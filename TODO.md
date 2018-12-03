@@ -1,0 +1,1 @@
+pub e sub per array route e provare a fare struct Task separata

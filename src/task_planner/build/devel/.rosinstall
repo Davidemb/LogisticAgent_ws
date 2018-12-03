@@ -1,0 +1,2 @@
+- setup-file:
+    local-name: /home/dave/catkin_ws/src/task_planner/build/devel/setup.sh

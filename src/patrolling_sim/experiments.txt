@@ -1,0 +1,8 @@
+results/model3_2/LOGA/boilert420/20181203_151726
+results/model3_2/LOGA/boilert420/20181203_154357
+results/model3_2/LOGA/boilert420/20181203_155139
+results/model3_4/LOGA/boilert420/20181203_155753
+results/model3_2/LOGA/boilert420/20181203_155933
+results/model3_2/LOGA/boilert420/20181203_160411
+results/model3_2/LOGA/boilert420/20181203_161201
+results/model3_2/LOGA/boilert420/20181203_162505

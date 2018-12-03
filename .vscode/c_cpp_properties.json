@@ -1,0 +1,25 @@
+{
+    "configurations": [
+        {
+            "browse": {
+                "databaseFilename": "",
+                "limitSymbolsToIncludedHeaders": true
+            },
+            "includePath": [
+                "/home/dave/LogisticAgent_ws/devel/include",
+                "/opt/ros/kinetic/include",
+                "/home/dave/LogisticAgent_ws/src/patrolling_sim/include",
+                "/home/dave/LogisticAgent_ws/src/task_planner/include",
+                "/usr/include",
+                "${workspaceFolder}/lib"
+            ],
+            "name": "Linux",
+            "intelliSenseMode": "gcc-x64",
+            "compilerPath": "/usr/bin/clang",
+            "cStandard": "c11",
+            "cppStandard": "c++17",
+            "compileCommands": "${workspaceFolder}/src/patrolling_sim/build/compile_commands.json"
+        }
+    ],
+    "version": 4
+}

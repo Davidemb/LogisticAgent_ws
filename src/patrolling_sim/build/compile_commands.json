@@ -1,0 +1,157 @@
+[
+{
+  "directory": "/home/dave/catkin_ws/src/patrolling_sim/build",
+  "command": "/usr/bin/clang++-3.8   -DROSCONSOLE_BACKEND_LOG4CXX -DROS_PACKAGE_NAME=\\\"patrolling_sim\\\" -I/home/dave/catkin_ws/src/patrolling_sim/build/devel/include -I/home/dave/catkin_ws/src/patrolling_sim/include -I/home/dave/catkin_ws/src/patrolling_sim/src -I/opt/ros/kinetic/include -I/opt/ros/kinetic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp  -g   -o CMakeFiles/idlHistogram.dir/src/idlHistogram.cpp.o -c /home/dave/catkin_ws/src/patrolling_sim/src/idlHistogram.cpp",
+  "file": "/home/dave/catkin_ws/src/patrolling_sim/src/idlHistogram.cpp"
+},
+{
+  "directory": "/home/dave/catkin_ws/src/patrolling_sim/build",
+  "command": "/usr/bin/clang++-3.8   -DROSCONSOLE_BACKEND_LOG4CXX -DROS_PACKAGE_NAME=\\\"patrolling_sim\\\" -DSSIPatrolAgent_EXPORTS -I/home/dave/catkin_ws/src/patrolling_sim/build/devel/include -I/home/dave/catkin_ws/src/patrolling_sim/include -I/home/dave/catkin_ws/src/patrolling_sim/src -I/opt/ros/kinetic/include -I/opt/ros/kinetic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp  -g -fPIC   -o CMakeFiles/SSIPatrolAgent.dir/src/SSIPatrolAgent.cpp.o -c /home/dave/catkin_ws/src/patrolling_sim/src/SSIPatrolAgent.cpp",
+  "file": "/home/dave/catkin_ws/src/patrolling_sim/src/SSIPatrolAgent.cpp"
+},
+{
+  "directory": "/home/dave/catkin_ws/src/patrolling_sim/build",
+  "command": "/usr/bin/clang++-3.8   -DROSCONSOLE_BACKEND_LOG4CXX -DROS_PACKAGE_NAME=\\\"patrolling_sim\\\" -I/home/dave/catkin_ws/src/patrolling_sim/build/devel/include -I/home/dave/catkin_ws/src/patrolling_sim/include -I/home/dave/catkin_ws/src/patrolling_sim/src -I/opt/ros/kinetic/include -I/opt/ros/kinetic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp  -g   -o CMakeFiles/monitor.dir/src/monitor.cpp.o -c /home/dave/catkin_ws/src/patrolling_sim/src/monitor.cpp",
+  "file": "/home/dave/catkin_ws/src/patrolling_sim/src/monitor.cpp"
+},
+{
+  "directory": "/home/dave/catkin_ws/src/patrolling_sim/build",
+  "command": "/usr/bin/clang++-3.8   -DROSCONSOLE_BACKEND_LOG4CXX -DROS_PACKAGE_NAME=\\\"patrolling_sim\\\" -I/home/dave/catkin_ws/src/patrolling_sim/build/devel/include -I/home/dave/catkin_ws/src/patrolling_sim/include -I/home/dave/catkin_ws/src/patrolling_sim/src -I/opt/ros/kinetic/include -I/opt/ros/kinetic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp  -g   -o CMakeFiles/monitor.dir/src/getgraph.cpp.o -c /home/dave/catkin_ws/src/patrolling_sim/src/getgraph.cpp",
+  "file": "/home/dave/catkin_ws/src/patrolling_sim/src/getgraph.cpp"
+},
+{
+  "directory": "/home/dave/catkin_ws/src/patrolling_sim/build",
+  "command": "/usr/bin/clang++-3.8   -DROSCONSOLE_BACKEND_LOG4CXX -DROS_PACKAGE_NAME=\\\"patrolling_sim\\\" -I/home/dave/catkin_ws/src/patrolling_sim/build/devel/include -I/home/dave/catkin_ws/src/patrolling_sim/include -I/home/dave/catkin_ws/src/patrolling_sim/src -I/opt/ros/kinetic/include -I/opt/ros/kinetic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp  -g   -o CMakeFiles/SEBS.dir/src/SEBS_Agent.cpp.o -c /home/dave/catkin_ws/src/patrolling_sim/src/SEBS_Agent.cpp",
+  "file": "/home/dave/catkin_ws/src/patrolling_sim/src/SEBS_Agent.cpp"
+},
+{
+  "directory": "/home/dave/catkin_ws/src/patrolling_sim/build",
+  "command": "/usr/bin/clang++-3.8   -DPatrolAgent_EXPORTS -DROSCONSOLE_BACKEND_LOG4CXX -DROS_PACKAGE_NAME=\\\"patrolling_sim\\\" -I/home/dave/catkin_ws/src/patrolling_sim/build/devel/include -I/home/dave/catkin_ws/src/patrolling_sim/include -I/home/dave/catkin_ws/src/patrolling_sim/src -I/opt/ros/kinetic/include -I/opt/ros/kinetic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp  -g -fPIC   -o CMakeFiles/PatrolAgent.dir/src/PatrolAgent.cpp.o -c /home/dave/catkin_ws/src/patrolling_sim/src/PatrolAgent.cpp",
+  "file": "/home/dave/catkin_ws/src/patrolling_sim/src/PatrolAgent.cpp"
+},
+{
+  "directory": "/home/dave/catkin_ws/src/patrolling_sim/build",
+  "command": "/usr/bin/clang++-3.8   -DPatrolAgent_EXPORTS -DROSCONSOLE_BACKEND_LOG4CXX -DROS_PACKAGE_NAME=\\\"patrolling_sim\\\" -I/home/dave/catkin_ws/src/patrolling_sim/build/devel/include -I/home/dave/catkin_ws/src/patrolling_sim/include -I/home/dave/catkin_ws/src/patrolling_sim/src -I/opt/ros/kinetic/include -I/opt/ros/kinetic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp  -g -fPIC   -o CMakeFiles/PatrolAgent.dir/src/getgraph.cpp.o -c /home/dave/catkin_ws/src/patrolling_sim/src/getgraph.cpp",
+  "file": "/home/dave/catkin_ws/src/patrolling_sim/src/getgraph.cpp"
+},
+{
+  "directory": "/home/dave/catkin_ws/src/patrolling_sim/build",
+  "command": "/usr/bin/clang++-3.8   -DPatrolAgent_EXPORTS -DROSCONSOLE_BACKEND_LOG4CXX -DROS_PACKAGE_NAME=\\\"patrolling_sim\\\" -I/home/dave/catkin_ws/src/patrolling_sim/build/devel/include -I/home/dave/catkin_ws/src/patrolling_sim/include -I/home/dave/catkin_ws/src/patrolling_sim/src -I/opt/ros/kinetic/include -I/opt/ros/kinetic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp  -g -fPIC   -o CMakeFiles/PatrolAgent.dir/src/algorithms.cpp.o -c /home/dave/catkin_ws/src/patrolling_sim/src/algorithms.cpp",
+  "file": "/home/dave/catkin_ws/src/patrolling_sim/src/algorithms.cpp"
+},
+{
+  "directory": "/home/dave/catkin_ws/src/patrolling_sim/build",
+  "command": "/usr/bin/clang++-3.8   -DPatrolAgent_EXPORTS -DROSCONSOLE_BACKEND_LOG4CXX -DROS_PACKAGE_NAME=\\\"patrolling_sim\\\" -I/home/dave/catkin_ws/src/patrolling_sim/build/devel/include -I/home/dave/catkin_ws/src/patrolling_sim/include -I/home/dave/catkin_ws/src/patrolling_sim/src -I/opt/ros/kinetic/include -I/opt/ros/kinetic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp  -g -fPIC   -o CMakeFiles/PatrolAgent.dir/src/config.cpp.o -c /home/dave/catkin_ws/src/patrolling_sim/src/config.cpp",
+  "file": "/home/dave/catkin_ws/src/patrolling_sim/src/config.cpp"
+},
+{
+  "directory": "/home/dave/catkin_ws/src/patrolling_sim/build",
+  "command": "/usr/bin/clang++-3.8   -DROSCONSOLE_BACKEND_LOG4CXX -DROS_PACKAGE_NAME=\\\"patrolling_sim\\\" -I/home/dave/catkin_ws/src/patrolling_sim/build/devel/include -I/home/dave/catkin_ws/src/patrolling_sim/include -I/home/dave/catkin_ws/src/patrolling_sim/src -I/opt/ros/kinetic/include -I/opt/ros/kinetic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp  -g   -o CMakeFiles/Cyclic.dir/src/Cyclic_Agent.cpp.o -c /home/dave/catkin_ws/src/patrolling_sim/src/Cyclic_Agent.cpp",
+  "file": "/home/dave/catkin_ws/src/patrolling_sim/src/Cyclic_Agent.cpp"
+},
+{
+  "directory": "/home/dave/catkin_ws/src/patrolling_sim/build",
+  "command": "/usr/bin/clang++-3.8   -DROSCONSOLE_BACKEND_LOG4CXX -DROS_PACKAGE_NAME=\\\"patrolling_sim\\\" -I/home/dave/catkin_ws/src/patrolling_sim/build/devel/include -I/home/dave/catkin_ws/src/patrolling_sim/include -I/home/dave/catkin_ws/src/patrolling_sim/src -I/opt/ros/kinetic/include -I/opt/ros/kinetic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp  -g   -o CMakeFiles/DTASSIPart.dir/src/DTASSIPart_Agent.cpp.o -c /home/dave/catkin_ws/src/patrolling_sim/src/DTASSIPart_Agent.cpp",
+  "file": "/home/dave/catkin_ws/src/patrolling_sim/src/DTASSIPart_Agent.cpp"
+},
+{
+  "directory": "/home/dave/catkin_ws/src/patrolling_sim/build",
+  "command": "/usr/bin/clang++-3.8   -DROSCONSOLE_BACKEND_LOG4CXX -DROS_PACKAGE_NAME=\\\"patrolling_sim\\\" -I/home/dave/catkin_ws/src/patrolling_sim/build/devel/include -I/home/dave/catkin_ws/src/patrolling_sim/include -I/home/dave/catkin_ws/src/patrolling_sim/src -I/opt/ros/kinetic/include -I/opt/ros/kinetic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp  -g   -o CMakeFiles/Conscientious_Cognitive.dir/src/Conscientious_Cognitive_Agent.cpp.o -c /home/dave/catkin_ws/src/patrolling_sim/src/Conscientious_Cognitive_Agent.cpp",
+  "file": "/home/dave/catkin_ws/src/patrolling_sim/src/Conscientious_Cognitive_Agent.cpp"
+},
+{
+  "directory": "/home/dave/catkin_ws/src/patrolling_sim/build",
+  "command": "/usr/bin/clang++-3.8   -DROSCONSOLE_BACKEND_LOG4CXX -DROS_PACKAGE_NAME=\\\"patrolling_sim\\\" -I/home/dave/catkin_ws/src/patrolling_sim/build/devel/include -I/home/dave/catkin_ws/src/patrolling_sim/include -I/home/dave/catkin_ws/src/patrolling_sim/src -I/opt/ros/kinetic/include -I/opt/ros/kinetic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp  -g   -o CMakeFiles/CBLS.dir/src/CBLS_Agent.cpp.o -c /home/dave/catkin_ws/src/patrolling_sim/src/CBLS_Agent.cpp",
+  "file": "/home/dave/catkin_ws/src/patrolling_sim/src/CBLS_Agent.cpp"
+},
+{
+  "directory": "/home/dave/catkin_ws/src/patrolling_sim/build",
+  "command": "/usr/bin/clang++-3.8   -DROSCONSOLE_BACKEND_LOG4CXX -DROS_PACKAGE_NAME=\\\"patrolling_sim\\\" -I/home/dave/catkin_ws/src/patrolling_sim/build/devel/include -I/home/dave/catkin_ws/src/patrolling_sim/include -I/home/dave/catkin_ws/src/patrolling_sim/src -I/opt/ros/kinetic/include -I/opt/ros/kinetic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp  -g   -o CMakeFiles/MSP.dir/src/MSP_Agent.cpp.o -c /home/dave/catkin_ws/src/patrolling_sim/src/MSP_Agent.cpp",
+  "file": "/home/dave/catkin_ws/src/patrolling_sim/src/MSP_Agent.cpp"
+},
+{
+  "directory": "/home/dave/catkin_ws/src/patrolling_sim/build",
+  "command": "/usr/bin/clang++-3.8   -DROSCONSOLE_BACKEND_LOG4CXX -DROS_PACKAGE_NAME=\\\"patrolling_sim\\\" -I/home/dave/catkin_ws/src/patrolling_sim/build/devel/include -I/home/dave/catkin_ws/src/patrolling_sim/include -I/home/dave/catkin_ws/src/patrolling_sim/src -I/opt/ros/kinetic/include -I/opt/ros/kinetic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp  -g   -o CMakeFiles/GBS.dir/src/GBS_Agent.cpp.o -c /home/dave/catkin_ws/src/patrolling_sim/src/GBS_Agent.cpp",
+  "file": "/home/dave/catkin_ws/src/patrolling_sim/src/GBS_Agent.cpp"
+},
+{
+  "directory": "/home/dave/catkin_ws/src/patrolling_sim/build",
+  "command": "/usr/bin/clang++-3.8   -DROSCONSOLE_BACKEND_LOG4CXX -DROS_PACKAGE_NAME=\\\"patrolling_sim\\\" -I/home/dave/catkin_ws/src/patrolling_sim/build/devel/include -I/home/dave/catkin_ws/src/patrolling_sim/include -I/home/dave/catkin_ws/src/patrolling_sim/src -I/opt/ros/kinetic/include -I/opt/ros/kinetic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp  -g   -o CMakeFiles/Random.dir/src/Random_Agent.cpp.o -c /home/dave/catkin_ws/src/patrolling_sim/src/Random_Agent.cpp",
+  "file": "/home/dave/catkin_ws/src/patrolling_sim/src/Random_Agent.cpp"
+},
+{
+  "directory": "/home/dave/catkin_ws/src/patrolling_sim/build",
+  "command": "/usr/bin/clang++-3.8   -DROSCONSOLE_BACKEND_LOG4CXX -DROS_PACKAGE_NAME=\\\"patrolling_sim\\\" -I/home/dave/catkin_ws/src/patrolling_sim/build/devel/include -I/home/dave/catkin_ws/src/patrolling_sim/include -I/home/dave/catkin_ws/src/patrolling_sim/src -I/opt/ros/kinetic/include -I/opt/ros/kinetic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp  -g   -o CMakeFiles/LOGA.dir/src/LOGA_Agent.cpp.o -c /home/dave/catkin_ws/src/patrolling_sim/src/LOGA_Agent.cpp",
+  "file": "/home/dave/catkin_ws/src/patrolling_sim/src/LOGA_Agent.cpp"
+},
+{
+  "directory": "/home/dave/catkin_ws/src/patrolling_sim/build",
+  "command": "/usr/bin/clang++-3.8   -DROSCONSOLE_BACKEND_LOG4CXX -DROS_PACKAGE_NAME=\\\"patrolling_sim\\\" -I/home/dave/catkin_ws/src/patrolling_sim/build/devel/include -I/home/dave/catkin_ws/src/patrolling_sim/include -I/home/dave/catkin_ws/src/patrolling_sim/src -I/opt/ros/kinetic/include -I/opt/ros/kinetic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp  -g   -o CMakeFiles/GoToStartPos.dir/src/GoToStartPos.cpp.o -c /home/dave/catkin_ws/src/patrolling_sim/src/GoToStartPos.cpp",
+  "file": "/home/dave/catkin_ws/src/patrolling_sim/src/GoToStartPos.cpp"
+},
+{
+  "directory": "/home/dave/catkin_ws/src/patrolling_sim/build",
+  "command": "/usr/bin/clang++-3.8   -DLogicAgent_EXPORTS -DROSCONSOLE_BACKEND_LOG4CXX -DROS_PACKAGE_NAME=\\\"patrolling_sim\\\" -I/home/dave/catkin_ws/src/patrolling_sim/build/devel/include -I/home/dave/catkin_ws/src/patrolling_sim/include -I/home/dave/catkin_ws/src/patrolling_sim/src -I/opt/ros/kinetic/include -I/opt/ros/kinetic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp  -g -fPIC   -o CMakeFiles/LogicAgent.dir/src/LogicAgent.cpp.o -c /home/dave/catkin_ws/src/patrolling_sim/src/LogicAgent.cpp",
+  "file": "/home/dave/catkin_ws/src/patrolling_sim/src/LogicAgent.cpp"
+},
+{
+  "directory": "/home/dave/catkin_ws/src/patrolling_sim/build",
+  "command": "/usr/bin/clang++-3.8   -DROSCONSOLE_BACKEND_LOG4CXX -DROS_PACKAGE_NAME=\\\"patrolling_sim\\\" -DTaskPlanner_EXPORTS -I/home/dave/catkin_ws/src/patrolling_sim/build/devel/include -I/home/dave/catkin_ws/src/patrolling_sim/include -I/home/dave/catkin_ws/src/patrolling_sim/src -I/opt/ros/kinetic/include -I/opt/ros/kinetic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp  -g -fPIC   -o CMakeFiles/TaskPlanner.dir/src/TaskPlanner.cpp.o -c /home/dave/catkin_ws/src/patrolling_sim/src/TaskPlanner.cpp",
+  "file": "/home/dave/catkin_ws/src/patrolling_sim/src/TaskPlanner.cpp"
+},
+{
+  "directory": "/home/dave/catkin_ws/src/patrolling_sim/build",
+  "command": "/usr/bin/clang++-3.8   -DROSCONSOLE_BACKEND_LOG4CXX -DROS_PACKAGE_NAME=\\\"patrolling_sim\\\" -I/home/dave/catkin_ws/src/patrolling_sim/build/devel/include -I/home/dave/catkin_ws/src/patrolling_sim/include -I/home/dave/catkin_ws/src/patrolling_sim/src -I/opt/ros/kinetic/include -I/opt/ros/kinetic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp  -g   -o CMakeFiles/Conscientious_Reactive.dir/src/Conscientious_Reactive_Agent.cpp.o -c /home/dave/catkin_ws/src/patrolling_sim/src/Conscientious_Reactive_Agent.cpp",
+  "file": "/home/dave/catkin_ws/src/patrolling_sim/src/Conscientious_Reactive_Agent.cpp"
+},
+{
+  "directory": "/home/dave/catkin_ws/src/patrolling_sim/build",
+  "command": "/usr/bin/clang++-3.8   -DROSCONSOLE_BACKEND_LOG4CXX -DROS_PACKAGE_NAME=\\\"patrolling_sim\\\" -I/home/dave/catkin_ws/src/patrolling_sim/build/devel/include -I/home/dave/catkin_ws/src/patrolling_sim/include -I/home/dave/catkin_ws/src/patrolling_sim/src -I/opt/ros/kinetic/include -I/opt/ros/kinetic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp  -g   -o CMakeFiles/Heuristic_Conscientious_Reactive.dir/src/Heuristic_Conscientious_Reactive_Agent.cpp.o -c /home/dave/catkin_ws/src/patrolling_sim/src/Heuristic_Conscientious_Reactive_Agent.cpp",
+  "file": "/home/dave/catkin_ws/src/patrolling_sim/src/Heuristic_Conscientious_Reactive_Agent.cpp"
+},
+{
+  "directory": "/home/dave/catkin_ws/src/patrolling_sim/build",
+  "command": "/usr/bin/clang++-3.8   -DROSCONSOLE_BACKEND_LOG4CXX -DROS_PACKAGE_NAME=\\\"patrolling_sim\\\" -I/home/dave/catkin_ws/src/patrolling_sim/build/devel/include -I/home/dave/catkin_ws/src/patrolling_sim/include -I/home/dave/catkin_ws/src/patrolling_sim/src -I/opt/ros/kinetic/include -I/opt/ros/kinetic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp  -g   -o CMakeFiles/DTAGreedy.dir/src/DTAGreedy_Agent.cpp.o -c /home/dave/catkin_ws/src/patrolling_sim/src/DTAGreedy_Agent.cpp",
+  "file": "/home/dave/catkin_ws/src/patrolling_sim/src/DTAGreedy_Agent.cpp"
+},
+{
+  "directory": "/home/dave/catkin_ws/src/patrolling_sim/build",
+  "command": "/usr/bin/clang++-3.8   -DROSCONSOLE_BACKEND_LOG4CXX -DROS_PACKAGE_NAME=\\\"patrolling_sim\\\" -I/home/dave/catkin_ws/src/patrolling_sim/build/devel/include -I/home/dave/catkin_ws/src/patrolling_sim/include -I/home/dave/catkin_ws/src/patrolling_sim/src -I/opt/ros/kinetic/include -I/opt/ros/kinetic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp  -g   -o CMakeFiles/DTASSI.dir/src/DTASSI_Agent.cpp.o -c /home/dave/catkin_ws/src/patrolling_sim/src/DTASSI_Agent.cpp",
+  "file": "/home/dave/catkin_ws/src/patrolling_sim/src/DTASSI_Agent.cpp"
+},
+{
+  "directory": "/home/dave/catkin_ws/src/patrolling_sim/build/gtest",
+  "command": "/usr/bin/clang++-3.8   -DGTEST_CREATE_SHARED_LIBRARY=1 -Dgmock_EXPORTS -I/usr/src/gmock/include -I/usr/src/gmock -I/usr/src/gtest/include -I/usr/src/gtest  -g -fPIC     -DGTEST_HAS_PTHREAD=1   -o CMakeFiles/gmock.dir/usr/src/gtest/src/gtest-all.cc.o -c /usr/src/gtest/src/gtest-all.cc",
+  "file": "/usr/src/gtest/src/gtest-all.cc"
+},
+{
+  "directory": "/home/dave/catkin_ws/src/patrolling_sim/build/gtest",
+  "command": "/usr/bin/clang++-3.8   -DGTEST_CREATE_SHARED_LIBRARY=1 -Dgmock_EXPORTS -I/usr/src/gmock/include -I/usr/src/gmock -I/usr/src/gtest/include -I/usr/src/gtest  -g -fPIC     -DGTEST_HAS_PTHREAD=1   -o CMakeFiles/gmock.dir/src/gmock-all.cc.o -c /usr/src/gmock/src/gmock-all.cc",
+  "file": "/usr/src/gmock/src/gmock-all.cc"
+},
+{
+  "directory": "/home/dave/catkin_ws/src/patrolling_sim/build/gtest",
+  "command": "/usr/bin/clang++-3.8   -DGTEST_CREATE_SHARED_LIBRARY=1 -Dgmock_main_EXPORTS -I/usr/src/gmock/include -I/usr/src/gmock -I/usr/src/gtest/include -I/usr/src/gtest  -g -fPIC     -DGTEST_HAS_PTHREAD=1   -o CMakeFiles/gmock_main.dir/usr/src/gtest/src/gtest-all.cc.o -c /usr/src/gtest/src/gtest-all.cc",
+  "file": "/usr/src/gtest/src/gtest-all.cc"
+},
+{
+  "directory": "/home/dave/catkin_ws/src/patrolling_sim/build/gtest",
+  "command": "/usr/bin/clang++-3.8   -DGTEST_CREATE_SHARED_LIBRARY=1 -Dgmock_main_EXPORTS -I/usr/src/gmock/include -I/usr/src/gmock -I/usr/src/gtest/include -I/usr/src/gtest  -g -fPIC     -DGTEST_HAS_PTHREAD=1   -o CMakeFiles/gmock_main.dir/src/gmock-all.cc.o -c /usr/src/gmock/src/gmock-all.cc",
+  "file": "/usr/src/gmock/src/gmock-all.cc"
+},
+{
+  "directory": "/home/dave/catkin_ws/src/patrolling_sim/build/gtest",
+  "command": "/usr/bin/clang++-3.8   -DGTEST_CREATE_SHARED_LIBRARY=1 -Dgmock_main_EXPORTS -I/usr/src/gmock/include -I/usr/src/gmock -I/usr/src/gtest/include -I/usr/src/gtest  -g -fPIC     -DGTEST_HAS_PTHREAD=1   -o CMakeFiles/gmock_main.dir/src/gmock_main.cc.o -c /usr/src/gmock/src/gmock_main.cc",
+  "file": "/usr/src/gmock/src/gmock_main.cc"
+},
+{
+  "directory": "/home/dave/catkin_ws/src/patrolling_sim/build/gtest/gtest",
+  "command": "/usr/bin/clang++-3.8   -DGTEST_CREATE_SHARED_LIBRARY=1 -Dgtest_EXPORTS -I/usr/src/gtest/include -I/usr/src/gtest  -g -fPIC     -DGTEST_HAS_PTHREAD=1   -o CMakeFiles/gtest.dir/src/gtest-all.cc.o -c /usr/src/gtest/src/gtest-all.cc",
+  "file": "/usr/src/gtest/src/gtest-all.cc"
+},
+{
+  "directory": "/home/dave/catkin_ws/src/patrolling_sim/build/gtest/gtest",
+  "command": "/usr/bin/clang++-3.8   -DGTEST_CREATE_SHARED_LIBRARY=1 -Dgtest_main_EXPORTS -I/usr/src/gtest/include -I/usr/src/gtest  -g -fPIC     -DGTEST_HAS_PTHREAD=1   -o CMakeFiles/gtest_main.dir/src/gtest_main.cc.o -c /usr/src/gtest/src/gtest_main.cc",
+  "file": "/usr/src/gtest/src/gtest_main.cc"
+}
+]

@@ -1,0 +1,95 @@
+#pragma once
+#include <color_cout.hpp> //lib 
+#include <fstream>
+#include <iostream>
+// #include <sys/type.h>
+#include <sys/stat.h>
+#include <vector>
+#include <ros/ros.h>
+#include <std_msgs/Bool.h>
+#include <std_msgs/Int16MultiArray.h>
+// #include <task_planner/Give_Array.h>
+
+namespace taskplanner 
+{
+    struct Task
+    {
+        bool    take;
+        int     item;
+        int     order;
+        int     demand;
+        int     priority;
+        int     dimension;
+        int*    route;
+    };
+
+    inline Task mkTask(int item, int order, int demand, int priority, int dimension, int * route)
+    {
+        Task t;
+
+        t.take      = false;            //  flag 
+        t.item      = item;             //  tipo di oggetto
+        t.order     = order;            //  id dell' ordine
+        t.demand    = demand;           //  quantita' di oggetti
+        t.priority  = priority;         //  priorita'
+        t.dimension = dimension;        //  numero di vertici del percorso
+        t.route = new int[dimension];
+
+        for (auto i = 0; i < t.dimension; i++)
+        t.route[i] = route[i];
+        
+        return t;
+    }
+
+class TaskPlanner 
+{
+
+    public:
+        TaskPlanner(ros::NodeHandle &nh_);
+        ~TaskPlanner() {};
+
+        uint TEAMSIZE;
+
+        struct
+        {
+            bool take_order;
+            int size;
+        } header;
+
+    vector<Task> tasks;
+ /*    TaskPlanner();
+    TaskPlanner(vector<Task> &ps, bool take_order)
+    {
+        header.take_order = take_order;
+        header.size = ps.size();
+        tasks.resize(header.size); //rescale
+        for (auto i = 0; i < ps.size(); i++)
+        {
+            tasks[i] = ps[i];
+        }
+    } */
+
+    const char * task_file = "/home/dave/LogisticAgent_ws/src/task_planner/param/task.txt";
+
+    int size()              const { return header.size; }
+    bool take_order()       const { return header.take_order; }
+    Task operator[] (int i) const { return tasks[i]; }
+    Task &operator[](int i)       { return tasks[i]; }
+    
+    bool checkRegularFile         (const char* task_file);
+    void t_print                  (Task t);
+    void parserTask               (const char* task_file);
+    void task_Callback            (const std_msgs::Bool &msg);
+    void init_agent               ();
+
+    bool free = false;
+    std_msgs::Int16MultiArray     msg;
+
+    private:
+        ros::Subscriber     sub_task;       // quando un robot vuole un task
+        ros::Publisher      pub_route;      // pubblicazione dell'array (pop dal vettore di tasks)
+};
+
+} // namespace taskplanner
+
+#include "impl/TaskPlanner.i.hpp"
