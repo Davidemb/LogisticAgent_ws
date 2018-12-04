@@ -74,7 +74,7 @@ class TaskPlanner
         }
     } */
 
-    const char * task_file = "/home/dave/LogisticAgent_ws/src/task_planner/param/task.txt";
+    const char * task_file = "/home/dave/LogisticAgent_ws/src/task_planner/param/all_task.txt";
 
     int size()              const { return header.size; }
     bool take_order()       const { return header.take_order; }

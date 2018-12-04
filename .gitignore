@@ -5,3 +5,6 @@ results/
 .vscode
 .catkin_workspace
 .catkin_tools
+
+experiments.txt
+rostime.txt
