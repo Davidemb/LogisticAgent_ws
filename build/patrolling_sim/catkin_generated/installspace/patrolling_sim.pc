@@ -1,8 +1,0 @@
-prefix=/home/dave/LogisticAgent_ws/install
-
-Name: patrolling_sim
-Description: Description of patrolling_sim
-Version: 2.2.2
-Cflags: -I/home/dave/LogisticAgent_ws/install/include
-Libs: -L/home/dave/LogisticAgent_ws/install/lib -lPatrolAgent -lSSIPatrolAgent -lLogicAgent
-Requires: 

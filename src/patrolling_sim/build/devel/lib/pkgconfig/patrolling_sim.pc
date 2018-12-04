@@ -1,8 +1,0 @@
-prefix=/home/dave/catkin_ws/src/patrolling_sim/build/devel
-
-Name: patrolling_sim
-Description: Description of patrolling_sim
-Version: 2.2.2
-Cflags: -I/home/dave/catkin_ws/src/patrolling_sim/build/devel/include -I/home/dave/catkin_ws/src/patrolling_sim/src
-Libs: -L/home/dave/catkin_ws/src/patrolling_sim/build/devel/lib -lPatrolAgent -lSSIPatrolAgent -lLogicAgent
-Requires: 

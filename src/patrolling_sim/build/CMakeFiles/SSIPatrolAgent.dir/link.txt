@@ -1,1 +1,0 @@
-/usr/bin/clang++-3.8  -fPIC -g  -shared -Wl,-soname,libSSIPatrolAgent.so -o devel/lib/libSSIPatrolAgent.so CMakeFiles/SSIPatrolAgent.dir/src/SSIPatrolAgent.cpp.o 

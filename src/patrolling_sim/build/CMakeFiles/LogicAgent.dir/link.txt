@@ -1,1 +1,0 @@
-/usr/bin/clang++-3.8  -fPIC -g  -shared -Wl,-soname,libLogicAgent.so -o devel/lib/libLogicAgent.so CMakeFiles/LogicAgent.dir/src/LogicAgent.cpp.o 
