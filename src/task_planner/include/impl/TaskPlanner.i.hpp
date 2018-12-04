@@ -6,7 +6,7 @@ namespace taskplanner
 TaskPlanner::TaskPlanner(ros::NodeHandle &nh_)
 {
     sub_task    = nh_.subscribe("needtask",1, &TaskPlanner::task_Callback, this);
-    pub_route   = nh_.advertise<std_msgs::Int16MultiArray>("mission",100);
+    pub_route   = nh_.advertise<task_planner::TaskMessage>("mission",1);
     parserTask(task_file);
     // init_agent();
 }
@@ -127,29 +127,43 @@ void TaskPlanner::parserTask(const char *task_file)
 
     for (auto i =0; i < tasks.size(); i++)
         t_print(tasks[i]);
+    
 }
 
-void TaskPlanner::task_Callback(const std_msgs::Bool &flag)
+void TaskPlanner::task_Callback(const patrolling_sim::TaskRequest &tr)
 {
-    free = flag.data;
-    if (free) 
+    ID_ROBOT = tr.id_robot;
+    // BOL_FLAG = tr.flag;
+    CAPACITY = tr.capacity;
+
+    if (tr.flag) 
     {
         c_print("@ Read Flag :-)", green);
 
         int id_vertex;
 
-        TEAMSIZE = tasks.size();
+        nTasks = tasks.size();
 
-        msg.data.clear();
+        tm.route.clear();
 
-        for (auto i = 0; i < TEAMSIZE; i++)
+        for (auto i = 0; i < nTasks; i++)
         {
-            for (auto j = 0; j < tasks[i].dimension; j++)
+            if (!tasks[i].take)
             {
-                id_vertex = tasks[i].route[j];
-                msg.data.push_back(id_vertex);
+                for (auto j = 0; j < tasks[i].dimension; j++)
+                {
+                    tasks[i].take = true;
+                    id_vertex = tasks[i].route[j];
+                    tm.route.push_back(id_vertex);
+                    tm.demand    = tasks[i].demand;
+                    tm.dimension = tasks[i].dimension;
+                    tm.item      = tasks[i].item;
+                    tm.order     = tasks[i].order;
+                    tm.priority  = tasks[i].priority;
+                    tasks.pop_back();
+                }
             }
-        pub_route.publish(msg);
+        pub_route.publish(tm);
         ROS_INFO("I published task on mission topic!");
         }
         ros::spinOnce();
@@ -158,43 +172,12 @@ void TaskPlanner::task_Callback(const std_msgs::Bool &flag)
     else
     {
         c_print("# Read Flag :-(", red);
-    }
+    } 
 }
 
 void TaskPlanner::init_agent()
 {
-    bool ok = true;
-
-    while (1) 
-    {
-    // pubblica sul topic "task_planner/mission"
-    int id_vertex;
-
-        TEAMSIZE = tasks.size();
-
-        msg.data.clear();
-
-        for (auto i = 0; i < TEAMSIZE; i++)
-        {
-            if (tasks[i].take == 0)
-            {
-                tasks[i].take = 1;
-                for (auto j = 0; j < tasks[i].dimension; j++)
-                {
-                    id_vertex = tasks[i].route[j];
-                    msg.data.push_back(id_vertex);
-                }
-                pub_route.publish(msg);
-            }
-            else
-            {
-                ok = false;
-            }
-        }
-        ROS_INFO("I published task on mission topic!");
-        ros::spinOnce(); // <dubbia
-        sleep(2);
-    }
+   //
 }
 
 } // namespace taskplanner

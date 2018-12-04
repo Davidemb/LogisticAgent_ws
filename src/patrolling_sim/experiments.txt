@@ -6,3 +6,13 @@ results/model3_2/LOGA/boilert420/20181203_155933
 results/model3_2/LOGA/boilert420/20181203_160411
 results/model3_2/LOGA/boilert420/20181203_161201
 results/model3_2/LOGA/boilert420/20181203_162505
+results/model3_2/LOGA/boilert420/20181204_104559
+results/model3_2/LOGA/boilert420/20181204_104912
+results/model3_2/LOGA/boilert420/20181204_105023
+results/model3_2/LOGA/boilert420/20181204_111052
+results/model3_2/LOGA/boilert420/20181204_113937
+results/model3_2/LOGA/boilert420/20181204_114351
+results/model3_2/LOGA/boilert420/20181204_114600
+results/model3_2/LOGA/boilert420/20181204_114715
+results/model3_1/LOGA/boilert420/20181204_114804
+results/model3_1/LOGA/boilert420/20181204_153158

@@ -43,3 +43,25 @@ void c_print(T t, R r, P p, F f, const string color)
 {
   cout << env_in << color << t << r << p << f << env_out << "\n";
 }
+
+// template <typename T>
+// void a_print(T t)
+// {
+//   cout << "\n";
+//   for (auto i = 0; i < t.size(); i++)
+//   {
+//     cout << t[i];
+//   }
+//   cout << "\n";
+// }
+
+// template <typename T>
+// void a_print(T t, const string color)
+// {
+//   cout << "\n";
+//   for (auto i = 0; i < t.size(); i++)
+//   {
+//     cout << env_in << color << t[i] << env_out;
+//   }
+//   cout << "\n";
+// }

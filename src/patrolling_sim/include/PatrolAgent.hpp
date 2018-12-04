@@ -53,6 +53,8 @@
 #include <std_srvs/Empty.h>
 #include "getgraph.hpp"
 #include "message_types.hpp"
+#include <patrolling_sim/TaskRequest.h>
+#include <task_planner/TaskMessage.h>
 
 #define NUM_MAX_ROBOTS 32
 #define INTERFERENCE_DISTANCE 2
@@ -75,6 +77,7 @@ namespace patrolagent
     protected:
         int TEAMSIZE;
         int ID_ROBOT;
+        int CAPACITY = 2;
 
         double xPos[NUM_MAX_ROBOTS]; //tabelas de posições (atençao ao index pro caso de 1 so robot)
         double yPos[NUM_MAX_ROBOTS]; //tabelas de posições (atençao ao index pro caso de 1 so robot)
@@ -117,7 +120,7 @@ namespace patrolagent
         ros::Publisher      results_pub;
         ros::Publisher      cmd_vel_pub;
 
-        std_msgs::Bool free;
+        patrolling_sim::TaskRequest task_request;
         ros::Publisher pub_to_task_planner_needtask;
 
 
@@ -136,12 +139,13 @@ namespace patrolagent
         uint route_dimension;
 
         virtual void init(int argc, char** argv);
-        void ready();
+            void readParams(); // read ROS parameters
         void initialize_node();
-        void readParams(); // read ROS parameters
         void update_idleness();  // local idleness
 
         virtual void run();
+            void ready();
+            virtual void onGoalComplete(); // what to do when a goal has been reached
 
         void getRobotPose(int robotid, float &x, float &y, float &theta);
         void odomCB(const nav_msgs::Odometry::ConstPtr& msg);
@@ -162,7 +166,6 @@ namespace patrolagent
         // void onGoalNotComplete(); // what to do when a goal has NOT been reached (aborted)
 
         // Events
-        virtual void onGoalComplete(); // what to do when a goal has been reached
         virtual void processEvents();  // processes algorithm-specific events
 
         // Robot-Robot Communication
@@ -179,7 +182,7 @@ namespace patrolagent
         virtual int compute_next_vertex();
 
         //--------------------------------------------------------------------------
-        void receive_mission_Callback(const std_msgs::Int16MultiArray::ConstPtr &msg);
+        void receive_mission_Callback(const task_planner::TaskMessageConstPtr &msg);
 };
 
 } // namespace patrolagent

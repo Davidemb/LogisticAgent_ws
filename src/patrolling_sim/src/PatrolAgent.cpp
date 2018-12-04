@@ -139,6 +139,12 @@ void PatrolAgent::initialize_node (){ //ID,msg_type,1
         loop_rate.sleep();
         count++;
     }
+    
+     c_print("# Nell' inizilizzazione dei robot!",red);
+    task_request.flag     = true;
+    task_request.id_robot = ID_ROBOT;
+    task_request.capacity = CAPACITY;
+    pub_to_task_planner_needtask.publish(task_request); 
 }
 
 void PatrolAgent::getRobotPose(int robotid, float &x, float &y, float &theta) {
@@ -569,9 +575,9 @@ void PatrolAgent::resultsCB(const std_msgs::Int16MultiArray::ConstPtr& msg) {
   
 }
 
-void PatrolAgent::receive_mission_Callback(const std_msgs::Int16MultiArray::ConstPtr &msg)
+void PatrolAgent::receive_mission_Callback(const task_planner::TaskMessageConstPtr &msg)
 {
-    std::vector<signed short>::const_iterator it = msg->data.begin();    
+    /* std::vector<signed short>::const_iterator it = msg->data.begin();    
     
     route.clear();
     
@@ -586,7 +592,7 @@ void PatrolAgent::receive_mission_Callback(const std_msgs::Int16MultiArray::Cons
        std::cout<< route[j]<<"\n";
     }
 
-    ros::spinOnce(); // dubbia
+    ros::spinOnce(); // dubbia */
     
 }
 

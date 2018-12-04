@@ -8,7 +8,8 @@
 #include <ros/ros.h>
 #include <std_msgs/Bool.h>
 #include <std_msgs/Int16MultiArray.h>
-// #include <task_planner/Give_Array.h>
+#include <patrolling_sim/TaskRequest.h>
+#include <task_planner/TaskMessage.h>
 
 namespace taskplanner 
 {
@@ -33,7 +34,7 @@ namespace taskplanner
         t.demand    = demand;           //  quantita' di oggetti
         t.priority  = priority;         //  priorita'
         t.dimension = dimension;        //  numero di vertici del percorso
-        t.route = new int[dimension];
+        t.route     = new int[dimension];
 
         for (auto i = 0; i < t.dimension; i++)
         t.route[i] = route[i];
@@ -49,6 +50,10 @@ class TaskPlanner
         ~TaskPlanner() {};
 
         uint TEAMSIZE;
+        uint nTasks;
+        int ID_ROBOT;
+        int CAPACITY;
+        bool BOL_FLAG;
 
         struct
         {
@@ -79,11 +84,10 @@ class TaskPlanner
     bool checkRegularFile         (const char* task_file);
     void t_print                  (Task t);
     void parserTask               (const char* task_file);
-    void task_Callback            (const std_msgs::Bool &msg);
+    void task_Callback            (const patrolling_sim::TaskRequest &tr);
     void init_agent               ();
 
-    bool free = false;
-    std_msgs::Int16MultiArray     msg;
+    task_planner::TaskMessage tm;
 
     private:
         ros::Subscriber     sub_task;       // quando un robot vuole un task

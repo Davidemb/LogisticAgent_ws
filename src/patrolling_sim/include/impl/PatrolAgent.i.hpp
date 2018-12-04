@@ -163,12 +163,12 @@ void PatrolAgent::init(int argc, char **argv)
                                 _1)); // size of the buffer = 1 (?)
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    sub_to_task_planner_mission = nh.subscribe<std_msgs::Int16MultiArray>(
+    sub_to_task_planner_mission = nh.subscribe<task_planner::TaskMessage>(
         "task_planner/mission", 1,
         boost::bind(&PatrolAgent::receive_mission_Callback, this, _1));
 
     pub_to_task_planner_needtask =
-        nh.advertise<std_msgs::Bool>("task_planner/needtask", 1);
+        nh.advertise<patrolling_sim::TaskRequest>("task_planner/needtask", 1);
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     ros::spinOnce();
@@ -198,7 +198,7 @@ void PatrolAgent::run()
 
     c_print("@ Ready!", green);
 
-    // initially clear the costmap (to make sure the robot is not trapped):
+    /* // initially clear the costmap (to make sure the robot is not trapped):
     std_srvs::Empty srv;
     std::string mb_string;
 
@@ -226,13 +226,9 @@ void PatrolAgent::run()
     spinner.start();
     //     ros::waitForShutdown();
 
-    /* Run Algorithm */
+    /* Run Algorithm 
 
     ros::Rate loop_rate(30); // 0.033 seconds or 30Hz
-
-    c_print("# Prima del core della run()!!!!!",red);
-    free.data = true;
-    pub_to_task_planner_needtask.publish(free);
 
     // while sarebbe
     if (ros::ok())
@@ -280,7 +276,8 @@ void PatrolAgent::run()
 
         loop_rate.sleep();
 
-    } // while ros.ok
+    } // while ros.ok 
+    */
 }
 
 int PatrolAgent::compute_next_vertex()

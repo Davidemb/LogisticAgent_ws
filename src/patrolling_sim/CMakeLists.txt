@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(patrolling_sim)
 
+add_compile_options(-std=c++11)
+
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
@@ -13,6 +15,7 @@ find_package(catkin REQUIRED COMPONENTS
   roslib
   tf
   message_generation
+  std_msgs
 )
 
 ## System dependencies are found with CMake's conventions
@@ -49,11 +52,10 @@ find_package(catkin REQUIRED COMPONENTS
 ##   * add every package in MSG_DEP_SET to generate_messages(DEPENDENCIES ...)
 
 ## Generate messages in the 'msg' folder
-# add_message_files(
-#   FILES
-#   Message1.msg
-#   Message2.msg
-# )
+add_message_files(
+  FILES
+  TaskRequest.msg
+)
 
 ## Generate services in the 'srv' folder
 add_service_files(
@@ -70,8 +72,7 @@ add_service_files(
 
 ## Generate added messages and services with any dependencies listed here
  generate_messages(
-   DEPENDENCIES
-   std_msgs
+   DEPENDENCIES std_msgs
  )
 
 ###################################
@@ -86,6 +87,7 @@ add_service_files(
 catkin_package(
   INCLUDE_DIRS src
    LIBRARIES PatrolAgent SSIPatrolAgent LogicAgent
+   CATKIN_DEPENDS message_runtime 
 #  CATKIN_DEPENDS actionlib move_base_msgs nav_msgs roscpp tf
 #  DEPENDS system_lib
 )
