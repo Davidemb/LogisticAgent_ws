@@ -14,14 +14,14 @@ def setIP(mapname,vip):
     n = len(ip)/2
     print 'Set initial poses of ',n,' robots'
 
-    fnr = 'maps/'+mapname+'/robots.inc'
+    fnr = '../../maps/'+mapname+'/robots.inc'
     fr = open(fnr, 'w')
 
     for i in range(0,n):
         x = ip[i*2]
         y = ip[i*2+1]
         th = 90
-        fn = 'params/amcl/robot_'+str(i)+'_initial_pose.xml'
+        fn = '../../params/amcl/robot_'+str(i)+'_initial_pose.xml'
         f = open(fn, 'w')
         f.write('<launch>\n')
         f.write('  <param name="amcl/initial_pose_x" value="'+str(x)+'"/>\n')

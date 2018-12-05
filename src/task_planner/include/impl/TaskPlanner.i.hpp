@@ -5,7 +5,8 @@ namespace taskplanner
 
 TaskPlanner::TaskPlanner(ros::NodeHandle &nh_)
 {
-    sub_task    = nh_.subscribe("needtask",1, &TaskPlanner::task_Callback, this);
+    // sub_task    = nh_.subscribe<patrolling_sim::TaskRequest>("needtask", 1, boost::bind(&TaskPlanner::task_Callback, this, _1));
+    sub_task    = nh_.subscribe("needtask", 1, &TaskPlanner::task_Callback, this);
     pub_route   = nh_.advertise<task_planner::TaskMessage>("mission",1);
     parserTask(task_file);
     // init_agent();
@@ -130,13 +131,13 @@ void TaskPlanner::parserTask(const char *task_file)
     
 }
 
-void TaskPlanner::task_Callback(const patrolling_sim::TaskRequest &tr)
+void TaskPlanner::task_Callback(const patrolling_sim::TaskRequestConstPtr &tr)
 {
-    ID_ROBOT = tr.id_robot;
+    ID_ROBOT = tr->id_robot;
     // BOL_FLAG = tr.flag;
-    CAPACITY = tr.capacity;
+    CAPACITY = tr->capacity;
 
-    if (tr.flag) 
+    if (tr->flag) 
     {
         c_print("@ Read Flag :-)", green);
 
@@ -165,6 +166,7 @@ void TaskPlanner::task_Callback(const patrolling_sim::TaskRequest &tr)
             }
         pub_route.publish(tm);
         ROS_INFO("I published task on mission topic!");
+        sleep(3);
         }
         ros::spinOnce();
         sleep(2);
@@ -172,7 +174,7 @@ void TaskPlanner::task_Callback(const patrolling_sim::TaskRequest &tr)
     else
     {
         c_print("# Read Flag :-(", red);
-    } 
+    }  
 }
 
 void TaskPlanner::init_agent()

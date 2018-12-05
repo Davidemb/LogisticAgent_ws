@@ -65,6 +65,16 @@
 
 namespace patrolagent 
 { 
+    struct Task
+    {
+        bool    take;
+        int     item;
+        int     order;
+        int     demand;
+        int     priority;
+        int     dimension;
+        int*    route;
+    };
 
     using uint = unsigned int;
     using MoveBaseClient = actionlib::SimpleActionClient<move_base_msgs::MoveBaseAction>;
@@ -108,8 +118,8 @@ namespace patrolagent
 
         int aborted_count, resend_goal_count;
 
-        tf::TransformListener *listener;
-        MoveBaseClient *ac; // action client for reaching target goals
+        tf::TransformListener   *listener;
+        MoveBaseClient          *ac; // action client for reaching target goals
 
         ros::Subscriber     odom_sub, positions_sub;
         // /------------------------------------------------------------------------
@@ -119,6 +129,8 @@ namespace patrolagent
         ros::Subscriber     results_sub;
         ros::Publisher      results_pub;
         ros::Publisher      cmd_vel_pub;
+
+        std::vector<Task> mission;
 
         patrolling_sim::TaskRequest task_request;
         ros::Publisher pub_to_task_planner_needtask;

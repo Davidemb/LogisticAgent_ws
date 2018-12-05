@@ -84,7 +84,7 @@ class TaskPlanner
     bool checkRegularFile         (const char* task_file);
     void t_print                  (Task t);
     void parserTask               (const char* task_file);
-    void task_Callback            (const patrolling_sim::TaskRequest &tr);
+    void task_Callback            (const patrolling_sim::TaskRequestConstPtr &tr);
     void init_agent               ();
 
     task_planner::TaskMessage tm;
