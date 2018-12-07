@@ -151,13 +151,15 @@ void PatrolAgent::initialize_node()
         ros::spinOnce();
         loop_rate.sleep();
         count++;
+
+        c_print("# Nell' inizilizzazione dei robot!", red);
+        task_request.flag = true;
+        task_request.id_robot = ID_ROBOT;
+        task_request.capacity = CAPACITY;
+        pub_to_task_planner_needtask.publish(task_request);
     }
 
-    c_print("# Nell' inizilizzazione dei robot!", red);
-    task_request.flag = true;
-    task_request.id_robot = ID_ROBOT;
-    task_request.capacity = CAPACITY;
-    pub_to_task_planner_needtask.publish(task_request);
+    
 }
 
 void PatrolAgent::getRobotPose(int robotid, float &x, float &y, float &theta)
@@ -648,7 +650,7 @@ void PatrolAgent::resultsCB(const std_msgs::Int16MultiArray::ConstPtr &msg)
 void PatrolAgent::receive_mission_Callback(const task_planner::TaskMessageConstPtr &msg)
 {
     // popolazione del vettore mission<Task>
-
+    c_print("@ Task ricevuto dalla missione!",green);
     Task task;
 
     task.demand     = msg->demand;
@@ -664,10 +666,12 @@ void PatrolAgent::receive_mission_Callback(const task_planner::TaskMessageConstP
         task.route[i] = msg->route[i];
         cout << task.route[i] << "\n";
     }
-
+    
     mission.push_back(task);
-    ros::spinOnce();
-    sleep(2);
+
+   
+    // ros::spinOnce();
+    // sleep(2);
 }
 
 } // namespace patrolagent

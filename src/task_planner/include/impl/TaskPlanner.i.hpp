@@ -2,12 +2,12 @@
 
 namespace taskplanner
 {
-
 TaskPlanner::TaskPlanner(ros::NodeHandle &nh_)
 {
-    // sub_task    = nh_.subscribe<patrolling_sim::TaskRequest>("needtask", 1, boost::bind(&TaskPlanner::task_Callback, this, _1));
-    sub_task    = nh_.subscribe("needtask", 1, &TaskPlanner::task_Callback, this);
-    pub_route   = nh_.advertise<task_planner::TaskMessage>("mission",1);
+    // sub_task    = nh_.subscribe<patrolling_sim::TaskRequest>("needtask", 1, boost::bind(&TaskPlanner::task_Callback,
+    // this, _1));
+    sub_task = nh_.subscribe("needtask", 1, &TaskPlanner::task_Callback, this);
+    pub_route = nh_.advertise<task_planner::TaskMessage>("mission", 1);
     parserTask(task_file);
     // init_agent();
 }
@@ -39,20 +39,20 @@ bool TaskPlanner::checkRegularFile(const char *task_file)
 
 void TaskPlanner::t_print(Task t)
 {
-    cout <<"\nTask :\n"
-    <<" -      take: "<<t.take<<"\n"
-    <<" -      item: "<<t.item<<"\n"
-    <<" -     order: "<<t.order<<"\n"
-    <<" -    demand: "<<t.demand<<"\n"
-    <<" -  priority: "<<t.priority<<"\n"
-    <<" - dimension: "<<t.dimension<<"\n"
-    <<" -     route:";
+    cout << "\nTask :\n"
+         << " -      take: " << t.take << "\n"
+         << " -      item: " << t.item << "\n"
+         << " -     order: " << t.order << "\n"
+         << " -    demand: " << t.demand << "\n"
+         << " -  priority: " << t.priority << "\n"
+         << " - dimension: " << t.dimension << "\n"
+         << " -     route:";
 
     for (auto i = 0; i < t.dimension; i++)
     {
-        cout <<" "<<t.route[i];
+        cout << " " << t.route[i];
     }
-    cout <<"\n";
+    cout << "\n";
 }
 
 void TaskPlanner::parserTask(const char *task_file)
@@ -62,17 +62,17 @@ void TaskPlanner::parserTask(const char *task_file)
 
     string str;
 
-    int tmp     = 0;
-    int tmp1    = 0;
-    int tmp2    = 0;
-    int tmp3    = 0;
-    
-    int count   = 0;
-    int nBlocks = 0;
-    int nEdges  = 0;
-    int vertex  = 0;
+    int tmp = 0;
+    int tmp1 = 0;
+    int tmp2 = 0;
+    int tmp3 = 0;
 
-    int * route = nullptr;
+    int count = 0;
+
+    int nEdges = 0;
+    int vertex = 0;
+
+    int *route = nullptr;
 
     ifstream ifs(task_file);
 
@@ -81,18 +81,18 @@ void TaskPlanner::parserTask(const char *task_file)
         getline(ifs, str);
         if (count == 0)
         {
-            nBlocks = std::atoi(str.c_str());
-            std::cout << "nTask: " << nBlocks << "\n";
+            nTasks = std::atoi(str.c_str());
+            std::cout << "nTask: " << nTasks << "\n";
         }
 
-        for (auto j = 0; j < nBlocks; j++)
+        for (auto j = 0; j < nTasks; j++)
         {
             for (auto i = 0; i < 2; i++)
-            {   
+            {
                 // prime linee
                 if (ifs.good())
                 {
-                    if(i == 1)
+                    if (i == 1)
                     {
                         getline(ifs, str);
                         nEdges = std::atoi(str.c_str());
@@ -126,9 +126,8 @@ void TaskPlanner::parserTask(const char *task_file)
     //     cout << it->dimension << it->item << it->order << it->priority << it->route <<"\n";
     // }
 
-    for (auto i =0; i < tasks.size(); i++)
+    for (auto i = 0; i < tasks.size(); i++)
         t_print(tasks[i]);
-    
 }
 
 void TaskPlanner::task_Callback(const patrolling_sim::TaskRequestConstPtr &tr)
@@ -136,37 +135,45 @@ void TaskPlanner::task_Callback(const patrolling_sim::TaskRequestConstPtr &tr)
     ID_ROBOT = tr->id_robot;
     // BOL_FLAG = tr.flag;
     CAPACITY = tr->capacity;
+    // fare controllo sulla capacita'
 
-    if (tr->flag) 
+    int temp_CPCTY = 0;
+
+    if (tr->flag)
     {
         c_print("@ Read Flag :-)", green);
 
         int id_vertex;
 
-        nTasks = tasks.size();
-
         tm.route.clear();
+
+        if (nTasks != tasks.size())
+            c_print("### Err: nTasks != size()", red);
 
         for (auto i = 0; i < nTasks; i++)
         {
             if (!tasks[i].take)
             {
-                for (auto j = 0; j < tasks[i].dimension; j++)
+                if (CAPACITY <= tasks[i].demand)
                 {
-                    tasks[i].take = true;
-                    id_vertex = tasks[i].route[j];
-                    tm.route.push_back(id_vertex);
-                    tm.demand    = tasks[i].demand;
-                    tm.dimension = tasks[i].dimension;
-                    tm.item      = tasks[i].item;
-                    tm.order     = tasks[i].order;
-                    tm.priority  = tasks[i].priority;
-                    tasks.pop_back();
+                    for (auto j = 0; j < tasks[i].dimension; j++)
+                    {
+                        tasks[i].take = true;
+                        id_vertex = tasks[i].route[j];
+                        tm.route.push_back(id_vertex);
+                        tm.demand = tasks[i].demand;
+                        tm.dimension = tasks[i].dimension;
+                        tm.item = tasks[i].item;
+                        tm.order = tasks[i].order;
+                        tm.priority = tasks[i].priority;
+                        // tasks.pop_back();
+                    }
+                    CAPACITY -= tasks[i].demand;
                 }
             }
-        pub_route.publish(tm);
-        ROS_INFO("I published task on mission topic!");
-        sleep(3);
+            pub_route.publish(tm);
+            ROS_INFO("I published task on mission topic!");
+            sleep(3);
         }
         ros::spinOnce();
         sleep(2);
@@ -174,12 +181,12 @@ void TaskPlanner::task_Callback(const patrolling_sim::TaskRequestConstPtr &tr)
     else
     {
         c_print("# Read Flag :-(", red);
-    }  
+    }
 }
 
 void TaskPlanner::init_agent()
 {
-   //
+    //
 }
 
 } // namespace taskplanner
