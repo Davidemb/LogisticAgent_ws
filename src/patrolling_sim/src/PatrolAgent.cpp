@@ -151,15 +151,16 @@ void PatrolAgent::initialize_node()
         ros::spinOnce();
         loop_rate.sleep();
         count++;
-
-        c_print("# Nell' inizilizzazione dei robot!", red);
-        task_request.flag = true;
-        task_request.id_robot = ID_ROBOT;
-        task_request.capacity = CAPACITY;
-        pub_to_task_planner_needtask.publish(task_request);
     }
 
-    
+    c_print("# Nell' inizilizzazione dei robot!", red);
+    task_request.flag = true;
+    task_request.id_robot = ID_ROBOT;
+    task_request.capacity = CAPACITY;
+    pub_to_task_planner_needtask.publish(task_request);
+
+    ros::spinOnce();
+    loop_rate.sleep();
 }
 
 void PatrolAgent::getRobotPose(int robotid, float &x, float &y, float &theta)
@@ -650,15 +651,15 @@ void PatrolAgent::resultsCB(const std_msgs::Int16MultiArray::ConstPtr &msg)
 void PatrolAgent::receive_mission_Callback(const task_planner::TaskMessageConstPtr &msg)
 {
     // popolazione del vettore mission<Task>
-    c_print("@ Task ricevuto dalla missione!",green);
+    c_print("@ Task ricevuto dalla missione!", green);
     Task task;
 
-    task.demand     = msg->demand;
-    task.dimension  = msg->dimension;
-    task.item       = msg->item;
-    task.order      = msg->order;
-    task.priority   = msg->priority;
-    task.take       = msg->take;
+    task.demand = msg->demand;
+    task.dimension = msg->dimension;
+    task.item = msg->item;
+    task.order = msg->order;
+    task.priority = msg->priority;
+    task.take = msg->take;
     task.route = new int[msg->dimension];
 
     for (auto i = 0; i < msg->dimension; i++)
@@ -666,12 +667,13 @@ void PatrolAgent::receive_mission_Callback(const task_planner::TaskMessageConstP
         task.route[i] = msg->route[i];
         cout << task.route[i] << "\n";
     }
-    
+
+    c_print("# Insert task on mission!");
+
     mission.push_back(task);
 
-   
-    // ros::spinOnce();
-    // sleep(2);
+    ros::spinOnce();
+    sleep(5);
 }
 
 } // namespace patrolagent

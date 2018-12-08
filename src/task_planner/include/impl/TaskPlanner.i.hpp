@@ -152,9 +152,9 @@ void TaskPlanner::task_Callback(const patrolling_sim::TaskRequestConstPtr &tr)
 
         for (auto i = 0; i < nTasks; i++)
         {
-            if (!tasks[i].take)
+            if (CAPACITY >= tasks[i].demand)
             {
-                if (CAPACITY <= tasks[i].demand)
+                if (!tasks[i].take)
                 {
                     for (auto j = 0; j < tasks[i].dimension; j++)
                     {
@@ -169,14 +169,15 @@ void TaskPlanner::task_Callback(const patrolling_sim::TaskRequestConstPtr &tr)
                         // tasks.pop_back();
                     }
                     CAPACITY -= tasks[i].demand;
+                    c_print("% CPCTY: ", CAPACITY, magenta);
                 }
             }
             pub_route.publish(tm);
             ROS_INFO("I published task on mission topic!");
-            sleep(3);
+            // sleep(3);
         }
         ros::spinOnce();
-        sleep(2);
+        // sleep(2);
     }
     else
     {

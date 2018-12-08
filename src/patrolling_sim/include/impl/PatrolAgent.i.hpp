@@ -228,10 +228,13 @@ void PatrolAgent::run()
 
     /* Run Algorithm */
 
+    for (int i = 0; i < 5; i++)
+    sleep(1);
+
     ros::Rate loop_rate(30); // 0.033 seconds or 30Hz
 
     // while sarebbe
-    if (ros::ok())
+    while (ros::ok())
     {
         if (goal_complete)
         {
