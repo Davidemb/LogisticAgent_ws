@@ -137,8 +137,6 @@ void TaskPlanner::task_Callback(const patrolling_sim::TaskRequestConstPtr &tr)
     CAPACITY = tr->capacity;
     // fare controllo sulla capacita'
 
-    int temp_CPCTY = 0;
-
     if (tr->flag)
     {
         c_print("@ Read Flag :-)", green);
@@ -156,28 +154,35 @@ void TaskPlanner::task_Callback(const patrolling_sim::TaskRequestConstPtr &tr)
             {
                 if (!tasks[i].take)
                 {
+                    tasks[i].take = true;
+                    tm.ID_ROBOT = ID_ROBOT;
+                    tm.demand = tasks[i].demand;
+                    tm.dimension = tasks[i].dimension;
+                    tm.item = tasks[i].item;
+                    tm.order = tasks[i].order;
+                    tm.priority = tasks[i].priority;
+                    
                     for (auto j = 0; j < tasks[i].dimension; j++)
                     {
-                        tasks[i].take = true;
                         id_vertex = tasks[i].route[j];
                         tm.route.push_back(id_vertex);
-                        tm.demand = tasks[i].demand;
-                        tm.dimension = tasks[i].dimension;
-                        tm.item = tasks[i].item;
-                        tm.order = tasks[i].order;
-                        tm.priority = tasks[i].priority;
+
                         // tasks.pop_back();
                     }
                     CAPACITY -= tasks[i].demand;
-                    c_print("% CPCTY: ", CAPACITY, magenta);
+                    c_print("% CPCTY: ", CAPACITY," ID_ROBOT: ", ID_ROBOT, magenta);
+                    pub_route.publish(tm);
+                    ROS_INFO("I published task on mission topic!");
+                    sleep(3);
                 }
             }
-            pub_route.publish(tm);
-            ROS_INFO("I published task on mission topic!");
-            // sleep(3);
+            else
+            {
+                c_print("# CPCTY finisched!", red);
+            }
         }
         ros::spinOnce();
-        // sleep(2);
+        sleep(1);
     }
     else
     {

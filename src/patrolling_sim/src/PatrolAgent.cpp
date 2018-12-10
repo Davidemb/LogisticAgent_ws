@@ -652,28 +652,38 @@ void PatrolAgent::receive_mission_Callback(const task_planner::TaskMessageConstP
 {
     // popolazione del vettore mission<Task>
     c_print("@ Task ricevuto dalla missione!", green);
-    Task task;
 
-    task.demand = msg->demand;
-    task.dimension = msg->dimension;
-    task.item = msg->item;
-    task.order = msg->order;
-    task.priority = msg->priority;
-    task.take = msg->take;
-    task.route = new int[msg->dimension];
-
-    for (auto i = 0; i < msg->dimension; i++)
+    if (msg->ID_ROBOT == ID_ROBOT)
     {
-        task.route[i] = msg->route[i];
-        cout << task.route[i] << "\n";
+        Task task;
+
+        c_print("% dimensione del task: ", msg->dimension, yellow);
+
+        task.demand = msg->demand;
+        task.dimension = msg->dimension;
+        task.item = msg->item;
+        task.order = msg->order;
+        task.priority = msg->priority;
+        task.take = msg->take;
+        task.route = new int[msg->dimension];
+
+        for (auto i = 0; i < msg->dimension; i++)
+        {
+            task.route[i] = msg->route[i];
+            cout << task.route[i] << "\n";
+        }
+
+        c_print("# Insert task on mission!");
+
+        mission.push_back(task);
+
+        // ros::spinOnce();
+        // sleep(1);
     }
-
-    c_print("# Insert task on mission!");
-
-    mission.push_back(task);
-
-    ros::spinOnce();
-    sleep(5);
+    else
+    {
+        c_print("# Skip task != ID_ROBOT!", red);
+    }
 }
 
 } // namespace patrolagent

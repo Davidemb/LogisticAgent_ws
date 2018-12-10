@@ -1,3 +1,4 @@
-bool   flag
-uint32 id_robot
-uint32 capacity
+Header  header
+bool    flag
+uint32  id_robot
+uint32  capacity

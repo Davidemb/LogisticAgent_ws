@@ -1,4 +1,6 @@
+Header      header
 bool        take
+int32       ID_ROBOT
 uint32      item
 uint32      order
 uint32      demand
