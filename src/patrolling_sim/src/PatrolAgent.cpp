@@ -665,19 +665,11 @@ void PatrolAgent::receive_mission_Callback(const task_planner::TaskMessageConstP
             cout << msg->route[i] << "\n";
         }
 
-        c_print("# Insert task on mission!");
+        c_print("# Insert task on mission!", red);
 
         mission.push_back(task);
 
-        for (auto i=0; i < mission.size(); i++)
-        {
-            c_print("Task inside the mission: ", red);
-            for (auto j =0; j< mission[i].dimension; j++)
-            {
-                c_print(mission[i].route[j]);
-            }
-            c_print("fine route!",red);
-        }
+        cout << "> Mission size: " << mission.size() << "\n";
 
         ros::spinOnce();
         sleep(1);

@@ -185,7 +185,6 @@ void PatrolAgent::init(int argc, char **argv)
     last_communication_delay_time = ros::Time::now().toSec();
 
     readParams();
-
 }
 
 void PatrolAgent::run()
@@ -227,7 +226,7 @@ void PatrolAgent::run()
     /* Run Algorithm */
 
     for (int i = 0; i < 5; i++)
-    sleep(1);
+        sleep(1);
 
     ros::Rate loop_rate(30); // 0.033 seconds or 30Hz
 
@@ -277,41 +276,40 @@ void PatrolAgent::run()
 
         loop_rate.sleep();
 
-    } // while ros.ok 
+    } // while ros.ok
 }
 
 int PatrolAgent::compute_next_vertex()
 {
-    c_print("& Presa del primo vertice della submission!", yellow);
-
     Task first_task = mission[id_task];
 
     auto nVertex = first_task.dimension;
 
-    c_print("% nVertex: ",nVertex -1,yellow);
-
     int vertex;
 
-    if (id_vertex <= nVertex -1)
+    if (id_vertex <= nVertex - 1)
     {
         vertex = first_task.route[id_vertex];
-        c_print("id_v: ",id_vertex, " vertex: ",vertex, blue);
+        c_print("id_v: ", id_vertex, " vertex: ", vertex, blue);
         id_vertex++;
+        id_task = 0;
     }
     else
     {
-        mission.erase(mission.begin());
+        mission.erase(mission.begin()); // cancella il primo
         int size = mission.size();
-        cout <<"mission size:" <<size << "\n";
+
+        cout << "## mission size: " << size << "\n";
+
         id_task++;
         id_vertex = 0;
+        
         Task tmp = mission[id_task];
         vertex = tmp.route[id_vertex];
-        c_print("id_v: ",id_vertex, " vertex: ",vertex,"id_task: ", id_task, blue);
+        c_print("id_v: ", id_vertex, " vertex: ", vertex, "id_task: ", id_task, blue);
         id_vertex++;
         request_Task();
     }
-
 
     // if (id_vertex >= mission.size())
     //     id_vertex = 1;
@@ -362,7 +360,7 @@ void PatrolAgent::request_Task()
     c_print("# Request Task!", red);
     task_request.flag = true;
     task_request.id_robot = ID_ROBOT;
-    task_request.capacity =  CPCTY_update();
+    task_request.capacity = CPCTY_update();
     pub_to_task_planner_needtask.publish(task_request);
     ros::spinOnce();
     loop_rate.sleep();
@@ -371,16 +369,25 @@ void PatrolAgent::request_Task()
 int PatrolAgent::CPCTY_update()
 {
     int tmp_CPCTY = CAPACITY;
-    for (auto i = 0; i < mission.size(); i++)
+    int tmp_demand = 0;
+    int size = mission.size();
+    if (size == 0)
     {
-        tmp_CPCTY -=mission[i].demand; 
+        c_print("@@@ size mission == 0", green);
+    }
+    else
+    {
+        for (auto i = 0; i < size; i++)
+        {
+            c_print("### Mission size(): ",size, red);
+            tmp_demand += mission[i].demand;
+        }
+
+        tmp_CPCTY -= tmp_demand;
     }
 
-    c_print("@ tmp_CAPCTY: ", tmp_CPCTY, green);
-
-    CAPACITY = tmp_CPCTY;
-
-    return CAPACITY;
+    c_print("@@@ CPCTY inviata al TP: ", tmp_CPCTY, green);
+    return tmp_CPCTY;
 }
 
 } // namespace patrolagent

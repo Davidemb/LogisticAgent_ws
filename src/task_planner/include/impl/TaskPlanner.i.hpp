@@ -176,6 +176,10 @@ void TaskPlanner::task_Callback(const patrolling_sim::TaskRequestConstPtr &tr)
                     ROS_INFO("I published task on mission topic!");
                     sleep(3);
                 }
+                else
+                {
+                    c_print("### task taken!",red);
+                }
             }
             else
             {
