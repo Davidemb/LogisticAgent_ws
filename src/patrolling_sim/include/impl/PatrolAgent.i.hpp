@@ -186,8 +186,6 @@ void PatrolAgent::init(int argc, char **argv)
 
     readParams();
 
-    // -------------------------------------------------------------------------
-    // -------------------------------------------------------------------------
 }
 
 void PatrolAgent::run()
@@ -285,13 +283,39 @@ void PatrolAgent::run()
 int PatrolAgent::compute_next_vertex()
 {
     c_print("& Presa del primo vertice della submission!", yellow);
-    int tmp = 0;
-    Task first_task = mission[0];
-    tmp = first_task.route[id_vertex];
-    id_vertex++;
-    if (id_vertex >= mission.size())
-        id_vertex = 1;
-    return tmp;
+
+    Task first_task = mission[id_task];
+
+    auto nVertex = first_task.dimension;
+
+    c_print("% nVertex: ",nVertex -1,yellow);
+
+    int vertex;
+
+    if (id_vertex <= nVertex -1)
+    {
+        vertex = first_task.route[id_vertex];
+        c_print("id_v: ",id_vertex, " vertex: ",vertex, blue);
+        id_vertex++;
+    }
+    else
+    {
+        mission.erase(mission.begin());
+        int size = mission.size();
+        cout <<"mission size:" <<size << "\n";
+        id_task++;
+        id_vertex = 0;
+        Task tmp = mission[id_task];
+        vertex = tmp.route[id_vertex];
+        c_print("id_v: ",id_vertex, " vertex: ",vertex,"id_task: ", id_task, blue);
+        id_vertex++;
+        request_Task();
+    }
+
+
+    // if (id_vertex >= mission.size())
+    //     id_vertex = 1;
+    return vertex;
 }
 
 void PatrolAgent::onGoalComplete()
@@ -331,5 +355,32 @@ void PatrolAgent::processEvents() {}
 void PatrolAgent::send_results() {}
 
 void PatrolAgent::receive_results() {}
+
+void PatrolAgent::request_Task()
+{
+    ros::Rate loop_rate(0.5);
+    c_print("# Request Task!", red);
+    task_request.flag = true;
+    task_request.id_robot = ID_ROBOT;
+    task_request.capacity =  CPCTY_update();
+    pub_to_task_planner_needtask.publish(task_request);
+    ros::spinOnce();
+    loop_rate.sleep();
+}
+
+int PatrolAgent::CPCTY_update()
+{
+    int tmp_CPCTY = CAPACITY;
+    for (auto i = 0; i < mission.size(); i++)
+    {
+        tmp_CPCTY -=mission[i].demand; 
+    }
+
+    c_print("@ tmp_CAPCTY: ", tmp_CPCTY, green);
+
+    CAPACITY = tmp_CPCTY;
+
+    return CAPACITY;
+}
 
 } // namespace patrolagent

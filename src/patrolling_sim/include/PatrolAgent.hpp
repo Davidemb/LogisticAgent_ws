@@ -148,6 +148,7 @@ namespace patrolagent
 
         std::vector<uint> route;
         uint id_vertex = 0;
+        uint id_task = 0;
         uint route_dimension;
 
         virtual void init(int argc, char** argv);
@@ -195,6 +196,8 @@ namespace patrolagent
 
         //--------------------------------------------------------------------------
         void receive_mission_Callback(const task_planner::TaskMessageConstPtr &msg);
+        void request_Task();
+        int  CPCTY_update();
 };
 
 } // namespace patrolagent

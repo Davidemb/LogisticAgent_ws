@@ -8,6 +8,7 @@ const string blue("34m");
 const string magenta("35m");
 const string cyan("36m");
 const string white("37m");
+
 const string env_in("\033[");
 const string env_out("\033[0m");
 
@@ -42,6 +43,18 @@ template <typename T, typename R, typename P, typename F>
 void c_print(T t, R r, P p, F f, const string color)
 {
   cout << env_in << color << t << r << p << f << env_out << "\n";
+}
+
+template <typename T, typename R, typename P, typename F, typename Q>
+void c_print(T t, R r, P p, F f, Q q, const string color)
+{
+  cout << env_in << color << t << r << p << f << q << env_out << "\n";
+}
+
+template <typename T, typename R, typename P, typename F, typename Q, typename Z>
+void c_print(T t, R r, P p, F f, Q q, Z z, const string color)
+{
+  cout << env_in << color << t << r << p << f << q << z << env_out << "\n";
 }
 
 // template <typename T>

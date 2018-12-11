@@ -18,6 +18,13 @@ void c_print(T t, R r, P p, const string color);
 template <typename T, typename R, typename P, typename F>
 void c_print(T t, R r, P p, F f, const string color);
 
+template <typename T, typename R, typename P, typename F, typename Q>
+void c_print(T t, R r, P p, F f, Q q, const string color);
+
+template <typename T, typename R, typename P, typename F, typename Q, typename Z>
+void c_print(T t, R r, P p, F f, Q q, Z z, const string color);
+
+
 // template <typename T>
 // void a_print(T t);
 

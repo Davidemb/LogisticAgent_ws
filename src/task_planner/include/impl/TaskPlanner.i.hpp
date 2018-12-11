@@ -143,13 +143,14 @@ void TaskPlanner::task_Callback(const patrolling_sim::TaskRequestConstPtr &tr)
 
         int id_vertex;
 
-        tm.route.clear();
-
         if (nTasks != tasks.size())
             c_print("### Err: nTasks != size()", red);
 
         for (auto i = 0; i < nTasks; i++)
         {
+            //-------------------------- creo numero di tm uguale al numero di task
+            task_planner::TaskMessage tm;
+            
             if (CAPACITY >= tasks[i].demand)
             {
                 if (!tasks[i].take)
@@ -166,11 +167,11 @@ void TaskPlanner::task_Callback(const patrolling_sim::TaskRequestConstPtr &tr)
                     {
                         id_vertex = tasks[i].route[j];
                         tm.route.push_back(id_vertex);
-
                         // tasks.pop_back();
                     }
                     CAPACITY -= tasks[i].demand;
                     c_print("% CPCTY: ", CAPACITY," ID_ROBOT: ", ID_ROBOT, magenta);
+                    tm.header.stamp = ros::Time::now();
                     pub_route.publish(tm);
                     ROS_INFO("I published task on mission topic!");
                     sleep(3);

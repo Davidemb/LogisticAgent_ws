@@ -87,7 +87,7 @@ class TaskPlanner
     void task_Callback            (const patrolling_sim::TaskRequestConstPtr &tr);
     void init_agent               ();
 
-    task_planner::TaskMessage tm;
+    // task_planner::TaskMessage tm;
 
     private:
         ros::Subscriber     sub_task;       // quando un robot vuole un task
