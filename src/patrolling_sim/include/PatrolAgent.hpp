@@ -147,12 +147,14 @@ namespace patrolagent
             ac              = NULL;
         }
 
-        std::vector<uint> route;
+        std::vector<int> route;
         uint id_vertex = 0;
         uint id_task = 0;
         uint route_dimension;
         uint loading[5]          = {2, 5, 8, 11, 14};
-        uint dowloading[5]       = {4, 7, 10, 13, 16};
+        uint downloading[5]       = {4, 7, 10, 13, 16};
+        bool ok = false;
+        int * tmp_route;
 
         virtual void init(int argc, char** argv);
             void readParams(); // read ROS parameters

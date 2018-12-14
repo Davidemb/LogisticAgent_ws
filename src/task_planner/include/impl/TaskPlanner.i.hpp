@@ -169,6 +169,7 @@ void TaskPlanner::task_Callback(const patrolling_sim::TaskRequestConstPtr &tr)
             else
             {
                 c_print("# CPCTY finisched!", red);
+                break;
             }
         }
         ros::spinOnce();

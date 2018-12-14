@@ -281,39 +281,29 @@ void PatrolAgent::run()
 
 int PatrolAgent::compute_next_vertex()
 {
-    Task first_task = mission[id_task];
+    c_print("Sono entrato nel compute_next vertex", blue);
+    for (auto j = 0; j < mission.size(); j++)
+    {
+        Task first_task = mission[j];
 
-    // auto nVertex = first_task.dimension;
+        route.push_back(first_task.src);
 
-    // int vertex;
+        for (auto i = 0; i < first_task.edge; i++)
+        {
+            route.push_back(downloading[i]);
+        }
 
-    // if (id_vertex <= nVertex - 1)
-    // {
-    //     vertex = first_task.route[id_vertex];
-    //     c_print("id_v: ", id_vertex, " vertex: ", vertex, blue);
-    //     id_vertex++;
-    //     id_task = 0;
-    // }
-    // else
-    // {
-    //     mission.erase(mission.begin()); // cancella il primo
-    //     int size = mission.size();
+        route.push_back(first_task.dst);
 
-    //     cout << "## mission size: " << size << "\n";
-
-    //     id_task++;
-    //     id_vertex = 0;
-        
-    //     Task tmp = mission[id_task];
-    //     vertex = tmp.route[id_vertex];
-    //     c_print("id_v: ", id_vertex, " vertex: ", vertex, "id_task: ", id_task, blue);
-    //     id_vertex++;
-    //     request_Task();
-    // }
-
-    // if (id_vertex >= mission.size())
-    //     id_vertex = 1;
-    return 0;
+        for (auto k = 0; k < route.size(); k++)
+        {
+            cout << route[k] << " ";
+        }
+        cout << "\n";
+    }
+        int vertex = route[id_vertex];
+        id_vertex++;
+    return vertex;
 }
 
 void PatrolAgent::onGoalComplete()
@@ -326,6 +316,7 @@ void PatrolAgent::onGoalComplete()
     }
 
     // devolver proximo vertex tendo em conta apenas as idlenesses;
+
     next_vertex = compute_next_vertex();
 
     c_print("   @ compute_next_vertex: ", next_vertex, green);
@@ -379,7 +370,7 @@ int PatrolAgent::CPCTY_update()
     {
         for (auto i = 0; i < size; i++)
         {
-            c_print("### Mission size(): ",size, red);
+            c_print("### Mission size(): ", size, red);
             tmp_demand += mission[i].demand;
         }
 
