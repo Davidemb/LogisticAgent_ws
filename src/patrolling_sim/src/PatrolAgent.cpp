@@ -649,21 +649,16 @@ void PatrolAgent::receive_mission_Callback(const task_planner::TaskMessageConstP
     {
         Task task;
 
-        c_print("% dimensione del task: ", msg->dimension, yellow);
+        c_print("% id del task: ", msg->order, yellow);
 
-        task.demand = msg->demand;
-        task.dimension = msg->dimension;
+        task.take = msg->take;        
         task.item = msg->item;
         task.order = msg->order;
+        task.demand = msg->demand;
         task.priority = msg->priority;
-        task.take = msg->take;        
-        task.route = new int[msg->dimension];
-
-        for (auto i = 0; i < msg->dimension; i++)
-        {
-            task.route[i] = msg->route[i];
-            cout << msg->route[i] << "\n";
-        }
+        task.src = msg->src;
+        task.dst = msg->dst;
+        task.edge = msg->edge;
 
         c_print("# Insert task on mission!", red);
 

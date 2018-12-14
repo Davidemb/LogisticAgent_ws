@@ -16,15 +16,16 @@ namespace taskplanner
     struct Task
     {
         bool    take;
-        int     item;
+        int     item;   
         int     order;
         int     demand;
         int     priority;
-        int     dimension;
-        int*    route;
+        int     src;
+        int     dst;
+        int     edge;
     };
 
-    inline Task mkTask(int item, int order, int demand, int priority, int dimension, int * route)
+    inline Task mkTask(int item, int order, int demand, int priority, int src, int dst, int edge)
     {
         Task t;
 
@@ -33,12 +34,10 @@ namespace taskplanner
         t.order     = order;            //  id dell' ordine
         t.demand    = demand;           //  quantita' di oggetti
         t.priority  = priority;         //  priorita'
-        t.dimension = dimension;        //  numero di vertici del percorso
-        t.route     = new int[dimension];
+        t.src       = src;
+        t.dst       = dst;
+        t.edge      = edge;
 
-        for (auto i = 0; i < t.dimension; i++)
-        t.route[i] = route[i];
-        
         return t;
     }
 
@@ -54,6 +53,9 @@ class TaskPlanner
         int ID_ROBOT;
         int CAPACITY;
         bool BOL_FLAG;
+
+        uint src_vertex = 3;
+        uint dst_vertex[4]      = {6, 9, 12, 15};
 
         struct
         {
@@ -81,11 +83,13 @@ class TaskPlanner
     Task operator[] (int i) const { return tasks[i]; }
     Task &operator[](int i)       { return tasks[i]; }
     
-    bool checkRegularFile         (const char* task_file);
+    // bool checkRegularFile         (const char* task_file);
     void t_print                  (Task t);
-    void parserTask               (const char* task_file);
+    // void parserTask               (const char* task_file);
     void task_Callback            (const patrolling_sim::TaskRequestConstPtr &tr);
     void init_agent               ();
+
+    void t_generator();
 
     // task_planner::TaskMessage tm;
 

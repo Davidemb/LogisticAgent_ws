@@ -1,1 +1,5 @@
-pub e sub per array route e provare a fare struct Task separata
+Modifica del parser no route
+calcolo del percorso 
+messaggio broadcast del percorso calcolato
+cycle intrincist
+pick and place task

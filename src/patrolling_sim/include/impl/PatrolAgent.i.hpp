@@ -283,37 +283,37 @@ int PatrolAgent::compute_next_vertex()
 {
     Task first_task = mission[id_task];
 
-    auto nVertex = first_task.dimension;
+    // auto nVertex = first_task.dimension;
 
-    int vertex;
+    // int vertex;
 
-    if (id_vertex <= nVertex - 1)
-    {
-        vertex = first_task.route[id_vertex];
-        c_print("id_v: ", id_vertex, " vertex: ", vertex, blue);
-        id_vertex++;
-        id_task = 0;
-    }
-    else
-    {
-        mission.erase(mission.begin()); // cancella il primo
-        int size = mission.size();
+    // if (id_vertex <= nVertex - 1)
+    // {
+    //     vertex = first_task.route[id_vertex];
+    //     c_print("id_v: ", id_vertex, " vertex: ", vertex, blue);
+    //     id_vertex++;
+    //     id_task = 0;
+    // }
+    // else
+    // {
+    //     mission.erase(mission.begin()); // cancella il primo
+    //     int size = mission.size();
 
-        cout << "## mission size: " << size << "\n";
+    //     cout << "## mission size: " << size << "\n";
 
-        id_task++;
-        id_vertex = 0;
+    //     id_task++;
+    //     id_vertex = 0;
         
-        Task tmp = mission[id_task];
-        vertex = tmp.route[id_vertex];
-        c_print("id_v: ", id_vertex, " vertex: ", vertex, "id_task: ", id_task, blue);
-        id_vertex++;
-        request_Task();
-    }
+    //     Task tmp = mission[id_task];
+    //     vertex = tmp.route[id_vertex];
+    //     c_print("id_v: ", id_vertex, " vertex: ", vertex, "id_task: ", id_task, blue);
+    //     id_vertex++;
+    //     request_Task();
+    // }
 
     // if (id_vertex >= mission.size())
     //     id_vertex = 1;
-    return vertex;
+    return 0;
 }
 
 void PatrolAgent::onGoalComplete()

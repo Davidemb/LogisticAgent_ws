@@ -5,5 +5,6 @@ uint32      item
 uint32      order
 uint32      demand
 uint32      priority
-uint32      dimension
-uint32[]    route
+uint32      src
+uint32      dst
+uint32      edge
