@@ -103,6 +103,8 @@ namespace patrolagent
         bool interference;
         double last_interference;
         bool goal_complete;
+        bool mission_complete;
+        bool loading_item;
         bool initialize;
         bool end_simulation;
         int next_vertex;
@@ -145,6 +147,8 @@ namespace patrolagent
             initialize      = true;
             end_simulation  = false;
             ac              = NULL;
+            mission_complete= false;
+            loading_item    = false;
         }
 
         std::vector<int> route;
@@ -203,6 +207,7 @@ namespace patrolagent
         void receive_mission_Callback(const task_planner::TaskMessageConstPtr &msg);
         void request_Task();
         int  CPCTY_update();
+        void prepare_mission();
 };
 
 } // namespace patrolagent

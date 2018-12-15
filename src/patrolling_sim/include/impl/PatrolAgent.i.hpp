@@ -4,26 +4,24 @@
 
 namespace patrolagent
 {
-
 using namespace std;
 
 void PatrolAgent::init(int argc, char **argv)
 {
     /*
-          argv[0]=/.../patrolling_sim/bin/GBS
-          argv[1]=__name:=XXXXXX
-          argv[2]=grid
-          argv[3]=ID_ROBOT
-      */
+        argv[0]=/.../patrolling_sim/bin/GBS
+        argv[1]=__name:=XXXXXX
+        argv[2]=grid
+        argv[3]=ID_ROBOT
+    */
 
     srand(time(NULL));
 
     // More than One robot (ID between 0 and 99)
     if (atoi(argv[3]) > NUM_MAX_ROBOTS || atoi(argv[3]) < -1)
     {
-        ROS_INFO(
-            "The Robot's ID must be an integer number between 0 an 99"); // max 100
-                                                                         // robots
+        ROS_INFO("The Robot's ID must be an integer number between 0 an 99"); // max 100
+                                                                              // robots
         return;
     }
     else
@@ -48,8 +46,7 @@ void PatrolAgent::init(int argc, char **argv)
 
     uint nedges = GetNumberEdges(vertex_web, dimension);
 
-    printf("Loaded graph %s with %d nodes and %d edges\n", mapname.c_str(),
-           dimension, nedges);
+    printf("Loaded graph %s with %d nodes and %d edges\n", mapname.c_str(), dimension, nedges);
 
 #if 0
     /* Output Graph Data */   
@@ -128,12 +125,10 @@ void PatrolAgent::init(int argc, char **argv)
     }
 
     // Publicar dados de "odom" para nó de posições
-    positions_pub = nh.advertise<nav_msgs::Odometry>(
-        "positions", 1); // only concerned about the most recent
+    positions_pub = nh.advertise<nav_msgs::Odometry>("positions", 1); // only concerned about the most recent
 
     // Subscrever posições de outros robots
-    positions_sub = nh.subscribe<nav_msgs::Odometry>(
-        "positions", 10, boost::bind(&PatrolAgent::positionsCB, this, _1));
+    positions_sub = nh.subscribe<nav_msgs::Odometry>("positions", 10, boost::bind(&PatrolAgent::positionsCB, this, _1));
 
     char string1[40];
     char string2[40];
@@ -158,17 +153,14 @@ void PatrolAgent::init(int argc, char **argv)
     cmd_vel_pub = nh.advertise<geometry_msgs::Twist>(string2, 1);
 
     // Subscrever para obter dados de "odom" do robot corrente
-    odom_sub = nh.subscribe<nav_msgs::Odometry>(
-        string1, 1, boost::bind(&PatrolAgent::odomCB, this,
-                                _1)); // size of the buffer = 1 (?)
+    odom_sub = nh.subscribe<nav_msgs::Odometry>(string1, 1, boost::bind(&PatrolAgent::odomCB, this,
+                                                                        _1)); // size of the buffer = 1 (?)
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     sub_to_task_planner_mission = nh.subscribe<task_planner::TaskMessage>(
-        "task_planner/mission", 1,
-        boost::bind(&PatrolAgent::receive_mission_Callback, this, _1));
+        "task_planner/mission", 1, boost::bind(&PatrolAgent::receive_mission_Callback, this, _1));
 
-    pub_to_task_planner_needtask =
-        nh.advertise<patrolling_sim::TaskRequest>("task_planner/needtask", 1);
+    pub_to_task_planner_needtask = nh.advertise<patrolling_sim::TaskRequest>("task_planner/needtask", 1);
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     ros::spinOnce();
@@ -177,9 +169,9 @@ void PatrolAgent::init(int argc, char **argv)
     results_pub = nh.advertise<std_msgs::Int16MultiArray>("results", 100);
     // results_sub = nh.subscribe("results", 10, resultsCB); //Subscrever
     // "results" vindo dos robots
-    results_sub = nh.subscribe<std_msgs::Int16MultiArray>(
-        "results", 100, boost::bind(&PatrolAgent::resultsCB, this,
-                                    _1)); // Subscrever "results" vindo dos robots
+    results_sub = nh.subscribe<std_msgs::Int16MultiArray>("results", 100,
+                                                          boost::bind(&PatrolAgent::resultsCB, this,
+                                                                      _1)); // Subscrever "results" vindo dos robots
 
     // last time comm delay has been applied
     last_communication_delay_time = ros::Time::now().toSec();
@@ -189,7 +181,6 @@ void PatrolAgent::init(int argc, char **argv)
 
 void PatrolAgent::run()
 {
-
     // get ready
     ready();
 
@@ -214,8 +205,7 @@ void PatrolAgent::run()
     }
     else
     {
-        ROS_WARN("Was not able to clear costmap (%s) before patrolling...",
-                 mb_string.c_str());
+        ROS_WARN("Was not able to clear costmap (%s) before patrolling...", mb_string.c_str());
     }
 
     // Asynch spinner (non-blocking)
@@ -230,12 +220,17 @@ void PatrolAgent::run()
 
     ros::Rate loop_rate(30); // 0.033 seconds or 30Hz
 
-    // while sarebbe
     while (ros::ok())
     {
+        if (!mission_complete)
+        {
+            prepare_mission();
+            mission_complete = true;
+        }
         if (goal_complete)
         {
             c_print("# Goal_complete?", red);
+            // prepare mission
             onGoalComplete(); // can be redefined
             resend_goal_count = 0;
         }
@@ -252,9 +247,8 @@ void PatrolAgent::run()
                 if (resend_goal_count < 3)
                 {
                     resend_goal_count++;
-                    ROS_INFO("Re-Sending goal (%d) - Vertex %d (%f,%f)",
-                             resend_goal_count, next_vertex, vertex_web[next_vertex].x,
-                             vertex_web[next_vertex].y);
+                    ROS_INFO("Re-Sending goal (%d) - Vertex %d (%f,%f)", resend_goal_count, next_vertex,
+                             vertex_web[next_vertex].x, vertex_web[next_vertex].y);
                     sendGoal(next_vertex);
                 }
                 else
@@ -279,20 +273,27 @@ void PatrolAgent::run()
     } // while ros.ok
 }
 
-int PatrolAgent::compute_next_vertex()
+void PatrolAgent::prepare_mission()
 {
-    c_print("Sono entrato nel compute_next vertex", blue);
+    int tmp_i = 0;
+
     for (auto j = 0; j < mission.size(); j++)
     {
         Task first_task = mission[j];
 
-        route.push_back(first_task.src);
-
-        for (auto i = 0; i < first_task.edge; i++)
+        if (!loading_item) 
         {
-            route.push_back(downloading[i]);
+            route.push_back(first_task.src);
+            loading_item = true;
         }
 
+
+        for (auto i = tmp_i; i < first_task.edge; i++)
+        {
+            route.push_back(downloading[i]);
+            if (i == first_task.edge - 1)
+                tmp_i = i;
+        }
         route.push_back(first_task.dst);
 
         for (auto k = 0; k < route.size(); k++)
@@ -301,8 +302,30 @@ int PatrolAgent::compute_next_vertex()
         }
         cout << "\n";
     }
-        int vertex = route[id_vertex];
+    mission.clear();
+    loading_item = false;
+}
+
+int PatrolAgent::compute_next_vertex()
+{
+    c_print("Sono entrato nel compute_next vertex", blue);
+
+    int vertex;
+
+    if (route.size() == id_vertex)
+    {
+        vertex = route[id_vertex];
+        request_Task();
+        mission_complete = false;
+        id_vertex = 0;
+        route.clear();
+    }
+    else
+    {
+        vertex = route[id_vertex];
         id_vertex++;
+    }
+
     return vertex;
 }
 
@@ -331,19 +354,24 @@ void PatrolAgent::onGoalComplete()
     send_results(); // Algorithm specific function
 
     // Send the goal to the robot (Global Map)
-    ROS_INFO("Sending goal - Vertex %d (%f,%f)\n", next_vertex,
-             vertex_web[next_vertex].x, vertex_web[next_vertex].y);
+    ROS_INFO("Sending goal - Vertex %d (%f,%f)\n", next_vertex, vertex_web[next_vertex].x, vertex_web[next_vertex].y);
     // sendGoal(vertex_web[next_vertex].x, vertex_web[next_vertex].y);
     sendGoal(next_vertex); // send to move_base
 
     goal_complete = false;
 }
 
-void PatrolAgent::processEvents() {}
+void PatrolAgent::processEvents()
+{
+}
 
-void PatrolAgent::send_results() {}
+void PatrolAgent::send_results()
+{
+}
 
-void PatrolAgent::receive_results() {}
+void PatrolAgent::receive_results()
+{
+}
 
 void PatrolAgent::request_Task()
 {
