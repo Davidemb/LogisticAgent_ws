@@ -57,7 +57,7 @@
 #include <task_planner/TaskMessage.h>
 
 #define NUM_MAX_ROBOTS 32
-#define INTERFERENCE_DISTANCE 3
+#define INTERFERENCE_DISTANCE 0.5
 
 #define DELTA_TIME_SEQUENTIAL_START 15
 #define SIMULATE_FOREVER false //WARNING: Set this to false, if you want a finishing condition.
