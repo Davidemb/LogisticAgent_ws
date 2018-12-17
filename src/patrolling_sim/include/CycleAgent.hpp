@@ -12,13 +12,24 @@ namespace cycleagent
 
     class CycleAgent : public PatrolAgent
     {
-        public:
+        protected:
+            bool first;
+            bool mission_complete;
+            bool go_src;
 
+            int last_vertex;
+            int i = 0;
+
+            std::vector<int> route_to_src;
+
+        public:
             // CycleAgent();
             virtual void run();
             virtual void onGoalComplete();
             virtual int compute_next_vertex();
             void compute_mission();
+            int go_to_src();
+            void compute_src(int vertex);
     };
 }//namespace cycleagent
 

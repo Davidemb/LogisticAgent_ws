@@ -6,21 +6,24 @@ using namespace std;
 
 int CycleAgent::compute_next_vertex()
 {
-    c_print("Sono entrato nel compute_next vertex", blue);
-
     int vertex;
 
-    if (route.size() == id_vertex)
+    if (route.size()-1 == id_vertex)
     {
         vertex = route[id_vertex];
         request_Task();
-        mission_complete = false;
-        id_vertex = 0;
+
+        c_print ("id_v: ",id_vertex, " vertex: ", vertex, yellow);
+
         route.clear();
+        id_vertex = 0;
+        go_src = true;
+        mission_complete = false;
     }
     else
     {
         vertex = route[id_vertex];
+        c_print ("id_v: ",id_vertex, " vertex: ", vertex, yellow);
         id_vertex++;
     }
 
@@ -37,9 +40,19 @@ void CycleAgent::onGoalComplete()
     }
 
     // devolver proximo vertex tendo em conta apenas as idlenesses;
-
-    next_vertex = compute_next_vertex();
-
+    if (!go_src)
+    {
+        c_print("go_src: ",go_src, red);
+        next_vertex = compute_next_vertex();
+        last_vertex = next_vertex;
+    }
+    else
+    {
+        c_print("go_src!", cyan);
+        compute_src(last_vertex);
+        next_vertex = go_to_src();
+        go_src = false;
+    }
     c_print("   @ compute_next_vertex: ", next_vertex, green);
 
     // printf("Move Robot to Vertex %d (%f,%f)\n", next_vertex,

@@ -57,7 +57,7 @@
 #include <task_planner/TaskMessage.h>
 
 #define NUM_MAX_ROBOTS 32
-#define INTERFERENCE_DISTANCE 2
+#define INTERFERENCE_DISTANCE 3
 
 #define DELTA_TIME_SEQUENTIAL_START 15
 #define SIMULATE_FOREVER false //WARNING: Set this to false, if you want a finishing condition.
@@ -103,8 +103,6 @@ namespace patrolagent
         bool interference;
         double last_interference;
         bool goal_complete;
-        bool mission_complete;
-        bool loading_item;
         bool initialize;
         bool end_simulation;
         int next_vertex;
@@ -153,8 +151,6 @@ namespace patrolagent
             initialize      = true;
             end_simulation  = false;
             ac              = NULL;
-            mission_complete= false;
-            loading_item    = false;
         }
 
         virtual void init(int argc, char** argv);

@@ -30,7 +30,7 @@ void TaskPlanner::task_Callback(const patrolling_sim::TaskRequestConstPtr &tr)
 
     if (tr->flag)
     {
-        c_print("@ Read Flag :-)", green);
+        c_print("@ Request activate!", green);
 
         for (auto i = 0; i < nTasks; i++)
         {
@@ -49,7 +49,7 @@ void TaskPlanner::task_Callback(const patrolling_sim::TaskRequestConstPtr &tr)
                     tm.dst = tasks[i].dst;
                     tm.edge = tasks[i].edge;
                     CAPACITY -= tasks[i].demand;
-                    c_print("% CPCTY: ", CAPACITY, " ID_ROBOT: ", ID_ROBOT, magenta);
+                    c_print("% id_task: ", tm.order, " ID_ROBOT: ", tm.ID_ROBOT, yellow);
                     tm.header.stamp = ros::Time::now();
                     pub_route.publish(tm);
                     ROS_INFO("I published task on mission topic!");
@@ -79,7 +79,7 @@ void TaskPlanner::t_generator()
 {
     uint n_item = 1;
     uint o = 0;
-    uint n_demand = 3;
+    uint n_demand = 2;
     // dare un id ad ogni task
     // 4 possibili partenze e destinazione
     // priorita' piu alta per i task con piu demand
