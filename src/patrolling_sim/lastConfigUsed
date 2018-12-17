@@ -1,7 +1,7 @@
 [Config]
 map: model3
 nrobots: 1
-algorithm: LOGA
+algorithm: CYCLE
 locmode: AMCL
 navmode: ros
 gwait: 3

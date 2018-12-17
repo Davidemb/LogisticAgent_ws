@@ -222,15 +222,8 @@ void PatrolAgent::run()
 
     while (ros::ok())
     {
-        if (!mission_complete)
-        {
-            prepare_mission();
-            mission_complete = true;
-        }
         if (goal_complete)
         {
-            c_print("# Goal_complete?", red);
-            // prepare mission
             onGoalComplete(); // can be redefined
             resend_goal_count = 0;
         }
@@ -273,60 +266,9 @@ void PatrolAgent::run()
     } // while ros.ok
 }
 
-void PatrolAgent::prepare_mission()
-{
-    int tmp_i = 0;
-
-    for (auto j = 0; j < mission.size(); j++)
-    {
-        Task first_task = mission[j];
-
-        if (!loading_item) 
-        {
-            route.push_back(first_task.src);
-            loading_item = true;
-        }
-
-
-        for (auto i = tmp_i; i < first_task.edge; i++)
-        {
-            route.push_back(downloading[i]);
-            if (i == first_task.edge - 1)
-                tmp_i = i;
-        }
-        route.push_back(first_task.dst);
-
-        for (auto k = 0; k < route.size(); k++)
-        {
-            cout << route[k] << " ";
-        }
-        cout << "\n";
-    }
-    mission.clear();
-    loading_item = false;
-}
-
 int PatrolAgent::compute_next_vertex()
 {
-    c_print("Sono entrato nel compute_next vertex", blue);
-
-    int vertex;
-
-    if (route.size() == id_vertex)
-    {
-        vertex = route[id_vertex];
-        request_Task();
-        mission_complete = false;
-        id_vertex = 0;
-        route.clear();
-    }
-    else
-    {
-        vertex = route[id_vertex];
-        id_vertex++;
-    }
-
-    return vertex;
+   return 666;
 }
 
 void PatrolAgent::onGoalComplete()
@@ -375,38 +317,18 @@ void PatrolAgent::receive_results()
 
 void PatrolAgent::request_Task()
 {
-    ros::Rate loop_rate(0.5);
     c_print("# Request Task!", red);
+    
+    ros::Rate loop_rate(0.5);
+    
     task_request.flag = true;
     task_request.id_robot = ID_ROBOT;
-    task_request.capacity = CPCTY_update();
+    task_request.capacity = CAPACITY;
+
     pub_to_task_planner_needtask.publish(task_request);
+    
     ros::spinOnce();
     loop_rate.sleep();
-}
-
-int PatrolAgent::CPCTY_update()
-{
-    int tmp_CPCTY = CAPACITY;
-    int tmp_demand = 0;
-    int size = mission.size();
-    if (size == 0)
-    {
-        c_print("@@@ size mission == 0", green);
-    }
-    else
-    {
-        for (auto i = 0; i < size; i++)
-        {
-            c_print("### Mission size(): ", size, red);
-            tmp_demand += mission[i].demand;
-        }
-
-        tmp_CPCTY -= tmp_demand;
-    }
-
-    c_print("@@@ CPCTY inviata al TP: ", tmp_CPCTY, green);
-    return tmp_CPCTY;
 }
 
 } // namespace patrolagent

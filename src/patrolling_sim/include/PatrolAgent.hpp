@@ -127,6 +127,7 @@ namespace patrolagent
         ros::Subscriber     odom_sub, positions_sub;
         // /------------------------------------------------------------------------
         ros::Subscriber     sub_to_task_planner_mission;
+        ros::Publisher pub_to_task_planner_needtask;
 
         ros::Publisher      positions_pub;
         ros::Subscriber     results_sub;
@@ -136,8 +137,13 @@ namespace patrolagent
         std::vector<Task> mission;
 
         patrolling_sim::TaskRequest task_request;
-        ros::Publisher pub_to_task_planner_needtask;
 
+        std::vector<int> route;
+        uint id_vertex = 0;
+        uint id_task = 0;
+        uint route_dimension;
+        uint loading[5]          = {2, 5, 8, 11, 14};
+        uint downloading[5]       = {4, 7, 10, 13, 16};
 
     public:
 
@@ -151,23 +157,14 @@ namespace patrolagent
             loading_item    = false;
         }
 
-        std::vector<int> route;
-        uint id_vertex = 0;
-        uint id_task = 0;
-        uint route_dimension;
-        uint loading[5]          = {2, 5, 8, 11, 14};
-        uint downloading[5]       = {4, 7, 10, 13, 16};
-        bool ok = false;
-        int * tmp_route;
-
         virtual void init(int argc, char** argv);
-            void readParams(); // read ROS parameters
+        void readParams(); // read ROS parameters
         void initialize_node();
         void update_idleness();  // local idleness
 
         virtual void run();
-            void ready();
-            virtual void onGoalComplete(); // what to do when a goal has been reached
+        void ready();
+        virtual void onGoalComplete(); // what to do when a goal has been reached
 
         void getRobotPose(int robotid, float &x, float &y, float &theta);
         void odomCB(const nav_msgs::Odometry::ConstPtr& msg);
@@ -179,7 +176,6 @@ namespace patrolagent
         void goalActiveCallback();
         void goalFeedbackCallback(const move_base_msgs::MoveBaseFeedbackConstPtr &feedback);
 
-    
         void send_goal_reached();
         bool check_interference (int ID_ROBOT);
         void do_interference_behavior();
@@ -206,8 +202,6 @@ namespace patrolagent
         //--------------------------------------------------------------------------
         void receive_mission_Callback(const task_planner::TaskMessageConstPtr &msg);
         void request_Task();
-        int  CPCTY_update();
-        void prepare_mission();
 };
 
 } // namespace patrolagent

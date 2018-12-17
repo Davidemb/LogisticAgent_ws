@@ -32,7 +32,8 @@ Alg_names = [
         [ 'CBLS', 'CBLS' ],
         [ 'DTAG', 'DTAGreedy' ],
         [ 'DTAP', 'DTASSIPart' ],
-        [ 'LOGA', 'LOGA']
+        [ 'LOGA', 'LOGA'],
+        [ 'CYCLE','CYCLE']
      ]
 
 Map_names = ['cumberland','example','grid','1r5','broughton','DIAG_labs','DIAG_floor1','model1','model2','model3','model4']   

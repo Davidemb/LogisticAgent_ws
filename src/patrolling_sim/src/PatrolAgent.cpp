@@ -152,7 +152,7 @@ void PatrolAgent::initialize_node()
         loop_rate.sleep();
         count++;
     }
-    request_Task();
+    request_Task(); // <--- Task di inizializzazione
 }
 
 void PatrolAgent::getRobotPose(int robotid, float &x, float &y, float &theta)
