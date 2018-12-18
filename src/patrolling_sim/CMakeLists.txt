@@ -55,6 +55,8 @@ find_package(catkin REQUIRED COMPONENTS
 add_message_files(
   FILES
   TaskRequest.msg
+  Vertex.msg
+  VertexWeb.msg
 )
 
 ## Generate services in the 'srv' folder
@@ -72,7 +74,7 @@ add_service_files(
 
 ## Generate added messages and services with any dependencies listed here
  generate_messages(
-   DEPENDENCIES std_msgs
+   DEPENDENCIES std_msgs geometry_msgs
  )
 
 ###################################
@@ -135,10 +137,12 @@ add_library(CycleAgent
 ## Declare a cpp executable 
 add_executable(LOGA src/LOGA_Agent.cpp)
 ## Specify libraries to link a library or executable target against
+add_dependencies(LOGA ${PROJECT_NAME}_gencpp)
 target_link_libraries(LOGA PatrolAgent LogicAgent ${catkin_LIBRARIES})
 
 ## Declare a cpp executable 
 add_executable(CYCLE src/CYCLE_Agent.cpp)
+add_dependencies(CYCLE ${PROJECT_NAME}_gencpp)
 ## Specify libraries to link a library or executable target against
 target_link_libraries(CYCLE PatrolAgent CycleAgent ${catkin_LIBRARIES})
 

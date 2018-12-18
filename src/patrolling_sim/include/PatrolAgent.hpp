@@ -55,10 +55,13 @@
 #include "message_types.hpp"
 #include <patrolling_sim/TaskRequest.h>
 #include <task_planner/TaskMessage.h>
+#include <patrolling_sim/Vertex.h>
+#include <patrolling_sim/VertexWeb.h>
+
 
 #define NUM_MAX_ROBOTS 32
 #define INTERFERENCE_DISTANCE 0.5
-
+#define SHARE_MSG 33
 #define DELTA_TIME_SEQUENTIAL_START 15
 #define SIMULATE_FOREVER false //WARNING: Set this to false, if you want a finishing condition.
 
@@ -106,12 +109,13 @@ namespace patrolagent
         bool initialize;
         bool end_simulation;
         int next_vertex;
-        // uint backUpCounter;
+        uint backUpCounter;
         vertex *vertex_web;
         double *instantaneous_idleness;  // local idleness
         double *last_visit;
 
         std::vector<int> vresults; // results exchanged among robots
+        std::vector<int> shared_array;
 
         bool goal_canceled_by_user;
 
@@ -131,17 +135,25 @@ namespace patrolagent
         ros::Subscriber     results_sub;
         ros::Publisher      results_pub;
         ros::Publisher      cmd_vel_pub;
+        
+        ros::Publisher      pub_broadcast_msg;
+        ros::Subscriber     sub_broadcast_msg;
+
+        ros::Publisher      pub_vertex_msg;
+        ros::Publisher      pub_vertex_web;
+        ros::Subscriber     sub_vertex_web;
 
         std::vector<Task> mission;
 
-        patrolling_sim::TaskRequest task_request;
+        patrolling_sim::TaskRequest     task_request;
+        patrolling_sim::VertexWeb       vertex_web_msg;
 
         std::vector<int> route;
         uint id_vertex = 0;
         uint id_task = 0;
         uint route_dimension;
-        uint loading[5]          = {2, 5, 8, 11, 14};
-        uint downloading[5]       = {4, 7, 10, 13, 16};
+        uint loading[5]                 = {2, 5, 8, 11, 14};
+        uint downloading[5]             = {4, 7, 10, 13, 16};
 
     public:
 
@@ -196,8 +208,12 @@ namespace patrolagent
         virtual int compute_next_vertex();
 
         //--------------------------------------------------------------------------
-        void receive_mission_Callback(const task_planner::TaskMessageConstPtr &msg);
         void request_Task();
+        void receive_mission_Callback(const task_planner::TaskMessageConstPtr &msg);
+        void share_env_Callback(const std_msgs::Int16MultiArray::ConstPtr &msg);
+        // void receive_vertex_web_Callback(const patrolling_sim::VertexWebConstPtr &msg);
+        //----------------------------------------------------------------------
+        // void instantaneous_vertex_web();
 };
 
 } // namespace patrolagent

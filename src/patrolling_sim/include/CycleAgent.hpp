@@ -6,6 +6,9 @@ uint id_vertex, id_task
 uint loading[5] vertici superiori
 uint dowload[5] vertici inferiori
 */
+ 
+
+
 namespace cycleagent
 {
     using namespace patrolagent;

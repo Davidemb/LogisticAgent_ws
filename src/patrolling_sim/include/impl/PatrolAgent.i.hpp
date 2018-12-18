@@ -41,6 +41,8 @@ void PatrolAgent::init(int argc, char **argv)
     // Create Structure to save the Graph Info;
     vertex_web = new vertex[dimension];
 
+    
+
     // Get the Graph info from the Graph File
     GetGraphInfo(vertex_web, dimension, graph_file.c_str());
 
@@ -132,17 +134,24 @@ void PatrolAgent::init(int argc, char **argv)
 
     char string1[40];
     char string2[40];
-
+    char string3[40];
+    char string4[40];
+    
     if (ID_ROBOT == -1)
     {
         strcpy(string1, "odom");    // string = "odom"
         strcpy(string2, "cmd_vel"); // string = "cmd_vel"
+        strcpy(string3, "vetrex");
+        strcpy(string4, "vetrex_web");
         TEAMSIZE = 1;
     }
     else
     {
         sprintf(string1, "robot_%d/odom", ID_ROBOT);
         sprintf(string2, "robot_%d/cmd_vel", ID_ROBOT);
+        sprintf(string3, "robot_%d/vertex", ID_ROBOT);
+        sprintf(string4, "robot_%d/vertex_web", ID_ROBOT);
+        
         TEAMSIZE = ID_ROBOT + 1;
     }
 
@@ -154,7 +163,7 @@ void PatrolAgent::init(int argc, char **argv)
 
     // Subscrever para obter dados de "odom" do robot corrente
     odom_sub = nh.subscribe<nav_msgs::Odometry>(string1, 1, boost::bind(&PatrolAgent::odomCB, this,
-                                                                        _1)); // size of the buffer = 1 (?)
+                                                                        _1)); 
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     sub_to_task_planner_mission = nh.subscribe<task_planner::TaskMessage>(
@@ -163,6 +172,16 @@ void PatrolAgent::init(int argc, char **argv)
     pub_to_task_planner_needtask = nh.advertise<patrolling_sim::TaskRequest>("task_planner/needtask", 1);
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+    pub_broadcast_msg = nh.advertise<std_msgs::Int16MultiArray>("share_env",100);
+
+    sub_broadcast_msg = nh.subscribe<std_msgs::Int16MultiArray>("share_env",100,
+                                                            boost::bind(&PatrolAgent::share_env_Callback, this, _1));
+
+    pub_vertex_msg = nh.advertise<patrolling_sim::Vertex>(string3, 1);
+    pub_vertex_web = nh.advertise<patrolling_sim::VertexWeb>(string4, 1);
+
+    // sub_vertex_web = nh.subscribe<patrolling_sim::VertexWeb>(string4, 1, boost::bind(&PatrolAgent::receive_vertex_web_Callback, this, _1));
+    
     ros::spinOnce();
 
     // Publicar dados para "results"
