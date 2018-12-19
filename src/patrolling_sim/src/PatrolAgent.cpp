@@ -318,7 +318,6 @@ void PatrolAgent::goalFeedbackCallback(const move_base_msgs::MoveBaseFeedbackCon
     value = 0;
   }
   interference = check_interference(value);
-  sleep(3);  // <<<
 }
 
 void PatrolAgent::send_goal_reached()

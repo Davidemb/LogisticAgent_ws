@@ -7,4 +7,3 @@ uint32[]              id_neigh
 uint32[]              cost
 float32[]             cost_m 
 bool[]                visited
-geometry_msgs/Point[] dir

@@ -91,7 +91,7 @@ namespace patrolagent
     protected:
         int TEAMSIZE;
         int ID_ROBOT;
-        int CAPACITY = 2;
+        int CAPACITY = 1; //////////////////////////////////////////////////////////////////////////////////////////////
 
         double xPos[NUM_MAX_ROBOTS]; //tabelas de posições (atençao ao index pro caso de 1 so robot)
         double yPos[NUM_MAX_ROBOTS]; //tabelas de posições (atençao ao index pro caso de 1 so robot)
@@ -129,7 +129,7 @@ namespace patrolagent
         ros::Subscriber     odom_sub, positions_sub;
         // /------------------------------------------------------------------------
         ros::Subscriber     sub_to_task_planner_mission;
-        ros::Publisher pub_to_task_planner_needtask;
+        ros::Publisher      pub_to_task_planner_needtask;
 
         ros::Publisher      positions_pub;
         ros::Subscriber     results_sub;

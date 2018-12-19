@@ -51,7 +51,6 @@ void CycleAgent::onGoalComplete()
         c_print("go_src!", cyan);
         compute_src(last_vertex);
         next_vertex = go_to_src();
-        go_src = false;
     }
     c_print("   @ compute_next_vertex: ", next_vertex, green);
 

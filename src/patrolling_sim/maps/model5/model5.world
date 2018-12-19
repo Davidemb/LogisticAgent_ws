@@ -14,7 +14,7 @@ window(
 floorplan (
   size [23.0 8.0  1] 
   pose [11.5 4.0 0 0]
-  bitmap "model3.pgm"
+  bitmap "model5.pgm"
 )
 
 include "robots.inc"

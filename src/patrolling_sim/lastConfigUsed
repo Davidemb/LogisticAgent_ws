@@ -1,8 +1,8 @@
 [Config]
 map: model3
-nrobots: 2
+nrobots: 1
 algorithm: CYCLE
 locmode: AMCL
 navmode: ros
-gwait: 3
+gwait: 0
 term: gnome-terminal

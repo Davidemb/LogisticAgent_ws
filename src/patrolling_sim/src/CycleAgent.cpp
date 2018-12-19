@@ -38,6 +38,10 @@ int CycleAgent::go_to_src()
 {
     int vertex;
     vertex = route_to_src[i];
+    if (route_to_src.size() -1 == i)
+    {
+        go_src = true;
+    }
     i++;
     return vertex;
 }
