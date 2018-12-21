@@ -4,8 +4,10 @@ namespace taskplanner
 {
 TaskPlanner::TaskPlanner(ros::NodeHandle &nh_)
 {
-  sub_task = nh_.subscribe("needtask", 1, &TaskPlanner::task_Callback, this);
-  pub_route = nh_.advertise<task_planner::TaskMessage>("mission", 1);
+  sub_task    = nh_.subscribe("needtask", 1, &TaskPlanner::task_Callback, this);
+  pub_task    = nh_.advertise<task_planner::TaskMessage>("mission", 1);
+  sub_mission = nh_.subscribe("needtask", 1, &TaskPlanner::mission_Callback, this);
+  pub_mission = nh_.advertise<task_planner::MissionMessage>("mission",1);
   t_generator();
 }
 
@@ -95,7 +97,7 @@ void TaskPlanner::task_Callback(const patrolling_sim::TaskRequestConstPtr &tr)
         tm.dst = it->dst;
         tm.edge = it->edge;
         c_print("% publish on topic mission! Task n: ", it->order," ID_robot: ",tm.ID_ROBOT, yellow);
-        pub_route.publish(tm);
+        pub_task.publish(tm);
         single_task = false;
         sleep(3);
       }

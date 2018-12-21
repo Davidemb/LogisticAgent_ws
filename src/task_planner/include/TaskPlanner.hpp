@@ -8,8 +8,9 @@
 #include <ros/ros.h>
 #include <std_msgs/Bool.h>
 #include <std_msgs/Int16MultiArray.h>
-#include <patrolling_sim/TaskRequest.h>
+#include <patrolling_sim/Request.h>
 #include <task_planner/TaskMessage.h>
+#include <task_planner/MissionMessage.h>
 
 namespace taskplanner
 {
@@ -52,10 +53,6 @@ class TaskPlanner
     const char *task_file = "/home/dave/LogisticAgent_ws/src/task_planner/param/all_task.txt";
 
     uint TEAMSIZE;
-    uint nTasks;
-    int ID_ROBOT;
-    int CAPACITY;
-    bool BOL_FLAG;
     uint src_vertex = 3;
     uint dst_vertex[4] = {6, 9, 12, 15};
     vector<Task> tasks;
@@ -64,12 +61,16 @@ class TaskPlanner
     Task &operator[](int i) { return tasks[i]; }
 
     void t_print(Task t);
-    void task_Callback(const patrolling_sim::TaskRequestConstPtr &tr);
     void t_generator();
+    
+    void task_Callback(const patrolling_sim::TaskRequestConstPtr &msg);
+    void mission_Callback(const patrolling_sim::MissionRequestConstPtr &msg);
 
   private:
     ros::Subscriber sub_task; // quando un robot vuole un task
-    ros::Publisher pub_route; // pubblicazione dell'array (pop dal vettore di tasks)
+    ros::Publisher  pub_task; // pubblicazione dell'array (pop dal vettore di tasks)
+    ros::Subscriber sub_mission;
+    ros::Publisher  pub_mission;
 };
 
 } // namespace taskplanner
