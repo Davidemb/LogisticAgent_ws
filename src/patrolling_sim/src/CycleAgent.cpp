@@ -10,7 +10,7 @@ void CycleAgent::compute_mission()
     {
         Task first_task = mission[j];
 
-        if (!first) 
+        if (!first)
         {
             route.push_back(first_task.src);
             first = true;
@@ -36,45 +36,62 @@ void CycleAgent::compute_mission()
 
 int CycleAgent::go_to_src()
 {
-    int vertex;
-    vertex = route_to_src[i];
-    if (route_to_src.size() -1 == i)
-    {
-        go_src = true;
-    }
-    i++;
-    return vertex;
+    return 666;
 }
 
 void CycleAgent::compute_src(int vertex)
 {
-
     c_print("compute src!", red);
     int i = 0;
     switch (vertex)
     {
-        case 15:
-            i = 5;
-           
-        case 12:
-            i = 4;
-           
-        case 9:
-            i = 3;
-          
-        case 6:
-            i = 2;
+    case 15:
+        i = 5;
+        break;
+
+    case 12:
+        i = 4;
+        break;
+
+    case 9:
+        i = 3;
+        break;
+
+    case 6:
+        i = 2;
+        break;
+
+    default:
+        c_print("# Err compute_src!", red);
+        break;
     }
 
-    c_print("I: ",i, cyan);
-
-    for (int j = i-1; j >= 0; j--)
+    for (int j = i - 1; j >= 0; --j)
     {
-        c_print("#######################",red);
-        int element = loading[j];
-        route_to_src.push_back(element);
-        c_print("element: ", element, cyan);
+        route.push_back(loading[j]);
     }
+}
+
+void CycleAgent::compute_single_task()
+{
+    route.clear();
+    Task t = mission.front();
+    route.push_back(t.src);
+    for (auto i = 0; i < t.edge; i++)
+    {
+        route.push_back(downloading[i]);
+    }
+    route.push_back(t.dst);
+    compute_src(t.dst);
+
+    std::cout << "route: \n";
+    for (auto i = 0; i < route.size(); i++)
+    {
+        c_print(route[i], " ", blue);
+    }
+    std::cout << "\n";
+
+    mission.clear();
 }
 
 // void CycleAgent::share_decison()
@@ -93,4 +110,4 @@ void CycleAgent::compute_src(int vertex)
 //     }
 //     send_decision(msg);
 // }
-}// namesapce cycleagent
+} // namespace cycleagent

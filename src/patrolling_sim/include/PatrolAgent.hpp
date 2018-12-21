@@ -151,7 +151,7 @@ namespace patrolagent
         std::vector<int> route;
         uint id_vertex = 0;
         uint id_task = 0;
-        uint route_dimension;
+        uint route_dimension;                  
         uint loading[5]                 = {2, 5, 8, 11, 14};
         uint downloading[5]             = {4, 7, 10, 13, 16};
 

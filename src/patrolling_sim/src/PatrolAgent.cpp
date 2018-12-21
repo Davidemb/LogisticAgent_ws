@@ -643,14 +643,11 @@ void PatrolAgent::resultsCB(const std_msgs::Int16MultiArray::ConstPtr &msg)
 void PatrolAgent::receive_mission_Callback(const task_planner::TaskMessageConstPtr &msg)
 {
   // popolazione del vettore mission<Task>
-  c_print("@CB Task ricevuto dalla missione!", green);
+  c_print("@ Task ricevuto! n: ",msg->order," ID_ROBOT = ",ID_ROBOT, green);
 
   if (msg->ID_ROBOT == ID_ROBOT)
   {
     Task task;
-
-    c_print("% id del task: ", msg->order, yellow);
-
     task.take = msg->take;
     task.item = msg->item;
     task.order = msg->order;
@@ -659,19 +656,11 @@ void PatrolAgent::receive_mission_Callback(const task_planner::TaskMessageConstP
     task.src = msg->src;
     task.dst = msg->dst;
     task.edge = msg->edge;
-
-    c_print("# Insert task on mission!", red);
-
+    c_print("# insert task on mission!", red);
     mission.push_back(task);
-
-    cout << "> Mission size: " << mission.size() << "\n";
-
-    ros::spinOnce();
   }
-  else
-  {
-    c_print("# Skip task != ID_ROBOT!", red);
-  }
+  ros::spinOnce();
+  sleep(1);
 }
 
 void PatrolAgent::share_env_Callback(const std_msgs::Int16MultiArray::ConstPtr &msg)
@@ -706,6 +695,7 @@ void PatrolAgent::share_env_Callback(const std_msgs::Int16MultiArray::ConstPtr &
         }
     break;
     }
+    ros::spinOnce();
 }
 
 /* void PatrolAgent::instantaneous_vertex_web()

@@ -76,34 +76,36 @@ void TaskPlanner::t_print(Task t)
 
 void TaskPlanner::task_Callback(const patrolling_sim::TaskRequestConstPtr &tr)
 {
+  bool single_task = true;
   if (tr->flag)
   {
-    for (auto i = 0; i < tasks.size(); i++)
+    for (vector<Task>::iterator it = tasks.begin(); it != tasks.end(); it++)
     {
       task_planner::TaskMessage tm;
-      if (!tasks[i].take)
+      if ((!it->take) && (single_task))
       {
-        tasks[i].take = true;
+        it->take = true;
         tm.header.stamp = ros::Time().now();
         tm.ID_ROBOT = tr->id_robot;
-        tm.demand = tasks[i].demand;
-        tm.item = tasks[i].item;
-        tm.order = tasks[i].order;
-        tm.priority = tasks[i].priority;
-        tm.src = tasks[i].src;
-        tm.dst = tasks[i].dst;
-        tm.edge = tasks[i].edge;
-        c_print("# publish on topic mission!", red);
+        tm.demand = it->demand;
+        tm.item = it->item;
+        tm.order = it->order;
+        tm.priority = it->priority;
+        tm.src = it->src;
+        tm.dst = it->dst;
+        tm.edge = it->edge;
+        c_print("% publish on topic mission! Task n: ", it->order," ID_robot: ",tm.ID_ROBOT, yellow);
         pub_route.publish(tm);
+        single_task = false;
         sleep(3);
       }
-      break;
     }
-    c_print("Fine dei task!",red);
+    ros::spinOnce();
+    sleep(1);
   }
   else
   {
-      c_print("# task taken!",red);
+    c_print("# task taken!", red);
   }
 }
 
@@ -115,8 +117,8 @@ void TaskPlanner::t_generator()
   // dare un id ad ogni task
   // 4 possibili partenze e destinazione
   // priorita' piu alta per i task con piu demand
-  src_vertex;  // loading
-  dst_vertex;  // download
+  src_vertex; // loading
+  dst_vertex; // download
   for (auto i = 0; i < n_item; i++)
   {
     for (auto d = 1; d <= n_demand; d++)
@@ -138,7 +140,7 @@ void TaskPlanner::t_generator()
     t_print(tasks[k]);
 }
 
-}  // namespace taskplanner
+} // namespace taskplanner
 
 //------------------------------------//
 // void TaskPlanner::parserTask(const char *task_file)

@@ -12,12 +12,8 @@ int CycleAgent::compute_next_vertex()
     {
         vertex = route[id_vertex];
         request_Task();
-
-        c_print ("id_v: ",id_vertex, " vertex: ", vertex, yellow);
-
-        route.clear();
+        c_print ("id_v: ",id_vertex, " vertex: ", vertex, magenta);
         id_vertex = 0;
-        go_src = true;
         mission_complete = false;
     }
     else
@@ -40,18 +36,9 @@ void CycleAgent::onGoalComplete()
     }
 
     // devolver proximo vertex tendo em conta apenas as idlenesses;
-    if (!go_src)
-    {
-        c_print("go_src: ",go_src, red);
+    
         next_vertex = compute_next_vertex();
-        last_vertex = next_vertex;
-    }
-    else
-    {
-        c_print("go_src!", cyan);
-        compute_src(last_vertex);
-        next_vertex = go_to_src();
-    }
+    
     c_print("   @ compute_next_vertex: ", next_vertex, green);
 
     // printf("Move Robot to Vertex %d (%f,%f)\n", next_vertex,
@@ -107,8 +94,7 @@ void CycleAgent::run()
 
     /* Run Algorithm */
 
-    for (int i = 0; i < 5; i++)
-        sleep(1);
+    sleep(10);
 
     ros::Rate loop_rate(30); // 0.033 seconds or 30Hz
 
@@ -116,7 +102,7 @@ void CycleAgent::run()
     {
         if (!mission_complete)
         {
-            compute_mission();
+            compute_single_task();
             mission_complete = true;
         }
         if (goal_complete)

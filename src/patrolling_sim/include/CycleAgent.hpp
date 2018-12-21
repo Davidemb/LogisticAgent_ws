@@ -20,9 +20,6 @@ namespace cycleagent
             bool mission_complete;
             bool go_src;
 
-            int last_vertex;
-            int i = 0;
-
             std::vector<int> route_to_src;
 
         public:
@@ -31,6 +28,7 @@ namespace cycleagent
             virtual void onGoalComplete();
             virtual int compute_next_vertex();
             void compute_mission();
+            void compute_single_task();
             int go_to_src();
             void compute_src(int vertex);
     };
