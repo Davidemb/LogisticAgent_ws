@@ -53,8 +53,11 @@
 #include <std_srvs/Empty.h>
 #include "getgraph.hpp"
 #include "message_types.hpp"
+
+#include <task_planner/Task.h>
+
 #include <patrolling_sim/TaskRequest.h>
-#include <task_planner/TaskMessage.h>
+#include <patrolling_sim/MissionRequest.h>
 #include <patrolling_sim/Vertex.h>
 #include <patrolling_sim/VertexWeb.h>
 
@@ -209,7 +212,7 @@ namespace patrolagent
 
         //--------------------------------------------------------------------------
         void request_Task();
-        void receive_mission_Callback(const task_planner::TaskMessageConstPtr &msg);
+        void receive_mission_Callback(const task_planner::TaskConstPtr &msg);
         void share_env_Callback(const std_msgs::Int16MultiArray::ConstPtr &msg);
         // void receive_vertex_web_Callback(const patrolling_sim::VertexWebConstPtr &msg);
         //----------------------------------------------------------------------

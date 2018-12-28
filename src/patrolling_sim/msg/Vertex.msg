@@ -1,9 +1,6 @@
 Header                header
 uint32                ID_ROBOT
 uint32                id
-uint32                num_neigh
-geometry_msgs/Point[] points
-uint32[]              id_neigh
 uint32[]              cost
 float32[]             cost_m 
 bool[]                visited

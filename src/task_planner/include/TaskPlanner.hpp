@@ -8,9 +8,10 @@
 #include <ros/ros.h>
 #include <std_msgs/Bool.h>
 #include <std_msgs/Int16MultiArray.h>
-#include <patrolling_sim/Request.h>
-#include <task_planner/TaskMessage.h>
-#include <task_planner/MissionMessage.h>
+#include <patrolling_sim/TaskRequest.h>
+#include <patrolling_sim/MissionRequest.h>
+#include <task_planner/Task.h>
+#include <task_planner/Mission.h>
 
 namespace taskplanner
 {
@@ -64,7 +65,7 @@ class TaskPlanner
     void t_generator();
     
     void task_Callback(const patrolling_sim::TaskRequestConstPtr &msg);
-    void mission_Callback(const patrolling_sim::MissionRequestConstPtr &msg);
+    // void mission_Callback(const patrolling_sim::MissionRequestConstPtr &msg);
 
   private:
     ros::Subscriber sub_task; // quando un robot vuole un task

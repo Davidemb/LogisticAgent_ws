@@ -640,7 +640,7 @@ void PatrolAgent::resultsCB(const std_msgs::Int16MultiArray::ConstPtr &msg)
   ros::spinOnce();
 }
 
-void PatrolAgent::receive_mission_Callback(const task_planner::TaskMessageConstPtr &msg)
+void PatrolAgent::receive_mission_Callback(const task_planner::TaskConstPtr &msg)
 {
   // popolazione del vettore mission<Task>
   c_print("@ Task ricevuto! n: ",msg->order," ID_ROBOT = ",ID_ROBOT, green);
@@ -661,7 +661,7 @@ void PatrolAgent::receive_mission_Callback(const task_planner::TaskMessageConstP
   }
   ros::spinOnce();
   sleep(1);
-}
+} 
 
 void PatrolAgent::share_env_Callback(const std_msgs::Int16MultiArray::ConstPtr &msg)
 {

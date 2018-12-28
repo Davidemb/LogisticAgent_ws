@@ -4,10 +4,10 @@ namespace taskplanner
 {
 TaskPlanner::TaskPlanner(ros::NodeHandle &nh_)
 {
-  sub_task    = nh_.subscribe("needtask", 1, &TaskPlanner::task_Callback, this);
-  pub_task    = nh_.advertise<task_planner::TaskMessage>("mission", 1);
-  sub_mission = nh_.subscribe("needtask", 1, &TaskPlanner::mission_Callback, this);
-  pub_mission = nh_.advertise<task_planner::MissionMessage>("mission",1);
+  sub_task    = nh_.subscribe("need", 1, &TaskPlanner::task_Callback, this);
+  pub_task    = nh_.advertise<task_planner::Task>("answer", 1);
+  // sub_mission = nh_.subscribe("need", 1, &TaskPlanner::mission_Callback, this);
+  pub_mission = nh_.advertise<task_planner::Mission>("answer",1); 
   t_generator();
 }
 
@@ -83,12 +83,12 @@ void TaskPlanner::task_Callback(const patrolling_sim::TaskRequestConstPtr &tr)
   {
     for (vector<Task>::iterator it = tasks.begin(); it != tasks.end(); it++)
     {
-      task_planner::TaskMessage tm;
+      task_planner::Task tm;
       if ((!it->take) && (single_task))
       {
         it->take = true;
         tm.header.stamp = ros::Time().now();
-        tm.ID_ROBOT = tr->id_robot;
+        tm.ID_ROBOT = tr->ID_ROBOT;
         tm.demand = it->demand;
         tm.item = it->item;
         tm.order = it->order;
@@ -109,7 +109,7 @@ void TaskPlanner::task_Callback(const patrolling_sim::TaskRequestConstPtr &tr)
   {
     c_print("# task taken!", red);
   }
-}
+} 
 
 void TaskPlanner::t_generator()
 {
@@ -136,7 +136,7 @@ void TaskPlanner::t_generator()
     }
   }
 
-  nTasks = tasks.size();
+  // nTasks = tasks.size();
 
   for (auto k = 0; k < tasks.size(); k++)
     t_print(tasks[k]);

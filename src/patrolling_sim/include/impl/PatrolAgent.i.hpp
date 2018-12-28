@@ -166,10 +166,10 @@ void PatrolAgent::init(int argc, char **argv)
                                                                         _1)); 
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    sub_to_task_planner_mission = nh.subscribe<task_planner::TaskMessage>(
-        "task_planner/mission", 1, boost::bind(&PatrolAgent::receive_mission_Callback, this, _1));
+    sub_to_task_planner_mission = nh.subscribe<task_planner::Task>(
+        "task_planner/answer", 1, boost::bind(&PatrolAgent::receive_mission_Callback, this, _1));
 
-    pub_to_task_planner_needtask = nh.advertise<patrolling_sim::TaskRequest>("task_planner/needtask", 1);
+    pub_to_task_planner_needtask = nh.advertise<patrolling_sim::TaskRequest>("task_planner/need", 1);
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     pub_broadcast_msg = nh.advertise<std_msgs::Int16MultiArray>("share_env",100);
@@ -341,7 +341,7 @@ void PatrolAgent::request_Task()
     ros::Rate loop_rate(0.5);
     
     task_request.flag = true;
-    task_request.id_robot = ID_ROBOT;
+    task_request.ID_ROBOT = ID_ROBOT;
     task_request.capacity = CAPACITY;
 
     pub_to_task_planner_needtask.publish(task_request);
