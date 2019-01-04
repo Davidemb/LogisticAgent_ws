@@ -48,15 +48,19 @@ class TaskPlanner
 
   public:
 
-    TaskPlanner(ros::NodeHandle &nh_);
+    TaskPlanner(ros::NodeHandle &nh_, uint TEAMSIZE);
     ~TaskPlanner(){};
     
     const char *task_file = "/home/dave/LogisticAgent_ws/src/task_planner/param/all_task.txt";
 
-    uint TEAMSIZE;
+    uint all_capacity = 0;
+
+    uint TEAM_t;
+
     uint src_vertex = 3;
     uint dst_vertex[4] = {6, 9, 12, 15};
     vector<Task> tasks;
+    bool *arrived_message;
 
     Task operator[](int i) const { return tasks[i]; }
     Task &operator[](int i) { return tasks[i]; }
@@ -72,6 +76,7 @@ class TaskPlanner
     ros::Publisher  pub_task; // pubblicazione dell'array (pop dal vettore di tasks)
     ros::Subscriber sub_mission;
     ros::Publisher  pub_mission;
+    ros::Publisher  pub_task_to_coo;
 };
 
 } // namespace taskplanner

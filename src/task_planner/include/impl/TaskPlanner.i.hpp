@@ -2,12 +2,14 @@
 
 namespace taskplanner
 {
-TaskPlanner::TaskPlanner(ros::NodeHandle &nh_)
+TaskPlanner::TaskPlanner(ros::NodeHandle &nh_, uint TEAMSIZE)
 {
-  sub_task    = nh_.subscribe("need", 1, &TaskPlanner::task_Callback, this);
-  pub_task    = nh_.advertise<task_planner::Task>("answer", 1);
-  // sub_mission = nh_.subscribe("need", 1, &TaskPlanner::mission_Callback, this);
-  pub_mission = nh_.advertise<task_planner::Mission>("answer",1); 
+  TEAMSIZE        = TEAM_t;
+  sub_task        = nh_.subscribe("need", 1, &TaskPlanner::task_Callback, this);
+  pub_task        = nh_.advertise<task_planner::Task>("answer", 1);
+  // sub_mission  = nh_.subscribe("need", 1, &TaskPlanner::mission_Callback, this);
+  pub_task_to_coo = nh_.advertise<typemessage>("topic",1);
+  pub_mission     = nh_.advertise<task_planner::Mission>("answer",1); 
   t_generator();
 }
 
@@ -79,6 +81,8 @@ void TaskPlanner::t_print(Task t)
 void TaskPlanner::task_Callback(const patrolling_sim::TaskRequestConstPtr &tr)
 {
   bool single_task = true;
+  arrived_message = new bool[TEAM_t];
+  all_capacity += tr->capacity;
   if (tr->flag)
   {
     for (vector<Task>::iterator it = tasks.begin(); it != tasks.end(); it++)
@@ -86,6 +90,7 @@ void TaskPlanner::task_Callback(const patrolling_sim::TaskRequestConstPtr &tr)
       task_planner::Task tm;
       if ((!it->take) && (single_task))
       {
+        arrived_message[tr->ID_ROBOT] = true;
         it->take = true;
         tm.header.stamp = ros::Time().now();
         tm.ID_ROBOT = tr->ID_ROBOT;
@@ -102,6 +107,7 @@ void TaskPlanner::task_Callback(const patrolling_sim::TaskRequestConstPtr &tr)
         sleep(3);
       }
     }
+    // c_print("all_C: ",all_capacity, green);
     ros::spinOnce();
     sleep(1);
   }

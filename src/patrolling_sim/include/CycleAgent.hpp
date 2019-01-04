@@ -7,8 +7,6 @@ uint loading[5] vertici superiori
 uint dowload[5] vertici inferiori
 */
  
-
-
 namespace cycleagent
 {
     using namespace patrolagent;
@@ -19,7 +17,6 @@ namespace cycleagent
             bool first;
             bool mission_complete;
             bool go_src;
-
             std::vector<int> route_to_src;
 
         public:
