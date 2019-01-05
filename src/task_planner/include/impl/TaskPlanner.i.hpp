@@ -8,7 +8,7 @@ TaskPlanner::TaskPlanner(ros::NodeHandle &nh_, uint TEAMSIZE)
   sub_task        = nh_.subscribe("need", 1, &TaskPlanner::task_Callback, this);
   pub_task        = nh_.advertise<task_planner::Task>("answer", 1);
   // sub_mission  = nh_.subscribe("need", 1, &TaskPlanner::mission_Callback, this);
-  pub_task_to_coo = nh_.advertise<typemessage>("topic",1);
+  // pub_task_to_coo = nh_.advertise<typemessage>("topic",1);
   pub_mission     = nh_.advertise<task_planner::Mission>("answer",1); 
   t_generator();
 }
@@ -78,20 +78,40 @@ void TaskPlanner::t_print(Task t)
 //     }
 // }
 
+Task TaskPlanner::compare(Task t1, Task t2)
+{
+  return t1.dst < t2.dst ? t1 : t2 ;
+}
+
 void TaskPlanner::task_Callback(const patrolling_sim::TaskRequestConstPtr &tr)
 {
   bool single_task = true;
   arrived_message = new bool[TEAM_t];
-  all_capacity += tr->capacity;
+  all_capacity += tr->capacity; 
   if (tr->flag)
   {
     for (vector<Task>::iterator it = tasks.begin(); it != tasks.end(); it++)
     {
-      task_planner::Task tm;
       if ((!it->take) && (single_task))
       {
-        arrived_message[tr->ID_ROBOT] = true;
         it->take = true;
+        task_planner::Task tm;
+        if ((tr->capacity <= it->demand))
+        {
+          // for (vector<Task>::iterator te = tasks.begin(); te != tasks.end(); te++)
+          // {
+          //   Task t = compare(*it,*te);
+          //   cout << "vedem: "<< t.dst <<" id: "<<t.order << "\n";
+          // }
+          Task t = *std::min_element(tasks.begin(), tasks.end());
+          cout << "allor: "<< t.dst<<" id: "<<t.order<<"\n";
+          // id del task e' anche id nel vettore!!!!!!!!!!!!!!!!!!!!!!!!11!111!1!!!!!!
+        } 
+        // {
+        //   Task t = *std::min_element(tasks.begin(),tasks.end(),compare());
+        //   cout << "dst del minimo elemto: " <<t.dst << "\n";
+        // }
+        arrived_message[tr->ID_ROBOT] = true;
         tm.header.stamp = ros::Time().now();
         tm.ID_ROBOT = tr->ID_ROBOT;
         tm.demand = it->demand;
@@ -121,12 +141,10 @@ void TaskPlanner::t_generator()
 {
   uint n_item = 1;
   uint o = 0;
-  uint n_demand = 4;
+  uint n_demand = 1;
   // dare un id ad ogni task
   // 4 possibili partenze e destinazione
   // priorita' piu alta per i task con piu demand
-  src_vertex; // loading
-  dst_vertex; // download
   for (auto i = 0; i < n_item; i++)
   {
     for (auto d = 1; d <= n_demand; d++)

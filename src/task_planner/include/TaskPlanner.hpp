@@ -8,6 +8,7 @@
 #include <ros/ros.h>
 #include <std_msgs/Bool.h>
 #include <std_msgs/Int16MultiArray.h>
+#include <algorithm>
 #include <patrolling_sim/TaskRequest.h>
 #include <patrolling_sim/MissionRequest.h>
 #include <task_planner/Task.h>
@@ -25,6 +26,11 @@ struct Task
     int src;
     int dst;
     int edge;
+
+    bool operator < (const Task& other) const 
+    {
+        return dst < other.dst;
+    }
 };
 
 inline Task mkTask(int item, int order, int demand, int priority, int src, int dst, int edge)
@@ -64,9 +70,11 @@ class TaskPlanner
 
     Task operator[](int i) const { return tasks[i]; }
     Task &operator[](int i) { return tasks[i]; }
-
+   
     void t_print(Task t);
     void t_generator();
+
+    Task compare(Task t1, Task t2);
     
     void task_Callback(const patrolling_sim::TaskRequestConstPtr &msg);
     // void mission_Callback(const patrolling_sim::MissionRequestConstPtr &msg);
