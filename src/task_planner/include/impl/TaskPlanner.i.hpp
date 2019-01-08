@@ -4,12 +4,13 @@ namespace taskplanner
 {
 TaskPlanner::TaskPlanner(ros::NodeHandle &nh_, uint TEAMSIZE)
 {
-  TEAMSIZE        = TEAM_t;
-  sub_task        = nh_.subscribe("need", 1, &TaskPlanner::task_Callback, this);
-  pub_task        = nh_.advertise<task_planner::Task>("answer", 1);
+  TEAMSIZE = TEAM_t;
+  sub_task = nh_.subscribe("need_task", 1, &TaskPlanner::task_Callback, this);
+  sub_task = nh_.subscribe("need_mission",1,&TaskPlanner::mission_Callback, this);
+  pub_task = nh_.advertise<task_planner::Task>("answer", 1);
   // sub_mission  = nh_.subscribe("need", 1, &TaskPlanner::mission_Callback, this);
   // pub_task_to_coo = nh_.advertise<typemessage>("topic",1);
-  pub_mission     = nh_.advertise<task_planner::Mission>("answer",1); 
+  pub_mission = nh_.advertise<task_planner::Mission>("answer", 1);
   t_generator();
 }
 
@@ -80,14 +81,15 @@ void TaskPlanner::t_print(Task t)
 
 Task TaskPlanner::compare(Task t1, Task t2)
 {
-  return t1.dst < t2.dst ? t1 : t2 ;
+  return t1.dst < t2.dst ? t1 : t2;
 }
 
 void TaskPlanner::task_Callback(const patrolling_sim::TaskRequestConstPtr &tr)
 {
+  c_print("Funge?",red);
   bool single_task = true;
-  arrived_message = new bool[TEAM_t];
-  all_capacity += tr->capacity; 
+  // arrived_message = new bool[TEAM_t];
+  // all_capacity += tr->capacity;
   if (tr->flag)
   {
     for (vector<Task>::iterator it = tasks.begin(); it != tasks.end(); it++)
@@ -98,33 +100,26 @@ void TaskPlanner::task_Callback(const patrolling_sim::TaskRequestConstPtr &tr)
         task_planner::Task tm;
         if ((tr->capacity <= it->demand))
         {
-          // for (vector<Task>::iterator te = tasks.begin(); te != tasks.end(); te++)
-          // {
-          //   Task t = compare(*it,*te);
-          //   cout << "vedem: "<< t.dst <<" id: "<<t.order << "\n";
-          // }
           Task t = *std::min_element(tasks.begin(), tasks.end());
-          cout << "allor: "<< t.dst<<" id: "<<t.order<<"\n";
+          cout << "allor: " << t.dst << " id: " << t.order << "\n";
           // id del task e' anche id nel vettore!!!!!!!!!!!!!!!!!!!!!!!!11!111!1!!!!!!
-        } 
-        // {
-        //   Task t = *std::min_element(tasks.begin(),tasks.end(),compare());
-        //   cout << "dst del minimo elemto: " <<t.dst << "\n";
-        // }
-        arrived_message[tr->ID_ROBOT] = true;
-        tm.header.stamp = ros::Time().now();
-        tm.ID_ROBOT = tr->ID_ROBOT;
-        tm.demand = it->demand;
-        tm.item = it->item;
-        tm.order = it->order;
-        tm.priority = it->priority;
-        tm.src = it->src;
-        tm.dst = it->dst;
-        tm.edge = it->edge;
-        c_print("% publish on topic mission! Task n: ", it->order," ID_robot: ",tm.ID_ROBOT, yellow);
-        pub_task.publish(tm);
-        single_task = false;
-        sleep(3);
+          // arrived_message[tr->ID_ROBOT] = true;
+          tm.header.stamp = ros::Time().now();
+          tm.ID_ROBOT = tr->ID_ROBOT;
+          tm.demand = t.demand;
+          tm.item = t.item;
+          tm.order = t.order;
+          tm.priority = t.priority;
+          tm.src = t.src;
+          tm.dst = t.dst;
+          tm.edge = t.edge;
+          c_print("% publish on topic mission! Task n: ", t.order, " ID_robot: ", tm.ID_ROBOT, yellow);
+          c_print("% take: ",t.take,yellow);
+          tasks.erase(std::find(tasks.begin(),tasks.end(),t));
+          pub_task.publish(tm);
+          single_task = false;
+          sleep(3);
+        }
       }
     }
     // c_print("all_C: ",all_capacity, green);
@@ -135,7 +130,61 @@ void TaskPlanner::task_Callback(const patrolling_sim::TaskRequestConstPtr &tr)
   {
     c_print("# task taken!", red);
   }
-} 
+}
+
+void TaskPlanner::mission_Callback(const patrolling_sim::MissionRequestConstPtr &tr)
+{
+  c_print("Funge?",magenta);
+  // arrived_message = new bool[TEAM_t];
+  // all_capacity += tr->capacity;
+  if (tr->flag)
+  {
+    task_planner::Mission mm;
+    for (vector<Task>::iterator it = tasks.begin(); it != tasks.end(); it++)
+    {
+      if (!it->take)
+      {
+        it->take = true;
+        task_planner::Task tm;
+        if ((tr->capacity <= it->demand))
+        {
+          Task t = *std::min_element(tasks.begin(), tasks.end());
+          cout << "allor: " << t.dst << " id: " << t.order << "\n";
+          // id del task e' anche id nel vettore!!!!!!!!!!!!!!!!!!!!!!!!11!111!1!!!!!!
+          // arrived_message[tr->ID_ROBOT] = true;
+          tm.header.stamp = ros::Time().now();
+          tm.ID_ROBOT = tr->ID_ROBOT;
+          tm.demand = t.demand;
+          tm.item = t.item;
+          tm.order = t.order;
+          tm.priority = t.priority;
+          tm.src = t.src;
+          tm.dst = t.dst;
+          tm.edge = t.edge;
+          c_print("% publish on topic mission! Task n: ", t.order, " ID_robot: ", tm.ID_ROBOT, yellow);
+          c_print("% take: ",t.take,yellow);
+          tasks.erase(std::find(tasks.begin(),tasks.end(),t));
+          c_print("DC",magenta);
+          mm.Mission.push_back(tm); // <-
+          c_print("popolazione dell'array",red);
+          sleep(1);
+        }
+      }
+    }
+    // c_print("all_C: ",all_capacity, green);
+    // pub_mission.publish(mm);
+    for (auto i = 0; i < mm.Mission.size(); i++)
+    {
+      cout<<mm.Mission[i].order<<"\n";
+    }
+    ros::spinOnce();
+    sleep(1);
+  }
+  else
+  {
+    c_print("# task taken!", red);
+  }
+}
 
 void TaskPlanner::t_generator()
 {
@@ -166,7 +215,7 @@ void TaskPlanner::t_generator()
     t_print(tasks[k]);
 }
 
-} // namespace taskplanner
+}  // namespace taskplanner
 
 //------------------------------------//
 // void TaskPlanner::parserTask(const char *task_file)

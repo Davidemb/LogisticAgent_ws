@@ -169,7 +169,8 @@ void PatrolAgent::init(int argc, char **argv)
     sub_to_task_planner_mission = nh.subscribe<task_planner::Task>(
         "task_planner/answer", 1, boost::bind(&PatrolAgent::receive_mission_Callback, this, _1));
 
-    pub_to_task_planner_needtask = nh.advertise<patrolling_sim::TaskRequest>("task_planner/need", 1);
+    pub_to_task_planner_needtask = nh.advertise<patrolling_sim::TaskRequest>("task_planner/need_task", 1);
+    pub_to_task_planner_needmission =nh.advertise<patrolling_sim::MissionRequest>("task_planner/need_mission", 1);
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     pub_broadcast_msg = nh.advertise<std_msgs::Int16MultiArray>("share_env",100);
