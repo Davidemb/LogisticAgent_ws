@@ -6,6 +6,7 @@
 #include <patrolling_sim/MissionRequest.h>
 #include <patrolling_sim/TaskRequest.h>
 #include <ros/ros.h>
+#include <ros/package.h> //to get pkg path
 #include <std_msgs/Bool.h>
 #include <std_msgs/Int16MultiArray.h>
 #include <sys/stat.h>
@@ -13,6 +14,8 @@
 #include <task_planner/Task.h>
 #include <algorithm>
 #include <vector>
+
+#include "getgraph.hpp"
 
 namespace taskplanner
 {
@@ -62,6 +65,8 @@ inline Task mkTask(int item, int order, int demand, int priority, int src, int d
   return t;
 }
 
+const std::string PS_path = ros::package::getPath("task_planner");
+
 class TaskPlanner
 {
 public:
@@ -70,13 +75,21 @@ public:
 
   const char *task_file = "/home/dave/LogisticAgent_ws/src/task_planner/param/all_task.txt";
 
+  std::string graph_file, mapname;
+
+
+  uint dimension;
+  vertex *vertex_web;
+
   uint all_capacity = 0;
 
   uint TEAM_t;
 
-  uint src_vertex = 3;
-  uint dst_vertex[4] = {6, 9, 12, 15};
+  uint src_vertex = 6;
+  uint dst_vertex[3] = {11, 16, 21};
+  uint under_pass[7] = {7, 9, 12, 14, 17, 19, 22};
   vector<Task> tasks;
+  vector<uint> route;
   bool *arrived_message;
 
   Task operator[](int i) const
@@ -89,7 +102,15 @@ public:
   }
 
   void t_print(Task t);
+  void r_print();
   void t_generator();
+
+  void compute_route_to_delivery(Task t);
+  int compute_cost_of_route(uint element);
+  
+
+  void init(int argc, char** argv);
+  void run();
 
   Task compare(Task t1, Task t2);
 

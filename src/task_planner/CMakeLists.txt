@@ -118,7 +118,7 @@ include_directories(
 ########################################################################################################################
 
 # ## Declare a cpp executable 
-add_executable(TaskPlanner src/TaskPlanner.cpp)
+add_executable(TaskPlanner src/TaskPlanner.cpp src/getgraph.cpp)
 add_dependencies(TaskPlanner ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 # ## Specify libraries to link a library or executable target against
 target_link_libraries(TaskPlanner ${catkin_LIBRARIES})

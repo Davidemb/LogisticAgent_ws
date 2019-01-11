@@ -1,6 +1,5 @@
 #pragma once
 
-#include "color_cout.hpp"
 
 namespace patrolagent
 {

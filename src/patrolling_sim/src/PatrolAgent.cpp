@@ -698,33 +698,28 @@ void PatrolAgent::share_env_Callback(const std_msgs::Int16MultiArray::ConstPtr &
     ros::spinOnce();
 }
 
-/* void PatrolAgent::instantaneous_vertex_web()
+void PatrolAgent::instantaneous_vertex_web()
 {
 
-  for (auto i = 0; i < dimension; i++)
-  {
-    patrolling_sim::Vertex vertex;
-    auto element = vertex_web[i];
-    vertex.ID_ROBOT = ID_ROBOT;
-    vertex.id = element.id;
-    vertex.num_neigh = element.num_neigh;
-    vertex.points.clear();
-    vertex.points.push_back(element.x);
-    vertex.points.push_back(element.y);
-    for (auto i = 0; i < element.id_neigh.size(); i++)
-    {
-    vertex.id_neigh.push_back(element.id_neigh[i]);
-    }
-    for (auto i = 0; i < element.cost.size(); i ++)
-    {
-      vertex.cost.push_back(element.cost[i]);
-    }
-
-
-
-
-    
-  }
-} */
+  // for (auto i = 0; i < dimension; i++)
+  // {
+  //   patrolling_sim::Vertex vertex;
+  //   auto element = vertex_web[i];
+  //   vertex.ID_ROBOT = ID_ROBOT;
+  //   vertex.id = element.id;
+  //   vertex.num_neigh = element.num_neigh;
+  //   vertex.points.clear();
+  //   vertex.points.push_back(element.x);
+  //   vertex.points.push_back(element.y);
+  //   for (auto i = 0; i < element.id_neigh.size(); i++)
+  //   {
+  //   vertex.id_neigh.push_back(element.id_neigh[i]);
+  //   }
+  //   for (auto i = 0; i < element.cost.size(); i ++)
+  //   {
+  //     vertex.cost.push_back(element.cost[i]);
+  //   }
+  // }
+} 
 
 }  // namespace patrolagent

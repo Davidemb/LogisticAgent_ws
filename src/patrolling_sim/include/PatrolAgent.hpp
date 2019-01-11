@@ -51,7 +51,8 @@
 #include <std_msgs/Bool.h>
 #include <ros/package.h> //to get pkg path
 #include <std_srvs/Empty.h>
-#include "getgraph.hpp"
+#include <getgraph.hpp>
+#include <color_cout.hpp>
 #include "message_types.hpp"
 
 #include <task_planner/Task.h>
@@ -217,7 +218,7 @@ namespace patrolagent
         void share_env_Callback(const std_msgs::Int16MultiArray::ConstPtr &msg);
         // void receive_vertex_web_Callback(const patrolling_sim::VertexWebConstPtr &msg);
         //----------------------------------------------------------------------
-        // void instantaneous_vertex_web();
+        void instantaneous_vertex_web();
 };
 
 } // namespace patrolagent
