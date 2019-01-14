@@ -7,4 +7,5 @@ uint32      demand
 uint32      priority
 uint32      src
 uint32      dst
-uint32      edge
+uint32      path_distance
+uint32[]    route

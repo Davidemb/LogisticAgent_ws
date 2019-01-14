@@ -13,7 +13,7 @@ int main(int argc, char **argv)
 
     TP.init(argc, argv);
 
-    TP.run();
+    // TP.run();
     
     ros::AsyncSpinner spinner(2);
 

@@ -8,17 +8,19 @@ int CycleAgent::compute_next_vertex()
 {
     int vertex;
 
-    if (route.size()-1 == id_vertex)
+    if (mission[id_task].route.size()-1 == id_vertex)
     {
-        vertex = route[id_vertex];
+        vertex = mission[id_task].route[id_vertex];
         request_Task();
+    //  ^ Importatnte!
+    
         c_print ("id_v: ",id_vertex, " vertex: ", vertex, magenta);
         id_vertex = 0;
         mission_complete = false;
     }
     else
     {
-        vertex = route[id_vertex];
+        vertex = mission[id_task].route[id_vertex];
         c_print ("id_v: ",id_vertex, " vertex: ", vertex, yellow);
         id_vertex++;
     }
@@ -100,11 +102,6 @@ void CycleAgent::run()
 
     while (ros::ok())
     {
-        if (!mission_complete)
-        {
-            compute_single_task();
-            mission_complete = true;
-        }
         if (goal_complete)
         {
             onGoalComplete(); // can be redefined

@@ -29,25 +29,20 @@ struct Task
   int src;
   int dst;
   int edge;
-
-  // e' possibile fare tutto fuori dall struct con inline (const struct a, const strct b) ecc ...
-
-  bool operator<(const Task &other) const
-  {
-    if ((!take && !other.take)) // sistemare la condizione
-    {
-      return dst < other.dst;
-    }
-  }
-
-  bool operator==(const Task &other) const
-  {
-    if ((!take && !other.take)) // sistemare la condizione
-    {
-      return order == other.order ;
-    }
-  }
 };
+
+inline bool operator<(const Task& A, const Task& B)
+{
+  if (!A.take && !B.take)
+  {
+    return A.dst < B.dst ? 1 : 0; 
+  }
+}
+
+inline bool operator==(const Task& A, const Task& B)
+{
+    return A.dst == B.dst ? 1 : 0;
+}
 
 inline Task mkTask(int item, int order, int demand, int priority, int src, int dst, int edge)
 {
@@ -75,9 +70,8 @@ public:
 
   const char *task_file = "/home/dave/LogisticAgent_ws/src/task_planner/param/all_task.txt";
 
-  std::string graph_file, mapname;
-
-
+  std::string graph_file;
+  std::string mapname;
   uint dimension;
   vertex *vertex_web;
 
@@ -88,6 +82,7 @@ public:
   uint src_vertex = 6;
   uint dst_vertex[3] = {11, 16, 21};
   uint under_pass[7] = {7, 9, 12, 14, 17, 19, 22};
+  uint upper_pass[7] = {5, 8, 10, 13, 15, 18, 20};
   vector<Task> tasks;
   vector<uint> route;
   bool *arrived_message;
@@ -105,8 +100,10 @@ public:
   void r_print();
   void t_generator();
 
-  void compute_route_to_delivery(Task t);
+  void compute_route_to_delivery(Task& t);
+  void compute_route_to_picktask(Task& t); 
   int compute_cost_of_route(uint element);
+
   
 
   void init(int argc, char** argv);
@@ -115,14 +112,14 @@ public:
   Task compare(Task t1, Task t2);
 
   void task_Callback(const patrolling_sim::TaskRequestConstPtr &msg);
-  void mission_Callback(const patrolling_sim::MissionRequestConstPtr &msg);
+  // void mission_Callback(const patrolling_sim::MissionRequestConstPtr &msg);
 
 private:
   ros::Subscriber sub_task; // quando un robot vuole un task
   ros::Publisher pub_task;  // pubblicazione dell'array (pop dal vettore di tasks)
-  ros::Subscriber sub_mission;
-  ros::Publisher pub_mission;
-  ros::Publisher pub_task_to_coo;
+  // ros::Subscriber sub_mission;
+  // ros::Publisher pub_mission;
+  // ros::Publisher pub_task_to_coo;
 };
 
 } // namespace taskplanner

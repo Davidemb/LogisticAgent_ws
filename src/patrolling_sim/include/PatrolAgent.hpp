@@ -81,7 +81,8 @@ namespace patrolagent
         int     priority;
         int     src;
         int     dst;
-        int     edge; 
+        int     path_distance;
+        std::vector<uint> route;
     };
 
     using uint = unsigned int;
@@ -95,7 +96,7 @@ namespace patrolagent
     protected:
         int TEAMSIZE;
         int ID_ROBOT;
-        int CAPACITY = 2; //////////////////////////////////////////////////////////////////////////////////////////////
+        int CAPACITY = 1; //////////////////////////////////////////////////////////////////////////////////////////////
 
         double xPos[NUM_MAX_ROBOTS]; //tabelas de posições (atençao ao index pro caso de 1 so robot)
         double yPos[NUM_MAX_ROBOTS]; //tabelas de posições (atençao ao index pro caso de 1 so robot)
@@ -153,7 +154,7 @@ namespace patrolagent
         patrolling_sim::TaskRequest     task_request;
         patrolling_sim::VertexWeb       vertex_web_msg;
 
-        std::vector<int> route;
+        // std::vector<int> route;
         uint id_vertex = 0;
         uint id_task = 0;
         uint route_dimension;                  
@@ -214,7 +215,14 @@ namespace patrolagent
 
         //--------------------------------------------------------------------------
         void request_Task();
+
+        
         void receive_mission_Callback(const task_planner::TaskConstPtr &msg);
+        //   ^ nuovi messaggi di task NB route[];
+        
+        
+        
+        
         void share_env_Callback(const std_msgs::Int16MultiArray::ConstPtr &msg);
         // void receive_vertex_web_Callback(const patrolling_sim::VertexWebConstPtr &msg);
         //----------------------------------------------------------------------

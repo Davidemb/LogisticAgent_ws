@@ -1,5 +1,5 @@
 [Config]
-map: model3
+map: model5
 nrobots: 2
 algorithm: CYCLE
 locmode: AMCL

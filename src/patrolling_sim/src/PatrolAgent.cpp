@@ -642,6 +642,8 @@ void PatrolAgent::resultsCB(const std_msgs::Int16MultiArray::ConstPtr &msg)
 
 void PatrolAgent::receive_mission_Callback(const task_planner::TaskConstPtr &msg)
 {
+  // ^ guarda hpp
+  
   // popolazione del vettore mission<Task>
   c_print("@ Task ricevuto! n: ",msg->order," ID_ROBOT = ",ID_ROBOT, green);
 
@@ -655,7 +657,11 @@ void PatrolAgent::receive_mission_Callback(const task_planner::TaskConstPtr &msg
     task.priority = msg->priority;
     task.src = msg->src;
     task.dst = msg->dst;
-    task.edge = msg->edge;
+    task.path_distance = msg->path_distance;
+    for (auto i = 0; i < msg->route.size(); i ++)
+    {
+      task.route.push_back(msg->route[i]);
+    }
     c_print("# insert task on mission!", red);
     mission.push_back(task);
   }

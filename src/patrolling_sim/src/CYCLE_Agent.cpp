@@ -8,7 +8,6 @@
 #include <nav_msgs/Odometry.h>
 
 #include "color_cout.hpp"
-// #include "LogicAgent.hpp"
 #include "PatrolAgent.hpp"
 #include "CycleAgent.hpp"
 
