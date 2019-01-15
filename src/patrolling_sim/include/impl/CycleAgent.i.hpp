@@ -38,8 +38,10 @@ void CycleAgent::onGoalComplete()
     }
 
     // devolver proximo vertex tendo em conta apenas as idlenesses;
+
+    next_vertex = compute_next_vertex();
     
-        next_vertex = compute_next_vertex();
+        // next_vertex = compute_next_vertex();
     
     c_print("   @ compute_next_vertex: ", next_vertex, green);
 

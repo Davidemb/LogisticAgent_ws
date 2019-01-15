@@ -75,8 +75,6 @@ public:
   uint dimension;
   vertex *vertex_web;
 
-  uint all_capacity = 0;
-
   uint TEAM_t;
 
   uint src_vertex = 6;
@@ -85,7 +83,6 @@ public:
   uint upper_pass[7] = {5, 8, 10, 13, 15, 18, 20};
   vector<Task> tasks;
   vector<uint> route;
-  bool *arrived_message;
 
   Task operator[](int i) const
   {
@@ -97,7 +94,6 @@ public:
   }
 
   void t_print(Task t);
-  void r_print();
   void t_generator();
 
   void compute_route_to_delivery(Task& t);

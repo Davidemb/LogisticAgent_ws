@@ -27,15 +27,7 @@ void TaskPlanner::t_print(Task t)
        << " -       dst: " << t.dst << "\n";
 }
 
-void TaskPlanner::r_print()
-{
-  c_print("\nRoute: ", green);
-  for (int i = 0; i < route.size(); i++)
-  {
-    std::cout << route[i] << " ";
-  }
-  std::cout << "\n";
-}
+
 
 void TaskPlanner::init(int argc, char **argv)
 {
@@ -52,7 +44,6 @@ void TaskPlanner::init(int argc, char **argv)
 
 void TaskPlanner::run()
 {
-  
 }
 
 Task TaskPlanner::compare(Task t1, Task t2)
@@ -118,7 +109,7 @@ void TaskPlanner::t_generator()
 {
   uint n_item = 3;
   uint o = 0;
-  uint n_demand = 4;
+  uint n_demand = 1;
   // dare un id ad ogni task
   // 4 possibili partenze e destinazione
   // priorita' piu alta per i task con piu demand
@@ -130,7 +121,7 @@ void TaskPlanner::t_generator()
       for (auto j = 0; j < 3; j++)
       {
         // auto p = d + 1;
-        auto e = j + 2;
+        auto e = 0;
         tasks.push_back(mkTask(i, o, 1, 1, src_vertex, dst_vertex[j], e));
         o++;
       }
@@ -189,7 +180,6 @@ void TaskPlanner::compute_route_to_picktask(Task &t)
   {
     route.push_back(upper_pass[j]);
   }
-  r_print();
 }
 
 int TaskPlanner::compute_cost_of_route(uint element)
@@ -202,19 +192,12 @@ int TaskPlanner::compute_cost_of_route(uint element)
     anterior = route[i - 1];
     proximo = route[i];
 
-    c_print("a ", anterior, " p ", proximo, green);
-
     for (int j = 0; j < vertex_web[anterior].num_neigh; j++)
     {
-      c_print("vicino: ", vertex_web[anterior].id_neigh[j], green);
       if (vertex_web[anterior].id_neigh[j] == proximo)
       {
         custo_final += vertex_web[anterior].cost[j];
         break;
-      }
-      else
-      {
-        c_print("ramo else", magenta);
       }
     }
   }
@@ -226,7 +209,6 @@ int TaskPlanner::compute_cost_of_route(uint element)
 
 void TaskPlanner::task_Callback(const patrolling_sim::TaskRequestConstPtr &tr)
 {
-  c_print("Funge?", red);
   bool single_task = true;
   // arrived_message = new bool[TEAM_t];
   // all_capacity += tr->capacity;
@@ -239,6 +221,8 @@ void TaskPlanner::task_Callback(const patrolling_sim::TaskRequestConstPtr &tr)
       {
         if ((tr->capacity <= it->demand))
         {
+          int c = 0;
+
           Task t = *std::min_element(tasks.begin(), tasks.end());
           compute_route_to_delivery(t);
           compute_route_to_picktask(t);
@@ -253,15 +237,23 @@ void TaskPlanner::task_Callback(const patrolling_sim::TaskRequestConstPtr &tr)
           tm.src = t.src;
           tm.dst = t.dst;
           tm.path_distance = path_distance;
+          c_print("\nRoute:", red);
           for (auto i = 0; i < route.size(); i++)
+          {
+            if (! (i % 2))
+            {
             tm.route.push_back(route[i]);
+            cout << route[i] << "\n";
+            }
+          }
+          cout << "\n";
           c_print("% publish on topic mission! Task n: ", t.order, " ID_robot: ", tm.ID_ROBOT, yellow);
           pub_task.publish(tm);
           route.clear();
-          c_print("% take: ", t.take, yellow);
           t.take = true;
           tasks.erase(std::find(tasks.begin(), tasks.end(), t));
           single_task = false;
+          // ros::spinOnce();
           sleep(3);
         }
       }

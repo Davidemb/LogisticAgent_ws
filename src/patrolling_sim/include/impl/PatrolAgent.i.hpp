@@ -243,8 +243,12 @@ void PatrolAgent::run()
     {
         if (goal_complete)
         {
-            onGoalComplete(); // can be redefined
-            resend_goal_count = 0;
+            
+                    onGoalComplete(); // can be redefined
+                    resend_goal_count = 0;
+                
+            
+            
         }
         else
         { // goal not complete (active)
@@ -300,9 +304,9 @@ void PatrolAgent::onGoalComplete()
     }
 
     // devolver proximo vertex tendo em conta apenas as idlenesses;
-
+    
     next_vertex = compute_next_vertex();
-
+    
     c_print("   @ compute_next_vertex: ", next_vertex, green);
 
     // printf("Move Robot to Vertex %d (%f,%f)\n", next_vertex,

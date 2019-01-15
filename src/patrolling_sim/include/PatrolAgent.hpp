@@ -85,6 +85,16 @@ namespace patrolagent
         std::vector<uint> route;
     };
 
+    ostream& operator << (ostream& os, const Task& t)
+    {
+        os  << "\nRoute: \n";
+        for (auto i = 0; t.route.size(); i++)
+        {
+            os << t.route[i] << " ";
+        }
+            os << "\n";
+    }
+
     using uint = unsigned int;
     using MoveBaseClient = actionlib::SimpleActionClient<move_base_msgs::MoveBaseAction>;
 
@@ -105,7 +115,7 @@ namespace patrolagent
         std::string initial_positions;
 
         uint dimension; // Graph Dimension
-        uint current_vertex; // current vertex
+        uint current_vertex = 3; // current vertex
 
         bool ResendGoal; // Send the same goal again (if goal failed...)
         bool interference;
@@ -121,6 +131,7 @@ namespace patrolagent
 
         std::vector<int> vresults; // results exchanged among robots
         std::vector<int> shared_array;
+        std::vector<bool> ok;
 
         bool goal_canceled_by_user;
 
