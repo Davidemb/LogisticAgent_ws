@@ -182,12 +182,12 @@ void TaskPlanner::compute_route_to_picktask(Task &t)
   }
 }
 
-int TaskPlanner::compute_cost_of_route(uint element)
+int TaskPlanner::compute_cost_of_route()
 {
   int custo_final = 0;
   int anterior, proximo;
 
-  for (int i = 1; i < element; i++)
+  for (int i = 1; i < route.size(); i++)
   {
     anterior = route[i - 1];
     proximo = route[i];
@@ -202,7 +202,7 @@ int TaskPlanner::compute_cost_of_route(uint element)
     }
   }
 
-  c_print("costo del percorso? ", custo_final, magenta);
+  c_print("costo del percorso: ", custo_final, magenta);
 
   return custo_final;
 }
@@ -226,7 +226,7 @@ void TaskPlanner::task_Callback(const patrolling_sim::TaskRequestConstPtr &tr)
           Task t = *std::min_element(tasks.begin(), tasks.end());
           compute_route_to_delivery(t);
           compute_route_to_picktask(t);
-          int path_distance = compute_cost_of_route(route.front());
+          int path_distance = compute_cost_of_route();
           double normalized_distance = path_distance / t.demand;
           tm.header.stamp = ros::Time().now();
           tm.ID_ROBOT = tr->ID_ROBOT;

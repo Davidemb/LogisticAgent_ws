@@ -98,7 +98,7 @@ public:
 
   void compute_route_to_delivery(Task& t);
   void compute_route_to_picktask(Task& t); 
-  int compute_cost_of_route(uint element);
+  int compute_cost_of_route();
 
   
 
