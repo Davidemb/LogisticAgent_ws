@@ -42,7 +42,6 @@
 #include <color_cout.hpp>
 
 #include "PatrolAgent.hpp"
-#include "algorithms.hpp"
 #include "config.hpp"
 
 

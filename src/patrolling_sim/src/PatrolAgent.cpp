@@ -78,30 +78,30 @@ void PatrolAgent::readParams()
 {
   if (!ros::param::get("/goal_reached_wait", goal_reached_wait))
   {
-    // goal_reached_wait = 0.0;
+    goal_reached_wait = 0.0;
     ROS_WARN("Cannot read parameter /goal_reached_wait. Using default value!");
-    // ros::param::set("/goal_reached_wait", goal_reached_wait);
+    ros::param::set("/goal_reached_wait", goal_reached_wait);
   }
 
   if (!ros::param::get("/communication_delay", communication_delay))
   {
-    // communication_delay = 0.0;
+    communication_delay = 0.0;
     ROS_WARN("Cannot read parameter /communication_delay. Using default value!");
-    // ros::param::set("/communication_delay", communication_delay);
+    ros::param::set("/communication_delay", communication_delay);
   }
 
   if (!ros::param::get("/lost_message_rate", lost_message_rate))
   {
-    // lost_message_rate = 0.0;
+    lost_message_rate = 0.0;
     ROS_WARN("Cannot read parameter /lost_message_rate. Using default value!");
-    // ros::param::set("/lost_message_rate", lost_message_rate);
+    ros::param::set("/lost_message_rate", lost_message_rate);
   }
 
   if (!ros::param::get("/initial_positions", initial_positions))
   {
-    // initial_positions = "default";
+    initial_positions = "default";
     ROS_WARN("Cannot read parameter /initial_positions. Using default value '%s'!", initial_positions.c_str());
-    // ros::param::set("/initial_pos", initial_positions);
+    ros::param::set("/initial_pos", initial_positions);
   }
 }
 
@@ -152,7 +152,7 @@ void PatrolAgent::initialize_node()
     loop_rate.sleep();
     count++;
   }
-  request_Task(); // <--- Task di inizializzazione
+  // request_Task(); // <--- Task di inizializzazione
 }
 
 void PatrolAgent::getRobotPose(int robotid, float &x, float &y, float &theta)
@@ -372,7 +372,7 @@ void PatrolAgent::backup()
   ros::Rate loop_rate(100); // 100Hz
 
   int backUpCounter = 0;
-  while (backUpCounter <= 100)
+  while (backUpCounter <= 50)
   {
     if (backUpCounter == 0)
     {
@@ -393,7 +393,7 @@ void PatrolAgent::backup()
       cmd_vel_pub.publish(cmd_vel);
     }
 
-    if (backUpCounter == 100)
+    if (backUpCounter == 50)
     {
       // Stop the robot...
       geometry_msgs::Twist cmd_vel;
@@ -642,9 +642,9 @@ void PatrolAgent::resultsCB(const std_msgs::Int16MultiArray::ConstPtr &msg)
 
 void PatrolAgent::receive_mission_Callback(const task_planner::TaskConstPtr &msg)
 {
-  c_print("@ Task ricevuto! n: ", msg->order, " ID_ROBOT = ", ID_ROBOT, green);
   if (msg->ID_ROBOT == ID_ROBOT)
   {
+    c_print("@ Task ricevuto! n: ", msg->order, " ID_ROBOT = ", ID_ROBOT, green);
     Task task;
     task.take = msg->take;
     task.item = msg->item;

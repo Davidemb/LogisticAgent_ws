@@ -2,13 +2,13 @@
 
 namespace taskplanner
 {
-
 TaskPlanner::TaskPlanner(ros::NodeHandle &nh_, uint TEAMSIZE)
 {
   TEAMSIZE = TEAM_t;
   sub_task = nh_.subscribe("need_task", 1, &TaskPlanner::task_Callback, this);
   // sub_task = nh_.subscribe("need_mission", 1, &TaskPlanner::mission_Callback, this);
   pub_task = nh_.advertise<task_planner::Task>("answer", 1);
+  // pub_go_home = nh_advertise<>("home",1); <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
   // sub_mission  = nh_.subscribe("need", 1, &TaskPlanner::mission_Callback, this);
   // pub_task_to_coo = nh_.advertise<typemessage>("topic",1);
   // pub_mission = nh_.advertise<task_planner::Mission>("answer", 1);
@@ -26,8 +26,6 @@ void TaskPlanner::t_print(Task t)
        << " -       src: " << t.src << "\n"
        << " -       dst: " << t.dst << "\n";
 }
-
-
 
 void TaskPlanner::init(int argc, char **argv)
 {
@@ -210,62 +208,48 @@ int TaskPlanner::compute_cost_of_route()
 void TaskPlanner::task_Callback(const patrolling_sim::TaskRequestConstPtr &tr)
 {
   bool single_task = true;
-  // arrived_message = new bool[TEAM_t];
-  // all_capacity += tr->capacity;
-  if (tr->flag)
+  task_planner::Task tm;
+  if ((single_task) && (tasks.size() >= 1))
   {
-    task_planner::Task tm;
-    for (vector<Task>::iterator it = tasks.begin(); it != tasks.end(); it++)
+    Task t = *std::min_element(tasks.begin(), tasks.end());
+    compute_route_to_delivery(t);
+    compute_route_to_picktask(t);
+    int path_distance = compute_cost_of_route();
+    double normalized_distance = path_distance / t.demand;
+    tm.header.stamp = ros::Time().now();
+    tm.ID_ROBOT = tr->ID_ROBOT;
+    tm.demand = t.demand;
+    tm.item = t.item;
+    tm.order = t.order;
+    tm.priority = t.priority;
+    tm.src = t.src;
+    tm.dst = t.dst;
+    tm.path_distance = path_distance;
+    c_print("\nRoute:", red);
+    for (auto i = 0; i < route.size(); i++)
     {
-      if ((!it->take) && (single_task))
-      {
-        if ((tr->capacity <= it->demand))
-        {
-          int c = 0;
-
-          Task t = *std::min_element(tasks.begin(), tasks.end());
-          compute_route_to_delivery(t);
-          compute_route_to_picktask(t);
-          int path_distance = compute_cost_of_route();
-          double normalized_distance = path_distance / t.demand;
-          tm.header.stamp = ros::Time().now();
-          tm.ID_ROBOT = tr->ID_ROBOT;
-          tm.demand = t.demand;
-          tm.item = t.item;
-          tm.order = t.order;
-          tm.priority = t.priority;
-          tm.src = t.src;
-          tm.dst = t.dst;
-          tm.path_distance = path_distance;
-          c_print("\nRoute:", red);
-          for (auto i = 0; i < route.size(); i++)
-          {
-            if (! (i % 2))
-            {
-            tm.route.push_back(route[i]);
-            cout << route[i] << "\n";
-            }
-          }
-          cout << "\n";
-          c_print("% publish on topic mission! Task n: ", t.order, " ID_robot: ", tm.ID_ROBOT, yellow);
-          pub_task.publish(tm);
-          route.clear();
-          t.take = true;
-          tasks.erase(std::find(tasks.begin(), tasks.end(), t));
-          single_task = false;
-          // ros::spinOnce();
-          sleep(3);
-        }
-      }
+      // if (! (i % 2))
+      // {
+      tm.route.push_back(route[i]);
+      cout << route[i] << "\n";
+      // }
     }
-    // c_print("all_C: ",all_capacity, green);
-    ros::spinOnce();
-    sleep(1);
+    cout << "\n";
+    c_print("% publish on topic mission! Task n: ", t.order, " ID_robot: ", tm.ID_ROBOT, yellow);
+    pub_task.publish(tm);
+    route.clear();
+    t.take = true;
+    tasks.erase(std::find(tasks.begin(), tasks.end(), t));
+    c_print("Size tasks: ", tasks.size(), red);
+    single_task = false;
   }
   else
   {
-    c_print("# task taken!", red);
+    c_print("Task finiti!",red);
+
   }
+  ros::spinOnce();
+  sleep(1);
 }
 
 } // namespace taskplanner

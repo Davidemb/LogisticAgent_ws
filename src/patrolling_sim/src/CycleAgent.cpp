@@ -22,6 +22,7 @@ void CycleAgent::compute_single_task()
    
 }
 
+
 // void CycleAgent::share_decison()
 // {
 //     int value = ID_ROBOT;

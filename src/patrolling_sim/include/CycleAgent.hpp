@@ -14,7 +14,7 @@ namespace cycleagent
     class CycleAgent : public PatrolAgent
     {
         protected:
-            bool first;
+            bool first =  true;
             bool mission_complete;
             bool go_src;
             std::vector<int> route_to_src;

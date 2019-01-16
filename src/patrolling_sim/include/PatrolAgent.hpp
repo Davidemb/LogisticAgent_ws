@@ -51,7 +51,8 @@
 #include <std_msgs/Bool.h>
 #include <ros/package.h> //to get pkg path
 #include <std_srvs/Empty.h>
-#include <getgraph.hpp>
+#include "algorithms.hpp" // <<< ALGO
+#include "getgraph.hpp"
 #include <color_cout.hpp>
 #include "message_types.hpp"
 

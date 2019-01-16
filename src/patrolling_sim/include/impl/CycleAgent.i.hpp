@@ -8,9 +8,12 @@ int CycleAgent::compute_next_vertex()
 {
     int vertex;
 
+    c_print("CV: ",current_vertex, green);
+
     if (mission[id_task].route.size()-1 == id_vertex)
     {
         vertex = mission[id_task].route[id_vertex];
+        mission.clear();
         request_Task();
     //  ^ Importatnte!
     
@@ -39,7 +42,25 @@ void CycleAgent::onGoalComplete()
 
     // devolver proximo vertex tendo em conta apenas as idlenesses;
 
+    if (first)
+    {
+    uint elem_s_path;
+    int *shortest_path = new int[dimension];
+
+    dijkstra(current_vertex, 6, shortest_path, elem_s_path, vertex_web, dimension);
+    Task t;
+    for (auto i = 0; i < elem_s_path-1; i++)
+    {
+        printf("path[%u] = %d\n",i,shortest_path[i]);
+        t.route.push_back(shortest_path[i]);
+    }
+    mission.push_back(t);
+    first = false;
+    }
+   
     next_vertex = compute_next_vertex();
+    
+
     
         // next_vertex = compute_next_vertex();
     
@@ -119,7 +140,7 @@ void CycleAgent::run()
             if (ResendGoal)
             {
                 // Send the goal to the robot (Global Map)
-                if (resend_goal_count < 3)
+                if (resend_goal_count < 2)
                 {
                     resend_goal_count++;
                     ROS_INFO("Re-Sending goal (%d) - Vertex %d (%f,%f)", resend_goal_count, next_vertex,
