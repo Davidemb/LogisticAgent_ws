@@ -30,7 +30,7 @@ void PatrolAgent::init(int argc, char **argv)
 
     /** D.Portugal: needed in case you "rosrun" from another folder **/
     chdir(PS_path.c_str());
-
+    
     mapname = string(argv[2]);
     graph_file = "maps/" + mapname + "/" + mapname + ".graph";
 
@@ -39,8 +39,6 @@ void PatrolAgent::init(int argc, char **argv)
 
     // Create Structure to save the Graph Info;
     vertex_web = new vertex[dimension];
-
-    
 
     // Get the Graph info from the Graph File
     GetGraphInfo(vertex_web, dimension, graph_file.c_str());

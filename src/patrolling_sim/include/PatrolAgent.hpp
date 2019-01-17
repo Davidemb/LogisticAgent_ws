@@ -116,29 +116,30 @@ namespace patrolagent
         std::string initial_positions;
 
         uint dimension; // Graph Dimension
-        uint current_vertex = 3; // current vertex
+        uint current_vertex; // current vertex
+        uint backUpCounter;
+        int next_vertex;
+ 
+        int aborted_count, resend_goal_count;
 
         bool ResendGoal; // Send the same goal again (if goal failed...)
         bool interference;
-        double last_interference;
         bool goal_complete;
         bool initialize;
         bool end_simulation;
-        int next_vertex;
-        uint backUpCounter;
-        vertex *vertex_web;
+        bool goal_canceled_by_user;
+        
+        double last_interference;
         double *instantaneous_idleness;  // local idleness
         double *last_visit;
+        double goal_reached_wait, communication_delay, last_communication_delay_time, lost_message_rate;
+        
+        vertex *vertex_web;
 
         std::vector<int> vresults; // results exchanged among robots
         std::vector<int> shared_array;
         std::vector<bool> ok;
 
-        bool goal_canceled_by_user;
-
-        double goal_reached_wait, communication_delay, last_communication_delay_time, lost_message_rate;
-
-        int aborted_count, resend_goal_count;
 
         tf::TransformListener   *listener;
         MoveBaseClient          *ac; // action client for reaching target goals
@@ -196,6 +197,7 @@ namespace patrolagent
         void odomCB(const nav_msgs::Odometry::ConstPtr& msg);
 
         void sendGoal(int next_vertex);
+        void sendMissionGoal(vector<uint> mission);
         void cancelGoal();
 
         void goalDoneCallback(const actionlib::SimpleClientGoalState &state, const move_base_msgs::MoveBaseResultConstPtr &result);
@@ -228,12 +230,8 @@ namespace patrolagent
         //--------------------------------------------------------------------------
         void request_Task();
 
-        
         void receive_mission_Callback(const task_planner::TaskConstPtr &msg);
         //   ^ nuovi messaggi di task NB route[];
-        
-        
-        
         
         void share_env_Callback(const std_msgs::Int16MultiArray::ConstPtr &msg);
         // void receive_vertex_web_Callback(const patrolling_sim::VertexWebConstPtr &msg);

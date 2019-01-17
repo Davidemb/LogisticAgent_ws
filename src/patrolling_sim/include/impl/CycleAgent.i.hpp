@@ -8,23 +8,23 @@ int CycleAgent::compute_next_vertex()
 {
     int vertex;
 
-    c_print("CV: ",current_vertex, green);
+    c_print("CV: ", current_vertex, green);
 
-    if (mission[id_task].route.size()-1 == id_vertex)
+    if (mission[id_task].route.size() - 1 == id_vertex)
     {
         vertex = mission[id_task].route[id_vertex];
         mission.clear();
         request_Task();
-    //  ^ Importatnte!
-    
-        c_print ("id_v: ",id_vertex, " vertex: ", vertex, magenta);
+        //  ^ Importatnte!
+
+        c_print("id_v: ", id_vertex, " vertex: ", vertex, magenta);
         id_vertex = 0;
         mission_complete = false;
     }
     else
     {
         vertex = mission[id_task].route[id_vertex];
-        c_print ("id_v: ",id_vertex, " vertex: ", vertex, yellow);
+        c_print("id_v: ", id_vertex, " vertex: ", vertex, yellow);
         id_vertex++;
     }
 
@@ -44,48 +44,57 @@ void CycleAgent::onGoalComplete()
 
     if (first)
     {
-    uint elem_s_path;
-    int *shortest_path = new int[dimension];
+        uint elem_s_path;
+        int *shortest_path = new int[dimension];
 
-    dijkstra(current_vertex, 6, shortest_path, elem_s_path, vertex_web, dimension);
-    Task t;
-    for (auto i = 0; i < elem_s_path-1; i++)
+        dijkstra(current_vertex, 6, shortest_path, elem_s_path, vertex_web, dimension);
+        Task t;
+        for (auto i = 0; i < elem_s_path - 1; i++)
+        {
+            printf("path[%u] = %d\n", i, shortest_path[i]);
+            t.route.push_back(shortest_path[i]);
+        }
+        mission.push_back(t);
+        first = false;
+    }
+
+    // next_vertex = compute_next_vertex();
+
+    // next_vertex = compute_next_vertex();
+
+    // c_print("   @ compute_next_vertex: ", next_vertex, green);
+
+    // // printf("Move Robot to Vertex %d (%f,%f)\n", next_vertex,
+    // // vertex_web[next_vertex].x, vertex_web[next_vertex].y);
+
+    // /** SEND GOAL (REACHED) AND INTENTION **/
+
+    // send_goal_reached(); // Send TARGET to monitor
+
+    // send_results(); // Algorithm specific function
+
+    // // Send the goal to the robot (Global Map)
+    // ROS_INFO("Sending goal - Vertex %d (%f,%f)\n", next_vertex, vertex_web[next_vertex].x, vertex_web[next_vertex].y);
+    // // sendGoal(vertex_web[next_vertex].x, vertex_web[next_vertex].y);
+    // // sendGoal(next_vertex); // send to move_base
+
+    auto t = mission.front();
+
+    cout << "route che passo alla sendmission\n";
+    for (auto i = 0; i < t.route.size(); i++)
     {
-        printf("path[%u] = %d\n",i,shortest_path[i]);
-        t.route.push_back(shortest_path[i]);
+        cout << t.route[i] << " ";
     }
-    mission.push_back(t);
-    first = false;
-    }
-   
-    next_vertex = compute_next_vertex();
-    
+    cout << "\n";
 
-    
-        // next_vertex = compute_next_vertex();
-    
-    c_print("   @ compute_next_vertex: ", next_vertex, green);
-
-    // printf("Move Robot to Vertex %d (%f,%f)\n", next_vertex,
-    // vertex_web[next_vertex].x, vertex_web[next_vertex].y);
-
-    /** SEND GOAL (REACHED) AND INTENTION **/
-
-    send_goal_reached(); // Send TARGET to monitor
-
-    send_results(); // Algorithm specific function
-
-    // Send the goal to the robot (Global Map)
-    ROS_INFO("Sending goal - Vertex %d (%f,%f)\n", next_vertex, vertex_web[next_vertex].x, vertex_web[next_vertex].y);
-    // sendGoal(vertex_web[next_vertex].x, vertex_web[next_vertex].y);
-    sendGoal(next_vertex); // send to move_base
+    sendMissionGoal(t.route);
 
     goal_complete = false;
 }
 
 void CycleAgent::run()
 {
-     // get ready
+    // get ready
     ready();
 
     c_print("@ Ready!", green);

@@ -152,7 +152,6 @@ void PatrolAgent::initialize_node()
     loop_rate.sleep();
     count++;
   }
-  // request_Task(); // <--- Task di inizializzazione
 }
 
 void PatrolAgent::getRobotPose(int robotid, float &x, float &y, float &theta)
@@ -234,6 +233,31 @@ void PatrolAgent::sendGoal(int next_vertex)
   ac->sendGoal(goal, boost::bind(&PatrolAgent::goalDoneCallback, this, _1, _2),
                boost::bind(&PatrolAgent::goalActiveCallback, this),
                boost::bind(&PatrolAgent::goalFeedbackCallback, this, _1));
+}
+
+void PatrolAgent::sendMissionGoal(vector<uint> mission)
+{
+  goal_canceled_by_user = false;
+
+  // double target_x = vertex_web[next_vertex].x, target_y = vertex_web[next_vertex].y;
+
+  // Define Goal:
+  move_base_msgs::MoveBaseGoal goal;
+  // Send the goal to the robot (Global Map)
+  geometry_msgs::Quaternion angle_quat = tf::createQuaternionMsgFromYaw(0.0);
+  goal.target_pose.header.frame_id = "map";
+  goal.target_pose.header.stamp = ros::Time::now();
+  for (int i = 0; i < mission.size(); i++)
+  {
+  goal.target_pose.pose.position.x = vertex_web[mission[i]].x;    // vertex_web[current_vertex].x;
+  goal.target_pose.pose.position.y = vertex_web[mission[i]].y;    // vertex_web[current_vertex].y;
+  goal.target_pose.pose.orientation = angle_quat; // doesn't matter really.
+  
+  ac->sendGoal(goal, boost::bind(&PatrolAgent::goalDoneCallback, this, _1, _2),
+               boost::bind(&PatrolAgent::goalActiveCallback, this),
+               boost::bind(&PatrolAgent::goalFeedbackCallback, this, _1));
+  cout<<"id del vetice: "<< mission[i] <<" ";
+  }
 }
 
 void PatrolAgent::cancelGoal()
@@ -369,10 +393,10 @@ bool PatrolAgent::check_interference(int robot_id)
 
 void PatrolAgent::backup()
 {
-  ros::Rate loop_rate(100); // 100Hz
+  ros::Rate loop_rate(5); // 100Hz
 
   int backUpCounter = 0;
-  while (backUpCounter <= 50)
+  while (backUpCounter <= 30)
   {
     if (backUpCounter == 0)
     {
@@ -384,7 +408,7 @@ void PatrolAgent::backup()
       cmd_vel_pub.publish(cmd_vel);
     }
 
-    if (backUpCounter == 20)
+    if (backUpCounter == 15)
     {
       // Turn the robot around...
       geometry_msgs::Twist cmd_vel;
@@ -393,14 +417,13 @@ void PatrolAgent::backup()
       cmd_vel_pub.publish(cmd_vel);
     }
 
-    if (backUpCounter == 50)
+    if (backUpCounter == 30)
     {
       // Stop the robot...
       geometry_msgs::Twist cmd_vel;
       cmd_vel.linear.x = 0.0;
       cmd_vel.angular.z = 0.0;
       cmd_vel_pub.publish(cmd_vel);
-
       // ROS_INFO("Done backing up, now on with my life!");
     }
 
