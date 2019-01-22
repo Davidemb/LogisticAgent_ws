@@ -39,9 +39,17 @@ inline bool operator<(const Task& A, const Task& B)
   }
 }
 
+inline bool operator>(const Task& A, const Task& B)
+{
+  if (!A.take && !B.take)
+  {
+    return A.dst > B.dst ? 1 : 0; 
+  }
+}
+
 inline bool operator==(const Task& A, const Task& B)
 {
-    return A.dst == B.dst ? 1 : 0;
+    return A.order == B.order ? 1 : 0;
 }
 
 inline Task mkTask(int item, int order, int demand, int priority, int src, int dst, int edge)

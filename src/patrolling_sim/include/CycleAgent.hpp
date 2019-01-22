@@ -15,6 +15,7 @@ namespace cycleagent
     {
         protected:
             bool first =  true;
+            // bool init =false;
             bool mission_complete;
             bool go_src;
             std::vector<int> route_to_src;

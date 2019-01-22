@@ -1,6 +1,5 @@
 #pragma once
 
-
 namespace patrolagent
 {
 using namespace std;
@@ -30,7 +29,7 @@ void PatrolAgent::init(int argc, char **argv)
 
     /** D.Portugal: needed in case you "rosrun" from another folder **/
     chdir(PS_path.c_str());
-    
+
     mapname = string(argv[2]);
     graph_file = "maps/" + mapname + "/" + mapname + ".graph";
 
@@ -133,7 +132,7 @@ void PatrolAgent::init(int argc, char **argv)
     char string2[40];
     char string3[40];
     char string4[40];
-    
+
     if (ID_ROBOT == -1)
     {
         strcpy(string1, "odom");    // string = "odom"
@@ -148,7 +147,7 @@ void PatrolAgent::init(int argc, char **argv)
         sprintf(string2, "robot_%d/cmd_vel", ID_ROBOT);
         sprintf(string3, "robot_%d/vertex", ID_ROBOT);
         sprintf(string4, "robot_%d/vertex_web", ID_ROBOT);
-        
+
         TEAMSIZE = ID_ROBOT + 1;
     }
 
@@ -159,27 +158,26 @@ void PatrolAgent::init(int argc, char **argv)
     cmd_vel_pub = nh.advertise<geometry_msgs::Twist>(string2, 1);
 
     // Subscrever para obter dados de "odom" do robot corrente
-    odom_sub = nh.subscribe<nav_msgs::Odometry>(string1, 1, boost::bind(&PatrolAgent::odomCB, this,
-                                                                        _1)); 
+    odom_sub = nh.subscribe<nav_msgs::Odometry>(string1, 1, boost::bind(&PatrolAgent::odomCB, this, _1));
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     sub_to_task_planner_mission = nh.subscribe<task_planner::Task>(
         "task_planner/answer", 1, boost::bind(&PatrolAgent::receive_mission_Callback, this, _1));
 
     pub_to_task_planner_needtask = nh.advertise<patrolling_sim::TaskRequest>("task_planner/need_task", 1);
-    pub_to_task_planner_needmission =nh.advertise<patrolling_sim::MissionRequest>("task_planner/need_mission", 1);
+    pub_to_task_planner_needmission = nh.advertise<patrolling_sim::MissionRequest>("task_planner/need_mission", 1);
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    pub_broadcast_msg = nh.advertise<std_msgs::Int16MultiArray>("share_env",100);
+    pub_broadcast_msg = nh.advertise<std_msgs::Int16MultiArray>("broadcast_msg", 100);
 
-    sub_broadcast_msg = nh.subscribe<std_msgs::Int16MultiArray>("share_env",100,
-                                                            boost::bind(&PatrolAgent::share_env_Callback, this, _1));
+    sub_broadcast_msg = nh.subscribe<std_msgs::Int16MultiArray>("broadcast_msg", 100,
+                                                                boost::bind(&PatrolAgent::broadcast_msg_Callback, this, _1));
 
     pub_vertex_msg = nh.advertise<patrolling_sim::Vertex>(string3, 1);
     pub_vertex_web = nh.advertise<patrolling_sim::VertexWeb>(string4, 1);
 
     // sub_vertex_web = nh.subscribe<patrolling_sim::VertexWeb>(string4, 1, boost::bind(&PatrolAgent::receive_vertex_web_Callback, this, _1));
-    
+
     ros::spinOnce();
 
     // Publicar dados para "results"
@@ -196,11 +194,118 @@ void PatrolAgent::init(int argc, char **argv)
     readParams();
 }
 
+void PatrolAgent::can_execute_decicion()
+{
+    std_msgs::Int16MultiArray init_msg;
+    init_msg.data.clear();
+    int value = ID_ROBOT;
+    if (value == -1)
+    {
+        value = 0;
+    }
+    init_msg.data.push_back(value);
+    init_msg.data.push_back(INIT_MSG);
+    init_msg.data.push_back(current_dim_path);
+    c_print("broadcast", red);
+    pub_broadcast_msg.publish(init_msg);
+    ros::Rate loop_rate(30);
+    ros::spinOnce();
+    loop_rate.sleep();
+}
+
+void PatrolAgent::calc_route_to_src()
+{
+    int value = ID_ROBOT;
+    if (value == -1)
+    {
+        value = 0;
+    }
+
+    Task t;
+    t.take = true;
+
+    switch (value)
+    {
+    case (0):
+    {
+        t.route.push_back(5);
+        t.route.push_back(6);
+    }
+    break;
+    case (1):
+    {
+        t.route.push_back(3);
+        t.route.push_back(5);
+        t.route.push_back(6);
+    }
+    break;
+    case (2):
+    {
+        t.route.push_back(0);
+        t.route.push_back(3);
+        t.route.push_back(5);
+        t.route.push_back(6);
+    }
+    break;
+    case (3):
+    {
+        t.route.push_back(1);
+        t.route.push_back(0);
+        t.route.push_back(3);
+        t.route.push_back(5);
+        t.route.push_back(6);
+    }
+    break;
+    }
+
+    mission.push_back(t);
+}
+
+int PatrolAgent::compute_cost_of_route()
+{
+    int anterior, proximo;
+
+    for (int i = 1; i < mission.front().route.size(); i++)
+    {
+        anterior = mission.front().route[i - 1];
+        proximo = mission.front().route[i];
+
+        for (int j = 0; j < vertex_web[anterior].num_neigh; j++)
+        {
+            if (vertex_web[anterior].id_neigh[j] == proximo)
+            {
+                current_dim_path += vertex_web[anterior].cost[j];
+                break;
+            }
+        }
+    }
+
+    c_print("costo del percorso: ", current_dim_path, magenta);
+
+    return current_dim_path;
+}
+
+void PatrolAgent::init_agent()
+{
+    bool f = true;
+    while (!OK)
+    {
+        // chiedo se dopo aver calcolato la via per la src posso andare se non posso aspetto
+        // e dopo looprate.sleep() richiedo se posso finalmente partire
+        if (f)
+        {
+            calc_route_to_src();
+            compute_cost_of_route();
+            f = false;
+        }
+        can_execute_decicion();
+    }
+}
+
 void PatrolAgent::run()
 {
     // get ready
     ready();
-
     c_print("@ Ready!", green);
 
     // initially clear the costmap (to make sure the robot is not trapped):
@@ -241,12 +346,9 @@ void PatrolAgent::run()
     {
         if (goal_complete)
         {
-            
-                    onGoalComplete(); // can be redefined
-                    resend_goal_count = 0;
-                
-            
-            
+
+            onGoalComplete(); // can be redefined
+            resend_goal_count = 0;
         }
         else
         { // goal not complete (active)
@@ -289,7 +391,7 @@ void PatrolAgent::run()
 
 int PatrolAgent::compute_next_vertex()
 {
-   return 666;
+    return 666;
 }
 
 void PatrolAgent::onGoalComplete()
@@ -302,9 +404,9 @@ void PatrolAgent::onGoalComplete()
     }
 
     // devolver proximo vertex tendo em conta apenas as idlenesses;
-    
+
     next_vertex = compute_next_vertex();
-    
+
     c_print("   @ compute_next_vertex: ", next_vertex, green);
 
     // printf("Move Robot to Vertex %d (%f,%f)\n", next_vertex,
@@ -339,15 +441,38 @@ void PatrolAgent::receive_results()
 void PatrolAgent::request_Task()
 {
     c_print("# Request Task!", red);
-    
+
     ros::Rate loop_rate(0.5);
-    
+
     task_request.flag = true;
-    task_request.ID_ROBOT = ID_ROBOT;
+    int value = ID_ROBOT;
+    if (value == -1)
+    {
+        value = 0;
+    }
+    task_request.ID_ROBOT = value;
     task_request.capacity = CAPACITY;
 
     pub_to_task_planner_needtask.publish(task_request);
-    
+
+    bool first = true;
+    if (first)
+    {
+        std_msgs::Int16MultiArray msg;
+        if (value == -1)
+        {
+            value = 0;
+        }
+
+        msg.data.push_back(value);
+        msg.data.push_back(START);
+        msg.data.push_back(value + 1);
+        pub_broadcast_msg.publish(msg);
+        first = false;
+    }
+
+    mission.clear();
+
     ros::spinOnce();
     loop_rate.sleep();
 }

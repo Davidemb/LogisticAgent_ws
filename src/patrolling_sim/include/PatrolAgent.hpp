@@ -119,6 +119,8 @@ namespace patrolagent
         uint current_vertex; // current vertex
         uint backUpCounter;
         int next_vertex;
+        uint initial_vertex; // initial vertex
+        int current_dim_path;
  
         int aborted_count, resend_goal_count;
 
@@ -128,6 +130,8 @@ namespace patrolagent
         bool initialize;
         bool end_simulation;
         bool goal_canceled_by_user;
+
+        bool OK = false;
         
         double last_interference;
         double *instantaneous_idleness;  // local idleness
@@ -138,8 +142,6 @@ namespace patrolagent
 
         std::vector<int> vresults; // results exchanged among robots
         std::vector<int> shared_array;
-        std::vector<bool> ok;
-
 
         tf::TransformListener   *listener;
         MoveBaseClient          *ac; // action client for reaching target goals
@@ -168,10 +170,11 @@ namespace patrolagent
         patrolling_sim::VertexWeb       vertex_web_msg;
 
         // std::vector<int> route;
+        bool * ok;
         uint id_vertex = 0;
         uint id_task = 0;
         uint route_dimension;                  
-        uint loading[5]                 = {2, 5, 8, 11, 14};
+        uint loading[6]                 = {2, 1, 0, 3, 5, 6};
         uint downloading[5]             = {4, 7, 10, 13, 16};
 
     public:
@@ -228,12 +231,17 @@ namespace patrolagent
         virtual int compute_next_vertex();
 
         //--------------------------------------------------------------------------
+        void init_agent();
+        void calc_route_to_src();
+        void can_execute_decicion();
+        bool initialization(int cv, int nv);
         void request_Task();
-
+        int compute_cost_of_route();
         void receive_mission_Callback(const task_planner::TaskConstPtr &msg);
         //   ^ nuovi messaggi di task NB route[];
         
-        void share_env_Callback(const std_msgs::Int16MultiArray::ConstPtr &msg);
+
+        void broadcast_msg_Callback(const std_msgs::Int16MultiArray::ConstPtr &msg);
         // void receive_vertex_web_Callback(const patrolling_sim::VertexWebConstPtr &msg);
         //----------------------------------------------------------------------
         void instantaneous_vertex_web();

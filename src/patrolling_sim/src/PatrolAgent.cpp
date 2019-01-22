@@ -249,14 +249,24 @@ void PatrolAgent::sendMissionGoal(vector<uint> mission)
   goal.target_pose.header.stamp = ros::Time::now();
   for (int i = 0; i < mission.size(); i++)
   {
-  goal.target_pose.pose.position.x = vertex_web[mission[i]].x;    // vertex_web[current_vertex].x;
-  goal.target_pose.pose.position.y = vertex_web[mission[i]].y;    // vertex_web[current_vertex].y;
-  goal.target_pose.pose.orientation = angle_quat; // doesn't matter really.
-  
-  ac->sendGoal(goal, boost::bind(&PatrolAgent::goalDoneCallback, this, _1, _2),
-               boost::bind(&PatrolAgent::goalActiveCallback, this),
-               boost::bind(&PatrolAgent::goalFeedbackCallback, this, _1));
-  cout<<"id del vetice: "<< mission[i] <<" ";
+    goal.target_pose.pose.position.x = vertex_web[mission[i]].x; // vertex_web[current_vertex].x;
+    goal.target_pose.pose.position.y = vertex_web[mission[i]].y; // vertex_web[current_vertex].y;
+    goal.target_pose.pose.orientation = angle_quat;              // doesn't matter really.
+
+    ac->sendGoal(goal, boost::bind(&PatrolAgent::goalDoneCallback, this, _1, _2),
+                 boost::bind(&PatrolAgent::goalActiveCallback, this),
+                 boost::bind(&PatrolAgent::goalFeedbackCallback, this, _1));
+    ac->waitForResult();
+    cout << "id del vetice: " << mission[i] << " ";
+
+    if (ac->getState() == actionlib::SimpleClientGoalState::SUCCEEDED)
+    {
+      ROS_INFO("Goal reached ... WAITING %.2f sec", goal_reached_wait);
+      // ros::Duration delay(goal_reached_wait); // wait after goal is reached
+      // delay.sleep();
+      ROS_INFO("Goal reached ... DONE");
+      goal_complete = true;
+    }
   }
 }
 
@@ -278,8 +288,8 @@ void PatrolAgent::goalDoneCallback(const actionlib::SimpleClientGoalState &state
   if (state.state_ == actionlib::SimpleClientGoalState::SUCCEEDED)
   {
     ROS_INFO("Goal reached ... WAITING %.2f sec", goal_reached_wait);
-    ros::Duration delay(goal_reached_wait); // wait after goal is reached
-    delay.sleep();
+    // ros::Duration delay(goal_reached_wait); // wait after goal is reached
+    // delay.sleep();
     ROS_INFO("Goal reached ... DONE");
     goal_complete = true;
   }
@@ -667,54 +677,93 @@ void PatrolAgent::receive_mission_Callback(const task_planner::TaskConstPtr &msg
 {
   if (msg->ID_ROBOT == ID_ROBOT)
   {
-    c_print("@ Task ricevuto! n: ", msg->order, " ID_ROBOT = ", ID_ROBOT, green);
-    Task task;
-    task.take = msg->take;
-    task.item = msg->item;
-    task.order = msg->order;
-    task.demand = msg->demand;
-    task.priority = msg->priority;
-    task.src = msg->src;
-    task.dst = msg->dst;
-    task.path_distance = msg->path_distance;
-    for (auto i = 0; i < msg->route.size(); i++)
+    if (!msg->go_home)
     {
-      task.route.push_back(msg->route[i]);
+      c_print("@ Task ricevuto! n: ", msg->order, " ID_ROBOT = ", ID_ROBOT, green);
+      Task task;
+      task.take = msg->take;
+      task.item = msg->item;
+      task.order = msg->order;
+      task.demand = msg->demand;
+      task.priority = msg->priority;
+      task.src = msg->src;
+      task.dst = msg->dst;
+      task.path_distance = msg->path_distance;
+      for (auto i = 0; i < msg->route.size(); i++)
+      {
+        task.route.push_back(msg->route[i]);
+      }
+      c_print("# insert task on mission!", red);
+      mission.push_back(task);
+      //  end_simulation = false;
     }
-    c_print("# insert task on mission!", red);
-    mission.push_back(task);
+    else
+    {
+      Task task;
+      uint elem_s_path;
+      int *shortest_path = new int[dimension];
+      dijkstra(current_vertex, initial_vertex, shortest_path, elem_s_path, vertex_web, dimension);
+      Task t;
+      t.take = msg->take;
+      for (auto i = 2; i < elem_s_path; i++)
+      {
+        printf("path[%u] = %d\n", i, shortest_path[i]);
+        t.route.push_back(shortest_path[i]);
+      }
+      c_print("# insert task to go home!", magenta);
+      mission.push_back(t);
+    }
   }
 }
 
-void PatrolAgent::share_env_Callback(const std_msgs::Int16MultiArray::ConstPtr &msg)
+bool PatrolAgent::initialization(int cv, int nv)
+{
+  if (next_vertex == cv)
+  {
+    return false;
+  }
+  else
+  {
+    return true;
+  }
+}
+
+void PatrolAgent::broadcast_msg_Callback(const std_msgs::Int16MultiArray::ConstPtr &msg)
 {
   // molto importante <signed short>
   std::vector<signed short>::const_iterator it = msg->data.begin();
-  // shared_array.clear();
-
-  // for (auto i = 0; i < msg->data.size(); i++)
-  // {
-  //     shared_array.push_back(*it);
-  //     it++;
-  // }
 
   int id_sender = *it;
   it++;
   int value = ID_ROBOT;
+  c_print("message id robot: ",ID_ROBOT, green);
   if (value == -1)
   {
     value = 0;
   }
   if (id_sender == value)
     return;
+
+  
   int msg_type = *it;
   it++;
   switch (msg_type)
   {
-  case (SHARE_MSG):
+  case (INIT_MSG):
   {
-    c_print("# share_msg arrivato!", red);
-    cout << *it << "\n";
+    if (value == 0)
+    {
+      OK = true;
+    }
+  }
+  break;
+  case (START):
+  {
+   c_print("PArte quello dopo");
+   if (value ==*it)
+   {
+     OK = true;
+   }
   }
   break;
   }

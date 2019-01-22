@@ -211,13 +211,16 @@ void TaskPlanner::task_Callback(const patrolling_sim::TaskRequestConstPtr &tr)
   task_planner::Task tm;
   if ((single_task) && (tasks.size() >= 1))
   {
-    Task t = *std::min_element(tasks.begin(), tasks.end());
+    // Task t = *std::min_element(tasks.begin(), tasks.end());
+    Task t = *std::max_element(tasks.begin(), tasks.end());
     compute_route_to_delivery(t);
     compute_route_to_picktask(t);
     int path_distance = compute_cost_of_route();
     double normalized_distance = path_distance / t.demand;
     tm.header.stamp = ros::Time().now();
     tm.ID_ROBOT = tr->ID_ROBOT;
+    tm.take = true;
+    tm.go_home = false;
     tm.demand = t.demand;
     tm.item = t.item;
     tm.order = t.order;
@@ -246,7 +249,12 @@ void TaskPlanner::task_Callback(const patrolling_sim::TaskRequestConstPtr &tr)
   else
   {
     c_print("Task finiti!",red);
-
+    tm.header.stamp = ros::Time().now();
+    tm.ID_ROBOT = tr->ID_ROBOT;
+    tm.take = false;
+    tm.go_home = true;
+    c_print("% publish on topic mission! go_home ID_robot: ", tm.ID_ROBOT, yellow);
+    pub_task.publish(tm);
   }
   ros::spinOnce();
   sleep(1);

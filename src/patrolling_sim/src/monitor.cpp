@@ -71,9 +71,9 @@ using namespace std;
 
 #define LOG_MONITOR 0
 #define SAVE_HYSTOGRAMS 0
-#define EXTENDED_STAGE 1
+#define EXTENDED_STAGE 0
 
-#define SIMULATE_FOREVER true                // WARNING: Set this to false, if you want a finishing condition.
+#define SIMULATE_FOREVER false             // WARNING: Set this to false, if you want a finishing condition.
 #define TIMEOUT_WRITE_RESULTS_FOREVER 900.0  // timeout for writing results to file when simulating forever
 
 using std::cout;

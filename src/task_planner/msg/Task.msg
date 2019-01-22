@@ -1,5 +1,6 @@
 Header      header
 bool        take
+bool        go_home
 int32       ID_ROBOT
 uint32      item
 uint32      order
