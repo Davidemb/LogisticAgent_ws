@@ -54,4 +54,20 @@
 // Message types for DTASSI algorithm
 #define DTASSI_TR 41 //Task request, msg format: [ID_ROBOT,msg_type,next_vertex_index,bid_value]
 #define DTASSI_BID 42 //Bid Message, msg format: [ID_ROBOT,msg_type,next_vertex_index,bid_value]
+#define NUM_MAX_ROBOTS 32
+#define DEAD_ROBOT_TIME 300.0           // (seconds) time from last goal reached after which a robot is
+                                        // considered dead
+#define TIMEOUT_WRITE_RESULTS 180.0     // (seconds) timeout for writing results to file
+
+// For hystograms
+#define RESOLUTION 1.0     // seconds
+#define MAXIDLENESS 500.0  // seconds
+
+#define LOG_MONITOR 0
+#define SAVE_HYSTOGRAMS 0
+#define EXTENDED_STAGE 0
+
+#define SIMULATE_FOREVER false             // WARNING: Set this to false, if you want a finishing condition.
+#define TIMEOUT_WRITE_RESULTS_FOREVER 900.0  // timeout for writing results to file when simulating forever
+#define MAX_DIMENSION 200
 

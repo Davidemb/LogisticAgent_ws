@@ -60,22 +60,6 @@ using namespace std;
 #include "message_types.hpp"
 // #include "patrolling_sim/GoToStartPosSrv.h"
 
-#define NUM_MAX_ROBOTS 32
-#define DEAD_ROBOT_TIME 300.0           // (seconds) time from last goal reached after which a robot is
-                                        // considered dead
-#define TIMEOUT_WRITE_RESULTS 180.0     // (seconds) timeout for writing results to file
-
-// For hystograms
-#define RESOLUTION 1.0     // seconds
-#define MAXIDLENESS 500.0  // seconds
-
-#define LOG_MONITOR 0
-#define SAVE_HYSTOGRAMS 0
-#define EXTENDED_STAGE 0
-
-#define SIMULATE_FOREVER false             // WARNING: Set this to false, if you want a finishing condition.
-#define TIMEOUT_WRITE_RESULTS_FOREVER 900.0  // timeout for writing results to file when simulating forever
-
 using std::cout;
 using std::endl;
 using std::string;
@@ -108,7 +92,6 @@ string algorithm, algparams, nav_mod, initial_positions;
 
 const std::string PS_path = ros::package::getPath("patrolling_sim");  // D.Portugal => get pkg path
 
-#define MAX_DIMENSION 200
 
 /* ESTRUTURAS DE DADOS A CALCULAR */
 double last_visit[MAX_DIMENSION], current_idleness[MAX_DIMENSION], avg_idleness[MAX_DIMENSION],

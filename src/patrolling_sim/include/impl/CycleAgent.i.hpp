@@ -49,56 +49,7 @@ void CycleAgent::onGoalComplete()
 
     // devolver proximo vertex tendo em conta apenas as idlenesses;
 
-    if (first)
-    {
-        uint elem_s_path;
-        int *shortest_path = new int[dimension];
-        initial_vertex = current_vertex;
-
-        dijkstra(current_vertex, 6, shortest_path, elem_s_path, vertex_web, dimension);
-        Task t;
-        t.take = true;
-        for (auto i = 1; i < elem_s_path; i++)
-        {
-            printf("path[%u] = %d\n", i, shortest_path[i]);
-            t.route.push_back(shortest_path[i]);
-        }
-        mission.push_back(t);
-
-        std_msgs::Int16MultiArray init_msg;
-        init_msg.data.clear();
-        int value = ID_ROBOT;
-        if (value==-1){value=0;}
-        init_msg.data.push_back(value);
-        init_msg.data.push_back(INIT_MSG);
-
-        if (elem_s_path == 1)
-        {
-            int cv = shortest_path[0];
-            init_msg.data.push_back(cv);
-            init_msg.data.push_back(cv);
-        }
-        else
-        {
-            for (int i = 0; i < elem_s_path; i++)
-            {
-                init_msg.data.push_back(shortest_path[i]);
-                cout << shortest_path[i]<<"\n";
-            }
-        }
-        c_print("broadcast",red);
-        pub_broadcast_msg.publish(init_msg);
-        ros::Rate loop_rate(30);
-        ros::spinOnce();
-        loop_rate.sleep();
-        
-        first = false;
-    }
-
-    if (OK)
     next_vertex = compute_next_vertex();
-    else
-    next_vertex = current_vertex;
 
     // next_vertex = compute_next_vertex();
 
@@ -117,17 +68,6 @@ void CycleAgent::onGoalComplete()
     ROS_INFO("Sending goal - Vertex %d (%f,%f)\n", next_vertex, vertex_web[next_vertex].x, vertex_web[next_vertex].y);
     // sendGoal(vertex_web[next_vertex].x, vertex_web[next_vertex].y);
     sendGoal(next_vertex); // send to move_base
-
-    // auto t = mission.front();
-
-    // cout << "route che passo alla sendmission\n";
-    // for (auto i = 0; i < t.route.size(); i++)
-    // {
-    //     cout << t.route[i] << " ";
-    // }
-    // cout << "\n";
-
-    // sendMissionGoal(t.route);
 
     goal_complete = false;
 }

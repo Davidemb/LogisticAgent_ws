@@ -455,7 +455,8 @@ void PatrolAgent::request_Task()
 
     pub_to_task_planner_needtask.publish(task_request);
 
-    bool first = true;
+
+   
     if (first)
     {
         std_msgs::Int16MultiArray msg;

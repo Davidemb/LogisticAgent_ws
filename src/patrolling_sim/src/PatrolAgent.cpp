@@ -702,7 +702,8 @@ void PatrolAgent::receive_mission_Callback(const task_planner::TaskConstPtr &msg
       Task task;
       uint elem_s_path;
       int *shortest_path = new int[dimension];
-      dijkstra(current_vertex, initial_vertex, shortest_path, elem_s_path, vertex_web, dimension);
+      uint home = msg->dst;
+      dijkstra(current_vertex, home, shortest_path, elem_s_path, vertex_web, dimension);
       Task t;
       t.take = msg->take;
       for (auto i = 2; i < elem_s_path; i++)

@@ -132,6 +132,7 @@ namespace patrolagent
         bool goal_canceled_by_user;
 
         bool OK = false;
+        bool first = true;
         
         double last_interference;
         double *instantaneous_idleness;  // local idleness

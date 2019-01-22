@@ -89,8 +89,11 @@ public:
   uint dst_vertex[3] = {11, 16, 21};
   uint under_pass[7] = {7, 9, 12, 14, 17, 19, 22};
   uint upper_pass[7] = {5, 8, 10, 13, 15, 18, 20};
+  uint initial_position[4] = {2, 1, 0, 3};
   vector<Task> tasks;
   vector<uint> route;
+
+  uint id = 0;
 
   Task operator[](int i) const
   {
