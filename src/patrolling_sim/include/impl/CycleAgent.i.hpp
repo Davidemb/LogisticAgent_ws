@@ -26,6 +26,7 @@ int CycleAgent::compute_next_vertex()
         //  ^ Importatnte!
         // mission.clear();
         c_print("id_v: ", id_vertex, " vertex: ", vertex, magenta);
+        send_goal_reached();
         id_vertex = 0;
     }
     else
@@ -60,7 +61,7 @@ void CycleAgent::onGoalComplete()
 
     /** SEND GOAL (REACHED) AND INTENTION **/
 
-    send_goal_reached(); // Send TARGET to monitor
+    // send_goal_reached(); // Send TARGET to monitor
 
     send_results(); // Algorithm specific function
 
@@ -131,19 +132,11 @@ void CycleAgent::run()
 
                 if (ResendGoal)
                 {
-                    // Send the goal to the robot (Global Map)
-                    if (resend_goal_count < 2)
-                    {
-                        resend_goal_count++;
+                    
                         ROS_INFO("Re-Sending goal (%d) - Vertex %d (%f,%f)", resend_goal_count, next_vertex,
                                  vertex_web[next_vertex].x, vertex_web[next_vertex].y);
                         sendGoal(next_vertex);
-                    }
-                    else
-                    {
-                        resend_goal_count = 0;
-                        // onGoalNotComplete();
-                    }
+                    
                     ResendGoal = false; // para nao voltar a entrar (envia goal so uma vez)
                 }
 

@@ -65,7 +65,7 @@
 
 
 #define NUM_MAX_ROBOTS 32
-#define INTERFERENCE_DISTANCE 0.5
+#define INTERFERENCE_DISTANCE 0.55
 #define SHARE_MSG 33
 #define DELTA_TIME_SEQUENTIAL_START 15
 #define SIMULATE_FOREVER false //WARNING: Set this to false, if you want a finishing condition.
@@ -123,6 +123,7 @@ namespace patrolagent
         int current_dim_path;
  
         int aborted_count, resend_goal_count;
+        int interference_cnt;
 
         bool ResendGoal; // Send the same goal again (if goal failed...)
         bool interference;

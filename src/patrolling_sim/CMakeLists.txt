@@ -152,7 +152,7 @@ target_link_libraries(CYCLE PatrolAgent CycleAgent ${catkin_LIBRARIES})
 # Results and Monitor Node:
  
 ## Declare a cpp executable 
-add_executable(monitor src/monitor.cpp src/getgraph.cpp)
+add_executable(monitor src/view_result.cpp src/getgraph.cpp)
 add_dependencies(monitor ${PROJECT_NAME}_gencpp)
 ## Specify libraries to link a library or executable target against
 target_link_libraries(monitor ${catkin_LIBRARIES})

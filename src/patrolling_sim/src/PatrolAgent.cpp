@@ -302,11 +302,11 @@ void PatrolAgent::goalDoneCallback(const actionlib::SimpleClientGoalState &state
       ROS_INFO("Goal not cancelled by the interference...");
 
       // ROS_INFO("Backup");
-      backup();
+      // backup();
 
       ROS_INFO("Clear costmap!");
 
-      char srvname[80];
+     /*  char srvname[80];
 
       if (ID_ROBOT <= -1)
       {
@@ -328,7 +328,7 @@ void PatrolAgent::goalDoneCallback(const actionlib::SimpleClientGoalState &state
       {
         ROS_ERROR("Failed to call service move_base/clear_costmaps");
       }
-
+ */
       ROS_INFO("Resend Goal!");
       ResendGoal = true;
     }
@@ -366,8 +366,12 @@ void PatrolAgent::send_goal_reached()
   std_msgs::Int16MultiArray msg;
   msg.data.clear();
   msg.data.push_back(value);
-  msg.data.push_back(TARGET_REACHED_MSG_TYPE);
-  msg.data.push_back(current_vertex);
+  msg.data.push_back(TASK_REACHED_MSG_TYPE);
+  msg.data.push_back(1);
+  msg.data.push_back(mission.front().item);
+  msg.data.push_back(mission.front().path_distance);
+  msg.data.push_back(interference_cnt);
+  msg.data.push_back(resend_goal_count);
   // msg.data.push_back(next_vertex);
   // msg.data.push_back(0); //David Portugal: is this necessary?
 
@@ -381,7 +385,7 @@ bool PatrolAgent::check_interference(int robot_id)
   int i;
   double dist_quad;
 
-  if (ros::Time::now().toSec() - last_interference < 10) // seconds
+  if (ros::Time::now().toSec() - last_interference < 3) // seconds
     return false;                                        // false if within 10 seconds from the last one
 
   /* Poderei usar TEAMSIZE para afinar */
@@ -403,10 +407,10 @@ bool PatrolAgent::check_interference(int robot_id)
 
 void PatrolAgent::backup()
 {
-  ros::Rate loop_rate(5); // 100Hz
+  ros::Rate loop_rate(0.5); // 100Hz
 
   int backUpCounter = 0;
-  while (backUpCounter <= 30)
+  while (backUpCounter <1)
   {
     if (backUpCounter == 0)
     {
@@ -418,7 +422,7 @@ void PatrolAgent::backup()
       cmd_vel_pub.publish(cmd_vel);
     }
 
-    if (backUpCounter == 15)
+    if (backUpCounter == 1)
     {
       // Turn the robot around...
       geometry_msgs::Twist cmd_vel;
@@ -427,7 +431,7 @@ void PatrolAgent::backup()
       cmd_vel_pub.publish(cmd_vel);
     }
 
-    if (backUpCounter == 30)
+    if (backUpCounter == 3)
     {
       // Stop the robot...
       geometry_msgs::Twist cmd_vel;
@@ -437,9 +441,9 @@ void PatrolAgent::backup()
       // ROS_INFO("Done backing up, now on with my life!");
     }
 
+    backUpCounter++;
     ros::spinOnce();
     loop_rate.sleep();
-    backUpCounter++;
   }
 }
 
@@ -452,7 +456,7 @@ void PatrolAgent::do_interference_behavior()
     // Stop the robot..
     cancelGoal();
     ROS_INFO("Robot stopped");
-    ros::Duration delay(3); // seconds
+    ros::Duration delay(0.1); // seconds
     delay.sleep();
     ResendGoal = true;
 #else

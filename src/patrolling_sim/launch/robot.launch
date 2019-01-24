@@ -2,10 +2,10 @@
 <launch>
   <arg name="robotname" default="robot_0" />
   <arg name="mapname" default="grid" />
-  <arg name="use_amcl" default="false" />
-  <arg name="use_move_base" default="false" />
-  <arg name="use_srrg_localizer" default="true" />
-  <arg name="use_spqrel_planner" default="true" />
+  <arg name="use_amcl" default="true" />
+  <arg name="use_move_base" default="true" />
+  <arg name="use_srrg_localizer" default="false" />
+  <arg name="use_spqrel_planner" default="false" />
 
 
   <group ns="$(arg robotname)">    
