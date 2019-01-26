@@ -226,6 +226,7 @@ namespace patrolagent
         virtual void receive_results();  // asynchronous call
         void do_send_message(std_msgs::Int16MultiArray &msg);
         void send_interference();
+        void send_resendgoal();
         void positionsCB(const nav_msgs::Odometry::ConstPtr& msg);
         void resultsCB(const std_msgs::Int16MultiArray::ConstPtr& msg);
 

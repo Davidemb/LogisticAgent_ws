@@ -301,8 +301,8 @@ void PatrolAgent::goalDoneCallback(const actionlib::SimpleClientGoalState &state
     {
       ROS_INFO("Goal not cancelled by the interference...");
 
-      // ROS_INFO("Backup");
-      // backup();
+      ROS_INFO("Backup");
+      backup();
 
       ROS_INFO("Clear costmap!");
 
@@ -407,12 +407,12 @@ bool PatrolAgent::check_interference(int robot_id)
 
 void PatrolAgent::backup()
 {
-  ros::Rate loop_rate(0.5); // 100Hz
+  ros::Rate loop_rate(10); // 100Hz
 
   int backUpCounter = 0;
-  while (backUpCounter <1)
+  while (backUpCounter <=100)
   {
-    if (backUpCounter == 0)
+    if (backUpCounter <= 10)
     {
       ROS_INFO("The wall is too close! I need to do some backing up...");
       // Move the robot back...
@@ -422,7 +422,7 @@ void PatrolAgent::backup()
       cmd_vel_pub.publish(cmd_vel);
     }
 
-    if (backUpCounter == 1)
+    if (backUpCounter == 20)
     {
       // Turn the robot around...
       geometry_msgs::Twist cmd_vel;
@@ -431,7 +431,7 @@ void PatrolAgent::backup()
       cmd_vel_pub.publish(cmd_vel);
     }
 
-    if (backUpCounter == 3)
+    if (backUpCounter == 100)
     {
       // Stop the robot...
       geometry_msgs::Twist cmd_vel;
@@ -597,6 +597,26 @@ void PatrolAgent::send_interference()
   msg.data.clear();
   msg.data.push_back(value);
   msg.data.push_back(INTERFERENCE_MSG_TYPE);
+
+  results_pub.publish(msg);
+  ros::spinOnce();
+}
+
+void PatrolAgent::send_resendgoal()
+{
+  // interference: [ID,msg_type]
+
+  int value = ID_ROBOT;
+  if (value == -1)
+  {
+    value = 0;
+  }
+  printf("Resend goal: Robot %d\n", value);
+
+  std_msgs::Int16MultiArray msg;
+  msg.data.clear();
+  msg.data.push_back(value);
+  msg.data.push_back(RESENDGOAL_MSG_TYPE);
 
   results_pub.publish(msg);
   ros::spinOnce();

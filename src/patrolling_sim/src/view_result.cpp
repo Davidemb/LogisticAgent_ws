@@ -69,6 +69,7 @@ int number_of_visits[MAX_DIMENSION];
 size_t dimension; // graph size
 
 uint interference_cnt = 0;
+uint resendgoal_cnt = 0;
 uint patrol_cnt = 1;
 void set_last_goal_reached(int id, int k)
 {
@@ -184,7 +185,22 @@ void resultsCB(const std_msgs::Int16MultiArray::ConstPtr &msg)
     if (initialize == false)
     {
       ROS_INFO("Robot %d sent interference.\n", id_robot);
-      interference_cnt++;
+      // interference_cnt++;
+      view_results.at(id_robot).interference += 1;
+      // view_results.at(id_robot).resend_goal += vresults[6];
+      ros::spinOnce();
+    }
+    break;
+  }
+
+  case RESENDGOAL_MSG_TYPE:
+  {
+    if (initialize == false)
+    {
+      ROS_INFO("Robot %d sent resendgoal.\n", id_robot);
+      // resendgoal_cnt++;
+      // view_results.at(id_robot).interference += vresults[5];
+      view_results.at(id_robot).resend_goal += 1;
       ros::spinOnce();
     }
     break;
@@ -195,7 +211,7 @@ void resultsCB(const std_msgs::Int16MultiArray::ConstPtr &msg)
     if (initialize == false)
     {
       view_results.at(id_robot).ID_ROBOT = id_robot;
-      view_results.at(id_robot).n_task += vresults[2];
+      view_results.at(id_robot).n_task += vresults[2]; // capacita' demand del task
       switch (vresults[3])
       {
       case 0:
@@ -215,11 +231,9 @@ void resultsCB(const std_msgs::Int16MultiArray::ConstPtr &msg)
       break;
       }
       view_results.at(id_robot).dim_path += vresults[4];
-      view_results.at(id_robot).interference += vresults[5];
-      view_results.at(id_robot).resend_goal += vresults[6];
     }
 
-    c_print("\nsa ghe rento il vrs?", red);
+    c_print("\nview result?", red);
     for (int i = 0; i < view_results.size(); i++)
     {
       cout << view_results[i].ID_ROBOT << " "
@@ -238,28 +252,8 @@ void resultsCB(const std_msgs::Int16MultiArray::ConstPtr &msg)
 
 bool check_dead_robots()
 {
-  double current_time = ros::Time::now().toSec();
-  bool r = false;
-  for (size_t i = 0; i < teamsize; i++)
-  {
-    double l = get_last_goal_reached(i);
-    double delta = current_time - l;
-    // printf("DEBUG dead robot: %d   %.1f - %.1f =
-    // %.1f\n",i,current_time,l,delta);
-    if (delta > DEAD_ROBOT_TIME * 0.75)
-    {
-      printf("Robot %lu: dead robot - delta = %.1f / %.1f \n", i, delta, DEAD_ROBOT_TIME);
-      system("play -q beep.wav");
-    }
-    if (delta > DEAD_ROBOT_TIME)
-    {
-      // printf("Dead robot %d. Time from last goal reached = %.1f\n",i,delta);
-      r = true;
-      break;
-    }
-  }
-
-  return r;
+  sleep(300);
+  return true;
 }
 
 void scenario_name(char *name, const char *graph_file, const char *teamsize_str)
