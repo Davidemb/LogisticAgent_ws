@@ -43,9 +43,14 @@ ros::Publisher results_pub;
 // Initialization:
 bool initialize = true; // Initialization flag
 uint cnt = 0;           // Count number of robots connected
+uint ok_cnt = 0;
 uint teamsize;
 bool init_robots[NUM_MAX_ROBOTS];
 double last_goal_reached[NUM_MAX_ROBOTS];
+
+bool end_simulation = false;
+
+bool ok[4];
 
 vector<view_result> view_results(4);
 
@@ -71,10 +76,11 @@ size_t dimension; // graph size
 uint interference_cnt = 0;
 uint resendgoal_cnt = 0;
 uint patrol_cnt = 1;
+
 void set_last_goal_reached(int id, int k)
 {
   pthread_mutex_lock(&lock_last_goal_reached);
-  c_print("hole", green);
+  last_goal_reached[id] = k;
   pthread_mutex_unlock(&lock_last_goal_reached);
 }
 
@@ -211,7 +217,8 @@ void resultsCB(const std_msgs::Int16MultiArray::ConstPtr &msg)
     if (initialize == false)
     {
       view_results.at(id_robot).ID_ROBOT = id_robot;
-      view_results.at(id_robot).n_task += vresults[2]; // capacita' demand del task
+      view_results.at(id_robot).n_task += vresults[2];   //  demand
+      view_results.at(id_robot).dim_path += vresults[4]; // dim_path
       switch (vresults[3])
       {
       case 0:
@@ -230,30 +237,67 @@ void resultsCB(const std_msgs::Int16MultiArray::ConstPtr &msg)
       }
       break;
       }
-      view_results.at(id_robot).dim_path += vresults[4];
     }
 
-    c_print("\nview result?", red);
+    c_print("\nview result:", red);
     for (int i = 0; i < view_results.size(); i++)
     {
-      cout << view_results[i].ID_ROBOT << " "
-           << view_results[i].n_task << " "
-           << view_results[i].type_A << " "
-           << view_results[i].type_B << " "
-           << view_results[i].type_C << " "
-           << view_results[i].dim_path << " "
-           << view_results[i].interference << " "
-           << view_results[i].resend_goal << "\n";
+      cout << view_results[i].ID_ROBOT << " " << view_results[i].n_task << " " << view_results[i].type_A << " "
+           << view_results[i].type_B << " " << view_results[i].type_C << " " << view_results[i].dim_path << " "
+           << view_results[i].interference << " " << view_results[i].resend_goal << "\n";
     }
     cout << "\n";
   }
+
+  case AT_HOME_MSG_TYPE:
+  {
+    if (initialize == false)
+    {
+      ok[id_robot] = true;
+    }
+    break;
+  }
+
+  case END_MSG_TYPE:
+  {
+    int c = 0;
+    for (auto i = 0 ; i < 4; i++)
+    {
+      if (ok[i] == true)
+      {
+        c++;
+      }
+    }
+    if (c == 3)
+    end_simulation = true;
+  }
+  break;
   }
 }
 
 bool check_dead_robots()
 {
-  sleep(300);
-  return true;
+  double current_time = ros::Time::now().toSec();
+  bool r = false;
+  for (size_t i = 0; i < teamsize; i++)
+  {
+    double l = get_last_goal_reached(i);
+    double delta = current_time - l;
+    // printf("DEBUG dead robot: %d   %.1f - %.1f =
+    // %.1f\n",i,current_time,l,delta);
+    if (delta > DEAD_ROBOT_TIME * 0.75)
+    {
+      printf("Robot %lu: dead robot - delta = %.1f / %.1f \n", i, delta, DEAD_ROBOT_TIME);
+      system("play -q beep.wav");
+    }
+    if (delta > DEAD_ROBOT_TIME)
+    {
+      // printf("Dead robot %d. Time from last goal reached = %.1f\n",i,delta);
+      r = true;
+      break;
+    }
+  }
+  return r;
 }
 
 void scenario_name(char *name, const char *graph_file, const char *teamsize_str)
@@ -298,16 +342,26 @@ void finish_simulation()
   results_pub.publish(msg);
   ros::spinOnce();
 }
+/*
+void init_view_results()
+{
+  // Fase di inizializzazione delle cose che mi servono
+  // array flag
+  c_print ("TS:", teamsize, red, Pr);
+  ok = new bool[teamsize];
+  view_results.reserve(teamsize);
+  c_print("Size complete!", green, Pr);
+} */
 
 int main(int argc, char **argv)
 { // pass TEAMSIZE GRAPH ALGORITHM
   /*
- argc=3
- argv[0]=/.../patrolling_sim/bin/monitor
- argv[1]=grid
- argv[2]=ALGORITHM = {MSP,Cyc,CC,CR,HCR}
- argv[3]=TEAMSIZE
- */
+  argc=3
+  argv[0]=/.../patrolling_sim/bin/monitor
+  argv[1]=grid
+  argv[2]=ALGORITHM = {MSP,Cyc,CC,CR,HCR}
+  argv[3]=TEAMSIZE
+  */
 
   // ex: "rosrun patrolling_sim monitor maps/example/example.graph MSP 2"
 
@@ -360,6 +414,12 @@ int main(int argc, char **argv)
     init_robots[i] = false;
     last_goal_reached[i] = 0.0;
   }
+
+  //-------------{Fase di inizializzazione per i dati}--------------------------
+
+  // init_view_results();
+
+  //----------------------------------------------------------------------------
 
   bool dead = false; // check if there is a dead robot
 
@@ -482,66 +542,49 @@ int main(int argc, char **argv)
       // check time
       double report_time = ros::Time::now().toSec();
 
-      // printf("### report time=%.1f  last_report_time=%.1f diff =
-      // %.1f\n",report_time, last_report_time, report_time - last_report_time);
-
-      // write results every TIMEOUT_WRITE_RESULTS_(FOREVER) seconds anyway
-      bool timeout_write_results;
-
-      timeout_write_results = (report_time - last_report_time > TIMEOUT_WRITE_RESULTS);
-
-      if (timeout_write_results)
-      {
-        // write results every time a patrolling cycle is finished.
-        // or after some time
-
-        uint i, tot_visits = 0;
-        for (size_t i = 0; i < dimension; i++)
-        {
-          tot_visits += number_of_visits[i];
-        }
-        float avg_visits = (float)tot_visits / dimension;
-
-        duration = report_time - time_zero;
-        time_t real_now;
-        time(&real_now);
-        real_duration = (double)real_now - (double)real_time_zero;
-
-        if (timeout_write_results)
-          last_report_time = report_time;
-        else
-          patrol_cnt++;
-
-      } // if ((patrol_cnt == complete_patrol) || timeout_write_results)
+      duration = report_time - time_zero;
+      time_t real_now;
+      time(&real_now);
+      real_duration = (double)real_now - (double)real_time_zero;
+    } // if ((patrol_cnt == complete_patrol) || timeout_write_results)
 
 // Check if simulation must be terminated
 #if SIMULATE_FOREVER == false
-      dead = check_dead_robots();
+    // dead = check_dead_robots();
 
-      simrun = true;
-      simabort = false;
-      std::string psimrun, psimabort;
-      bool bsimabort;
-      if (nh.getParam("/simulation_running", psimrun))
-        if (psimrun == "false")
-          simrun = false;
-      if (nh.getParam("/simulation_abort", psimabort))
-        if (psimabort == "true")
-          simabort = true;
-      if (nh.getParam("/simulation_abort", bsimabort))
-        simabort = bsimabort;
+    simrun = true;
+    simabort = false;
+    std::string psimrun, psimabort;
+    bool bsimabort;
+    if (nh.getParam("/simulation_running", psimrun))
+      if (psimrun == "false")
+        simrun = false;
+    if (nh.getParam("/simulation_abort", psimabort))
+      if (psimabort == "true")
+        simabort = true;
+    if (nh.getParam("/simulation_abort", bsimabort))
+      simabort = bsimabort;
 
-      if ((dead) || (!simrun) || (simabort))
-      {
-        printf("Simulation is Over\n");
-        nh.setParam("/simulation_running", false);
-        finish_simulation();
-        ros::spinOnce();
-        break;
-      }
+    if ((dead) || (!simrun) || (simabort))
+    {
+      printf("Simulation is Over\n");
+      nh.setParam("/simulation_running", false);
+      finish_simulation();
+      ros::spinOnce();
+      break;
+    }
 #endif
 
-    } // if ! initialize
+    // if ! initialize
+
+    if (end_simulation)
+    {
+      nh.setParam("/simulation_running", false);
+      finish_simulation();
+      ros::spinOnce();
+      ros::shutdown();
+      break;
+    }
 
     current_time = ros::Time::now().toSec();
     ros::spinOnce();
@@ -555,6 +598,29 @@ int main(int argc, char **argv)
   time_t real_now;
   time(&real_now);
   real_duration = (double)real_now - (double)real_time_zero;
+
+  c_print("\nTimer: ", red, Pr);
+  c_print("duration: ", duration, red, Pr);
+  c_print("current_time: ", current_time, red, Pr);
+  c_print("time_zero: ", time_zero, green, Pr);
+  c_print("real_duration: ", real_duration, magenta, Pr);
+
+  c_print("Write LOGIC result <>", green, Pr);
+  string vr_results_file_name;
+  vr_results_file_name = expname + "_logistic_results.csv";
+
+  FILE *vr_results_file;
+  vr_results_file = fopen(vr_results_file_name.c_str(), "w");
+  fprintf(vr_results_file, "Robot; nTask; A; B; C; totDist; interference; resendGoal; Time \n"); // header VR_results
+
+  for (int i = 0; i < view_results.size(); i++)
+  {
+    fprintf(vr_results_file, "%d;%d;%d;%d;%d;%d;%d;%d;%.2f\n", view_results[i].ID_ROBOT, view_results[i].n_task,
+            view_results[i].type_A, view_results[i].type_B, view_results[i].type_C, view_results[i].dim_path,
+            view_results[i].interference, view_results[i].resend_goal, real_duration);
+  }
+
+  c_print("allor ><", red, Pr);
 
   uint tot_visits = 0;
   for (size_t i = 0; i < dimension; i++)
@@ -573,8 +639,8 @@ int main(int argc, char **argv)
                     "1f;%.1f;%.1f;%.2f;%d;%.1f;%d\n",
           mapname.c_str(), teamsize_str, initial_positions.c_str(), goal_reached_wait, comm_delay, nav_mod.c_str(),
           algorithm.c_str(), algparams.c_str(), hostname, strnow, duration, real_duration, interference_cnt,
-          (dead ? "FAIL" : (simabort ? "ABORT" : "TIMEOUT")),
-          (float)interference_cnt / duration * 60, tot_visits, avg_visits);
+          (dead ? "FAIL" : (simabort ? "ABORT" : "TIMEOUT")), (float)interference_cnt / duration * 60, tot_visits,
+          avg_visits);
 
   fclose(infofile);
   cout << "Info file " << infofilename << " saved." << endl;

@@ -302,11 +302,12 @@ void PatrolAgent::goalDoneCallback(const actionlib::SimpleClientGoalState &state
       ROS_INFO("Goal not cancelled by the interference...");
 
       ROS_INFO("Backup");
+
       backup();
 
       ROS_INFO("Clear costmap!");
 
-     /*  char srvname[80];
+      /*  char srvname[80];
 
       if (ID_ROBOT <= -1)
       {
@@ -354,7 +355,7 @@ void PatrolAgent::goalFeedbackCallback(const move_base_msgs::MoveBaseFeedbackCon
   interference = check_interference(value);
 }
 
-void PatrolAgent::send_goal_reached()
+void PatrolAgent::send_task_reached()
 {
   int value = ID_ROBOT;
   if (value == -1)
@@ -379,6 +380,28 @@ void PatrolAgent::send_goal_reached()
   ros::spinOnce();
 }
 
+void PatrolAgent::send_goal_reached()
+{
+
+  int value = ID_ROBOT;
+  if (value == -1)
+  {
+    value = 0;
+  }
+
+  // [ID,msg_type,vertex,intention,0]
+  std_msgs::Int16MultiArray msg;
+  msg.data.clear();
+  msg.data.push_back(value);
+  msg.data.push_back(TARGET_REACHED_MSG_TYPE);
+  msg.data.push_back(current_vertex);
+  //msg.data.push_back(next_vertex);
+  //msg.data.push_back(0); //David Portugal: is this necessary?
+
+  results_pub.publish(msg);
+  ros::spinOnce();
+}
+
 bool PatrolAgent::check_interference(int robot_id)
 { // verificar se os robots estao proximos
 
@@ -386,7 +409,7 @@ bool PatrolAgent::check_interference(int robot_id)
   double dist_quad;
 
   if (ros::Time::now().toSec() - last_interference < 3) // seconds
-    return false;                                        // false if within 10 seconds from the last one
+    return false;                                       // false if within 10 seconds from the last one
 
   /* Poderei usar TEAMSIZE para afinar */
   for (i = 0; i < robot_id; i++)
@@ -407,12 +430,12 @@ bool PatrolAgent::check_interference(int robot_id)
 
 void PatrolAgent::backup()
 {
-  ros::Rate loop_rate(10); // 100Hz
+  ros::Rate loop_rate(300); // 100Hz
 
   int backUpCounter = 0;
-  while (backUpCounter <=100)
+  while (backUpCounter <= 100)
   {
-    if (backUpCounter <= 10)
+    if (backUpCounter == 0)
     {
       ROS_INFO("The wall is too close! I need to do some backing up...");
       // Move the robot back...
@@ -462,6 +485,10 @@ void PatrolAgent::do_interference_behavior()
 #else
   // get own "odom" positions...
   ros::spinOnce();
+
+  //---------------
+  backup();
+  //---------------
 
   // Waiting until conflict is solved...
   int value = ID_ROBOT;
@@ -723,7 +750,6 @@ void PatrolAgent::receive_mission_Callback(const task_planner::TaskConstPtr &msg
     }
     else
     {
-      Task task;
       uint elem_s_path;
       int *shortest_path = new int[dimension];
       uint home = msg->dst;
@@ -761,7 +787,7 @@ void PatrolAgent::broadcast_msg_Callback(const std_msgs::Int16MultiArray::ConstP
   int id_sender = *it;
   it++;
   int value = ID_ROBOT;
-  c_print("message id robot: ",ID_ROBOT, green);
+  c_print("message id robot: ", ID_ROBOT, green);
   if (value == -1)
   {
     value = 0;
@@ -769,7 +795,6 @@ void PatrolAgent::broadcast_msg_Callback(const std_msgs::Int16MultiArray::ConstP
   if (id_sender == value)
     return;
 
-  
   int msg_type = *it;
   it++;
   switch (msg_type)
@@ -784,11 +809,11 @@ void PatrolAgent::broadcast_msg_Callback(const std_msgs::Int16MultiArray::ConstP
   break;
   case (START):
   {
-   c_print("PArte quello dopo");
-   if (value ==*it)
-   {
-     OK = true;
-   }
+    c_print("PArte quello dopo");
+    if (value == *it)
+    {
+      OK = true;
+    }
   }
   break;
   }

@@ -42,9 +42,13 @@
 #define TASK_REACHED_MSG_TYPE 13
 #define RESENDGOAL_MSG_TYPE 14
 
+#define Pr true
+
 //LOGISCTIC AGENT
 #define INIT_MSG 37
 #define START 46
+#define AT_HOME_MSG_TYPE 47
+#define END_MSG_TYPE 333
 //
 #define GBS_MSG_TYPE 31
 #define SEBS_MSG_TYPE 32
@@ -57,7 +61,7 @@
 #define DTASSI_TR 41 //Task request, msg format: [ID_ROBOT,msg_type,next_vertex_index,bid_value]
 #define DTASSI_BID 42 //Bid Message, msg format: [ID_ROBOT,msg_type,next_vertex_index,bid_value]
 #define NUM_MAX_ROBOTS 32
-#define DEAD_ROBOT_TIME 300.0           // (seconds) time from last goal reached after which a robot is
+#define DEAD_ROBOT_TIME 60.0           // (seconds) time from last goal reached after which a robot is
                                         // considered dead
 #define TIMEOUT_WRITE_RESULTS 180.0     // (seconds) timeout for writing results to file
 
@@ -72,4 +76,3 @@
 #define SIMULATE_FOREVER false             // WARNING: Set this to false, if you want a finishing condition.
 #define TIMEOUT_WRITE_RESULTS_FOREVER 900.0  // timeout for writing results to file when simulating forever
 #define MAX_DIMENSION 200
-

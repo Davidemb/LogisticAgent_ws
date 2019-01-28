@@ -1,4 +1,4 @@
-obstacle_range: 0.5
+obstacle_range: 0.3
 raytrace_range: 0.5
 robot_radius: 0.30
 inflation_radius: 0.33

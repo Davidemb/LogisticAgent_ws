@@ -256,12 +256,12 @@ void TaskPlanner::task_Callback(const patrolling_sim::TaskRequestConstPtr &tr)
     tm.go_home = true;
     tm.dst = initial_position[id];
     c_print("% publish on topic mission! go_home ID_robot: ", tm.ID_ROBOT, yellow);
-    pub_task.publish(tm);
     id++;
+    pub_task.publish(tm);
   }
   ros::spinOnce();
   sleep(1);
-}
+} 
 
 } // namespace taskplanner
 

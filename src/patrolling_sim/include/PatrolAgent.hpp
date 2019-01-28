@@ -173,6 +173,7 @@ namespace patrolagent
 
         // std::vector<int> route;
         bool * ok;
+        bool at_home = false;
         uint id_vertex = 0;
         uint id_task = 0;
         uint route_dimension;                  
@@ -210,6 +211,7 @@ namespace patrolagent
         void goalFeedbackCallback(const move_base_msgs::MoveBaseFeedbackConstPtr &feedback);
 
         void send_goal_reached();
+        void send_task_reached();
         bool check_interference (int ID_ROBOT);
         void do_interference_behavior();
         void backup();

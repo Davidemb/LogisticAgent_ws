@@ -8,8 +8,6 @@ int CycleAgent::compute_next_vertex()
 {
   int vertex;
 
-  c_print("CV: ", current_vertex, green);
-
   if (mission[id_task].route.size() - 1 == id_vertex)
   {
     vertex = mission[id_task].route[id_vertex];
@@ -19,14 +17,29 @@ int CycleAgent::compute_next_vertex()
     }
     else
     {
-      c_print("end_simulation", red);
-      end_simulation = true;
-      // sleep(100);
+      // pubblico un messaggio al view_result e gli dico sono a casa. quando tutti hanno mandato il messaggio scrivo i
+      // risultati e end_simulation.
+      int value = ID_ROBOT;
+      if (value == -1)
+      {
+        value = 0;
+      }
+
+      // [ID,msg_type,vertex,intention,0]
+      c_print("ATHOMEEEEEEEEEEEEEEEEEEEEEEEEEEEEE",red,Pr);
+      std_msgs::Int16MultiArray msg;
+      msg.data.clear();
+      msg.data.push_back(value);
+      msg.data.push_back(AT_HOME_MSG_TYPE);
+      results_pub.publish(msg);
+      ros::spinOnce();
+
+      at_home = true;
     }
     //  ^ Importatnte!
     // mission.clear();
     c_print("id_v: ", id_vertex, " vertex: ", vertex, magenta);
-    send_goal_reached();
+    send_task_reached();
     id_vertex = 0;
   }
   else
@@ -50,7 +63,16 @@ void CycleAgent::onGoalComplete()
 
   // devolver proximo vertex tendo em conta apenas as idlenesses;
 
+  if (!at_home)
   next_vertex = compute_next_vertex();
+  else
+  {
+    while (true)
+    {
+      c_print("sono a casa!", yellow,Pr);
+    }
+  }
+  
 
   // next_vertex = compute_next_vertex();
 
@@ -61,7 +83,7 @@ void CycleAgent::onGoalComplete()
 
   /** SEND GOAL (REACHED) AND INTENTION **/
 
-  // send_goal_reached(); // Send TARGET to monitor
+  send_goal_reached();  // Send TARGET to monitor
 
   send_results();  // Algorithm specific function
 

@@ -454,9 +454,7 @@ void PatrolAgent::request_Task()
     task_request.capacity = CAPACITY;
 
     pub_to_task_planner_needtask.publish(task_request);
-
-
-   
+ 
     if (first)
     {
         std_msgs::Int16MultiArray msg;
