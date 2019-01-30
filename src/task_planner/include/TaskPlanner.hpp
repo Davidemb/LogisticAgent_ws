@@ -17,6 +17,7 @@
 
 #include "getgraph.hpp"
 
+
 namespace taskplanner
 {
 struct Task
@@ -124,6 +125,7 @@ public:
 private:
   ros::Subscriber sub_task; // quando un robot vuole un task
   ros::Publisher pub_task;  // pubblicazione dell'array (pop dal vettore di tasks)
+  ros::Publisher pub_results;
   // ros::Subscriber sub_mission;
   // ros::Publisher pub_mission;
   // ros::Publisher pub_task_to_coo;

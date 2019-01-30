@@ -26,7 +26,7 @@ int CycleAgent::compute_next_vertex()
       }
 
       // [ID,msg_type,vertex,intention,0]
-      c_print("ATHOMEEEEEEEEEEEEEEEEEEEEEEEEEEEEE",red,Pr);
+      c_print("ATHOMEEEEEEEEEEEEEEEEEEEEEEEEEEEEE", red, Pr);
       std_msgs::Int16MultiArray msg;
       msg.data.clear();
       msg.data.push_back(value);
@@ -64,15 +64,13 @@ void CycleAgent::onGoalComplete()
   // devolver proximo vertex tendo em conta apenas as idlenesses;
 
   if (!at_home)
-  next_vertex = compute_next_vertex();
+    next_vertex = compute_next_vertex();
   else
   {
-    while (true)
-    {
-      c_print("sono a casa!", yellow,Pr);
-    }
+    c_print("sono a casa!", yellow, Pr);
+    sendGoal(next_vertex);
+    end_simulation = true;
   }
-  
 
   // next_vertex = compute_next_vertex();
 
@@ -83,14 +81,14 @@ void CycleAgent::onGoalComplete()
 
   /** SEND GOAL (REACHED) AND INTENTION **/
 
-  send_goal_reached();  // Send TARGET to monitor
+  send_goal_reached(); // Send TARGET to monitor
 
-  send_results();  // Algorithm specific function
+  send_results(); // Algorithm specific function
 
   // Send the goal to the robot (Global Map)
   ROS_INFO("Sending goal - Vertex %d (%f,%f)\n", next_vertex, vertex_web[next_vertex].x, vertex_web[next_vertex].y);
   // sendGoal(vertex_web[next_vertex].x, vertex_web[next_vertex].y);
-  sendGoal(next_vertex);  // send to move_base
+  sendGoal(next_vertex); // send to move_base
 
   goal_complete = false;
 }
@@ -125,13 +123,13 @@ void CycleAgent::run()
   }
 
   // Asynch spinner (non-blocking)
-  ros::AsyncSpinner spinner(2);  // Use n threads
+  ros::AsyncSpinner spinner(2); // Use n threads
   spinner.start();
   // ros::waitForShutdown();
 
   /* Run Algorithm */
 
-  ros::Rate loop_rate(30);  // 0.033 seconds or 30Hz
+  ros::Rate loop_rate(30); // 0.033 seconds or 30Hz
 
   while (ros::ok())
   {
@@ -141,11 +139,11 @@ void CycleAgent::run()
 
     if (goal_complete)
     {
-      onGoalComplete();  // can be redefined
+      onGoalComplete(); // can be redefined
       resend_goal_count = 0;
     }
     else
-    {  // goal not complete (active)
+    { // goal not complete (active)
       if (interference)
       {
         do_interference_behavior();
@@ -158,7 +156,7 @@ void CycleAgent::run()
         send_resendgoal();
         sendGoal(next_vertex);
 
-        ResendGoal = false;  // para nao voltar a entrar (envia goal so uma vez)
+        ResendGoal = false; // para nao voltar a entrar (envia goal so uma vez)
       }
 
       processEvents();
@@ -168,11 +166,11 @@ void CycleAgent::run()
         return;
       }
 
-    }  // if (goal_complete)
+    } // if (goal_complete)
     // }// if (initialization)
 
     loop_rate.sleep();
 
-  }  // while ros.ok
+  } // while ros.ok
 }
-}  // namespace cycleagent
+} // namespace cycleagent

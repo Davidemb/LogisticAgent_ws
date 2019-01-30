@@ -304,10 +304,10 @@ void PatrolAgent::goalDoneCallback(const actionlib::SimpleClientGoalState &state
       ROS_INFO("Backup");
 
       backup();
-
+/* 
       ROS_INFO("Clear costmap!");
 
-      /*  char srvname[80];
+       char srvname[80];
 
       if (ID_ROBOT <= -1)
       {
@@ -328,8 +328,8 @@ void PatrolAgent::goalDoneCallback(const actionlib::SimpleClientGoalState &state
       else
       {
         ROS_ERROR("Failed to call service move_base/clear_costmaps");
-      }
- */
+      } */
+ 
       ROS_INFO("Resend Goal!");
       ResendGoal = true;
     }
@@ -408,7 +408,7 @@ bool PatrolAgent::check_interference(int robot_id)
   int i;
   double dist_quad;
 
-  if (ros::Time::now().toSec() - last_interference < 3) // seconds
+  if (ros::Time::now().toSec() - last_interference < 10) // seconds
     return false;                                       // false if within 10 seconds from the last one
 
   /* Poderei usar TEAMSIZE para afinar */
@@ -418,8 +418,9 @@ bool PatrolAgent::check_interference(int robot_id)
     dist_quad = (xPos[i] - xPos[robot_id]) * (xPos[i] - xPos[robot_id]) +
                 (yPos[i] - yPos[robot_id]) * (yPos[i] - yPos[robot_id]);
 
-    if (dist_quad <= INTERFERENCE_DISTANCE * INTERFERENCE_DISTANCE)
-    { // robots are ... meter or less apart
+    if ( dist_quad <= INTERFERENCE_DISTANCE * INTERFERENCE_DISTANCE)
+    { 
+      // robots are ... meter or less apart
       //          ROS_INFO("Feedback: Robots are close. INTERFERENCE! Dist_Quad = %f", dist_quad);
       last_interference = ros::Time::now().toSec();
       return true;
@@ -430,7 +431,7 @@ bool PatrolAgent::check_interference(int robot_id)
 
 void PatrolAgent::backup()
 {
-  ros::Rate loop_rate(300); // 100Hz
+  ros::Rate loop_rate(100); // 100Hz
 
   int backUpCounter = 0;
   while (backUpCounter <= 100)
@@ -475,11 +476,13 @@ void PatrolAgent::do_interference_behavior()
   ROS_INFO("Interference detected! Executing interference behavior...\n");
   send_interference(); // send interference to monitor for counting
 
-#if 0
+  // backup();
+
+#if 1
     // Stop the robot..
     cancelGoal();
     ROS_INFO("Robot stopped");
-    ros::Duration delay(0.1); // seconds
+    ros::Duration delay(1); // seconds
     delay.sleep();
     ResendGoal = true;
 #else
@@ -487,7 +490,7 @@ void PatrolAgent::do_interference_behavior()
   ros::spinOnce();
 
   //---------------
-  backup();
+  // backup();
   //---------------
 
   // Waiting until conflict is solved...
@@ -692,6 +695,7 @@ void PatrolAgent::resultsCB(const std_msgs::Int16MultiArray::ConstPtr &msg)
       end_simulation = true;
     }
 #endif
+
   }
 
   if (!initialize)
@@ -744,7 +748,7 @@ void PatrolAgent::receive_mission_Callback(const task_planner::TaskConstPtr &msg
       {
         task.route.push_back(msg->route[i]);
       }
-      c_print("# insert task on mission!", red);
+      c_print("# insert task on mission!", red,Pr);
       mission.push_back(task);
       //  end_simulation = false;
     }
@@ -758,7 +762,7 @@ void PatrolAgent::receive_mission_Callback(const task_planner::TaskConstPtr &msg
       t.take = msg->take;
       for (auto i = 2; i < elem_s_path; i++)
       {
-        printf("path[%u] = %d\n", i, shortest_path[i]);
+        // printf("path[%u] = %d\n", i, shortest_path[i]);
         t.route.push_back(shortest_path[i]);
       }
       c_print("# insert task to go home!", magenta);
@@ -787,7 +791,7 @@ void PatrolAgent::broadcast_msg_Callback(const std_msgs::Int16MultiArray::ConstP
   int id_sender = *it;
   it++;
   int value = ID_ROBOT;
-  c_print("message id robot: ", ID_ROBOT, green);
+  c_print("message id robot: ", ID_ROBOT, green, Pr);
   if (value == -1)
   {
     value = 0;
@@ -809,7 +813,7 @@ void PatrolAgent::broadcast_msg_Callback(const std_msgs::Int16MultiArray::ConstP
   break;
   case (START):
   {
-    c_print("PArte quello dopo");
+    c_print("PArte quello dopo",red,Pr);
     if (value == *it)
     {
       OK = true;

@@ -41,8 +41,10 @@
 #define INTERFERENCE_MSG_TYPE 12
 #define TASK_REACHED_MSG_TYPE 13
 #define RESENDGOAL_MSG_TYPE 14
+#define TASK_PLANNER 888
+#define TASK_PLANNER_MSG_TYPE 883
 
-#define Pr true
+#define Pr false
 
 //LOGISCTIC AGENT
 #define INIT_MSG 37
@@ -64,7 +66,6 @@
 #define DEAD_ROBOT_TIME 60.0           // (seconds) time from last goal reached after which a robot is
                                         // considered dead
 #define TIMEOUT_WRITE_RESULTS 180.0     // (seconds) timeout for writing results to file
-
 // For hystograms
 #define RESOLUTION 1.0     // seconds
 #define MAXIDLENESS 500.0  // seconds

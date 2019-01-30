@@ -166,8 +166,8 @@ def run_experiment(MAP, NROBOTS, INITPOS, ALG_SHORT, LOC_MODE, NAV_MODULE, GWAIT
     if (TERM == 'xterm'):
         os.system('xterm -e  "'+cmd_monitor+'" &') 
         os.system('xterm -e  "'+cmd_stage+'" &')
-    # else: 
-        # os.system('gnome-terminal --tab -e  "bash -c \''+cmd_monitor+'\'" --tab -e "bash -c \''+cmd_stage+'\'" &')
+    else: 
+        os.system('gnome-terminal --tab -e  "bash -c \''+cmd_monitor+'\'" --tab -e "bash -c \''+cmd_stage+'\'" &')
     
     os.system('sleep 3')
     

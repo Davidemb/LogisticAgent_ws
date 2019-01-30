@@ -8,6 +8,7 @@ TaskPlanner::TaskPlanner(ros::NodeHandle &nh_, uint TEAMSIZE)
   sub_task = nh_.subscribe("need_task", 1, &TaskPlanner::task_Callback, this);
   // sub_task = nh_.subscribe("need_mission", 1, &TaskPlanner::mission_Callback, this);
   pub_task = nh_.advertise<task_planner::Task>("answer", 1);
+  pub_results = nh_.advertise<std_msgs::Int16MultiArray>("results", 100);
   // pub_go_home = nh_advertise<>("home",1); <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
   // sub_mission  = nh_.subscribe("need", 1, &TaskPlanner::mission_Callback, this);
   // pub_task_to_coo = nh_.advertise<typemessage>("topic",1);
@@ -128,6 +129,17 @@ void TaskPlanner::t_generator()
 
   for (auto k = 0; k < tasks.size(); k++)
     t_print(tasks[k]);
+
+  uint nTask = tasks.back().order + 1;
+  std_msgs::Int16MultiArray msg;
+  msg.data.clear();
+  msg.data.push_back(888); //id task_planner
+  msg.data.push_back(883); //msg type n_task
+  msg.data.push_back(nTask);
+  pub_results.publish(msg);
+  c_print("Pub nTask!",yellow);
+  ros::spinOnce();
+  sleep(0.2);
 }
 
 void TaskPlanner::compute_route_to_delivery(Task &t)
@@ -211,9 +223,9 @@ void TaskPlanner::task_Callback(const patrolling_sim::TaskRequestConstPtr &tr)
   task_planner::Task tm;
   if ((single_task) && (tasks.size() >= 1))
   {
-    // Task t = *std::min_element(tasks.begin(), tasks.end());
+    Task t = *std::min_element(tasks.begin(), tasks.end());
 
-    Task t = *std::max_element(tasks.begin(), tasks.end());
+    // Task t = *std::max_element(tasks.begin(), tasks.end());
     compute_route_to_delivery(t);
     compute_route_to_picktask(t);
     int path_distance = compute_cost_of_route();
@@ -253,6 +265,7 @@ void TaskPlanner::task_Callback(const patrolling_sim::TaskRequestConstPtr &tr)
     tm.header.stamp = ros::Time().now();
     tm.ID_ROBOT = tr->ID_ROBOT;
     tm.take = false;
+    tm.demand = 1;
     tm.go_home = true;
     tm.dst = initial_position[id];
     c_print("% publish on topic mission! go_home ID_robot: ", tm.ID_ROBOT, yellow);

@@ -442,7 +442,7 @@ void PatrolAgent::request_Task()
 {
     c_print("# Request Task!", red);
 
-    ros::Rate loop_rate(0.5);
+    
 
     task_request.flag = true;
     int value = ID_ROBOT;
@@ -473,7 +473,7 @@ void PatrolAgent::request_Task()
     mission.clear();
 
     ros::spinOnce();
-    loop_rate.sleep();
+    sleep(0.1);
 }
 
 } // namespace patrolagent
