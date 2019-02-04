@@ -18,9 +18,8 @@ using namespace std;
 
 int main (int argc, char** argv)
 {
-    cycleagent::CycleAgent CA; // visrual compute next vertex
+    cycleagent::CycleAgent CA;
     CA.init (argc, argv);
-    // CA.init_agent();
     c_print("@ Inizializzazione finita!",green);
     CA.run();
     return 0;

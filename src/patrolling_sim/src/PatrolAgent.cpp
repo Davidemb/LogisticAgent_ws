@@ -744,9 +744,13 @@ void PatrolAgent::receive_mission_Callback(const task_planner::TaskConstPtr &msg
       task.src = msg->src;
       task.dst = msg->dst;
       task.path_distance = msg->path_distance;
+      Route step; 
+      // bool status= new[msg->route.size()]();
       for (auto i = 0; i < msg->route.size(); i++)
       {
-        task.route.push_back(msg->route[i]);
+        step.id_vertex = msg->route[i];
+        step.status = msg->condition[i];
+        task.trail.push_back(step);
       }
       c_print("# insert task on mission!", red,Pr);
       mission.push_back(task);
@@ -760,10 +764,13 @@ void PatrolAgent::receive_mission_Callback(const task_planner::TaskConstPtr &msg
       dijkstra(current_vertex, home, shortest_path, elem_s_path, vertex_web, dimension);
       Task t;
       t.take = msg->take;
+      Route step;
       for (auto i = 2; i < elem_s_path; i++)
       {
         // printf("path[%u] = %d\n", i, shortest_path[i]);
-        t.route.push_back(shortest_path[i]);
+        step.id_vertex = shortest_path[i];
+        step.status = false;
+        t.trail.push_back(step);
       }
       c_print("# insert task to go home!", magenta);
       mission.push_back(t);

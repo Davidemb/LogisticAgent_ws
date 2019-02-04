@@ -38,220 +38,231 @@
 
 #pragma once
 
+#include <actionlib/client/simple_action_client.h>
+#include <move_base_msgs/MoveBaseAction.h>
+#include <nav_msgs/Odometry.h>
+#include <ros/package.h>  //to get pkg path
+#include <ros/ros.h>
+#include <std_msgs/Bool.h>
+#include <std_msgs/Int16MultiArray.h>
+#include <std_srvs/Empty.h>
+#include <tf/transform_broadcaster.h>
+#include <tf/transform_listener.h>
+#include <color_cout.hpp>
 #include <sstream>
 #include <string>
 #include <vector>
-#include <ros/ros.h>
-#include <move_base_msgs/MoveBaseAction.h>
-#include <actionlib/client/simple_action_client.h>
-#include <tf/transform_broadcaster.h>
-#include <tf/transform_listener.h>
-#include <nav_msgs/Odometry.h>
-#include <std_msgs/Int16MultiArray.h>
-#include <std_msgs/Bool.h>
-#include <ros/package.h> //to get pkg path
-#include <std_srvs/Empty.h>
-#include "algorithms.hpp" // <<< ALGO
+#include "algorithms.hpp"  // <<< ALGO
 #include "getgraph.hpp"
-#include <color_cout.hpp>
 #include "message_types.hpp"
 
 #include <task_planner/Task.h>
 
-#include <patrolling_sim/TaskRequest.h>
 #include <patrolling_sim/MissionRequest.h>
+#include <patrolling_sim/TaskRequest.h>
 #include <patrolling_sim/Vertex.h>
 #include <patrolling_sim/VertexWeb.h>
-
 
 #define NUM_MAX_ROBOTS 32
 #define INTERFERENCE_DISTANCE 2
 #define SHARE_MSG 33
 #define DELTA_TIME_SEQUENTIAL_START 15
-#define SIMULATE_FOREVER false //WARNING: Set this to false, if you want a finishing condition.
+#define SIMULATE_FOREVER false  // WARNING: Set this to false, if you want a finishing condition.
 
-
-namespace patrolagent 
-{ 
-    struct Task
-    {
-        bool    take;
-        int     item;
-        int     order;
-        int     demand;
-        int     priority;
-        int     src;
-        int     dst;
-        int     path_distance;
-        std::vector<uint> route;
-    };
-
-    ostream& operator << (ostream& os, const Task& t)
-    {
-        os  << "\nRoute: \n";
-        for (auto i = 0; t.route.size(); i++)
-        {
-            os << t.route[i] << " ";
-        }
-            os << "\n";
-    }
-
-    using uint = unsigned int;
-    using MoveBaseClient = actionlib::SimpleActionClient<move_base_msgs::MoveBaseAction>;
-
-    const std::string PS_path = ros::package::getPath("patrolling_sim"); 	//D.Portugal => get pkg path
-
-    class PatrolAgent 
-    {
-
-    protected:
-        int TEAMSIZE;
-        int ID_ROBOT;
-        int CAPACITY = 1; //////////////////////////////////////////////////////////////////////////////////////////////
-
-        double xPos[NUM_MAX_ROBOTS]; //tabelas de posições (atençao ao index pro caso de 1 so robot)
-        double yPos[NUM_MAX_ROBOTS]; //tabelas de posições (atençao ao index pro caso de 1 so robot)
-
-        std::string graph_file, mapname;
-        std::string initial_positions;
-
-        uint dimension; // Graph Dimension
-        uint current_vertex; // current vertex
-        uint backUpCounter;
-        int next_vertex;
-        uint initial_vertex; // initial vertex
-        int current_dim_path;
- 
-        int aborted_count, resend_goal_count;
-        int interference_cnt;
-
-        bool ResendGoal; // Send the same goal again (if goal failed...)
-        bool interference;
-        bool goal_complete;
-        bool initialize;
-        bool end_simulation;
-        bool goal_canceled_by_user;
-
-        bool OK = false;
-        bool first = true;
-        
-        double last_interference;
-        double *instantaneous_idleness;  // local idleness
-        double *last_visit;
-        double goal_reached_wait, communication_delay, last_communication_delay_time, lost_message_rate;
-        
-        vertex *vertex_web;
-
-        std::vector<int> vresults; // results exchanged among robots
-        std::vector<int> shared_array;
-
-        tf::TransformListener   *listener;
-        MoveBaseClient          *ac; // action client for reaching target goals
-
-        ros::Subscriber     odom_sub, positions_sub;
-        // /------------------------------------------------------------------------
-        ros::Subscriber     sub_to_task_planner_mission;
-        ros::Publisher      pub_to_task_planner_needtask;
-        ros::Publisher      pub_to_task_planner_needmission;
-
-        ros::Publisher      positions_pub;
-        ros::Subscriber     results_sub;
-        ros::Publisher      results_pub;
-        ros::Publisher      cmd_vel_pub;
-        
-        ros::Publisher      pub_broadcast_msg;
-        ros::Subscriber     sub_broadcast_msg;
-
-        ros::Publisher      pub_vertex_msg;
-        ros::Publisher      pub_vertex_web;
-        ros::Subscriber     sub_vertex_web;
-
-        std::vector<Task> mission;
-
-        patrolling_sim::TaskRequest     task_request;
-        patrolling_sim::VertexWeb       vertex_web_msg;
-
-        // std::vector<int> route;
-        bool * ok;
-        bool at_home = false;
-        uint id_vertex = 0;
-        uint id_task = 0;
-        uint route_dimension;                  
-        uint loading[6]                 = {2, 1, 0, 3, 5, 6};
-        uint downloading[5]             = {4, 7, 10, 13, 16};
-
-    public:
-
-        PatrolAgent() { 
-            listener        = NULL;
-            next_vertex     = -1;
-            initialize      = true;
-            end_simulation  = false;
-            ac              = NULL;
-        }
-
-        virtual void init(int argc, char** argv);
-        void readParams(); // read ROS parameters
-        void initialize_node();
-        void update_idleness();  // local idleness
-
-        virtual void run();
-        void ready();
-        virtual void onGoalComplete(); // what to do when a goal has been reached
-
-        void getRobotPose(int robotid, float &x, float &y, float &theta);
-        void odomCB(const nav_msgs::Odometry::ConstPtr& msg);
-
-        void sendGoal(int next_vertex);
-        void sendMissionGoal(vector<uint> mission);
-        void cancelGoal();
-
-        void goalDoneCallback(const actionlib::SimpleClientGoalState &state, const move_base_msgs::MoveBaseResultConstPtr &result);
-        void goalActiveCallback();
-        void goalFeedbackCallback(const move_base_msgs::MoveBaseFeedbackConstPtr &feedback);
-
-        void send_goal_reached();
-        void send_task_reached();
-        bool check_interference (int ID_ROBOT);
-        void do_interference_behavior();
-        void backup();
-
-        // void onGoalNotComplete(); // what to do when a goal has NOT been reached (aborted)
-
-        // Events
-        virtual void processEvents();  // processes algorithm-specific events
-
-        // Robot-Robot Communication
-        void send_positions();
-        void receive_positions();
-        virtual void send_results();  // when goal is completed
-        virtual void receive_results();  // asynchronous call
-        void do_send_message(std_msgs::Int16MultiArray &msg);
-        void send_interference();
-        void send_resendgoal();
-        void positionsCB(const nav_msgs::Odometry::ConstPtr& msg);
-        void resultsCB(const std_msgs::Int16MultiArray::ConstPtr& msg);
-
-        // Must be implemented by sub-classes
-        virtual int compute_next_vertex();
-
-        //--------------------------------------------------------------------------
-        void init_agent();
-        void calc_route_to_src();
-        void can_execute_decicion();
-        bool initialization(int cv, int nv);
-        void request_Task();
-        int compute_cost_of_route();
-        void receive_mission_Callback(const task_planner::TaskConstPtr &msg);
-        //   ^ nuovi messaggi di task NB route[];
-        
-
-        void broadcast_msg_Callback(const std_msgs::Int16MultiArray::ConstPtr &msg);
-        // void receive_vertex_web_Callback(const patrolling_sim::VertexWebConstPtr &msg);
-        //----------------------------------------------------------------------
-        void instantaneous_vertex_web();
+namespace patrolagent
+{
+struct Route
+{
+  bool status;
+  uint id_vertex;
 };
 
-} // namespace patrolagent
+struct Task
+{
+  bool take;
+  int item;
+  int order;
+  int demand;
+  int priority;
+  int src;
+  int dst;
+  int path_distance;
+  std::vector<Route> trail;
+};
+
+ostream &operator<<(ostream &os, const Task &t)
+{
+  os << "\nRoute: \n";
+  for (auto i = 0; t.trail.size(); i++)
+  {
+    os << t.trail[i].id_vertex << " Status: "
+       << "[ " << t.trail[i].status << " ]\n";
+  }
+  os << "\n";
+}
+
+using uint = unsigned int;
+using MoveBaseClient = actionlib::SimpleActionClient<move_base_msgs::MoveBaseAction>;
+
+const std::string PS_path = ros::package::getPath("patrolling_sim");  // D.Portugal => get pkg path
+
+class PatrolAgent
+{
+protected:
+  int TEAMSIZE;
+  int ID_ROBOT;
+  int CAPACITY = 3;  //////////////////////////////////////////////////////////////////////////////////////////////
+
+  double xPos[NUM_MAX_ROBOTS];  // tabelas de posições (atençao ao index pro caso
+                                // de 1 so robot)
+  double yPos[NUM_MAX_ROBOTS];  // tabelas de posições (atençao ao index pro caso
+                                // de 1 so robot)
+
+  std::string graph_file, mapname;
+  std::string initial_positions;
+
+  uint dimension;       // Graph Dimension
+  uint current_vertex;  // current vertex
+  uint backUpCounter;
+  int next_vertex;
+  uint initial_vertex;  // initial vertex
+  int current_dim_path;
+
+  int aborted_count, resend_goal_count;
+  int interference_cnt;
+
+  bool ResendGoal;  // Send the same goal again (if goal failed...)
+  bool interference;
+  bool goal_complete;
+  bool initialize;
+  bool end_simulation;
+  bool goal_canceled_by_user;
+
+  bool OK = false;
+  bool first = true;
+
+  double last_interference;
+  double *instantaneous_idleness;  // local idleness
+  double *last_visit;
+  double goal_reached_wait, communication_delay, last_communication_delay_time, lost_message_rate;
+
+  vertex *vertex_web;
+
+  std::vector<int> vresults;  // results exchanged among robots
+  std::vector<int> shared_array;
+
+  tf::TransformListener *listener;
+  MoveBaseClient *ac;  // action client for reaching target goals
+
+  ros::Subscriber odom_sub, positions_sub;
+  // /------------------------------------------------------------------------
+  ros::Subscriber sub_to_task_planner_mission;
+  ros::Publisher pub_to_task_planner_needtask;
+  ros::Publisher pub_to_task_planner_needmission;
+  ros::Publisher pub_to_task_planner_init;
+
+  ros::Publisher positions_pub;
+  ros::Subscriber results_sub;
+  ros::Publisher results_pub;
+  ros::Publisher cmd_vel_pub;
+
+  ros::Publisher pub_broadcast_msg;
+  ros::Subscriber sub_broadcast_msg;
+
+  ros::Publisher pub_vertex_msg;
+  ros::Publisher pub_vertex_web;
+  ros::Subscriber sub_vertex_web;
+
+  std::vector<Task> mission;
+
+  patrolling_sim::TaskRequest task_request;
+  patrolling_sim::VertexWeb vertex_web_msg;
+
+  // std::vector<int> route;
+  bool *ok;
+  bool at_home = false;
+  uint id_vertex = 0;
+  uint id_task = 0;
+  uint route_dimension;
+  uint loading[6] = { 2, 1, 0, 3, 5, 6 };
+  uint downloading[5] = { 4, 7, 10, 13, 16 };
+  uint route_to_src[5] = { 1, 0, 3, 5, 6 };
+
+
+public:
+  PatrolAgent()
+  {
+    listener = NULL;
+    next_vertex = -1;
+    initialize = true;
+    end_simulation = false;
+    ac = NULL;
+  }
+
+  virtual void init(int argc, char **argv);
+  void readParams();  // read ROS parameters
+  void initialize_node();
+  void update_idleness();  // local idleness
+
+  virtual void run();
+  void ready();
+  virtual void onGoalComplete();  // what to do when a goal has been reached
+
+  void getRobotPose(int robotid, float &x, float &y, float &theta);
+  void odomCB(const nav_msgs::Odometry::ConstPtr &msg);
+
+  void sendGoal(int next_vertex);
+  void sendMissionGoal(vector<uint> mission);
+  void cancelGoal();
+
+  void goalDoneCallback(const actionlib::SimpleClientGoalState &state,
+                        const move_base_msgs::MoveBaseResultConstPtr &result);
+  void goalActiveCallback();
+  void goalFeedbackCallback(const move_base_msgs::MoveBaseFeedbackConstPtr &feedback);
+
+  void send_goal_reached();
+  void send_task_reached();
+  bool check_interference(int ID_ROBOT);
+  void do_interference_behavior();
+  void backup();
+
+  // void onGoalNotComplete(); // what to do when a goal has NOT been reached
+  // (aborted)
+
+  // Events
+  virtual void processEvents();  // processes algorithm-specific events
+
+  // Robot-Robot Communication
+  void send_positions();
+  void receive_positions();
+  virtual void send_results();     // when goal is completed
+  virtual void receive_results();  // asynchronous call
+  void do_send_message(std_msgs::Int16MultiArray &msg);
+  void send_interference();
+  void send_resendgoal();
+  void positionsCB(const nav_msgs::Odometry::ConstPtr &msg);
+  void resultsCB(const std_msgs::Int16MultiArray::ConstPtr &msg);
+
+  // Must be implemented by sub-classes
+  virtual int compute_next_vertex();
+
+  //--------------------------------------------------------------------------
+  void init_agent();
+  void calc_route_to_src();
+  void can_execute_decicion();
+  bool initialization(int cv, int nv);
+  void request_Task();
+  int compute_cost_of_route();
+  void receive_mission_Callback(const task_planner::TaskConstPtr &msg);
+  //   ^ nuovi messaggi di task NB route[];
+
+  void broadcast_msg_Callback(const std_msgs::Int16MultiArray::ConstPtr &msg);
+  // void receive_vertex_web_Callback(const patrolling_sim::VertexWebConstPtr
+  // &msg);
+  //----------------------------------------------------------------------
+  void instantaneous_vertex_web();
+};
+
+}  // namespace patrolagent
 
 #include "impl/PatrolAgent.i.hpp"

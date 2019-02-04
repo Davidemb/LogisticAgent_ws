@@ -10,3 +10,4 @@ uint32      src
 uint32      dst
 uint32      path_distance
 uint32[]    route
+uint32[]    condition

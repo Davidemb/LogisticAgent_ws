@@ -17,6 +17,7 @@
 
 #include "getgraph.hpp"
 
+#define INIT_MSG 46
 
 namespace taskplanner
 {
@@ -32,25 +33,25 @@ struct Task
   int edge;
 };
 
-inline bool operator<(const Task& A, const Task& B)
+inline bool operator<(const Task &A, const Task &B)
 {
   if (!A.take && !B.take)
   {
-    return A.dst < B.dst ? 1 : 0; 
+    return A.dst < B.dst ? 1 : 0;
   }
 }
 
-inline bool operator>(const Task& A, const Task& B)
+inline bool operator>(const Task &A, const Task &B)
 {
   if (!A.take && !B.take)
   {
-    return A.dst > B.dst ? 1 : 0; 
+    return A.dst > B.dst ? 1 : 0;
   }
 }
 
-inline bool operator==(const Task& A, const Task& B)
+inline bool operator==(const Task &A, const Task &B)
 {
-    return A.order == B.order ? 1 : 0;
+  return A.order == B.order ? 1 : 0;
 }
 
 inline Task mkTask(int item, int order, int demand, int priority, int src, int dst, int edge)
@@ -69,12 +70,32 @@ inline Task mkTask(int item, int order, int demand, int priority, int src, int d
   return t;
 }
 
+struct ProcessAgent
+{
+  uint ID_ROBOT;
+  uint CAPACITY;
+  bool flag;
+  vector<Task> mission;
+};
+
+inline ProcessAgent mkPA(uint id, uint c)
+{
+  ProcessAgent pa;
+
+  pa.ID_ROBOT = id;
+  pa.CAPACITY = c;
+  pa.flag = false;
+  pa.mission.clear();
+
+  return pa;
+}
+
 const std::string PS_path = ros::package::getPath("task_planner");
 
 class TaskPlanner
 {
 public:
-  TaskPlanner(ros::NodeHandle &nh_, uint TEAMSIZE);
+  TaskPlanner(ros::NodeHandle &nh_);
   ~TaskPlanner(){};
 
   const char *task_file = "/home/dave/LogisticAgent_ws/src/task_planner/param/all_task.txt";
@@ -84,7 +105,8 @@ public:
   uint dimension;
   vertex *vertex_web;
 
-  uint TEAM_t;
+  uint TEAM_c = 0;
+  uint TEAM_t = 0;
 
   uint src_vertex = 6;
   uint dst_vertex[3] = {11, 16, 21};
@@ -93,6 +115,10 @@ public:
   uint initial_position[4] = {2, 1, 0, 3};
   vector<Task> tasks;
   vector<uint> route;
+  vector<bool> status;
+  bool *init_agent;
+  // vector<ProcessAgent> pa;
+  ProcessAgent * pa;
 
   uint id = 0;
 
@@ -106,25 +132,23 @@ public:
   }
 
   void t_print(Task t);
+  void pa_print(ProcessAgent pa);
   void t_generator();
 
-  void compute_route_to_delivery(Task& t);
-  void compute_route_to_picktask(Task& t); 
+  void compute_route_to_delivery(Task &t);
+  void compute_route_to_picktask(Task &t);
   int compute_cost_of_route();
 
-  
-
-  void init(int argc, char** argv);
+  void init(int argc, char **argv);
   void run();
-
-  Task compare(Task t1, Task t2);
-
   void task_Callback(const patrolling_sim::TaskRequestConstPtr &msg);
+  void init_Callback(const std_msgs::Int16MultiArrayConstPtr &msg);
   // void mission_Callback(const patrolling_sim::MissionRequestConstPtr &msg);
 
 private:
   ros::Subscriber sub_task; // quando un robot vuole un task
-  ros::Publisher pub_task;  // pubblicazione dell'array (pop dal vettore di tasks)
+  ros::Subscriber sub_init;
+  ros::Publisher pub_task; // pubblicazione dell'array (pop dal vettore di tasks)
   ros::Publisher pub_results;
   // ros::Subscriber sub_mission;
   // ros::Publisher pub_mission;

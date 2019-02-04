@@ -8,9 +8,9 @@ int CycleAgent::compute_next_vertex()
 {
   int vertex;
 
-  if (mission[id_task].route.size() - 1 == id_vertex)
+  if (mission[id_task].trail.size() - 1 == id_vertex)
   {
-    vertex = mission[id_task].route[id_vertex];
+    vertex = mission[id_task].trail[id_vertex].id_vertex;
     if (mission[id_task].take)
     {
       request_Task();
@@ -44,7 +44,7 @@ int CycleAgent::compute_next_vertex()
   }
   else
   {
-    vertex = mission[id_task].route[id_vertex];
+    vertex = mission[id_task].trail[id_vertex].id_vertex;
     c_print("id_v: ", id_vertex, " vertex: ", vertex, yellow);
     id_vertex++;
   }

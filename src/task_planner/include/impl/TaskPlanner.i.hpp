@@ -2,9 +2,9 @@
 
 namespace taskplanner
 {
-TaskPlanner::TaskPlanner(ros::NodeHandle &nh_, uint TEAMSIZE)
+TaskPlanner::TaskPlanner(ros::NodeHandle &nh_)
 {
-  TEAMSIZE = TEAM_t;
+  sub_init = nh_.subscribe("init", 1, &TaskPlanner::init_Callback, this);
   sub_task = nh_.subscribe("need_task", 1, &TaskPlanner::task_Callback, this);
   // sub_task = nh_.subscribe("need_mission", 1, &TaskPlanner::mission_Callback, this);
   pub_task = nh_.advertise<task_planner::Task>("answer", 1);
@@ -28,6 +28,14 @@ void TaskPlanner::t_print(Task t)
        << " -       dst: " << t.dst << "\n";
 }
 
+void TaskPlanner::pa_print(ProcessAgent pa)
+{
+  cout << "\nProcessAgent: \n"
+       << " -  id_robot: " << pa.ID_ROBOT << "\n"
+       << " -  capacity: " << pa.CAPACITY << "\n"
+       << " -      falg: " << pa.flag << "\n";
+}
+
 void TaskPlanner::init(int argc, char **argv)
 {
   srand(time(NULL));
@@ -39,70 +47,15 @@ void TaskPlanner::init(int argc, char **argv)
   GetGraphInfo(vertex_web, dimension, graph_file.c_str());
   uint nedges = GetNumberEdges(vertex_web, dimension);
   printf("Loaded graph %s with %d nodes and %d edges\n", mapname.c_str(), dimension, nedges);
+  TEAM_t = atoi(argv[3]);
+  c_print("TEAM: ", TEAM_t, magenta);
+  init_agent = new bool[TEAM_t];
+  pa = new ProcessAgent[TEAM_t];
 }
 
 void TaskPlanner::run()
 {
 }
-
-Task TaskPlanner::compare(Task t1, Task t2)
-{
-  return t1.dst < t2.dst ? t1 : t2;
-}
-
-// void TaskPlanner::mission_Callback(const patrolling_sim::MissionRequestConstPtr &tr)
-// {
-//   c_print("Funge?", magenta);
-//   // arrived_message = new bool[TEAM_t];
-//   // all_capacity += tr->capacity;
-//   if (tr->flag)
-//   {
-//     task_planner::Mission mm;
-//     for (vector<Task>::iterator it = tasks.begin(); it != tasks.end(); it++)
-//     {
-//       if (!it->take)
-//       {
-//         it->take = true;
-//         task_planner::Task tm;
-//         if ((tr->capacity <= it->demand))
-//         {
-//           Task t = *std::min_element(tasks.begin(), tasks.end());
-//           cout << "allor: " << t.dst << " id: " << t.order << "\n";
-//           // id del task e' anche id nel vettore!!!!!!!!!!!!!!!!!!!!!!!!11!111!1!!!!!!
-//           // arrived_message[tr->ID_ROBOT] = true;
-//           tm.header.stamp = ros::Time().now();
-//           tm.ID_ROBOT = tr->ID_ROBOT;
-//           tm.demand = t.demand;
-//           tm.item = t.item;
-//           tm.order = t.order;
-//           tm.priority = t.priority;
-//           tm.src = t.src;
-//           tm.dst = t.dst;
-//           // tm.edge = t.edge;
-//           c_print("% publish on topic mission! Task n: ", t.order, " ID_robot: ", tm.ID_ROBOT, yellow);
-//           c_print("% take: ", t.take, yellow);
-//           tasks.erase(std::find(tasks.begin(), tasks.end(), t));
-//           c_print("DC", magenta);
-//           mm.Mission.push_back(tm);  // <-
-//           c_print("popolazione dell'array", red);
-//           sleep(1);
-//         }
-//       }
-//     }
-//     // c_print("all_C: ",all_capacity, green);
-//     // pub_mission.publish(mm);
-//     for (auto i = 0; i < mm.Mission.size(); i++)
-//     {
-//       cout << mm.Mission[i].order << "\n";
-//     }
-//     ros::spinOnce();
-//     sleep(1);
-//   }
-//   else
-//   {
-//     c_print("# task taken!", red);
-//   }
-// }
 
 void TaskPlanner::t_generator()
 {
@@ -137,7 +90,7 @@ void TaskPlanner::t_generator()
   msg.data.push_back(883); //msg type n_task
   msg.data.push_back(nTask);
   pub_results.publish(msg);
-  c_print("Pub nTask!",yellow);
+  c_print("Pub nTask!", yellow);
   ros::spinOnce();
   sleep(0.2);
 }
@@ -145,6 +98,7 @@ void TaskPlanner::t_generator()
 void TaskPlanner::compute_route_to_delivery(Task &t)
 {
   route.push_back(t.src);
+  status.push_back(true);
   int i = 0;
   switch (t.dst)
   {
@@ -164,8 +118,10 @@ void TaskPlanner::compute_route_to_delivery(Task &t)
   for (int j = 0; j < i; j++)
   {
     route.push_back(under_pass[j]);
+    status.push_back(false);
   }
   route.push_back(t.dst);
+  status.push_back(true);
 }
 
 void TaskPlanner::compute_route_to_picktask(Task &t)
@@ -189,6 +145,7 @@ void TaskPlanner::compute_route_to_picktask(Task &t)
   for (int j = i - 1; j >= 0; --j)
   {
     route.push_back(upper_pass[j]);
+    status.push_back(false);
   }
 }
 
@@ -215,6 +172,39 @@ int TaskPlanner::compute_cost_of_route()
   c_print("costo del percorso: ", custo_final, magenta);
 
   return custo_final;
+}
+
+void TaskPlanner::init_Callback(const std_msgs::Int16MultiArrayConstPtr &msg)
+{
+  /* vettore dove:
+  [0] = id_robot
+  [1] = type
+  [2] = data
+  */
+
+  int value = msg->data[0];
+  int type_msg = msg->data[1];
+
+  if (value == -1)
+  {
+    value = 0;
+  }
+
+  switch (type_msg)
+  {
+  case (INIT_MSG):
+  {
+    init_agent[value] = true;
+    auto c = msg->data[2];
+    TEAM_c += c;
+    pa[value] = mkPA(value, c);
+    pa_print(pa[value]);
+  }
+    break;
+
+  default:
+    break;
+  }
 }
 
 void TaskPlanner::task_Callback(const patrolling_sim::TaskRequestConstPtr &tr)
@@ -247,13 +237,16 @@ void TaskPlanner::task_Callback(const patrolling_sim::TaskRequestConstPtr &tr)
       // if (! (i % 2))
       // {
       tm.route.push_back(route[i]);
-      cout << route[i] << "\n";
+      tm.condition.push_back(status[i]);
+      cout << setw(3) << route[i] << "   Status: [ " << status[i] << " ]"
+           << "\n";
       // }
     }
     cout << "\n";
     c_print("% publish on topic mission! Task n: ", t.order, " ID_robot: ", tm.ID_ROBOT, yellow);
     pub_task.publish(tm);
     route.clear();
+    status.clear();
     t.take = true;
     tasks.erase(std::find(tasks.begin(), tasks.end(), t));
     c_print("Size tasks: ", tasks.size(), red);
@@ -261,7 +254,7 @@ void TaskPlanner::task_Callback(const patrolling_sim::TaskRequestConstPtr &tr)
   }
   else
   {
-    c_print("Task finiti!",red);
+    c_print("Task finiti!", red);
     tm.header.stamp = ros::Time().now();
     tm.ID_ROBOT = tr->ID_ROBOT;
     tm.take = false;
@@ -271,10 +264,12 @@ void TaskPlanner::task_Callback(const patrolling_sim::TaskRequestConstPtr &tr)
     c_print("% publish on topic mission! go_home ID_robot: ", tm.ID_ROBOT, yellow);
     id++;
     pub_task.publish(tm);
+    route.clear();
+    status.clear();
   }
   ros::spinOnce();
   sleep(1);
-} 
+}
 
 } // namespace taskplanner
 

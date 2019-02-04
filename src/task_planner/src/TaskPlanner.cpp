@@ -9,9 +9,11 @@ int main(int argc, char **argv)
 
     ros::NodeHandle nh_("~");
 
-    taskplanner::TaskPlanner TP(nh_, TEAMSIZE);
+    taskplanner::TaskPlanner TP(nh_);
 
     TP.init(argc, argv);
+
+    c_print("inizializzazione finita!",green);
 
     // TP.run();
     
