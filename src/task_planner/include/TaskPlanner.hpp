@@ -1,12 +1,12 @@
 #pragma once
-#include <color_cout.hpp> //lib
+#include <color_cout.hpp>  //lib
 #include <fstream>
 #include <iostream>
 // #include <sys/type.h>
 #include <patrolling_sim/MissionRequest.h>
 #include <patrolling_sim/TaskRequest.h>
+#include <ros/package.h>  //to get pkg path
 #include <ros/ros.h>
-#include <ros/package.h> //to get pkg path
 #include <std_msgs/Bool.h>
 #include <std_msgs/Int16MultiArray.h>
 #include <sys/stat.h>
@@ -58,11 +58,11 @@ inline Task mkTask(int item, int order, int demand, int priority, int src, int d
 {
   Task t;
 
-  t.take = false;        //  flag
-  t.item = item;         //  tipo di oggetto
-  t.order = order;       //  id dell' ordine
-  t.demand = demand;     //  quantita' di oggetti
-  t.priority = priority; //  priorita'
+  t.take = false;         //  flag
+  t.item = item;          //  tipo di oggetto
+  t.order = order;        //  id dell' ordine
+  t.demand = demand;      //  quantita' di oggetti
+  t.priority = priority;  //  priorita'
   t.src = src;
   t.dst = dst;
   t.edge = edge;
@@ -107,18 +107,21 @@ public:
 
   uint TEAM_c = 0;
   uint TEAM_t = 0;
+  uint nTask = 0;
 
   uint src_vertex = 6;
-  uint dst_vertex[3] = {11, 16, 21};
-  uint under_pass[7] = {7, 9, 12, 14, 17, 19, 22};
-  uint upper_pass[7] = {5, 8, 10, 13, 15, 18, 20};
-  uint initial_position[4] = {2, 1, 0, 3};
+  uint dst_vertex[3] = { 11, 16, 21 };
+  uint under_pass[7] = { 7, 9, 12, 14, 17, 19, 22 };
+  uint upper_pass[7] = { 5, 8, 10, 13, 15, 18, 20 };
+  uint initial_position[4] = { 2, 1, 0, 3 };
   vector<Task> tasks;
+  vector<Task> natblida;
   vector<uint> route;
   vector<bool> status;
+
   bool *init_agent;
   // vector<ProcessAgent> pa;
-  ProcessAgent * pa;
+  ProcessAgent *pa;
 
   uint id = 0;
 
@@ -139,22 +142,24 @@ public:
   void compute_route_to_picktask(Task &t);
   int compute_cost_of_route();
 
+  void conclave();
+
   void init(int argc, char **argv);
   void run();
   void task_Callback(const patrolling_sim::TaskRequestConstPtr &msg);
   void init_Callback(const std_msgs::Int16MultiArrayConstPtr &msg);
-  // void mission_Callback(const patrolling_sim::MissionRequestConstPtr &msg);
+  void mission_Callback(const patrolling_sim::MissionRequestConstPtr &msg);
 
 private:
-  ros::Subscriber sub_task; // quando un robot vuole un task
+  ros::Subscriber sub_task;  // quando un robot vuole un task
   ros::Subscriber sub_init;
-  ros::Publisher pub_task; // pubblicazione dell'array (pop dal vettore di tasks)
+  ros::Publisher pub_task;  // pubblicazione dell'array (pop dal vettore di tasks)
   ros::Publisher pub_results;
   // ros::Subscriber sub_mission;
   // ros::Publisher pub_mission;
   // ros::Publisher pub_task_to_coo;
 };
 
-} // namespace taskplanner
+}  // namespace taskplanner
 
 #include "impl/TaskPlanner.i.hpp"

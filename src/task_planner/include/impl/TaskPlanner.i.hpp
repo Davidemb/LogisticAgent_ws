@@ -6,25 +6,26 @@ TaskPlanner::TaskPlanner(ros::NodeHandle &nh_)
 {
   sub_init = nh_.subscribe("init", 1, &TaskPlanner::init_Callback, this);
   sub_task = nh_.subscribe("need_task", 1, &TaskPlanner::task_Callback, this);
-  // sub_task = nh_.subscribe("need_mission", 1, &TaskPlanner::mission_Callback, this);
+  sub_task = nh_.subscribe("need_mission", 1, &TaskPlanner::mission_Callback, this);
+
   pub_task = nh_.advertise<task_planner::Task>("answer", 1);
   pub_results = nh_.advertise<std_msgs::Int16MultiArray>("results", 100);
   // pub_go_home = nh_advertise<>("home",1); <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
   // sub_mission  = nh_.subscribe("need", 1, &TaskPlanner::mission_Callback, this);
   // pub_task_to_coo = nh_.advertise<typemessage>("topic",1);
   // pub_mission = nh_.advertise<task_planner::Mission>("answer", 1);
-  t_generator();
+  // t_generator();
 }
 
 void TaskPlanner::t_print(Task t)
 {
   cout << "\nTask" << t.order << ":\n"
-       << " -      take: " << t.take << "\n"
+       //  << " -      take: " << t.take << "\n"
        << " -      item: " << t.item << "\n"
-       << " -     order: " << t.order << "\n"
+       //  << " -     order: " << t.order << "\n"
        << " -    demand: " << t.demand << "\n"
-       << " -  priority: " << t.priority << "\n"
-       << " -       src: " << t.src << "\n"
+       //  << " -  priority: " << t.priority << "\n"
+       //  << " -       src: " << t.src << "\n"
        << " -       dst: " << t.dst << "\n";
 }
 
@@ -33,7 +34,7 @@ void TaskPlanner::pa_print(ProcessAgent pa)
   cout << "\nProcessAgent: \n"
        << " -  id_robot: " << pa.ID_ROBOT << "\n"
        << " -  capacity: " << pa.CAPACITY << "\n"
-       << " -      falg: " << pa.flag << "\n";
+       << " -      flag: " << pa.flag << "\n";
 }
 
 void TaskPlanner::init(int argc, char **argv)
@@ -48,8 +49,12 @@ void TaskPlanner::init(int argc, char **argv)
   uint nedges = GetNumberEdges(vertex_web, dimension);
   printf("Loaded graph %s with %d nodes and %d edges\n", mapname.c_str(), dimension, nedges);
   TEAM_t = atoi(argv[3]);
-  c_print("TEAM: ", TEAM_t, magenta);
-  init_agent = new bool[TEAM_t];
+
+  t_generator();
+
+  c_print("TEAM: ", TEAM_t, " nTask: ", nTask, magenta);
+  init_agent = new bool[TEAM_t]();
+  //                           ^ figo!
   pa = new ProcessAgent[TEAM_t];
 }
 
@@ -61,7 +66,7 @@ void TaskPlanner::t_generator()
 {
   uint n_item = 3;
   uint o = 0;
-  uint n_demand = 1;
+  uint n_demand = 3;
   // dare un id ad ogni task
   // 4 possibili partenze e destinazione
   // priorita' piu alta per i task con piu demand
@@ -74,23 +79,24 @@ void TaskPlanner::t_generator()
       {
         // auto p = d + 1;
         auto e = 0;
-        tasks.push_back(mkTask(i, o, 1, 1, src_vertex, dst_vertex[j], e));
+        tasks.push_back(mkTask(i, o, d, 1, src_vertex, dst_vertex[j], e));
         o++;
       }
     }
   }
 
-  for (auto k = 0; k < tasks.size(); k++)
+  nTask = tasks.size();
+
+  for (auto k = 0; k < nTask; k++)
     t_print(tasks[k]);
 
-  uint nTask = tasks.back().order + 1;
   std_msgs::Int16MultiArray msg;
   msg.data.clear();
-  msg.data.push_back(888); //id task_planner
-  msg.data.push_back(883); //msg type n_task
+  msg.data.push_back(888);  // id task_planner
+  msg.data.push_back(883);  // msg type n_task
   msg.data.push_back(nTask);
   pub_results.publish(msg);
-  c_print("Pub nTask!", yellow);
+  // c_print("Pub nTask!", yellow);
   ros::spinOnce();
   sleep(0.2);
 }
@@ -102,18 +108,18 @@ void TaskPlanner::compute_route_to_delivery(Task &t)
   int i = 0;
   switch (t.dst)
   {
-  case 11:
-    i = 3;
-    break;
-  case 16:
-    i = 5;
-    break;
-  case 21:
-    i = 7;
-    break;
-  default:
-    c_print("# ERR t.dst non esiste!", red);
-    break;
+    case 11:
+      i = 3;
+      break;
+    case 16:
+      i = 5;
+      break;
+    case 21:
+      i = 7;
+      break;
+    default:
+      c_print("# ERR t.dst non esiste!", red);
+      break;
   }
   for (int j = 0; j < i; j++)
   {
@@ -129,18 +135,18 @@ void TaskPlanner::compute_route_to_picktask(Task &t)
   int i = 0;
   switch (t.dst)
   {
-  case 11:
-    i = 3;
-    break;
-  case 16:
-    i = 5;
-    break;
-  case 21:
-    i = 7;
-    break;
-  default:
-    c_print("# ERR t.dst non esiste!", red);
-    break;
+    case 11:
+      i = 3;
+      break;
+    case 16:
+      i = 5;
+      break;
+    case 21:
+      i = 7;
+      break;
+    default:
+      c_print("# ERR t.dst non esiste!", red);
+      break;
   }
   for (int j = i - 1; j >= 0; --j)
   {
@@ -192,18 +198,74 @@ void TaskPlanner::init_Callback(const std_msgs::Int16MultiArrayConstPtr &msg)
 
   switch (type_msg)
   {
-  case (INIT_MSG):
-  {
-    init_agent[value] = true;
-    auto c = msg->data[2];
-    TEAM_c += c;
-    pa[value] = mkPA(value, c);
-    pa_print(pa[value]);
-  }
+    case (INIT_MSG):
+    {
+      init_agent[value] = true;
+      auto c = msg->data[2];
+      TEAM_c += c;
+      c_print("TEAM_C: ", TEAM_c, red);
+      pa[value] = mkPA(value, c);
+      pa_print(pa[value]);
+
+      uint T_t = TEAM_t;
+
+      for (int i = 0; i < TEAM_t; i++)
+      {
+        if (init_agent[i] == true)
+        {
+          T_t--;
+        }
+      }
+      if (T_t == 0)
+      {
+        // ho tutti i pa e il TEAM_c adesso devo selezionare i natblida
+        conclave();
+      }
+    }
     break;
 
-  default:
-    break;
+    default:
+      break;
+  }
+}
+
+void TaskPlanner::conclave()
+{
+  // mi preparo tutti i task in ordine
+  // prima i piu vicini poi soglio ancora per capacita piu simile
+  bool full = true;
+  uint tmp_c = TEAM_c;
+  c_print("t_c: ", tmp_c, yellow);
+  c_print("T_c: ", TEAM_c, red);
+
+  natblida.clear();
+
+  if ((full) && (tasks.size() > 0))
+  {
+    int ts = tasks.size();
+    for (auto i = 0; i < ts; i++)
+    {
+      Task t = *std::min_element(tasks.begin(), tasks.end());
+      if (t.demand <= tmp_c)
+      {
+        tmp_c -= t.demand;
+        c_print("tmpc: ", tmp_c, red);
+        t.take = true;
+        natblida.push_back(t);
+        tasks.erase(find(tasks.begin(), tasks.end(), t));
+      }
+      else
+      {
+        full = false;
+      }
+    }
+  }
+
+  for (auto i = 0; i < natblida.size(); i++)
+  {
+    cout << "id order : " << natblida[i].order << "\n"
+         << "demand   : " << natblida[i].demand << "\n"
+         << "dst      : " << natblida[i].dst << "\n";
   }
 }
 
@@ -271,7 +333,32 @@ void TaskPlanner::task_Callback(const patrolling_sim::TaskRequestConstPtr &tr)
   sleep(1);
 }
 
-} // namespace taskplanner
+void TaskPlanner::mission_Callback(const patrolling_sim::MissionRequestConstPtr &mr)
+{ /*
+   mr->capacity;
+   mr->flag;
+   mr->header;
+   mr->ID_ROBOT;
+   mr->initial_vertex;
+
+   tasks
+   natblida
+   status dei vertici della route
+   ProcessAgent della fase di inizializzazione - pa[nAgent]
+  */
+  // c_print("Request Mission! id_robot: ", mr->ID_ROBOT, green);
+  // c_print(" Total capacity: ", TEAM_c, red);
+
+  // uint id_robot = mr->ID_ROBOT;
+  // bool flag = mr->flag;
+  // TEAM_c += mr->capacity;
+
+  // while (TEAM_c == 0)
+  // {
+  // }
+}
+
+}  // namespace taskplanner
 
 //------------------------------------//
 // void TaskPlanner::parserTask(const char *task_file)
