@@ -219,7 +219,20 @@ void TaskPlanner::init_Callback(const std_msgs::Int16MultiArrayConstPtr &msg)
       if (T_t == 0)
       {
         // ho tutti i pa e il TEAM_c adesso devo selezionare i natblida
-        conclave();
+        skip_tasks.clear();
+        for (auto i = 0; i < TEAM_t; i++)
+        {
+          for (auto i = 0; i < skip_tasks.size(); i++)
+          {
+            tasks.push_back(skip_tasks[i]);
+          }
+          conclave(pa[i]);
+        }
+
+        for (auto i = 0; i < skip_tasks.size(); i++)
+        {
+          tasks.push_back(skip_tasks[i]);
+        }
       }
     }
     break;
@@ -229,44 +242,77 @@ void TaskPlanner::init_Callback(const std_msgs::Int16MultiArrayConstPtr &msg)
   }
 }
 
-void TaskPlanner::conclave()
+void TaskPlanner::conclave(ProcessAgent &pa)
 {
   // mi preparo tutti i task in ordine
   // prima i piu vicini poi soglio ancora per capacita piu simile
   bool full = true;
-  uint tmp_c = TEAM_c;
+  uint tmp_c = pa.CAPACITY;
   c_print("t_c: ", tmp_c, yellow);
-  c_print("T_c: ", TEAM_c, red);
+  route.clear();
+  skip_tasks.clear();
+  // c_print("T_c: ", TEAM_c, red);
 
-  natblida.clear();
+  // natblida.clear();
 
   if ((full) && (tasks.size() > 0))
   {
     int ts = tasks.size();
     for (auto i = 0; i < ts; i++)
     {
-      Task t = *std::min_element(tasks.begin(), tasks.end());
+      Task t = *std::min_element(tasks.begin(), tasks.end(), pop_min_element);
+      c_print("t.demand: ", t.demand, magenta);
       if (t.demand <= tmp_c)
       {
         tmp_c -= t.demand;
         c_print("tmpc: ", tmp_c, red);
         t.take = true;
-        natblida.push_back(t);
+        pa.mission.push_back(t);
         tasks.erase(find(tasks.begin(), tasks.end(), t));
       }
       else
       {
+        if (pa.mission.size() <= 0)
+        {
+          skip_tasks.push_back(t);
+          tasks.erase(find(tasks.begin(), tasks.end(), t));
+          c_print("ERR! no allocato task", red);
+        }
         full = false;
       }
     }
   }
+  // calcolo dei percoorsi
 
-  for (auto i = 0; i < natblida.size(); i++)
+  for (auto i = 0; i < pa.mission.size(); i++)
   {
-    cout << "id order : " << natblida[i].order << "\n"
-         << "demand   : " << natblida[i].demand << "\n"
-         << "dst      : " << natblida[i].dst << "\n";
+    auto tmp_task = pa.mission[i];
+    if (tmp_task.dst != pa.mission[i + 1].dst)
+    {
+      compute_route_to_delivery(pa.mission[i]);
+    }
+    else
+    {
+      c_print("per ora stesso task->dst", red);
+    }
   }
+
+  c_print("\nRoute: ", red);
+  for (auto i = 0; i < route.size(); i++)
+  {
+    cout << route[i] << " ";
+  }
+  cout << "\n";
+
+  /*
+    for (auto i = 0; i < natblida.size(); i++)
+    {
+      cout << "id order : " << natblida[i].order << "\n"
+           << "demand   : " << natblida[i].demand << "\n"
+           << "dst      : " << natblida[i].dst << "\n";
+    } */
+
+  cout << pa << "\n";
 }
 
 void TaskPlanner::task_Callback(const patrolling_sim::TaskRequestConstPtr &tr)
@@ -346,12 +392,23 @@ void TaskPlanner::mission_Callback(const patrolling_sim::MissionRequestConstPtr 
    status dei vertici della route
    ProcessAgent della fase di inizializzazione - pa[nAgent]
   */
-  // c_print("Request Mission! id_robot: ", mr->ID_ROBOT, green);
-  // c_print(" Total capacity: ", TEAM_c, red);
+  c_print("Request Mission! id_robot: ", mr->ID_ROBOT, green);
+  c_print(" Total capacity: ", TEAM_c, red);
 
-  // uint id_robot = mr->ID_ROBOT;
-  // bool flag = mr->flag;
-  // TEAM_c += mr->capacity;
+  uint id_robot = mr->ID_ROBOT;
+  bool flag = mr->flag;
+  TEAM_c += mr->capacity;
+
+  for (auto i = 0; i < route.size(); i++)
+  {
+    // if (! (i % 2))
+    // {
+    // tm.route.push_back(route[i]);
+    // tm.condition.push_back(status[i]);
+    cout << setw(3) << route[i] << "\n";
+    // }
+  }
+  cout << "\n";
 
   // while (TEAM_c == 0)
   // {

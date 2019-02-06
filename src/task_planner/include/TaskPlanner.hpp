@@ -37,8 +37,21 @@ inline bool operator<(const Task &A, const Task &B)
 {
   if (!A.take && !B.take)
   {
-    return A.dst < B.dst ? 1 : 0;
+    return (A.dst < B.dst) ? 1 : 0;
   }
+}
+
+inline bool pop_min_element(const Task &A, const Task &B)
+{
+  if ((A.dst < B.dst) && (A.demand < B.demand))
+  {
+    return 1;
+  }
+  else if (A.dst == B.dst)
+  {
+      return 1;
+  }
+  return 0;
 }
 
 inline bool operator>(const Task &A, const Task &B)
@@ -78,6 +91,19 @@ struct ProcessAgent
   vector<Task> mission;
 };
 
+ostream &operator<<(ostream &os, const ProcessAgent &pa)
+{
+  os << "\nProcessAgent id: " << pa.ID_ROBOT << "\n";
+  for (auto i = 0; i < pa.mission.size(); i++)
+  {
+    os << "- id_order: " << pa.mission[i].order << "\n"
+       << "-   demand: " << pa.mission[i].demand << "\n"
+       << "-      dst: " << pa.mission[i].dst << "\n"
+       << "\n";
+  }
+  os << "\n";
+}
+
 inline ProcessAgent mkPA(uint id, uint c)
 {
   ProcessAgent pa;
@@ -115,6 +141,7 @@ public:
   uint upper_pass[7] = { 5, 8, 10, 13, 15, 18, 20 };
   uint initial_position[4] = { 2, 1, 0, 3 };
   vector<Task> tasks;
+  vector<Task> skip_tasks;
   vector<Task> natblida;
   vector<uint> route;
   vector<bool> status;
@@ -142,7 +169,7 @@ public:
   void compute_route_to_picktask(Task &t);
   int compute_cost_of_route();
 
-  void conclave();
+  void conclave(ProcessAgent &pa);
 
   void init(int argc, char **argv);
   void run();
