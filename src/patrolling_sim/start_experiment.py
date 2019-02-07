@@ -33,7 +33,8 @@ Alg_names = [
         [ 'DTAG', 'DTAGreedy' ],
         [ 'DTAP', 'DTASSIPart' ],
         [ 'LOGA', 'LOGA'],
-        [ 'CYCLE','CYCLE']
+        [ 'CYCLE','CYCLE'],
+        [ 'CYCLEOPT','CYCLEOPT']
      ]
 
 Map_names = ['cumberland','example','grid','1r5','broughton','DIAG_labs','DIAG_floor1','model1','model2','model3','model4','model5']   
@@ -200,7 +201,7 @@ def run_experiment(MAP, NROBOTS, INITPOS, ALG_SHORT, LOC_MODE, NAV_MODULE, GWAIT
 	    os.system(gcmd)
     os.system('sleep 5')
     print 'bash -c \rosrun task_planner TaskPlanner'
-    cmd_taskplanner = 'bash -c \'rosrun task_planner TaskPlanner '+ MAP+' '+str(NROBOTS)+'\''
+    cmd_taskplanner = 'bash -c \'rosrun task_planner TaskPlanner '+ MAP+' '+'ALG'+' '+str(NROBOTS)+'\''
     cmd_TP = 'gnome-terminal  --tab -e "'+cmd_taskplanner+'"&'
     os.system(cmd_TP)
     # os.system('gnome-terminal  --tab -e "bash -c \'rosrun task_planner TaskPlanner \'" &')    

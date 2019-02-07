@@ -175,7 +175,7 @@ protected:
 
   std::vector<Task> mission;
 
-  patrolling_sim::TaskRequest task_request;
+
   patrolling_sim::VertexWeb vertex_web_msg;
 
   // std::vector<int> route;
@@ -252,6 +252,7 @@ public:
   void can_execute_decicion();
   bool initialization(int cv, int nv);
   void request_Task();
+  void request_Mission();
   int compute_cost_of_route();
   void receive_mission_Callback(const task_planner::TaskConstPtr &msg);
   //   ^ nuovi messaggi di task NB route[];

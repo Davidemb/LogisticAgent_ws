@@ -6,7 +6,7 @@ TaskPlanner::TaskPlanner(ros::NodeHandle &nh_)
 {
   sub_init = nh_.subscribe("init", 1, &TaskPlanner::init_Callback, this);
   sub_task = nh_.subscribe("need_task", 1, &TaskPlanner::task_Callback, this);
-  sub_task = nh_.subscribe("need_mission", 1, &TaskPlanner::mission_Callback, this);
+  sub_mission = nh_.subscribe("need_mission", 1, &TaskPlanner::mission_Callback, this);
 
   pub_task = nh_.advertise<task_planner::Task>("answer", 1);
   pub_results = nh_.advertise<std_msgs::Int16MultiArray>("results", 100);
@@ -92,8 +92,8 @@ void TaskPlanner::t_generator()
 
   std_msgs::Int16MultiArray msg;
   msg.data.clear();
-  msg.data.push_back(888);  // id task_planner
-  msg.data.push_back(883);  // msg type n_task
+  msg.data.push_back(888); // id task_planner
+  msg.data.push_back(883); // msg type n_task
   msg.data.push_back(nTask);
   pub_results.publish(msg);
   // c_print("Pub nTask!", yellow);
@@ -108,18 +108,18 @@ void TaskPlanner::compute_route_to_delivery(Task &t)
   int i = 0;
   switch (t.dst)
   {
-    case 11:
-      i = 3;
-      break;
-    case 16:
-      i = 5;
-      break;
-    case 21:
-      i = 7;
-      break;
-    default:
-      c_print("# ERR t.dst non esiste!", red);
-      break;
+  case 11:
+    i = 3;
+    break;
+  case 16:
+    i = 5;
+    break;
+  case 21:
+    i = 7;
+    break;
+  default:
+    c_print("# ERR t.dst non esiste!", red);
+    break;
   }
   for (int j = 0; j < i; j++)
   {
@@ -135,18 +135,18 @@ void TaskPlanner::compute_route_to_picktask(Task &t)
   int i = 0;
   switch (t.dst)
   {
-    case 11:
-      i = 3;
-      break;
-    case 16:
-      i = 5;
-      break;
-    case 21:
-      i = 7;
-      break;
-    default:
-      c_print("# ERR t.dst non esiste!", red);
-      break;
+  case 11:
+    i = 3;
+    break;
+  case 16:
+    i = 5;
+    break;
+  case 21:
+    i = 7;
+    break;
+  default:
+    c_print("# ERR t.dst non esiste!", red);
+    break;
   }
   for (int j = i - 1; j >= 0; --j)
   {
@@ -198,47 +198,47 @@ void TaskPlanner::init_Callback(const std_msgs::Int16MultiArrayConstPtr &msg)
 
   switch (type_msg)
   {
-    case (INIT_MSG):
+  case (INIT_MSG):
+  {
+    init_agent[value] = true;
+    auto c = msg->data[2];
+    TEAM_c += c;
+    c_print("TEAM_C: ", TEAM_c, red);
+    pa[value] = mkPA(value, c);
+    pa_print(pa[value]);
+
+    uint T_t = TEAM_t;
+
+    for (int i = 0; i < TEAM_t; i++)
     {
-      init_agent[value] = true;
-      auto c = msg->data[2];
-      TEAM_c += c;
-      c_print("TEAM_C: ", TEAM_c, red);
-      pa[value] = mkPA(value, c);
-      pa_print(pa[value]);
-
-      uint T_t = TEAM_t;
-
-      for (int i = 0; i < TEAM_t; i++)
+      if (init_agent[i] == true)
       {
-        if (init_agent[i] == true)
-        {
-          T_t--;
-        }
+        T_t--;
       }
-      if (T_t == 0)
+    }
+    if (T_t == 0)
+    {
+      // ho tutti i pa e il TEAM_c adesso devo selezionare i natblida
+      skip_tasks.clear();
+      for (auto i = 0; i < TEAM_t; i++)
       {
-        // ho tutti i pa e il TEAM_c adesso devo selezionare i natblida
-        skip_tasks.clear();
-        for (auto i = 0; i < TEAM_t; i++)
-        {
-          for (auto i = 0; i < skip_tasks.size(); i++)
-          {
-            tasks.push_back(skip_tasks[i]);
-          }
-          conclave(pa[i]);
-        }
-
         for (auto i = 0; i < skip_tasks.size(); i++)
         {
           tasks.push_back(skip_tasks[i]);
         }
+        conclave(pa[i]);
+      }
+
+      for (auto i = 0; i < skip_tasks.size(); i++)
+      {
+        tasks.push_back(skip_tasks[i]);
       }
     }
-    break;
+  }
+  break;
 
-    default:
-      break;
+  default:
+    break;
   }
 }
 
@@ -251,9 +251,7 @@ void TaskPlanner::conclave(ProcessAgent &pa)
   c_print("t_c: ", tmp_c, yellow);
   route.clear();
   skip_tasks.clear();
-  // c_print("T_c: ", TEAM_c, red);
-
-  // natblida.clear();
+ 
 
   if ((full) && (tasks.size() > 0))
   {
@@ -267,6 +265,8 @@ void TaskPlanner::conclave(ProcessAgent &pa)
         tmp_c -= t.demand;
         c_print("tmpc: ", tmp_c, red);
         t.take = true;
+        pa.total_demand += t.demand;
+        pa.total_item[t.item] += t.demand;
         pa.mission.push_back(t);
         tasks.erase(find(tasks.begin(), tasks.end(), t));
       }
@@ -290,6 +290,7 @@ void TaskPlanner::conclave(ProcessAgent &pa)
     if (tmp_task.dst != pa.mission[i + 1].dst)
     {
       compute_route_to_delivery(pa.mission[i]);
+      compute_route_to_picktask(pa.mission[i]);
     }
     else
     {
@@ -300,18 +301,11 @@ void TaskPlanner::conclave(ProcessAgent &pa)
   c_print("\nRoute: ", red);
   for (auto i = 0; i < route.size(); i++)
   {
+    pa.route.push_back(route[i]);
+    pa.status.push_back(status[i]);
     cout << route[i] << " ";
   }
   cout << "\n";
-
-  /*
-    for (auto i = 0; i < natblida.size(); i++)
-    {
-      cout << "id order : " << natblida[i].order << "\n"
-           << "demand   : " << natblida[i].demand << "\n"
-           << "dst      : " << natblida[i].dst << "\n";
-    } */
-
   cout << pa << "\n";
 }
 
@@ -342,13 +336,10 @@ void TaskPlanner::task_Callback(const patrolling_sim::TaskRequestConstPtr &tr)
     c_print("\nRoute:", red);
     for (auto i = 0; i < route.size(); i++)
     {
-      // if (! (i % 2))
-      // {
       tm.route.push_back(route[i]);
       tm.condition.push_back(status[i]);
       cout << setw(3) << route[i] << "   Status: [ " << status[i] << " ]"
            << "\n";
-      // }
     }
     cout << "\n";
     c_print("% publish on topic mission! Task n: ", t.order, " ID_robot: ", tm.ID_ROBOT, yellow);
@@ -380,130 +371,38 @@ void TaskPlanner::task_Callback(const patrolling_sim::TaskRequestConstPtr &tr)
 }
 
 void TaskPlanner::mission_Callback(const patrolling_sim::MissionRequestConstPtr &mr)
-{ /*
-   mr->capacity;
-   mr->flag;
-   mr->header;
-   mr->ID_ROBOT;
-   mr->initial_vertex;
-
-   tasks
-   natblida
-   status dei vertici della route
-   ProcessAgent della fase di inizializzazione - pa[nAgent]
-  */
+{ 
+  task_planner::Task tm;
   c_print("Request Mission! id_robot: ", mr->ID_ROBOT, green);
-  c_print(" Total capacity: ", TEAM_c, red);
+
 
   uint id_robot = mr->ID_ROBOT;
   bool flag = mr->flag;
-  TEAM_c += mr->capacity;
+  tm.ID_ROBOT = id_robot;
+  tm.take = true;
+  tm.go_home = false;
+  // tm.item = pa[id_robot].total_item[0];
+  tm.demand = pa[id_robot].total_demand;
 
-  for (auto i = 0; i < route.size(); i++)
+  c_print("for ", yellow);
+
+  for (auto i = 0; i < pa[id_robot].route.size(); i++)
   {
-    // if (! (i % 2))
-    // {
-    // tm.route.push_back(route[i]);
-    // tm.condition.push_back(status[i]);
-    cout << setw(3) << route[i] << "\n";
-    // }
+    cout << pa[id_robot].route[i]<<" ";
+    tm.route.push_back(pa[id_robot].route[i]);
+    tm.condition.push_back(pa[id_robot].status[i]);
   }
   cout << "\n";
 
-  // while (TEAM_c == 0)
-  // {
-  // }
+  c_print("pub mission", yellow);
+  // preparo i pa per i prossimi task
+  pa[id_robot].mission.clear();
+  pa[id_robot].route.clear();
+  pa[id_robot].status.clear();
+  conclave(pa[id_robot]);
+  pub_task.publish(tm);
+  ros::spinOnce();
+  sleep(1);
 }
 
-}  // namespace taskplanner
-
-//------------------------------------//
-// void TaskPlanner::parserTask(const char *task_file)
-// {
-//     checkRegularFile(task_file);
-//     c_print("@ Open file! path: ", task_file, green);
-
-//     string str;
-
-//     int tmp = 0;
-//     int tmp1 = 0;
-//     int tmp2 = 0;
-//     int tmp3 = 0;
-
-//     int count = 0;
-
-//     int nEdges = 0;
-//     int vertex = 0;
-
-//     int *route = nullptr;
-
-//     ifstream ifs(task_file);
-
-//     if (ifs.good())
-//     {
-//         getline(ifs, str);
-//         if (count == 0)
-//         {
-//             nTasks = std::atoi(str.c_str());
-//             std::cout << "nTask: " << nTasks << "\n";
-//         }
-
-//         for (auto j = 0; j < nTasks; j++)
-//         {
-//             for (auto i = 0; i < 2; i++)
-//             {
-//                 // prime linee
-//                 if (ifs.good())
-//                 {
-//                     if (i == 1)
-//                     {
-//                         getline(ifs, str);
-//                         nEdges = std::atoi(str.c_str());
-//                     }
-//                     else
-//                     {
-//                         getline(ifs, str);
-//                         std::stringstream ss(str);
-//                         ss >> tmp >> tmp1 >> tmp2 >> tmp3;
-//                     }
-//                 }
-//             }
-//             // new route
-//             route = new int[nEdges];
-//             for (auto k = 0; k < nEdges; k++)
-//             {
-//                 getline(ifs, str);
-//                 vertex = std::atoi(str.c_str());
-//                 route[k] = vertex;
-//             }
-//             tasks.push_back(mkTask(tmp, tmp1, tmp2, tmp3, nEdges, route));
-//         }
-//         count++;
-//     }
-//     ifs.close();
-
-//     // delete[] route;
-
-//     // for (vector<Task>::iterator it = demand.begin(); it != demand.end(); ++it)
-//     // {
-//     //     cout << it->dimension << it->item << it->order << it->priority << it->route <<"\n";
-//     // }
-
-//     for (auto i = 0; i < tasks.size(); i++)
-//         t_print(tasks[i]);
-// }
-//------------------------------------//
-
-/*
-double get_edge_cost_between (vertex *vertex_web, uint vertex_A, uint vertex_B){
-
-  for (uint i=0; i<vertex_web[vertex_A].num_neigh; i++){
-
-    if ( vertex_web[vertex_A].id_neigh[i] == vertex_B){
-  return vertex_web[vertex_A].cost_m[i];
-    }
-  }
-
-  return -1.0;
-
-} */
+} // namespace taskplanner

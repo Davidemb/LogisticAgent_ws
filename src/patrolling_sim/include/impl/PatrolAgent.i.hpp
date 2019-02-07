@@ -449,6 +449,7 @@ void PatrolAgent::receive_results()
 
 void PatrolAgent::request_Task()
 {
+  patrolling_sim::TaskRequest task_request;
   c_print("# Request Task!", red);
 
   task_request.flag = true;
@@ -481,6 +482,45 @@ void PatrolAgent::request_Task()
 
   ros::spinOnce();
   sleep(0.1);
+}
+
+
+void PatrolAgent::request_Mission()
+{
+  patrolling_sim::MissionRequest mission_request;
+  c_print("# Request Mission!", red);
+
+  mission_request.flag = true;
+  int value = ID_ROBOT;
+  if (value == -1)
+  {
+    value = 0;
+  }
+  mission_request.ID_ROBOT = value;
+  mission_request.capacity = CAPACITY;
+
+  pub_to_task_planner_needmission.publish(mission_request);
+
+  if (first)
+  {
+    std_msgs::Int16MultiArray msg;
+    if (value == -1)
+    {
+      value = 0;
+    }
+
+    msg.data.push_back(value);
+    msg.data.push_back(START);
+    msg.data.push_back(value + 1);
+    pub_broadcast_msg.publish(msg);
+    first = false;
+  }
+
+  mission.clear();
+
+  ros::spinOnce();
+  sleep(0.1);
+
 }
 
 } // namespace patrolagent

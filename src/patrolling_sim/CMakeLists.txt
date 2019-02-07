@@ -89,7 +89,7 @@ add_service_files(
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
   INCLUDE_DIRS src
-   LIBRARIES PatrolAgent SSIPatrolAgent LogicAgent CycleAgent
+   LIBRARIES PatrolAgent SSIPatrolAgent LogicAgent CycleAgent CycleOptAgent
    CATKIN_DEPENDS message_runtime 
 #  CATKIN_DEPENDS actionlib move_base_msgs nav_msgs roscpp tf
 #  DEPENDS system_lib
@@ -132,6 +132,9 @@ add_library(CycleAgent
   src/CycleAgent.cpp
 )
 
+add_library(CycleOptAgent
+  src/CycleOptAgent.cpp
+)
 
 ########################################################################################################################
 
@@ -146,6 +149,12 @@ add_executable(CYCLE src/CYCLE_Agent.cpp)
 add_dependencies(CYCLE ${PROJECT_NAME}_gencpp)
 ## Specify libraries to link a library or executable target against
 target_link_libraries(CYCLE PatrolAgent CycleAgent ${catkin_LIBRARIES})
+
+## Declare a cpp executable 
+add_executable(CYCLEOPT src/CYCLE_Opt_Agent.cpp)
+add_dependencies(CYCLEOPT ${PROJECT_NAME}_gencpp)
+## Specify libraries to link a library or executable target against
+target_link_libraries(CYCLEOPT PatrolAgent CycleOptAgent ${catkin_LIBRARIES})
 
 ########################################################################################################################
 

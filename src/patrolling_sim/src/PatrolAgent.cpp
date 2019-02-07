@@ -745,7 +745,6 @@ void PatrolAgent::receive_mission_Callback(const task_planner::TaskConstPtr &msg
       task.dst = msg->dst;
       task.path_distance = msg->path_distance;
       Route step; 
-      // bool status= new[msg->route.size()]();
       for (auto i = 0; i < msg->route.size(); i++)
       {
         step.id_vertex = msg->route[i];

@@ -88,7 +88,11 @@ struct ProcessAgent
   uint ID_ROBOT;
   uint CAPACITY;
   bool flag;
-  vector<Task> mission;
+  vector<Task> mission; // task da concatenare
+  vector<uint> route; // route finale concatenata
+  vector<bool> status;
+  int * total_item;
+  uint   total_demand;
 };
 
 ostream &operator<<(ostream &os, const ProcessAgent &pa)
@@ -112,6 +116,10 @@ inline ProcessAgent mkPA(uint id, uint c)
   pa.CAPACITY = c;
   pa.flag = false;
   pa.mission.clear();
+  pa.route.clear(); // route definitiva
+  pa.status.clear();
+  pa.total_demand = 0;
+  pa.total_item[3];
 
   return pa;
 }
@@ -179,6 +187,8 @@ public:
 
 private:
   ros::Subscriber sub_task;  // quando un robot vuole un task
+  ros::Subscriber sub_mission;
+  
   ros::Subscriber sub_init;
   ros::Publisher pub_task;  // pubblicazione dell'array (pop dal vettore di tasks)
   ros::Publisher pub_results;
