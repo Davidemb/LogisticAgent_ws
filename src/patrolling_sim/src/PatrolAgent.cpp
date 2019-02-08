@@ -740,8 +740,6 @@ void PatrolAgent::receive_mission_Callback(const task_planner::TaskConstPtr &msg
       task.item = msg->item;
       task.order = msg->order;
       task.demand = msg->demand;
-      task.priority = msg->priority;
-      task.src = msg->src;
       task.dst = msg->dst;
       task.path_distance = msg->path_distance;
       Route step; 
@@ -774,18 +772,6 @@ void PatrolAgent::receive_mission_Callback(const task_planner::TaskConstPtr &msg
       c_print("# insert task to go home!", magenta);
       mission.push_back(t);
     }
-  }
-}
-
-bool PatrolAgent::initialization(int cv, int nv)
-{
-  if (next_vertex == cv)
-  {
-    return false;
-  }
-  else
-  {
-    return true;
   }
 }
 
@@ -828,29 +814,6 @@ void PatrolAgent::broadcast_msg_Callback(const std_msgs::Int16MultiArray::ConstP
   break;
   }
   ros::spinOnce();
-}
-
-void PatrolAgent::instantaneous_vertex_web()
-{
-  // for (auto i = 0; i < dimension; i++)
-  // {
-  //   patrolling_sim::Vertex vertex;
-  //   auto element = vertex_web[i];
-  //   vertex.ID_ROBOT = ID_ROBOT;
-  //   vertex.id = element.id;
-  //   vertex.num_neigh = element.num_neigh;
-  //   vertex.points.clear();
-  //   vertex.points.push_back(element.x);
-  //   vertex.points.push_back(element.y);
-  //   for (auto i = 0; i < element.id_neigh.size(); i++)
-  //   {
-  //   vertex.id_neigh.push_back(element.id_neigh[i]);
-  //   }
-  //   for (auto i = 0; i < element.cost.size(); i ++)
-  //   {
-  //     vertex.cost.push_back(element.cost[i]);
-  //   }
-  // }
 }
 
 } // namespace patrolagent

@@ -83,8 +83,8 @@ struct Task
   int item;
   int order;
   int demand;
-  int priority;
-  int src;
+  // int priority;
+  // int src;
   int dst;
   int path_distance;
   std::vector<Route> trail;
@@ -250,7 +250,6 @@ public:
   void init_agent();
   void calc_route_to_src();
   void can_execute_decicion();
-  bool initialization(int cv, int nv);
   void request_Task();
   void request_Mission();
   int compute_cost_of_route();
@@ -258,10 +257,8 @@ public:
   //   ^ nuovi messaggi di task NB route[];
 
   void broadcast_msg_Callback(const std_msgs::Int16MultiArray::ConstPtr &msg);
-  // void receive_vertex_web_Callback(const patrolling_sim::VertexWebConstPtr
-  // &msg);
   //----------------------------------------------------------------------
-  void instantaneous_vertex_web();
+ 
 };
 
 }  // namespace patrolagent
