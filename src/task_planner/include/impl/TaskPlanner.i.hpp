@@ -104,7 +104,7 @@ void TaskPlanner::t_generator()
 void TaskPlanner::compute_route_to_delivery(Task &t)
 {
   route.push_back(t.src);
-  status.push_back(true);
+  // status.push_back(true);
   int i = 0;
   switch (t.dst)
   {
@@ -124,10 +124,10 @@ void TaskPlanner::compute_route_to_delivery(Task &t)
   for (int j = 0; j < i; j++)
   {
     route.push_back(under_pass[j]);
-    status.push_back(false);
+    // status.push_back(false);
   }
   route.push_back(t.dst);
-  status.push_back(true);
+  // status.push_back(true);
 }
 
 void TaskPlanner::compute_route_to_picktask(Task &t)
@@ -151,8 +151,77 @@ void TaskPlanner::compute_route_to_picktask(Task &t)
   for (int j = i - 1; j >= 0; --j)
   {
     route.push_back(upper_pass[j]);
-    status.push_back(false);
+    // status.push_back(false);
   }
+}
+
+void TaskPlanner::compute_opt_delivery()
+{
+  //   uint dst_vertex[3] = { 11, 16, 21 };
+  if (dst.size() == 2)
+  {
+    if (dst[0] == 11 && dst[1] == 16)
+    {
+      route.push_back(6);
+      route.push_back(7);
+      route.push_back(9);
+      route.push_back(12);
+      route.push_back(11);
+      route.push_back(12);
+      route.push_back(14);
+      route.push_back(17);
+      route.push_back(16);
+    }
+    else if (dst[0] == 11 && dst[1] == 21)
+    {
+      route.push_back(6);
+      route.push_back(7);
+      route.push_back(9);
+      route.push_back(12);
+      route.push_back(11);
+      route.push_back(12);
+      route.push_back(14);
+      route.push_back(17);
+      route.push_back(19);
+      route.push_back(22);
+      route.push_back(21);
+    }
+    else if (dst[0] == 16 && dst[1] == 21)
+    {
+      route.push_back(6);
+      route.push_back(7);
+      route.push_back(9);
+      route.push_back(12);
+      route.push_back(14);
+      route.push_back(17);
+      route.push_back(16);
+      route.push_back(17);
+      route.push_back(19);
+      route.push_back(22);
+      route.push_back(21);
+    }
+  }
+  else if (dst.size() == 3)
+  {
+    route.push_back(6);
+    route.push_back(7);
+    route.push_back(9);
+    route.push_back(12);
+    route.push_back(11);
+    route.push_back(12);
+    route.push_back(14);
+    route.push_back(17);
+    route.push_back(16);
+    route.push_back(17);
+    route.push_back(19);
+    route.push_back(22);
+    route.push_back(21);
+  }
+  else
+  {
+    c_print("ERR!",red);
+  }
+  
 }
 
 int TaskPlanner::compute_cost_of_route()
@@ -216,24 +285,24 @@ void TaskPlanner::init_Callback(const std_msgs::Int16MultiArrayConstPtr &msg)
         T_t--;
       }
     }
-    if (T_t == 0)
-    {
-      // ho tutti i pa e il TEAM_c adesso devo selezionare i natblida
-      skip_tasks.clear();
-      for (auto i = 0; i < TEAM_t; i++)
-      {
-        for (auto i = 0; i < skip_tasks.size(); i++)
-        {
-          tasks.push_back(skip_tasks[i]);
-        }
-        conclave(pa[i]);
-      }
+    // if (T_t == 0)
+    // {
+    //   // ho tutti i pa e il TEAM_c adesso devo selezionare i natblida
+    //   skip_tasks.clear();
+    //   for (auto i = 0; i < TEAM_t; i++)
+    //   {
+    //     for (auto i = 0; i < skip_tasks.size(); i++)
+    //     {
+    //       tasks.push_back(skip_tasks[i]);
+    //     }
+    //   //  conclave(pa[i]);
+    //   }
 
-      for (auto i = 0; i < skip_tasks.size(); i++)
-      {
-        tasks.push_back(skip_tasks[i]);
-      }
-    }
+    //   for (auto i = 0; i < skip_tasks.size(); i++)
+    //   {
+    //     tasks.push_back(skip_tasks[i]);
+    //   }
+    // }
   }
   break;
 
@@ -249,9 +318,9 @@ void TaskPlanner::conclave(ProcessAgent &pa)
   bool full = true;
   uint tmp_c = pa.CAPACITY;
   c_print("t_c: ", tmp_c, yellow);
+  
   route.clear();
   skip_tasks.clear();
- 
 
   if ((full) && (tasks.size() > 0))
   {
@@ -283,30 +352,41 @@ void TaskPlanner::conclave(ProcessAgent &pa)
     }
   }
   // calcolo dei percoorsi
-
+  dst.clear();
   for (auto i = 0; i < pa.mission.size(); i++)
   {
-    auto tmp_task = pa.mission[i];
-    if (tmp_task.dst != pa.mission[i + 1].dst)
-    {
-      compute_route_to_delivery(pa.mission[i]);
-      compute_route_to_picktask(pa.mission[i]);
-    }
-    else
-    {
-      c_print("per ora stesso task->dst", red);
-    }
+    auto el = pa.mission[i];
+    dst.push_back(el.dst);
   }
 
+  sort(dst.begin(), dst.end());
+  dst.erase(unique(dst.begin(), dst.end()), dst.end());
+
+  if (dst.size() == 1)
+  {
+    compute_route_to_delivery(pa.mission.front());
+    compute_route_to_picktask(pa.mission.front());
+  }
+  else
+  {
+    compute_opt_delivery();
+    compute_route_to_picktask(pa.mission.back());
+  }
+
+  // return route e status
   c_print("\nRoute: ", red);
   for (auto i = 0; i < route.size(); i++)
   {
     pa.route.push_back(route[i]);
-    pa.status.push_back(status[i]);
+    pa.status.push_back(false);
     cout << route[i] << " ";
   }
   cout << "\n";
   cout << pa << "\n";
+  for (auto i = 0; i < skip_tasks.size(); i++)
+  {
+    tasks.push_back(skip_tasks[i]);
+  }
 }
 
 void TaskPlanner::task_Callback(const patrolling_sim::TaskRequestConstPtr &tr)
@@ -371,12 +451,18 @@ void TaskPlanner::task_Callback(const patrolling_sim::TaskRequestConstPtr &tr)
 }
 
 void TaskPlanner::mission_Callback(const patrolling_sim::MissionRequestConstPtr &mr)
-{ 
+{
   task_planner::Task tm;
   c_print("Request Mission! id_robot: ", mr->ID_ROBOT, green);
-
-
   uint id_robot = mr->ID_ROBOT;
+
+  // route.clear();
+  pa[id_robot].mission.clear();
+  pa[id_robot].route.clear();
+  pa[id_robot].status.clear();
+
+  conclave(pa[id_robot]);
+
   bool flag = mr->flag;
   tm.ID_ROBOT = id_robot;
   tm.take = true;
@@ -388,7 +474,7 @@ void TaskPlanner::mission_Callback(const patrolling_sim::MissionRequestConstPtr 
 
   for (auto i = 0; i < pa[id_robot].route.size(); i++)
   {
-    cout << pa[id_robot].route[i]<<" ";
+    cout << pa[id_robot].route[i] << " ";
     tm.route.push_back(pa[id_robot].route[i]);
     tm.condition.push_back(pa[id_robot].status[i]);
   }
@@ -396,10 +482,7 @@ void TaskPlanner::mission_Callback(const patrolling_sim::MissionRequestConstPtr 
 
   c_print("pub mission", yellow);
   // preparo i pa per i prossimi task
-  pa[id_robot].mission.clear();
-  pa[id_robot].route.clear();
-  pa[id_robot].status.clear();
-  conclave(pa[id_robot]);
+
   pub_task.publish(tm);
   ros::spinOnce();
   sleep(1);

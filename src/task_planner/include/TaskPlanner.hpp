@@ -132,8 +132,6 @@ public:
   TaskPlanner(ros::NodeHandle &nh_);
   ~TaskPlanner(){};
 
-  const char *task_file = "/home/dave/LogisticAgent_ws/src/task_planner/param/all_task.txt";
-
   std::string graph_file;
   std::string mapname;
   uint dimension;
@@ -150,9 +148,10 @@ public:
   uint initial_position[4] = { 2, 1, 0, 3 };
   vector<Task> tasks;
   vector<Task> skip_tasks;
-  vector<Task> natblida;
   vector<uint> route;
   vector<bool> status;
+
+  vector<uint> dst;
 
   bool *init_agent;
   // vector<ProcessAgent> pa;
@@ -176,6 +175,7 @@ public:
   void compute_route_to_delivery(Task &t);
   void compute_route_to_picktask(Task &t);
   int compute_cost_of_route();
+  void compute_opt_delivery();
 
   void conclave(ProcessAgent &pa);
 

@@ -18,9 +18,9 @@ using namespace std;
 
 int main (int argc, char** argv)
 {
-    coa::COA CA;
-    CA.init (argc, argv);
+    coa::COA COA;
+    COA.init (argc, argv);
     c_print("@ Inizializzazione finita!",green);
-    CA.run();
+    COA.run();
     return 0;
 }
