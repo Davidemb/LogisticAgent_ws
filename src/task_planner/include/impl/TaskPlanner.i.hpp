@@ -415,30 +415,14 @@ void TaskPlanner::task_Callback(const patrolling_sim::TaskRequestConstPtr &tr)
 
   task_planner::Task tm;
 
-  c_print("DIO CANE", red);
-  cout << el << "\n";
-
   if ((single_task) && (tasks.size() >= 1))
   {
     Task t = *std::min_element(tasks.begin(), tasks.end());
-    cout << el << "\n";
-    cout << "task dst: " << t.dst << "\n";
-    // Task t = *std::max_element(tasks.begin(), tasks.end());
     el->mission.push_back(t);
-    cout << el << "\n";
-    cout << "size: " << el->mission.size() << "\n";
-    // cout << el <<"\n";
     compute_route_to_delivery(el);
-    // cout << el << "\n";
+    
     compute_route_to_picktask(el);
-    cout << "\nRoute: "
-         << "\n";
-    for (auto i = 0; i < el->route.size(); i++)
-    {
-      cout << setw(3) << el->route[i].id_vertex << "   Status: [ " << el->route[i].status << " ]"
-           << "\n";
-    }
-    cout << "\n";
+  
     int path_distance = compute_cost_of_route(el);
     tm.header.stamp = ros::Time().now();
     tm.ID_ROBOT = tr->ID_ROBOT;
