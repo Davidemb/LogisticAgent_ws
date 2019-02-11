@@ -12,7 +12,7 @@ TaskPlanner::TaskPlanner(ros::NodeHandle &nh_)
   pub_results = nh_.advertise<std_msgs::Int16MultiArray>("results", 100);
 }
 
-void TaskPlanner::t_print(Task t)
+void TaskPlanner::t_print(Task &t)
 {
   cout << "\nTask" << t.order << ":\n"
        //  << " -      take: " << t.take << "\n"
@@ -24,12 +24,19 @@ void TaskPlanner::t_print(Task t)
        << " -       dst: " << t.dst << "\n";
 }
 
-void TaskPlanner::pa_print(ProcessAgent pa)
+void TaskPlanner::pa_print(ProcessAgent &pa)
 {
   cout << "\nProcessAgent: \n"
        << " -  id_robot: " << pa.ID_ROBOT << "\n"
        << " -  capacity: " << pa.CAPACITY << "\n"
-       << " -      flag: " << pa.flag << "\n";
+       << " -      flag: " << pa.flag << "\n"
+       << "mission.size: " << pa.mission.size() << "\n"
+       << " -     route: ";
+  for (auto i = 0; i < pa.route.size(); i++)
+  {
+    cout << pa.route[i].id_vertex << " ";
+  }
+  cout << "\n";
 }
 
 void TaskPlanner::init(int argc, char **argv)
@@ -51,9 +58,8 @@ void TaskPlanner::init(int argc, char **argv)
   init_agent = new bool[TEAM_t]();
   //                           ^ figo!
   pa = new ProcessAgent[TEAM_t];
-  //
 
-  c_print ("INIT",green);
+  c_print("INIT", green);
 }
 
 void TaskPlanner::init_Callback(const std_msgs::Int16MultiArrayConstPtr &msg)
@@ -74,49 +80,48 @@ void TaskPlanner::init_Callback(const std_msgs::Int16MultiArrayConstPtr &msg)
 
   switch (type_msg)
   {
-  case (INIT_MSG):
-  {
-    // inizializzazione dei robot acquisisco Capacity
-    init_agent[value] = true;
-    auto c = msg->data[2];
-    TEAM_c += c;
-    c_print("TEAM_C: ", TEAM_c, red);
-    
-    pa[value] = mkPA(value, c);
-    pa_print(pa[value]);
-
-    uint T_t = TEAM_t;
-
-    for (int i = 0; i < TEAM_t; i++)
+    case (INIT_MSG):
     {
-      if (init_agent[i] == true)
+      // inizializzazione dei robot acquisisco Capacity
+      init_agent[value] = true;
+      auto c = msg->data[2];
+      TEAM_c += c;
+      c_print("TEAM_C: ", TEAM_c, red);
+      pa[value] = mkPA(value, c);
+      pa_print(pa[value]);
+
+      uint T_t = TEAM_t;
+
+      for (int i = 0; i < TEAM_t; i++)
       {
-        T_t--;
+        if (init_agent[i] == true)
+        {
+          T_t--;
+        }
       }
+      // if (T_t == 0)
+      // {
+      //   // ho tutti i pa e il TEAM_c adesso devo selezionare i natblida
+      //   skip_tasks.clear();
+      //   for (auto i = 0; i < TEAM_t; i++)
+      //   {
+      //     for (auto i = 0; i < skip_tasks.size(); i++)
+      //     {
+      //       tasks.push_back(skip_tasks[i]);
+      //     }
+      //   //  conclave(pa[i]);
+      //   }
+
+      //   for (auto i = 0; i < skip_tasks.size(); i++)
+      //   {
+      //     tasks.push_back(skip_tasks[i]);
+      //   }
+      // }
     }
-    // if (T_t == 0)
-    // {
-    //   // ho tutti i pa e il TEAM_c adesso devo selezionare i natblida
-    //   skip_tasks.clear();
-    //   for (auto i = 0; i < TEAM_t; i++)
-    //   {
-    //     for (auto i = 0; i < skip_tasks.size(); i++)
-    //     {
-    //       tasks.push_back(skip_tasks[i]);
-    //     }
-    //   //  conclave(pa[i]);
-    //   }
-
-    //   for (auto i = 0; i < skip_tasks.size(); i++)
-    //   {
-    //     tasks.push_back(skip_tasks[i]);
-    //   }
-    // }
-  }
-  break;
-
-  default:
     break;
+
+    default:
+      break;
   }
 }
 
@@ -147,85 +152,87 @@ void TaskPlanner::t_generator()
     t_print(tasks[k]);
 }
 
-void TaskPlanner::compute_route_to_delivery(ProcessAgent &pa)
+void TaskPlanner::compute_route_to_delivery(ProcessAgent *pa)
 {
   // if (pa.mission.size() == 1)
 
   // // {
-
+  Route step;
   auto el = pa;
-  cout << el <<"\n";
-  cout << "pa.mission.size(): " << el.mission.size() << "\n";
-  Route s;
-  s.id_vertex = src_vertex;
-  s.status = false;
-  el.route.push_back(s);
-  auto dst = el.mission.front().dst;
-  cout << "pa.mission.size(): " << el.mission.size() << "\n";
+  cout << el << "\n";
+  cout << "pa.mission.size(): " << el->mission.size() << "\n";
+
+  step.id_vertex = src_vertex;
+  step.status = false;
+  el->route.push_back(step);
+  auto dst = el->mission.front().dst;
+  cout << "pa.mission.size(): " << el->mission.size() << "\n";
   int i = 0;
   switch (dst)
   {
-  case 11:
-    i = 3;
-    break;
-  case 16:
-    i = 5;
-    break;
-  case 21:
-    i = 7;
-    break;
-  default:
-    c_print("# ERR t.dst non esiste!", red);
-    break;
+    case 11:
+      i = 3;
+      break;
+    case 16:
+      i = 5;
+      break;
+    case 21:
+      i = 7;
+      break;
+    default:
+      c_print("# ERR t.dst non esiste!", red);
+      break;
   }
-  Route step;
+  // Route step;
   for (int j = 0; j < i; j++)
   {
     step.id_vertex = under_pass[j];
     step.status = false;
-    el.route.push_back(step);
+    // tmp_route.push_back(step);
+    pa->route.push_back(step);
   }
   step.id_vertex = dst;
   step.status = false;
-  el.route.push_back(step);
-
-   cout << el <<"\n";
+  // tmp_route.push_back(step);
+  pa->route.push_back(step);
+  cout << el << "\n";
 }
 
-void TaskPlanner::compute_route_to_picktask(ProcessAgent &pa)
+void TaskPlanner::compute_route_to_picktask(ProcessAgent *pa)
 {
   auto el = pa;
+  Route step;
   int i = 0;
-  cout << "pa.mission.size(): " << el.mission.size() << "\n";
-  auto dst = el.mission.back().dst;
+  cout << "pa.mission.size(): " << el->mission.size() << "\n";
+  auto dst = el->mission.back().dst;
   switch (dst)
   {
-  case 11:
-    i = 3;
-    break;
-  case 16:
-    i = 5;
-    break;
-  case 21:
-    i = 7;
-    break;
-  default:
-    c_print("# ERR t.dst non esiste!", red);
-    break;
+    case 11:
+      i = 3;
+      break;
+    case 16:
+      i = 5;
+      break;
+    case 21:
+      i = 7;
+      break;
+    default:
+      c_print("# ERR t.dst non esiste!", red);
+      break;
   }
-  Route step;
   for (int j = i - 1; j >= 0; --j)
   {
     step.id_vertex = upper_pass[j];
     step.status = false;
-    el.route.push_back(step);
+    // tmp_route.push_back(step);
+    pa->route.push_back(step);
   }
   cout << el << "\n";
 }
 
 void TaskPlanner::compute_opt_delivery()
-{ /* 
-  //   uint dst_vertex[3] = { 11, 16, 21 };
+{
+  /* //   uint dst_vertex[3] = { 11, 16, 21 };
   if (dst.size() == 2)
   {
     if (dst[0] == 11 && dst[1] == 16)
@@ -288,21 +295,21 @@ void TaskPlanner::compute_opt_delivery()
   else
   {
     c_print("ERR!", red);
-  } */
+  }  */
 }
 
-int TaskPlanner::compute_cost_of_route(ProcessAgent &pa)
+int TaskPlanner::compute_cost_of_route(ProcessAgent *pa)
 {
   auto el = pa;
   int custo_final = 0;
-  int anterior, proximo;
+  // int anterior, proximo;
 
-  cout << "pa.route.size(): " << el.route.size() << "\n";
+  cout << "pa.route.size(): " << pa->route.size() << "\n";
 
-  for (int i = 1; i < el.route.size(); i++)
+  for (int i = 1; i < pa->route.size(); i++)
   {
-    anterior = el.route[i - 1].id_vertex;
-    proximo = el.route[i].id_vertex;
+    int anterior = pa->route[i - 1].id_vertex;
+    int proximo = pa->route[i].id_vertex;
 
     for (int j = 0; j < vertex_web[anterior].num_neigh; j++)
     {
@@ -319,111 +326,116 @@ int TaskPlanner::compute_cost_of_route(ProcessAgent &pa)
   return custo_final;
 }
 
-void TaskPlanner::conclave(ProcessAgent pa)
-{ /* 
-  // mi preparo tutti i task in ordine
-  // prima i piu vicini poi soglio ancora per capacita piu simile
-  bool full = true;
-  uint tmp_c = pa.CAPACITY;
-  c_print("t_c: ", tmp_c, yellow);
+void TaskPlanner::conclave(ProcessAgent &pa)
+{
+  // // mi preparo tutti i task in ordine
+  // // prima i piu vicini poi soglio ancora per capacita piu simile
+  // bool full = true;
+  // uint tmp_c = pa.CAPACITY;
+  // c_print("t_c: ", tmp_c, yellow);
 
-  route.clear();
-  skip_tasks.clear();
+  // skip_tasks.clear();
 
-  if ((full) && (tasks.size() > 0))
-  {
-    int ts = tasks.size();
-    for (auto i = 0; i < ts; i++)
-    {
-      Task t = *std::min_element(tasks.begin(), tasks.end(), pop_min_element);
-      c_print("t.demand: ", t.demand, magenta);
-      if (t.demand <= tmp_c)
-      {
-        tmp_c -= t.demand;
-        c_print("tmpc: ", tmp_c, red);
-        t.take = true;
-        pa.total_demand += t.demand;
-        pa.total_item[t.item] += t.demand;
-        pa.mission.push_back(t);
-        tasks.erase(find(tasks.begin(), tasks.end(), t));
-      }
-      else
-      {
-        if (pa.mission.size() <= 0)
-        {
-          skip_tasks.push_back(t);
-          tasks.erase(find(tasks.begin(), tasks.end(), t));
-          c_print("ERR! no allocato task", red);
-        }
-        full = false;
-      }
-    }
-  }
-  // calcolo dei percoorsi
-  dst.clear();
-  for (auto i = 0; i < pa.mission.size(); i++)
-  {
-    auto el = pa.mission[i];
-    dst.push_back(el.dst);
-  }
+  // if ((full) && (tasks.size() > 0))
+  // {
+  //   int ts = tasks.size();
+  //   for (auto i = 0; i < ts; i++)
+  //   {
+  //     Task t = *std::min_element(tasks.begin(), tasks.end(), pop_min_element);
+  //     c_print("t.demand: ", t.demand, magenta);
+  //     if (t.demand <= tmp_c)
+  //     {
+  //       tmp_c -= t.demand;
+  //       c_print("tmp_c: ", tmp_c, red);
+  //       t.take = true;
+  //       pa.total_demand += t.demand;
+  //       pa.total_item[t.item] += t.demand;
+  //       auto t_d = pa.total_demand;
+  //       cout << "t_D: " << t_d << "\n";
+  //       c_print("insert task on mission", green);
+  //       pa.mission.push_back(t);
+  //       tasks.erase(find(tasks.begin(), tasks.end(), t));
+  //     }
+  //     else
+  //     {
+  //       if (pa.mission.size() <= 0)
+  //       {
+  //         skip_tasks.push_back(t);
+  //         tasks.erase(find(tasks.begin(), tasks.end(), t));
+  //         c_print("ERR! no allocato task", red);
+  //       }
+  //       full = false;
+  //     }
+  //   }
+  // }
+  // // calcolo dei percoorsi
+  // dst.clear();
+  // for (auto i = 0; i < pa.mission.size(); i++)
+  // {
+  //   auto el = pa.mission[i];
+  //   dst.push_back(el.dst);
+  // }
 
-  sort(dst.begin(), dst.end());
-  dst.erase(unique(dst.begin(), dst.end()), dst.end());
+  // sort(dst.begin(), dst.end());
+  // dst.erase(unique(dst.begin(), dst.end()), dst.end());
 
-  if (dst.size() == 1)
-  {
-    compute_route_to_delivery(pa.mission.front());
-    compute_route_to_picktask(pa.mission.front());
-  }
-  else
-  {
-    compute_opt_delivery();
-    compute_route_to_picktask(pa.mission.back());
-  }
+  // if (dst.size() == 1)
+  // {
+  //   compute_route_to_delivery(pa);
+  //   compute_route_to_picktask(pa);
+  // }
+  // else
+  // {
+  //   compute_opt_delivery();
+  //   compute_route_to_picktask(pa);
+  // }
 
-  // return route e status
-  c_print("\nRoute: ", red);
-  for (auto i = 0; i < route.size(); i++)
-  {
-    pa.route.push_back(route[i]);
-    pa.status.push_back(false);
-    cout << route[i] << " ";
-  }
-  cout << "\n";
-  cout << pa << "\n";
-  for (auto i = 0; i < skip_tasks.size(); i++)
-  {
-    tasks.push_back(skip_tasks[i]);
-  } */
+  // // return route e status
+  // // c_print("\nRoute: ", red);
+  // // for (auto i = 0; i < route.size(); i++)
+  // // {
+  // //   // pa.route.push_back(route[i]);
+  // //   pa.status.push_back(false);
+  // //   // cout << route[i] << " ";
+  // // }
+  // // cout << "\n";
+  // cout << pa << "\n";
+  // for (auto i = 0; i < skip_tasks.size(); i++)
+  // {
+  //   tasks.push_back(skip_tasks[i]);
+  // }
 }
 
 void TaskPlanner::task_Callback(const patrolling_sim::TaskRequestConstPtr &tr)
 {
   bool single_task = true;
   uint id_robot = tr->ID_ROBOT;
-  auto el = pa[id_robot];
+  auto el = &pa[id_robot];
+  //        ^ importante!
 
   task_planner::Task tm;
 
-  c_print("DIO CANE",red);
+  c_print("DIO CANE", red);
   cout << el << "\n";
 
   if ((single_task) && (tasks.size() >= 1))
   {
     Task t = *std::min_element(tasks.begin(), tasks.end());
     cout << el << "\n";
-    cout << "task dst: "<< t.dst << "\n";
+    cout << "task dst: " << t.dst << "\n";
     // Task t = *std::max_element(tasks.begin(), tasks.end());
-    el.mission.push_back(t);
+    el->mission.push_back(t);
     cout << el << "\n";
-    cout << "size: " << el.mission.size() << "\n";
+    cout << "size: " << el->mission.size() << "\n";
     // cout << el <<"\n";
     compute_route_to_delivery(el);
     // cout << el << "\n";
     compute_route_to_picktask(el);
-    for (auto i = 0; i < el.route.size(); i++)
+    cout << "\nRoute: "
+         << "\n";
+    for (auto i = 0; i < el->route.size(); i++)
     {
-      cout << setw(3) << el.route[i].id_vertex << "   Status: [ " << el.route[i].status << " ]"
+      cout << setw(3) << el->route[i].id_vertex << "   Status: [ " << el->route[i].status << " ]"
            << "\n";
     }
     cout << "\n";
@@ -438,18 +450,18 @@ void TaskPlanner::task_Callback(const patrolling_sim::TaskRequestConstPtr &tr)
     tm.dst = t.dst;
     tm.path_distance = path_distance;
     c_print("\nRoute:", red);
-    for (auto i = 0; i < el.route.size(); i++)
+    for (auto i = 0; i < el->route.size(); i++)
     {
-      tm.route.push_back(el.route[i].id_vertex);
-      tm.condition.push_back(el.route[i].status);
-      cout << setw(3) << el.route[i].id_vertex << "   Status: [ " << el.route[i].status << " ]"
+      tm.route.push_back(el->route[i].id_vertex);
+      tm.condition.push_back(el->route[i].status);
+      cout << setw(3) << el->route[i].id_vertex << "   Status: [ " << el->route[i].status << " ]"
            << "\n";
     }
     cout << "\n";
     c_print("% publish on topic mission! Task n: ", t.order, " ID_robot: ", tm.ID_ROBOT, yellow);
     pub_task.publish(tm);
-    el.mission.clear();
-    el.route.clear();
+    el->mission.clear();
+    el->route.clear();
     tasks.erase(std::find(tasks.begin(), tasks.end(), t));
     c_print("Size tasks: ", tasks.size(), red);
     single_task = false;
@@ -466,8 +478,8 @@ void TaskPlanner::task_Callback(const patrolling_sim::TaskRequestConstPtr &tr)
     c_print("% publish on topic mission! go_home ID_robot: ", tm.ID_ROBOT, yellow);
     id++;
     pub_task.publish(tm);
-    el.mission.clear();
-    el.route.clear();
+    el->mission.clear();
+    el->route.clear();
   }
   ros::spinOnce();
   sleep(1);
@@ -510,4 +522,4 @@ void TaskPlanner::mission_Callback(const patrolling_sim::MissionRequestConstPtr 
   sleep(1);
 }
 
-} // namespace taskplanner
+}  // namespace taskplanner

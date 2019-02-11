@@ -91,19 +91,9 @@ struct ProcessAgent
   vector<Task> mission; // task da concatenare
   vector<Route> route;  // vettore di vertici del path finale
   uint *dst;
-  int *total_item;
+  uint *total_item;
   uint total_demand;
 };
-
-// inline ProcessAgent operator[](int i) const
-// {
-//   return pa[i];
-// }
-
-// inline ProcessAgent &operator[](int i)
-// {
-//   return pa[i];
-// }
 
 ostream &operator<<(ostream &os, const ProcessAgent &pa)
 {
@@ -134,9 +124,9 @@ inline ProcessAgent mkPA(uint id, uint c)
   pa.flag = false;
   pa.mission.clear();
   pa.route.clear(); // route definitiva
-  pa.dst[3];
+  pa.dst;
   pa.total_demand = 0;
-  pa.total_item[3];
+  pa.total_item;
 
   return pa;
 }
@@ -164,7 +154,7 @@ public:
   vector<Task> skip_tasks;
 
   bool *init_agent;
-  ProcessAgent *pa; // <----------------------------- PA
+  ProcessAgent * pa; 
 
   Task operator[](int i) const
   {
@@ -175,16 +165,16 @@ public:
     return tasks[i];
   }
 
-  void t_print(Task t);
-  void pa_print(ProcessAgent pa);
+  void t_print(Task &t);
+  void pa_print(ProcessAgent &pa);
   void t_generator();
 
-  void compute_route_to_delivery(ProcessAgent &pa);
-  void compute_route_to_picktask(ProcessAgent &pa);
-  int compute_cost_of_route(ProcessAgent &pa);
+  void compute_route_to_delivery(ProcessAgent* pa);
+  void compute_route_to_picktask(ProcessAgent* pa);
+  int compute_cost_of_route(ProcessAgent* pa);
   void compute_opt_delivery();
 
-  void conclave(ProcessAgent pa);
+  void conclave(ProcessAgent &pa);
 
   void init(int argc, char **argv);
   void run();
