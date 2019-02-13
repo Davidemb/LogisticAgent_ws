@@ -2,6 +2,7 @@
 #include <color_cout.hpp> //lib
 #include <fstream>
 #include <iostream>
+// #include <iostream>
 // #include <sys/type.h>
 #include <patrolling_sim/MissionRequest.h>
 #include <patrolling_sim/TaskRequest.h>
@@ -13,7 +14,10 @@
 #include <task_planner/Mission.h>
 #include <task_planner/Task.h>
 #include <algorithm>
+#include <iterator>
+// #include <algorithm>
 #include <vector>
+#include <set>
 
 #include "getgraph.hpp"
 
@@ -32,10 +36,11 @@ struct Task
 
 inline bool operator<(const Task &A, const Task &B)
 {
-  if (!A.take && !B.take)
-  {
-    return (A.dst < B.dst) ? 1 : 0;
-  }
+  // messo <= per insert nel task_set.insert()
+  // if (!A.take && !B.take)
+  // {
+    return (A.dst <= B.dst) ? 1 : 0;
+  // }
 }
 
 inline bool pop_min_element(const Task &A, const Task &B)
@@ -75,6 +80,11 @@ inline Task mkTask(int item, int order, int demand, int dst)
   t.dst = dst;
 
   return t;
+}
+
+ostream &operator<<(ostream &os, const Task &t)
+{
+  os << "Task: "<< t.order;
 }
 
 struct Route
@@ -131,6 +141,38 @@ inline ProcessAgent mkPA(uint id, uint c)
   return pa;
 }
 
+inline bool operator>(const ProcessAgent &A, const ProcessAgent &B)
+{
+  return A.CAPACITY > B.CAPACITY ? 1 : 0;
+}
+
+inline bool operator<(const ProcessAgent &A, const ProcessAgent &B)
+{
+  return A.CAPACITY < B.CAPACITY ? 1 : 0;
+}
+
+
+
+struct ProcessTask
+{
+  uint id;
+  uint tot_demand;
+  vector<Task> mission;
+};
+
+inline bool operator==(const ProcessTask &A, const ProcessTask &B)
+{
+  return A.id == B.id ? 1 : 0;
+}
+
+/* inline ProcessTask mkPT(uint d, uint dst[], uint item[], uint pd)
+{
+  ProcessTask pt;
+
+  pt.demand = d;
+
+} */
+
 const std::string PS_path = ros::package::getPath("task_planner");
 
 class TaskPlanner
@@ -152,9 +194,12 @@ public:
   uint initial_position[4] = {2, 1, 0, 3};
   vector<Task> tasks;
   vector<Task> skip_tasks;
+  vector<Task> natblida; // tutte le combinazioni di task per il conclave()
+  set<Task> task_set;
 
-  bool *init_agent;
+  bool * init_agent;
   ProcessAgent * pa; 
+  vector<ProcessTask> v_pt;
 
   Task operator[](int i) const
   {
@@ -175,6 +220,8 @@ public:
   void compute_opt_delivery();
 
   void conclave(ProcessAgent &pa);
+  void ps_print(int s[], int size);
+  set<set<Task>> powerSet(const set<Task> &t);
 
   void init(int argc, char **argv);
   void run();

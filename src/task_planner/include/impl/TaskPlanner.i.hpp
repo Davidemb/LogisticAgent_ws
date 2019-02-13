@@ -80,48 +80,48 @@ void TaskPlanner::init_Callback(const std_msgs::Int16MultiArrayConstPtr &msg)
 
   switch (type_msg)
   {
-    case (INIT_MSG):
+  case (INIT_MSG):
+  {
+    // inizializzazione dei robot acquisisco Capacity
+    init_agent[value] = true;
+    auto c = msg->data[2];
+    TEAM_c += c;
+    c_print("TEAM_C: ", TEAM_c, red);
+    pa[value] = mkPA(value, c);
+    pa_print(pa[value]);
+
+    uint T_t = TEAM_t;
+
+    for (int i = 0; i < TEAM_t; i++)
     {
-      // inizializzazione dei robot acquisisco Capacity
-      init_agent[value] = true;
-      auto c = msg->data[2];
-      TEAM_c += c;
-      c_print("TEAM_C: ", TEAM_c, red);
-      pa[value] = mkPA(value, c);
-      pa_print(pa[value]);
-
-      uint T_t = TEAM_t;
-
-      for (int i = 0; i < TEAM_t; i++)
+      if (init_agent[i] == true)
       {
-        if (init_agent[i] == true)
-        {
-          T_t--;
-        }
+        T_t--;
       }
-      // if (T_t == 0)
-      // {
-      //   // ho tutti i pa e il TEAM_c adesso devo selezionare i natblida
-      //   skip_tasks.clear();
-      //   for (auto i = 0; i < TEAM_t; i++)
-      //   {
-      //     for (auto i = 0; i < skip_tasks.size(); i++)
-      //     {
-      //       tasks.push_back(skip_tasks[i]);
-      //     }
-      //   //  conclave(pa[i]);
-      //   }
-
-      //   for (auto i = 0; i < skip_tasks.size(); i++)
-      //   {
-      //     tasks.push_back(skip_tasks[i]);
-      //   }
-      // }
     }
-    break;
+    // if (T_t == 0)
+    // {
+    //   // ho tutti i pa e il TEAM_c adesso devo selezionare i natblida
+    //   skip_tasks.clear();
+    //   for (auto i = 0; i < TEAM_t; i++)
+    //   {
+    //     for (auto i = 0; i < skip_tasks.size(); i++)
+    //     {
+    //       tasks.push_back(skip_tasks[i]);
+    //     }
+    //   //  conclave(pa[i]);
+    //   }
 
-    default:
-      break;
+    //   for (auto i = 0; i < skip_tasks.size(); i++)
+    //   {
+    //     tasks.push_back(skip_tasks[i]);
+    //   }
+    // }
+  }
+  break;
+
+  default:
+    break;
   }
 }
 
@@ -141,6 +141,7 @@ void TaskPlanner::t_generator()
       for (auto j = 0; j < 3; j++)
       {
         tasks.push_back(mkTask(i, o, d, dst_vertex[j]));
+        // task_set.insert(mkTask(i,o,d,dst_vertex[j]));
         o++;
       }
     }
@@ -163,25 +164,25 @@ void TaskPlanner::compute_route_to_delivery(ProcessAgent *pa)
   cout << "pa.mission.size(): " << el->mission.size() << "\n";
 
   step.id_vertex = src_vertex;
-  step.status = false;
+  step.status = true;
   el->route.push_back(step);
   auto dst = el->mission.front().dst;
   cout << "pa.mission.size(): " << el->mission.size() << "\n";
   int i = 0;
   switch (dst)
   {
-    case 11:
-      i = 3;
-      break;
-    case 16:
-      i = 5;
-      break;
-    case 21:
-      i = 7;
-      break;
-    default:
-      c_print("# ERR t.dst non esiste!", red);
-      break;
+  case 11:
+    i = 3;
+    break;
+  case 16:
+    i = 5;
+    break;
+  case 21:
+    i = 7;
+    break;
+  default:
+    c_print("# ERR t.dst non esiste!", red);
+    break;
   }
   // Route step;
   for (int j = 0; j < i; j++)
@@ -192,7 +193,7 @@ void TaskPlanner::compute_route_to_delivery(ProcessAgent *pa)
     pa->route.push_back(step);
   }
   step.id_vertex = dst;
-  step.status = false;
+  step.status = true;
   // tmp_route.push_back(step);
   pa->route.push_back(step);
   cout << el << "\n";
@@ -207,18 +208,18 @@ void TaskPlanner::compute_route_to_picktask(ProcessAgent *pa)
   auto dst = el->mission.back().dst;
   switch (dst)
   {
-    case 11:
-      i = 3;
-      break;
-    case 16:
-      i = 5;
-      break;
-    case 21:
-      i = 7;
-      break;
-    default:
-      c_print("# ERR t.dst non esiste!", red);
-      break;
+  case 11:
+    i = 3;
+    break;
+  case 16:
+    i = 5;
+    break;
+  case 21:
+    i = 7;
+    break;
+  default:
+    c_print("# ERR t.dst non esiste!", red);
+    break;
   }
   for (int j = i - 1; j >= 0; --j)
   {
@@ -406,6 +407,188 @@ void TaskPlanner::conclave(ProcessAgent &pa)
   // }
 }
 
+void TaskPlanner::ps_print(int s[], int size)
+{
+  for (int i = 1; i <= size; i++)
+    std::cout << s[i] - 1 << " ";
+  std::cout << std::endl;
+
+  // return;
+}
+
+/* s[] = gli indici, k e m = 0, n = size */
+
+// void TaskPlanner::powerSet(int s[], int k, int m, int n)
+// {
+//   if (m <= n)
+//   {
+//     s[k + 1] = m;
+//     ps_print(s, k + 1);
+//     powerSet(s, k + 1, m + 1, n);
+//     powerSet(s, k, m + 1, n);
+//   }
+// }
+/*
+#include <iostream>
+#include <set>
+
+template <class S>
+auto powerset(const S& s)
+{
+    std::set<S> ret;
+    ret.emplace();
+    for (auto&& e: s) {
+        std::set<S> rs;
+        for (auto x: ret) {
+            x.insert(e);
+            rs.insert(x);
+        }
+        ret.insert(begin(rs), end(rs));
+    }
+    return ret;
+}
+
+int main()
+{
+    std::set<int> s = {222, 3131, 25, 7};
+    auto pset = powerset(s);
+
+    for (auto&& subset: pset) {
+        std::cout << "{ ";
+        char const* prefix = "";
+        for (auto&& e: subset) {
+            std::cout << prefix << e;
+            prefix = ", ";
+        }
+        std::cout << " }\n";
+    }
+} */
+
+//
+/* 
+#include <iostream>
+#include <set>
+#include <vector>
+#include <iterator>
+#include <algorithm>
+typedef std::set<int> set_type;
+typedef std::set<set_type> powerset_type;
+ 
+powerset_type powerset(set_type const& set)
+{
+  typedef set_type::const_iterator set_iter;
+  typedef std::vector<set_iter> vec;
+  typedef vec::iterator vec_iter;
+ 
+  struct local
+  {
+    static int dereference(set_iter v) { return *v; }
+  };
+ 
+  powerset_type result;
+ 
+  vec elements;
+  do
+  {
+    set_type tmp;
+    std::transform(elements.begin(), elements.end(),
+                   std::inserter(tmp, tmp.end()),
+                   local::dereference);
+    result.insert(tmp);
+    if (!elements.empty() && ++elements.back() == set.end())
+    {
+      elements.pop_back();
+    }
+    else
+    {
+      set_iter iter;
+      if (elements.empty())
+      {
+        iter = set.begin();
+      }
+      else
+      {
+        iter = elements.back();
+        ++iter;
+      }
+      for (; iter != set.end(); ++iter)
+      {
+        elements.push_back(iter);
+      }
+    }
+  } while (!elements.empty());
+ 
+  return result;
+}
+ 
+int main()
+{
+  int values[4] = { 2, 3, 5, 7 };
+  set_type test_set(values, values+4);
+ 
+  powerset_type test_powerset = powerset(test_set);
+ 
+  for (powerset_type::iterator iter = test_powerset.begin();
+       iter != test_powerset.end();
+       ++iter)
+  {
+    std::cout << "{ ";
+    char const* prefix = "";
+    for (set_type::iterator iter2 = iter->begin();
+         iter2 != iter->end();
+         ++iter2)
+    {
+      std::cout << prefix << *iter2;
+      prefix = ", ";
+    }
+    std::cout << " }\n";
+  }
+} */
+
+set<set<Task>> TaskPlanner::powerSet(const set<Task> &t)
+{
+  typedef set<Task>::const_iterator set_iter;
+  typedef vector<set_iter> vec;
+  typedef vec::iterator vec_iter;
+
+  struct local
+  {
+    static Task dereference(set_iter v) { return *v; }
+  };
+
+  set<set<Task>> result;
+  vec elements;
+  do
+  {
+    set<Task> tmp;
+    transform(elements.begin(), elements.end(), inserter(tmp, tmp.end()), local::dereference);
+    result.insert(tmp);
+    if (!elements.empty() && ++elements.back() == t.end())
+    {
+      elements.pop_back();
+    }
+    else
+    {
+      set_iter iter;
+      if (elements.empty())
+      {
+        iter = t.begin();
+      }
+      else
+      {
+        iter = elements.back();
+        ++iter;
+      }
+      for (; iter != t.end(); ++iter)
+      {
+        elements.push_back(iter);
+      }
+    }
+  } while (!elements.empty());
+
+  return result;
+}
+
 void TaskPlanner::task_Callback(const patrolling_sim::TaskRequestConstPtr &tr)
 {
   bool single_task = true;
@@ -417,13 +600,14 @@ void TaskPlanner::task_Callback(const patrolling_sim::TaskRequestConstPtr &tr)
 
   if ((single_task) && (tasks.size() >= 1))
   {
-    Task t = *std::min_element(tasks.begin(), tasks.end());
+    Task t = *std::min_element(tasks.begin(), tasks.end(), pop_min_element);
+
     el->mission.push_back(t);
+
     compute_route_to_delivery(el);
-    
     compute_route_to_picktask(el);
-  
     int path_distance = compute_cost_of_route(el);
+
     tm.header.stamp = ros::Time().now();
     tm.ID_ROBOT = tr->ID_ROBOT;
     tm.take = true;
@@ -456,7 +640,8 @@ void TaskPlanner::task_Callback(const patrolling_sim::TaskRequestConstPtr &tr)
     tm.header.stamp = ros::Time().now();
     tm.ID_ROBOT = tr->ID_ROBOT;
     tm.take = false;
-    tm.demand = 1;
+    tm.demand = 0;
+    tm.item = 3;
     tm.go_home = true;
     tm.dst = initial_position[id];
     c_print("% publish on topic mission! go_home ID_robot: ", tm.ID_ROBOT, yellow);
@@ -471,39 +656,124 @@ void TaskPlanner::task_Callback(const patrolling_sim::TaskRequestConstPtr &tr)
 
 void TaskPlanner::mission_Callback(const patrolling_sim::MissionRequestConstPtr &mr)
 {
-  task_planner::Task tm;
   c_print("Request Mission! id_robot: ", mr->ID_ROBOT, green);
+
+  bool full = true;
+  task_planner::Task tm;
   uint id_robot = mr->ID_ROBOT;
+  uint tmp_c = TEAM_c;
+  auto el = &pa[id_robot];
+  //        ^ importante!
 
-  // route.clear();
-  pa[id_robot].mission.clear();
-  pa[id_robot].route.clear();
+  // estrapolo i natblida rispetto la capacita' totale
+  // poi calcolo tuttte le possibili combinazioni di task
 
-  conclave(pa[id_robot]);
+  // natblida.clear();
+  skip_tasks.clear();
 
-  bool flag = mr->flag;
-  tm.ID_ROBOT = id_robot;
-  tm.take = true;
-  tm.go_home = false;
-  // tm.item = pa[id_robot].total_item[0];
-  tm.demand = pa[id_robot].total_demand;
-
-  c_print("for ", yellow);
-
-  for (auto i = 0; i < pa[id_robot].route.size(); i++)
+  if ((full) && (tasks.size() > 0))
   {
-    cout << pa[id_robot] << " ";
-    tm.route.push_back(pa[id_robot].route[i].id_vertex);
-    tm.condition.push_back(pa[id_robot].route[i].status);
+    int ts = tasks.size();
+    for (auto i = 0; i < ts; i++)
+    {
+      Task t = *std::min_element(tasks.begin(), tasks.end(), pop_min_element);
+      c_print("t.demand: ", t.demand, magenta);
+      if (t.demand <= tmp_c)
+      {
+        tmp_c -= t.demand;
+        c_print("tmp_c: ", tmp_c, red);
+        t.take = true;
+        c_print("insert natblida, id_order:", t.order, green);
+        task_set.insert(t);
+        tasks.erase(find(tasks.begin(), tasks.end(), t));
+      }
+      else
+      {
+        if (task_set.size() <= 0)
+        {
+          skip_tasks.push_back(t);
+          tasks.erase(find(tasks.begin(), tasks.end(), t));
+          c_print("ERR! no allocato task", red);
+        }
+        full = false;
+      }
+    }
   }
-  cout << "\n";
 
-  c_print("pub mission", yellow);
-  // preparo i pa per i prossimi task
+  // ciclo di aggiornamento
+  for (auto i = 0; i < skip_tasks.size(); i++)
+  {
+    tasks.push_back(skip_tasks[i]);
+  }
 
-  pub_task.publish(tm);
-  ros::spinOnce();
-  sleep(1);
+  auto pset = powerSet(task_set);
+
+  cout << "pset.size(): " << pset.size() << "\n";
+  cout << "task_set.size(): " << task_set.size() << "\n";
+
+  uint id = 0;
+
+  bool f = false;
+
+  for (set<set<Task>>::iterator iter = pset.begin(); iter != pset.end(); ++iter)
+  {
+    std::cout << "{ ";
+    char const *prefix = "";
+    uint temp_c = 0;
+    ProcessTask pt;
+    for (set<Task>::iterator iter2 = iter->begin(); iter2 != iter->end(); ++iter2)
+    {
+      std::cout << prefix << *iter2;
+      prefix = ", ";
+      temp_c += iter2->demand;
+      pt.id = id;
+      pt.mission.push_back(*iter2);
+    }
+    id++;
+    std::cout << " } demand: " << temp_c << "\n";
+    pt.tot_demand = temp_c;
+    if (f)
+    {
+      v_pt.push_back(pt);
+    }
+    f = true;
+  }
+
+  for (auto i = 0; i < v_pt.size(); i++)
+  {
+    cout << "id: " << v_pt[i].id << "\n ";
+    for (auto j = 0; j < v_pt[i].mission.size(); j++)
+    {
+      cout << v_pt[i].mission[j].order << " ";
+    }
+    cout << "\n";
+  }
+
+  auto max_el = *std::max_element(pa, pa + TEAM_t);
+  cout << "elemento massimo " << max_el.CAPACITY << "\n";
+
+  int c = 0;
+  for (vector<ProcessTask>::iterator it = v_pt.begin(); it != v_pt.end(); ++it)
+  {
+    // if (it->tot_demand > max_el.CAPACITY)
+    // {
+      // cout << "dc: "<<c<<"\n";
+      v_pt.erase(find(v_pt.begin(), v_pt.end(), *it));
+      c++;
+    // }
+  }
+
+  c_print("porca troia dio cane ", magenta);
+
+  for (auto i = 1; i < v_pt.size(); i++)
+  {
+    cout << "id: " << v_pt[i].id << "\n ";
+    for (auto j = 0; j < v_pt[i].mission.size(); j++)
+    {
+      cout << v_pt[i].mission[j].order << " ";
+    }
+    cout << "\ndemand: " << v_pt[i].tot_demand << "\n";
+  }
 }
 
-}  // namespace taskplanner
+} // namespace taskplanner
