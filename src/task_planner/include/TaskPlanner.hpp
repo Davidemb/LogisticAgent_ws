@@ -1,12 +1,12 @@
 #pragma once
-#include <color_cout.hpp> //lib
+#include <color_cout.hpp>  //lib
 #include <fstream>
 #include <iostream>
 // #include <iostream>
 // #include <sys/type.h>
 #include <patrolling_sim/MissionRequest.h>
 #include <patrolling_sim/TaskRequest.h>
-#include <ros/package.h> //to get pkg path
+#include <ros/package.h>  //to get pkg path
 #include <ros/ros.h>
 #include <std_msgs/Bool.h>
 #include <std_msgs/Int16MultiArray.h>
@@ -16,8 +16,8 @@
 #include <algorithm>
 #include <iterator>
 // #include <algorithm>
-#include <vector>
 #include <set>
+#include <vector>
 
 #include "getgraph.hpp"
 
@@ -39,7 +39,7 @@ inline bool operator<(const Task &A, const Task &B)
   // messo <= per insert nel task_set.insert()
   // if (!A.take && !B.take)
   // {
-    return (A.dst <= B.dst) ? 1 : 0;
+  return (A.dst <= B.dst) ? 1 : 0;
   // }
 }
 
@@ -73,10 +73,10 @@ inline Task mkTask(int item, int order, int demand, int dst)
 {
   Task t;
 
-  t.take = false;    //  flag
-  t.item = item;     //  tipo di oggetto
-  t.order = order;   //  id dell' ordine
-  t.demand = demand; //  quantita' di oggetti
+  t.take = false;     //  flag
+  t.item = item;      //  tipo di oggetto
+  t.order = order;    //  id dell' ordine
+  t.demand = demand;  //  quantita' di oggetti
   t.dst = dst;
 
   return t;
@@ -84,7 +84,7 @@ inline Task mkTask(int item, int order, int demand, int dst)
 
 ostream &operator<<(ostream &os, const Task &t)
 {
-  os << "Task: "<< t.order;
+  os << "Task: " << t.order;
 }
 
 struct Route
@@ -98,8 +98,8 @@ struct ProcessAgent
   uint ID_ROBOT;
   uint CAPACITY;
   bool flag;
-  vector<Task> mission; // task da concatenare
-  vector<Route> route;  // vettore di vertici del path finale
+  vector<Task> mission;  // task da concatenare
+  vector<Route> route;   // vettore di vertici del path finale
   uint *dst;
   uint *total_item;
   uint total_demand;
@@ -107,7 +107,6 @@ struct ProcessAgent
 
 ostream &operator<<(ostream &os, const ProcessAgent &pa)
 {
-
   os << "\nProcessAgent id: " << pa.ID_ROBOT << "\n";
   for (auto i = 0; i < pa.mission.size(); i++)
   {
@@ -118,8 +117,7 @@ ostream &operator<<(ostream &os, const ProcessAgent &pa)
   }
   for (auto k = 0; k < pa.route.size(); k++)
   {
-    os << "- route: " << pa.route[k].id_vertex
-       << " [" << pa.route[k].status << "] "
+    os << "- route: " << pa.route[k].id_vertex << " [" << pa.route[k].status << "] "
        << "\n";
   }
   os << "\n";
@@ -133,7 +131,7 @@ inline ProcessAgent mkPA(uint id, uint c)
   pa.CAPACITY = c;
   pa.flag = false;
   pa.mission.clear();
-  pa.route.clear(); // route definitiva
+  pa.route.clear();  // route definitiva
   pa.dst;
   pa.total_demand = 0;
   pa.total_item;
@@ -151,13 +149,13 @@ inline bool operator<(const ProcessAgent &A, const ProcessAgent &B)
   return A.CAPACITY < B.CAPACITY ? 1 : 0;
 }
 
-
-
 struct ProcessTask
 {
   uint id;
   uint tot_demand;
+  uint path_distance;
   vector<Task> mission;
+  vector<uint> route; 
 };
 
 inline bool operator==(const ProcessTask &A, const ProcessTask &B)
@@ -188,17 +186,28 @@ public:
   uint nTask = 0;
   uint id = 0;
   uint src_vertex = 6;
-  uint dst_vertex[3] = {11, 16, 21};
-  uint under_pass[7] = {7, 9, 12, 14, 17, 19, 22};
-  uint upper_pass[7] = {5, 8, 10, 13, 15, 18, 20};
-  uint initial_position[4] = {2, 1, 0, 3};
+  uint dst_vertex[3] = { 11, 16, 21 };
+  uint under_pass[7] = { 7, 9, 12, 14, 17, 19, 22 };
+  uint upper_pass[7] = { 5, 8, 10, 13, 15, 18, 20 };
+  uint initial_position[4] = { 2, 1, 0, 3 };
+  // per ora statici senza funzioni
+  uint p_11[8] = { 6, 7, 9, 12, 11, 10, 8, 5 };
+  uint p_16[12] = { 6, 7, 9, 12, 14, 17, 16, 15, 13, 10, 8, 5 };
+  uint p_21[16] = { 6, 7, 9, 12, 14, 17, 19, 22, 21, 20, 18, 15, 13, 10, 8, 5 };
+  uint p_11_16[14] = { 6, 7, 9, 12, 11, 12, 14, 17, 16, 15, 13, 10, 8, 5 };
+  uint p_11_21[18] = { 6, 7, 9, 12, 11, 12, 14, 17, 19, 22, 21, 20, 18, 15, 13, 10, 8, 5 };
+  uint p_16_21[18] = { 6, 7, 9, 12, 14, 17, 19, 22, 21, 20, 18, 15, 13, 10, 8, 5 };
+
+  uint p_11_16_21[20] = { 6, 7, 9, 12, 11, 12, 14, 17, 16, 17, 19, 22, 21, 20, 18, 15, 13, 10, 8, 5 };
+  //----------------------------------------------------------------------------
+
   vector<Task> tasks;
   vector<Task> skip_tasks;
-  vector<Task> natblida; // tutte le combinazioni di task per il conclave()
+  vector<Task> natblida;  // tutte le combinazioni di task per il conclave()
   set<Task> task_set;
 
-  bool * init_agent;
-  ProcessAgent * pa; 
+  bool *init_agent;
+  ProcessAgent *pa;
   vector<ProcessTask> v_pt;
 
   Task operator[](int i) const
@@ -214,10 +223,13 @@ public:
   void pa_print(ProcessAgent &pa);
   void t_generator();
 
-  void compute_route_to_delivery(ProcessAgent* pa);
-  void compute_route_to_picktask(ProcessAgent* pa);
-  int compute_cost_of_route(ProcessAgent* pa);
+  void compute_route_to_delivery(ProcessAgent *pa);
+  void compute_route_to_picktask(ProcessAgent *pa);
+  int compute_cost_of_route(ProcessAgent *pa);
   void compute_opt_delivery();
+
+  int ccor(vector<uint> route);
+  uint compute_cycle_dst(vector<Task> mission);
 
   void conclave(ProcessAgent &pa);
   void ps_print(int s[], int size);
@@ -230,14 +242,14 @@ public:
   void mission_Callback(const patrolling_sim::MissionRequestConstPtr &msg);
 
 private:
-  ros::Subscriber sub_task; // quando un robot vuole un task
+  ros::Subscriber sub_task;  // quando un robot vuole un task
   ros::Subscriber sub_mission;
 
   ros::Subscriber sub_init;
-  ros::Publisher pub_task; // pubblicazione dell'array (pop dal vettore di tasks)
+  ros::Publisher pub_task;  // pubblicazione dell'array (pop dal vettore di tasks)
   ros::Publisher pub_results;
 };
 
-} // namespace taskplanner
+}  // namespace taskplanner
 
 #include "impl/TaskPlanner.i.hpp"
