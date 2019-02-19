@@ -174,8 +174,8 @@ void PatrolAgent::init(int argc, char **argv)
   sub_broadcast_msg = nh.subscribe<std_msgs::Int16MultiArray>(
       "broadcast_msg", 100, boost::bind(&PatrolAgent::broadcast_msg_Callback, this, _1));
 
-  pub_vertex_msg = nh.advertise<patrolling_sim::Vertex>(string3, 1);
-  pub_vertex_web = nh.advertise<patrolling_sim::VertexWeb>(string4, 1);
+  // pub_vertex_msg = nh.advertise<patrolling_sim::Vertex>(string3, 1);
+  // pub_vertex_web = nh.advertise<patrolling_sim::VertexWeb>(string4, 1);
 
   // sub_vertex_web = nh.subscribe<patrolling_sim::VertexWeb>(string4, 1,
   // boost::bind(&PatrolAgent::receive_vertex_web_Callback, this, _1));

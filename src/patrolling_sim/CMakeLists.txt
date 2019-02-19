@@ -7,6 +7,8 @@ add_compile_options(-std=c++11)
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
+message_generation
+std_msgs
   actionlib
   move_base_msgs
   nav_msgs
@@ -14,8 +16,6 @@ find_package(catkin REQUIRED COMPONENTS
 #  rospy
   roslib
   tf
-  message_generation
-  std_msgs
 )
 
 ## System dependencies are found with CMake's conventions
@@ -141,18 +141,18 @@ add_library(CycleOptAgent
 ## Declare a cpp executable 
 add_executable(LOGA src/LOGA_Agent.cpp)
 ## Specify libraries to link a library or executable target against
-add_dependencies(LOGA ${PROJECT_NAME}_gencpp)
+add_dependencies(LOGA ${PROJECT_NAME}_gencpp ${catkin_EXPORTED_TARGETS})
 target_link_libraries(LOGA PatrolAgent LogicAgent ${catkin_LIBRARIES})
 
 ## Declare a cpp executable 
 add_executable(CYCLE src/CYCLE_Agent.cpp)
-add_dependencies(CYCLE ${PROJECT_NAME}_gencpp)
+add_dependencies(CYCLE ${PROJECT_NAME}_gencpp ${catkin_EXPORTED_TARGETS})
 ## Specify libraries to link a library or executable target against
 target_link_libraries(CYCLE PatrolAgent CycleAgent ${catkin_LIBRARIES})
 
 ## Declare a cpp executable 
 add_executable(CYCLEOPT src/CYCLE_Opt_Agent.cpp)
-add_dependencies(CYCLEOPT ${PROJECT_NAME}_gencpp)
+add_dependencies(CYCLEOPT ${PROJECT_NAME}_gencpp ${catkin_EXPORTED_TARGETS})
 ## Specify libraries to link a library or executable target against
 target_link_libraries(CYCLEOPT PatrolAgent CycleOptAgent ${catkin_LIBRARIES})
 
@@ -162,12 +162,12 @@ target_link_libraries(CYCLEOPT PatrolAgent CycleOptAgent ${catkin_LIBRARIES})
  
 ## Declare a cpp executable 
 add_executable(monitor src/view_result.cpp src/getgraph.cpp)
-add_dependencies(monitor ${PROJECT_NAME}_gencpp)
+add_dependencies(monitor ${PROJECT_NAME}_gencpp ${catkin_EXPORTED_TARGETS})
 ## Specify libraries to link a library or executable target against
 target_link_libraries(monitor ${catkin_LIBRARIES})
 
 add_executable(GoToStartPos src/GoToStartPos.cpp)
-add_dependencies(GoToStartPos ${PROJECT_NAME}_gencpp)
+add_dependencies(GoToStartPos ${PROJECT_NAME}_gencpp ${catkin_EXPORTED_TARGETS})
 target_link_libraries(GoToStartPos ${catkin_LIBRARIES})
 
 ## Declare a cpp executable 

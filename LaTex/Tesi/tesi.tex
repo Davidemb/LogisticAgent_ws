@@ -1,0 +1,80 @@
+%\documentclass[11pt, twoside, titlepage, a4paper, openright]{report}
+\documentclass[12pt, oneside, titlepage, a4paper]{report}
+\usepackage{graphicx}
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{algpseudocode}
+\usepackage{amsthm}
+\usepackage{algorithm}
+\usepackage{rotating}
+\usepackage{enumerate}
+%\usepackage[Lenny]{fncychap}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,       % false: boxed links; true: colored links
+    linkcolor=black,%red,          % color of internal links
+    citecolor=black,%green,        % color of links to bibliography
+    filecolor=black,%magenta,      % color of file links
+    urlcolor=black%cyan           % color of external links
+}
+\usepackage [a4paper,left=2.5cm,bottom=2.5cm,right=2.5cm,top=3cm]{geometry}
+\usepackage{frontespizio}
+
+\newtheorem{mydef}{Definition} % definizioni <-----
+%\nofiles 
+%\fontoptionnormal 
+
+\usepackage{mathtools}
+
+\frenchspacing
+
+\begin{document}
+
+
+\begin{frontespizio}
+\Universita {Verona}
+\Dipartimento {Informatica}
+\Corso {Ingegneria e Scienze Informatiche}
+\Annoaccademico {2017-2018}
+\Titoletto {Tesi di Laurea Magistrale}
+\Titolo { \Large {Multi-Robot Task Allocation for logistic applications} }
+\Candidato [vr414572]{Davide Zorzi}
+\Relatore {Alessandro Farinelli}
+\Correlatore{Riccardo Muradore}
+\Rientro {1.5cm}
+\NCandidato {Candidato}
+\end{frontespizio}
+
+%\clearpage\null\thispagestyle{plain}\clearpage
+%\newpage
+
+%\preparefrontpage
+
+\tableofcontents
+
+\newpage
+
+\paragraph{Abstract}
+\input{chapter/abstract.tex}
+
+\chapter{Introduction}\label{chap:intro}
+\input{chapter/intro.tex}
+
+
+\chapter{Background and Related Works}\label{chap:related}
+
+\chapter{Problem}\label{chap:problem}
+
+\chapter{Solution}\label{chap:solution}
+
+\chapter{Experiments}\label{chap:experiments}
+
+\chapter{Conclusions}\label{chap:conclusions}
+
+\chapter*{Acknowledgements}
+\addcontentsline{toc}{chapter}{\protect\numberline{}Acknowledgements}
+
+%\bibliographystyle{splncs03}
+%\bibliography{biblio}
+
+\end{document}

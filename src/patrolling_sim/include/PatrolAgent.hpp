@@ -52,12 +52,12 @@
 #include <sstream>
 #include <string>
 #include <vector>
+
 #include "algorithms.hpp"  // <<< ALGO
 #include "getgraph.hpp"
 #include "message_types.hpp"
 
 #include <task_planner/Task.h>
-
 #include <patrolling_sim/MissionRequest.h>
 #include <patrolling_sim/TaskRequest.h>
 #include <patrolling_sim/Vertex.h>
@@ -176,7 +176,7 @@ protected:
   std::vector<Task> mission;
 
 
-  patrolling_sim::VertexWeb vertex_web_msg;
+  // patrolling_sim::VertexWeb vertex_web_msg;
 
   // std::vector<int> route;
   bool *ok;

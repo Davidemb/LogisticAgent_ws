@@ -1,25 +1,30 @@
 #pragma once
 #include <color_cout.hpp>  //lib
+// #include <partition.hpp>
 #include <fstream>
 #include <iostream>
-// #include <iostream>
-// #include <sys/type.h>
-#include <patrolling_sim/MissionRequest.h>
-#include <patrolling_sim/TaskRequest.h>
-#include <ros/package.h>  //to get pkg path
-#include <ros/ros.h>
-#include <std_msgs/Bool.h>
-#include <std_msgs/Int16MultiArray.h>
-#include <sys/stat.h>
-#include <task_planner/Mission.h>
-#include <task_planner/Task.h>
+#include <stdexcept>
 #include <algorithm>
 #include <iterator>
-// #include <algorithm>
 #include <set>
 #include <vector>
+#include <queue>
+#include <sstream>
+
+#include <ros/package.h>  //to get pkg path
+#include <ros/ros.h>
+#include <sys/stat.h>
+
+#include <std_msgs/Int16MultiArray.h>
+#include <std_msgs/Bool.h>
+#include <patrolling_sim/TaskRequest.h>
+#include <patrolling_sim/MissionRequest.h>
+#include <task_planner/Mission.h>
+#include <task_planner/Task.h>
+
 
 #include "getgraph.hpp"
+#include "partition.hpp"
 
 #define INIT_MSG 46
 
@@ -84,7 +89,7 @@ inline Task mkTask(int item, int order, int demand, int dst)
 
 ostream &operator<<(ostream &os, const Task &t)
 {
-  os << "Task: " << t.order;
+  os << "t: " << t.order;
 }
 
 struct Route
@@ -163,13 +168,18 @@ inline bool operator==(const ProcessTask &A, const ProcessTask &B)
   return A.id == B.id ? 1 : 0;
 }
 
-/* inline ProcessTask mkPT(uint d, uint dst[], uint item[], uint pd)
+inline bool operator<(const ProcessTask &A, const ProcessTask &B)
 {
-  ProcessTask pt;
+  return A.path_distance/A.tot_demand < B.path_distance/B.tot_demand ? 1 : 0;
+}
 
-  pt.demand = d;
-
-} */
+ostream &operator<<(ostream &os, const ProcessTask &t)
+{
+  os << "ProcessTask: " << "\n"
+     << " -       id: " << t.id << "\n"
+     << " -   demand:" <<t.tot_demand << "\n"
+     << "\n";
+}
 
 const std::string PS_path = ros::package::getPath("task_planner");
 
@@ -194,6 +204,7 @@ public:
   uint p_11[8] = { 6, 7, 9, 12, 11, 10, 8, 5 };
   uint p_16[12] = { 6, 7, 9, 12, 14, 17, 16, 15, 13, 10, 8, 5 };
   uint p_21[16] = { 6, 7, 9, 12, 14, 17, 19, 22, 21, 20, 18, 15, 13, 10, 8, 5 };
+  
   uint p_11_16[14] = { 6, 7, 9, 12, 11, 12, 14, 17, 16, 15, 13, 10, 8, 5 };
   uint p_11_21[18] = { 6, 7, 9, 12, 11, 12, 14, 17, 19, 22, 21, 20, 18, 15, 13, 10, 8, 5 };
   uint p_16_21[18] = { 6, 7, 9, 12, 14, 17, 19, 22, 21, 20, 18, 15, 13, 10, 8, 5 };
@@ -208,7 +219,10 @@ public:
 
   bool *init_agent;
   ProcessAgent *pa;
+
+
   vector<ProcessTask> v_pt;
+  priority_queue<ProcessTask> p_q;
 
   Task operator[](int i) const
   {
@@ -234,6 +248,8 @@ public:
   void conclave(ProcessAgent &pa);
   void ps_print(int s[], int size);
   set<set<Task>> powerSet(const set<Task> &t);
+
+  vector<Task> processedTask();
 
   void init(int argc, char **argv);
   void run();

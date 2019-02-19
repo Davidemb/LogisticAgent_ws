@@ -2,6 +2,9 @@
 
 namespace taskplanner
 {
+
+static bool OK = false;
+
 TaskPlanner::TaskPlanner(ros::NodeHandle &nh_)
 {
   sub_init = nh_.subscribe("init", 1, &TaskPlanner::init_Callback, this);
@@ -91,7 +94,7 @@ void TaskPlanner::init_Callback(const std_msgs::Int16MultiArrayConstPtr &msg)
       pa_print(pa[value]);
 
       uint T_t = TEAM_t;
-
+      
       for (int i = 0; i < TEAM_t; i++)
       {
         if (init_agent[i] == true)
@@ -99,24 +102,10 @@ void TaskPlanner::init_Callback(const std_msgs::Int16MultiArrayConstPtr &msg)
           T_t--;
         }
       }
-      // if (T_t == 0)
-      // {
-      //   // ho tutti i pa e il TEAM_c adesso devo selezionare i natblida
-      //   skip_tasks.clear();
-      //   for (auto i = 0; i < TEAM_t; i++)
-      //   {
-      //     for (auto i = 0; i < skip_tasks.size(); i++)
-      //     {
-      //       tasks.push_back(skip_tasks[i]);
-      //     }
-      //   //  conclave(pa[i]);
-      //   }
-
-      //   for (auto i = 0; i < skip_tasks.size(); i++)
-      //   {
-      //     tasks.push_back(skip_tasks[i]);
-      //   }
-      // }
+      if (T_t == 0)
+      {
+        OK = true;
+      }
     }
     break;
 
@@ -127,6 +116,8 @@ void TaskPlanner::init_Callback(const std_msgs::Int16MultiArrayConstPtr &msg)
 
 void TaskPlanner::run()
 {
+  // check partition:
+  // vector<ProcessTask> v_pt;
 }
 
 void TaskPlanner::t_generator()
@@ -233,70 +224,7 @@ void TaskPlanner::compute_route_to_picktask(ProcessAgent *pa)
 
 void TaskPlanner::compute_opt_delivery()
 {
-  /* //   uint dst_vertex[3] = { 11, 16, 21 };
-  if (dst.size() == 2)
-  {
-    if (dst[0] == 11 && dst[1] == 16)
-    {
-      route.push_back(6);
-      route.push_back(7);
-      route.push_back(9);
-      route.push_back(12);
-      route.push_back(11);
-      route.push_back(12);
-      route.push_back(14);
-      route.push_back(17);
-      route.push_back(16);
-    }
-    else if (dst[0] == 11 && dst[1] == 21)
-    {
-      route.push_back(6);
-      route.push_back(7);
-      route.push_back(9);
-      route.push_back(12);
-      route.push_back(11);
-      route.push_back(12);
-      route.push_back(14);
-      route.push_back(17);
-      route.push_back(19);
-      route.push_back(22);
-      route.push_back(21);
-    }
-    else if (dst[0] == 16 && dst[1] == 21)
-    {
-      route.push_back(6);
-      route.push_back(7);
-      route.push_back(9);
-      route.push_back(12);
-      route.push_back(14);
-      route.push_back(17);
-      route.push_back(16);
-      route.push_back(17);
-      route.push_back(19);
-      route.push_back(22);
-      route.push_back(21);
-    }
-  }
-  else if (dst.size() == 3)
-  {
-    route.push_back(6);
-    route.push_back(7);
-    route.push_back(9);
-    route.push_back(12);
-    route.push_back(11);
-    route.push_back(12);
-    route.push_back(14);
-    route.push_back(17);
-    route.push_back(16);
-    route.push_back(17);
-    route.push_back(19);
-    route.push_back(22);
-    route.push_back(21);
-  }
-  else
-  {
-    c_print("ERR!", red);
-  }  */
+  // TODO!
 }
 
 int TaskPlanner::compute_cost_of_route(ProcessAgent *pa)
@@ -439,138 +367,7 @@ void TaskPlanner::ps_print(int s[], int size)
   for (int i = 1; i <= size; i++)
     std::cout << s[i] - 1 << " ";
   std::cout << std::endl;
-
-  // return;
 }
-
-/* s[] = gli indici, k e m = 0, n = size */
-
-// void TaskPlanner::powerSet(int s[], int k, int m, int n)
-// {
-//   if (m <= n)
-//   {
-//     s[k + 1] = m;
-//     ps_print(s, k + 1);
-//     powerSet(s, k + 1, m + 1, n);
-//     powerSet(s, k, m + 1, n);
-//   }
-// }
-/*
-#include <iostream>
-#include <set>
-
-template <class S>
-auto powerset(const S& s)
-{
-    std::set<S> ret;
-    ret.emplace();
-    for (auto&& e: s) {
-        std::set<S> rs;
-        for (auto x: ret) {
-            x.insert(e);
-            rs.insert(x);
-        }
-        ret.insert(begin(rs), end(rs));
-    }
-    return ret;
-}
-
-int main()
-{
-    std::set<int> s = {222, 3131, 25, 7};
-    auto pset = powerset(s);
-
-    for (auto&& subset: pset) {
-        std::cout << "{ ";
-        char const* prefix = "";
-        for (auto&& e: subset) {
-            std::cout << prefix << e;
-            prefix = ", ";
-        }
-        std::cout << " }\n";
-    }
-} */
-
-//
-/*
-#include <algorithm>
-#include <iostream>
-#include <iterator>
-#include <set>
-#include <vector>
-typedef std::set<int> set_type;
-typedef std::set<set_type> powerset_type;
-
-powerset_type powerset(set_type const& set)
-{
-  typedef set_type::const_iterator set_iter;
-  typedef std::vector<set_iter> vec;
-  typedef vec::iterator vec_iter;
-
-  struct local
-  {
-    static int dereference(set_iter v) { return *v; }
-  };
-
-  powerset_type result;
-
-  vec elements;
-  do
-  {
-    set_type tmp;
-    std::transform(elements.begin(), elements.end(),
-                   std::inserter(tmp, tmp.end()),
-                   local::dereference);
-    result.insert(tmp);
-    if (!elements.empty() && ++elements.back() == set.end())
-    {
-      elements.pop_back();
-    }
-    else
-    {
-      set_iter iter;
-      if (elements.empty())
-      {
-        iter = set.begin();
-      }
-      else
-      {
-        iter = elements.back();
-        ++iter;
-      }
-      for (; iter != set.end(); ++iter)
-      {
-        elements.push_back(iter);
-      }
-    }
-  } while (!elements.empty());
-
-  return result;
-}
-
-int main()
-{
-  int values[4] = { 2, 3, 5, 7 };
-  set_type test_set(values, values+4);
-
-  powerset_type test_powerset = powerset(test_set);
-
-  for (powerset_type::iterator iter = test_powerset.begin();
-       iter != test_powerset.end();
-       ++iter)
-  {
-    std::cout << "{ ";
-    char const* prefix = "";
-    for (set_type::iterator iter2 = iter->begin();
-         iter2 != iter->end();
-         ++iter2)
-    {
-      std::cout << prefix << *iter2;
-      prefix = ", ";
-    }
-    std::cout << " }\n";
-  }
-} */
 
 set<set<Task>> TaskPlanner::powerSet(const set<Task> &t)
 {
@@ -621,13 +418,6 @@ set<set<Task>> TaskPlanner::powerSet(const set<Task> &t)
 
 uint TaskPlanner::compute_cycle_dst(vector<Task> mission)
 {
-  // 1 11
-  // 2 16
-  // 3 21
-  // 4 11_16
-  // 5 11_21
-  // 6 16_21
-  // 7 11_16_21
   uint res = 0;
   vector<uint> tmp_d;
   for (auto i = 0; i < mission.size(); i++)
@@ -663,6 +453,52 @@ uint TaskPlanner::compute_cycle_dst(vector<Task> mission)
   }
 
   return res;
+}
+
+vector<Task> TaskPlanner::processedTask()
+{
+  bool full = true;
+
+  uint tmp_c = TEAM_c;
+
+  skip_tasks.clear();
+
+  if ((full) && (tasks.size() > 0))
+  {
+    int ts = tasks.size();
+    for (auto i = 0; i < ts; i++)
+    {
+      Task t = *std::min_element(tasks.begin(), tasks.end(), pop_min_element);
+      c_print("t.demand: ", t.demand, magenta);
+      if (t.demand <= tmp_c)
+      {
+        tmp_c -= t.demand;
+        c_print("tmp_c: ", tmp_c, red);
+        t.take = true;
+        c_print("insert natblida, id_order:", t.order, green);
+        // task_set.insert(t);
+        natblida.push_back(t);
+        tasks.erase(find(tasks.begin(), tasks.end(), t));
+      }
+      else
+      {
+        if (task_set.size() <= 0)
+        {
+          skip_tasks.push_back(t);
+          tasks.erase(find(tasks.begin(), tasks.end(), t));
+          c_print("ERR! no allocato task", red);
+        }
+        full = false;
+      }
+    }
+  }
+  // ciclo di aggiornamento
+  for (auto i = 0; i < skip_tasks.size(); i++)
+  {
+    tasks.push_back(skip_tasks[i]);
+  }
+
+  return natblida;
 }
 
 void TaskPlanner::task_Callback(const patrolling_sim::TaskRequestConstPtr &tr)
@@ -741,46 +577,60 @@ void TaskPlanner::mission_Callback(const patrolling_sim::MissionRequestConstPtr 
   auto el = &pa[id_robot];
   //        ^ importante!
 
-  // estrapolo i natblida rispetto la capacita' totale
-  // poi calcolo tuttte le possibili combinazioni di task
+  auto nat = processedTask();
 
-  // natblida.clear();
-  skip_tasks.clear();
+  int size = nat.size();
 
-  if ((full) && (tasks.size() > 0))
+  // optional second argument is the partition size (1--size)
+
+  try
   {
-    int ts = tasks.size();
-    for (auto i = 0; i < ts; i++)
+    partition::iterator it(size);
+
+    while (true)
     {
-      Task t = *std::min_element(tasks.begin(), tasks.end(), pop_min_element);
-      c_print("t.demand: ", t.demand, magenta);
-      if (t.demand <= tmp_c)
+      auto all_part = *it[nat];
+
+      // cout << all_part << "\n";
+
+      auto as = all_part.size();
+
+      int c = 0;
+
+      for (auto i = 0; i < as; i++)
       {
-        tmp_c -= t.demand;
-        c_print("tmp_c: ", tmp_c, red);
-        t.take = true;
-        c_print("insert natblida, id_order:", t.order, green);
-        task_set.insert(t);
-        tasks.erase(find(tasks.begin(), tasks.end(), t));
-      }
-      else
-      {
-        if (task_set.size() <= 0)
+        auto part = all_part[i];
+        ProcessTask pt;
+        c++;
+        for (auto j = 0; j < part.size(); j++)
         {
-          skip_tasks.push_back(t);
-          tasks.erase(find(tasks.begin(), tasks.end(), t));
-          c_print("ERR! no allocato task", red);
+            pt.id = c;
+            pt.mission.push_back(part[j]);
+          cout << part[j] << " ";
         }
-        full = false;
+        cout << " \n";
+
+        v_pt.push_back(pt);
       }
+
+      ++it;
     }
   }
-
-  // ciclo di aggiornamento
-  for (auto i = 0; i < skip_tasks.size(); i++)
+  catch (std::overflow_error &)
   {
-    tasks.push_back(skip_tasks[i]);
   }
+
+  // partition::iterator it(ns);
+
+  // while (true)
+  // {
+  //   // std::cout << it << " : " << it.subsets() << " : ";
+  //   std::unique_ptr<std::vector<std::vector<char>>> part = it[v];
+
+  //   cout << *it[v] << "\n"; // <---------
+
+  //   ++it;
+  // }
 
   auto pset = powerSet(task_set);
 
@@ -859,13 +709,6 @@ void TaskPlanner::mission_Callback(const patrolling_sim::MissionRequestConstPtr 
   // destinazioni e di nuovo sorgente
   for (auto j = 0; j < v_pt.size(); j++)
   {
-    // 1 11       8
-    // 2 16       12
-    // 3 21       16
-    // 4 11_16    14
-    // 5 11_21    18
-    // 6 16_21    18
-    // 7 11_16_21 20
     uint id_path = compute_cycle_dst(v_pt[j].mission);
     switch (id_path)
     {
@@ -952,13 +795,38 @@ void TaskPlanner::mission_Callback(const patrolling_sim::MissionRequestConstPtr 
     cout << "route: ";
     for (auto k = 0; k < v_pt[i].route.size(); k++)
     {
-      cout << v_pt[i].route[k]<< " ";
+      cout << v_pt[i].route[k] << " ";
     }
     cout << "\n";
-    cout << "PD: "<<v_pt[i].path_distance << "\n";
+    cout << "PD: " << v_pt[i].path_distance << "\n";
+
+    p_q.push(v_pt[i]);
   }
 
+  auto t = p_q.top();
 
+  c_print("PQ: ", red);
+  while (!p_q.empty())
+  {
+    cout << p_q.top() << " ";
+    p_q.pop();
+  }
+  cout << "\n";
+
+  tm.ID_ROBOT = id_robot;
+  tm.demand = t.tot_demand;
+  tm.path_distance = t.path_distance;
+
+  for (auto i = 0; i < t.route.size(); i++)
+  {
+    cout << t.route[i] << " ";
+    tm.route.push_back(t.route[i]);
+  }
+  cout << "\n";
+
+  pub_task.publish(tm);
+  ros::spinOnce();
+  sleep(1);
 }
 
 }  // namespace taskplanner

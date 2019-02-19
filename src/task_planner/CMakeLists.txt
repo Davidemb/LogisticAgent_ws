@@ -2,11 +2,18 @@ cmake_minimum_required(VERSION 2.8.3)
 project(task_planner)
 
 add_compile_options(-std=c++11)
+# add_compile_options(-pedantic)
+# add_compile_options(-frepo)
+# add_compile_options(-ansi)
+# add_compile_options(-O3)
+
 
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
+message_generation
+std_msgs
 #   actionlib
 #   move_base_msgs
 #   nav_msgs
@@ -14,10 +21,8 @@ find_package(catkin REQUIRED COMPONENTS
 #  rospy
   roslib
 #   tf
-  message_generation
   # patrolling_sim
   # task_planner
-  std_msgs
 )
 
 ## System dependencies are found with CMake's conventions
@@ -118,10 +123,17 @@ include_directories(
 ########################################################################################################################
 
 # ## Declare a cpp executable 
-add_executable(TaskPlanner src/TaskPlanner.cpp src/getgraph.cpp)
+add_executable(TaskPlanner src/TaskPlanner.cpp src/getgraph.cpp src/partition.cpp)
 add_dependencies(TaskPlanner ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 # ## Specify libraries to link a library or executable target against
 target_link_libraries(TaskPlanner ${catkin_LIBRARIES})
+
+# ## Declare a cpp executable 
+add_executable(Part src/part_test.cpp src/partition.cpp)
+add_dependencies(Part ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+# ## Specify libraries to link a library or executable target against
+target_link_libraries(Part ${catkin_LIBRARIES})
+
 
 # ########################################################################################################################
 
