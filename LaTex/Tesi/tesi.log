@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2018.5.15)  19 FEB 2019 17:34
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2018.5.15)  19 FEB 2019 22:19
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -745,7 +745,7 @@ LaTeX Info: Redefining \nameref on input line 31.
 * \@reversemarginfalse
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
-<tesi-frn.pdf, id=44, pagebox=cropbox, 597.50829pt x 845.0471pt>
+<tesi-frn.pdf, id=60, pagebox=cropbox, 597.50829pt x 845.0471pt>
 File: tesi-frn.pdf Graphic file (type pdf)
 <use tesi-frn.pdf>
 Package pdftex.def Info: tesi-frn.pdf  used on input line 34. on input line 34.
@@ -778,50 +778,50 @@ Chapter 1.
 
 ]) [4]
 Chapter 2.
-[5
+(/home/dave/LogisticAgent_ws/LaTex/Tesi/chapter/background_related_works.tex) [5
 
 ]
 Chapter 3.
-[6
+(/home/dave/LogisticAgent_ws/LaTex/Tesi/chapter/formalism.tex) [6
 
-]
+] [7]
 Chapter 4.
-[7
-
-]
-Chapter 5.
 [8
 
 ]
-Chapter 6.
+Chapter 5.
 [9
 
 ]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 80.
- [10
+Chapter 6.
+[10
 
 ]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 80.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 83.
+ [11
+
+]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 83.
  (/home/dave/LogisticAgent_ws/LaTex/Tesi/tesi.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 80.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 80.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 83.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 83.
 Package rerunfilecheck Info: File `tesi.out' has not changed.
-(rerunfilecheck)             Checksum: E386C153841BE464934B454111DB76DF;567.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 80.
+(rerunfilecheck)             Checksum: C17D146BAF2042D23D61605325AE2A70;858.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 83.
  ) 
 Here is how much of TeX's memory you used:
- 8752 strings out of 492995
- 124744 string characters out of 6135073
- 235377 words of memory out of 5000000
- 12156 multiletter control sequences out of 15000+600000
+ 8767 strings out of 492995
+ 125150 string characters out of 6135073
+ 235384 words of memory out of 5000000
+ 12160 multiletter control sequences out of 15000+600000
  8916 words of font info for 32 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  37i,10n,39p,308b,359s stack positions out of 5000i,500n,10000p,200000b,80000s
-</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmcsc10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb>
-Output written on /home/dave/LogisticAgent_ws/LaTex/Tesi/tesi.pdf (11 pages, 92384 bytes).
+</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmcsc10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb>
+Output written on /home/dave/LogisticAgent_ws/LaTex/Tesi/tesi.pdf (12 pages, 132703 bytes).
 PDF statistics:
- 153 PDF objects out of 1000 (max. 8388607)
- 131 compressed objects within 2 object streams
- 24 named destinations out of 1000 (max. 500000)
- 86 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 194 PDF objects out of 1000 (max. 8388607)
+ 167 compressed objects within 2 object streams
+ 29 named destinations out of 1000 (max. 500000)
+ 118 words of extra memory for PDF output out of 10000 (max. 10000000)
 

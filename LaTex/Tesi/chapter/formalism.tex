@@ -1,0 +1,39 @@
+In this section I detail my reference scenario for MRS coordination and formalization problem.
+
+\section{Description}
+My reference scenario is based on a warehouse that stores items of various types.
+Such items must bo composed together to satisfy orders that arrive based on customers’ demand.
+The items of various types are stored in particular section of the building (\textit{loading bay})
+and must be trasported to a set of \textit{unloading bays} where such items are then 
+packed together by human operators. The set of items to be trasported and where they should
+go depends on the orders.
+In my domain a set of robots is responsible for for transporting items from
+the loading bays to the unloading bays and the system goal is to maximize the
+throughput of the orders, i.e., to maximize the number of orders completed in
+the unit of time. Now, robots involved in transportation tasks move around
+the warehouse and are likely to interfere when they move in close proximity,
+and this can become a major source of inefficiency (e.g., robots must slow down
+and they might even collide causing serious delays in the system).
+Hence, a crucial aspect to maintain highly efficient and safe operations is to minimize the
+possible spatial interferences between robots. Specifically, here we propose to
+take this interferences into account in the task assignment process and assign
+tasks to robots so to reduce the possible interferences among the transportation
+robots.
+
+
+\section{Fomalization}
+In this section I formalize the MRS coordination problem described above as a task allocation problem
+where the robots must be allocated to transportation tasks. In my formalization if 
+transportation tasks are more than the available robots at each time step only a subset 
+of tasks will be allocated. However, since the task allocation process is repeated over time robots 
+effectively serve a sequence of tasks. 
+In more detail, my model considers a set of items of different types $E = \{ e_1,...,e_N\}$,
+stored in a specific loading bay ($L$). The warehouse must serve a set of orders 
+$O=\{o_1,...,o_M\}$. Orders are processed in one of the unloading bays ($U_i$).
+Each order is defined by a vector od demand for each item type (the number of required 
+items to close the order). Hence, $o_j = < d_{1,j},...,d_{N,j}>$, where $d_{i,j}$ is the 
+demand for order $j$ of items of type $i$. When an order is finished a new one arrives,
+and we assume to have no knowledge on future orders.
+The orders induce a set of $N \times M$ trasportation tasks $T = {t_{i,j}}$, with 
+$t_{i,j} = < d_{i,j}, P_{i,j}>$, where $t_{i,j}$ defines the task of transporting 
+$d_{i,j}$ items of type $i$ for order $o_j$ (hence to unloading bay $U_j$).

@@ -570,7 +570,6 @@ void TaskPlanner::mission_Callback(const patrolling_sim::MissionRequestConstPtr 
 {
   c_print("Request Mission! id_robot: ", mr->ID_ROBOT, green);
 
-  bool full = true;
   task_planner::Task tm;
   uint id_robot = mr->ID_ROBOT;
   uint tmp_c = TEAM_c;
