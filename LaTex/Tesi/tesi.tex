@@ -1,5 +1,5 @@
 %\documentclass[11pt, twoside, titlepage, a4paper, openright]{report}
-\documentclass[12pt, oneside, titlepage, a4paper]{report}
+\documentclass[12pt, oneside, titlepage, a4paper, openright]{report}
 \usepackage{graphicx}
 \usepackage[english]{babel}
 \usepackage[utf8]{inputenc}
@@ -19,8 +19,21 @@
 }
 \usepackage [a4paper,left=2.5cm,bottom=2.5cm,right=2.5cm,top=3cm]{geometry}
 \usepackage{frontespizio}
-
+\linespread{1.3}
 \newtheorem{mydef}{Definition} % definizioni <-----
+\usepackage{listings}
+\lstset{
+	language=C++,
+	basicstyle=\small\ttfamily, 
+	numbers=left,
+	numberstyle=\tiny,
+	frame=tb,
+	columns=fullflexible,
+	showstringspaces=false
+}
+\usepackage{multicol}
+% \usepackage{multicol}
+
 %\nofiles 
 %\fontoptionnormal 
 
@@ -69,10 +82,16 @@
 
 
 \chapter{Solution}\label{chap:solution}
+\input{chapter/solution.tex}
+
+\chapter{Empirical Setting} \label{chap:ros}
+\input{chapter/ros.tex}
 
 \chapter{Experiments}\label{chap:experiments}
+\input{chapter/experiments.tex}
 
-\chapter{Conclusions}\label{chap:conclusions}
+\chapter{Conclusions and Future Work}\label{chap:conclusions}
+\input{chapter/coclusions.tex}
 
 \chapter*{Acknowledgements}
 \addcontentsline{toc}{chapter}{\protect\numberline{}Acknowledgements}

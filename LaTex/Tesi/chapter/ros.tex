@@ -1,0 +1,257 @@
+Writing software for robots is difficult, particularly as the scale and scope
+of robotics continues to grow. Different types of robots can have wildly varying
+hardware, making code reuse non trivial. On top of this, the magnitude of
+the required code can be daunting, as it must contain a deep stack starting
+from driver-level software and continuing up through perception, abstract
+reasoning, and beyond.
+
+\section{Robot Operating System (ROS)}
+Our choice fell on ROS (Robot Operating System) which is a widespread
+open-source, meta-operating system for a robot. It provides several services
+that are commonly offered by an operating system, including hardware
+abstraction, low-level device control, implementation of commonly-used functionality,
+message-passing between processes, and package management. It is
+worth noting that the full source code of ROS is publicly available, ROS is
+distributed under the terms of the BSD license, which allows the development
+of both non-commercial and commercial projects.
+
+\subsection{Nomencalture and Architecture}
+In this section we simply outline the terminology adopted in the ROS
+community to allow an easy comprehension of the following discussion.
+\\
+The fundamental concepts of the ROS implementation are \textit{nodes}, \textit{messages},
+\textit{topics}, and \textit{services}.
+In ROS a system is typically comprised of many nodes. In this context, the term
+\textit{"node"} is interchangeable with \textit{"software module"}. The use of term 
+\textit{"node"} arises from visualization of ROS-based systems at runtime:
+when many nodes are running, it is convenient to render the peer-to-peer communications
+as a graph, called the \textit{computation graph}, with process as graph nodes and 
+the peer-to-peer links as arcs.
+\\
+Nodes communicate with each other by passing \textit{messages}. A message is a
+a strictly typed data structure. Standard primitive types (integer, floating
+point, boolean, etc.) are supported, as are arrays of primitive types and
+constants. Messages can be composed of other messages, and arrays of other
+messages, nested arbitrarily deep. Messages descriptions are usually stored
+in \texttt{my\_package/msg/MyMessageType.msg} and define the data structures for
+messages sent in ROS, called custom message.
+\\ 
+Here is a simple example of a \texttt{*.msg} file that uses a header, some integer primitive,
+arrays of integer and array of other \texttt{*.msg} files. The message is specified 
+in a language neutral interface definition language (IDL) which uses very short text 
+files to describe its fields and allow an easy composition of complex messages:
+\begin{multicols}{2}
+\begin{lstlisting}
+    Header      header
+    bool        take
+    bool        go_home
+    uint32      ID_ROBOT
+    uint32      item
+    uint32      order
+    uint32      demand
+    uint32      dst
+    uint32      path_distance
+    uint32[]    route
+\end{lstlisting}
+The custom message above rappresent a \texttt{Task.msg} which contains the basic
+information to define a task in the system. Instead, the custom message below, rappresent 
+a \texttt{Mission.msg} which is composed of task messages addressed to a specific robot.  
+\begin{lstlisting}
+    Header      header
+    uint32      ID_ROBOT
+    uint32      capacity
+    Task[]      Mission
+\end{lstlisting}
+\end{multicols}
+
+These simple high-level message definitions is then parsed and processed by a code 
+generator module, one for each support language (currentrly C++), which generates 
+native implementations that “feel” like native objects, and are automatically 
+serialized and deserialized by ROS as messages are sent and received.
+\\
+A node sends a message by publishing it to a given \textit{topic}, which is simply
+a string such as \texttt{/topic} or \texttt{/pkg/topic}. A node that is interested
+in a certain kind of data will subscribe to the appropriate topic. There may be multiple
+concurrent publishers and subscribers for a single topic, and a single node
+may publish and/or subscribe to multiple topics. In general, publishers and
+subscribers are not aware of each other existence (decoupling). 
+% Figure TODO: report an example \textit{computation graph}
+It is important to point out that because nodes connect to each other at runtime,
+the graph can be \textit{dynamically} modified.
+\\
+Although the topic-based publish-subscribe model is a flexible communications
+paradigm, its “broadcast” routing scheme is not appropriate forsynchronous transactions,
+which can simplify the design of some nodes.
+For this purpose ROS includes the concept of \textit{services}, defined by a string name
+and a pair of strictly typed messages: one for the request and one for the
+response. A providing node offers a service under a name and a client uses
+the service by sending the request message and awaiting the reply.
+\\
+As for the topic-based paradigm a high-level description of a service is then
+parsed and processed by a code generator module which generates the corresponding
+native implementation in a supported target language.
+Usually C++ messages are generated in \texttt{my\_package/msg\_gen/cpp/include/my\_package},
+while C++ services are generated in \texttt{my\_package/srv\_gen/cpp/include/my\_package}.
+% TODO figura di differenze tra topic e service
+To support collaborative development, the ROS software system is organized into \textit{packages}.
+A ROS package is simply a directory which contains an XML file describing the package
+and stating any dependencies. A collection of ROS packages is a directory tree with ROS
+packages at the leaves: a ROS package repository may thus contain an arbitrarily complex
+scheme of subdirectories. This structure is primarily meant to partition the building of 
+ROS-based software into small, manageable chunks of functionality.
+\\
+In ROS, a \textit{stack} of software is a cluster of nodes that does something
+coherent as a whole, as is illustrated in the simple \textit{navigation} example reported
+in Figure. %TODO 
+To allow for “packaged” functionality such as a navigation system, ROS provides
+a tool called \texttt{roslaunch}, which reads an XML-like description of a graph and instantiates
+the graph on the cluster, optionally on specific hosts.
+Thus ROS is able to instantiate a set of nodes with a single
+command, once the nodes are described in a \texttt{launch} file, the simple usage
+is:
+\begin{lstlisting}
+    roslaunch [package] [filename.launch]
+\end{lstlisting}
+
+\subsection{The Stage 2D Simulation}
+For visualization purposes we adopted the Stage 2D robot simulator
+which provides a virtual world populated by mobile robots and enriched with
+sensors, actuators and both approximate and exact localization. Stage is
+designed to be sufficiently simple to allow an easy set-up but at the same time
+it is intended to be just realistic enough to enable users to move controllers
+directly between Stage robots and real robots. 
+\\
+Stage is made available in ROS with the \texttt{stageros} node which wraps the 
+simulator and exposes its functionality to the rest of the system. The following 
+code reports how it is launched:
+
+\begin{lstlisting}
+<?xml version="1.0" encoding="UTF-8" ?>
+<launch>
+    <arg name="map" default="grid" />
+    <arg name="stage_pkg" default="stage_ros"/>     <!-- stage_pkg:=stage for ROS Groovy -->
+    <arg name="custom_stage" default="false" />
+    <group unless="$(arg custom_stage)"> 
+        <node name="stageros" pkg="$(arg stage_pkg)" type="stageros" 
+        args="$(find patrolling_sim)/maps/$(arg map)/$(arg map).world" output="screen" />
+    </group>
+    <group if="$(arg custom_stage)">   
+        <node name="stageros" pkg="$(arg stage_pkg)" type="stageros" 
+        args="$(find patrolling_sim)/maps/$(arg map)/$(arg map).world" output="screen">
+            <param name="base_frame" value="base_link" />
+            <param name="laser_topic" value="base_scan" />
+            <param name="laser_frame" value="base_laser_link" />
+        </node> 
+    </group>
+</launch>
+\end{lstlisting}
+
+The \texttt{*.world} file specified tells Stage everything about the world,
+from obstacles (usually represented via a \texttt{*.pgm} image), to robots and other 
+objects. In particular, after the definition of some parameters related to general 
+camera and GUI options, we specify the static map on which the robot has to navigate 
+(we will describe its characteristics shortly) and finally we include two specific 
+files which aims defining the properties of respectively the laser sensor and the robot.
+The last instruction just throws the robot in the map by indicating it's $x$, $y$, $z$
+and $\theta$ coordinates, this is summarized in:
+\begin{lstlisting}
+include "../hokuyo.inc"
+include "../crobot.inc"
+include "../floorplan.inc"
+include "../cpoint.inc"
+window
+( size   [ 460 180 1 ]         
+  rotate [ 0.000 0.000 ]    
+  center [ 11.5 4.0 ]   
+  scale 20
+  show_data 1)
+floorplan
+( size [23.0 8.0  1] 
+  pose [11.5 4.0 0 0]
+  bitmap "model5.pgm")
+include "robots.inc"
+include "point.inc"
+\end{lstlisting}
+The first included file (hokuyo.inc) defines the physical and technical
+properties of the particular laser range finders support that we adopt: we
+define it to have a circular shape and to be mounted on top of the robot base
+which has the same circular shape. As for the sensor properties we specify
+the following parameters described in:
+\begin{lstlisting}
+define hokuyo ranger
+(
+  sensor(           
+    range [ 0.0  5.0 ] # the max/min range reported by the scanner, in meters.
+    fov 230            # the angular field of view of the scanner, in degrees.
+    samples 1081       # the number of laser samples per scan.
+    )
+  # model properties
+  color "orange"
+  size [ 0.1 0.1 0.1 ]
+  block( points 4
+    point[0] [0 0]
+    point[1] [0 1]
+    point[2] [1 1]
+    point[3] [1 0]
+    z [0 1])
+)
+\end{lstlisting}
+The second included file (crobot.inc) defines the physical properties of
+the robot, as mentioned above we define it to have a circular shape which
+is suffice for our purpose of having a mobile camera that moves around the world:
+\begin{lstlisting}
+    define crobot position(
+    size [0.3 0.3 0.2]
+    origin [0 0 0 0]
+    gui_nose 0
+    drive "diff"
+
+    # This block approximates a circular shape of a Robot
+    block( points 16
+        point[0] [ 0.225 0.000 ]
+        point[1] [ 0.208 0.086 ]
+        point[2] [ 0.159 0.159 ]
+        point[3] [ 0.086 0.208 ]
+        point[4] [ 0.000 0.225 ]
+        point[5] [ -0.086 0.208 ]
+        point[6] [ -0.159 0.159 ]
+        point[7] [ -0.208 0.086 ]
+        point[8] [ -0.225 0.000 ]
+        point[9] [ -0.208 -0.086 ]
+        point[10] [ -0.159 -0.159 ]
+        point[11] [ -0.086 -0.208 ]
+        point[12] [ -0.000 -0.225 ]
+        point[13] [ 0.086 -0.208 ]
+        point[14] [ 0.159 -0.159 ]
+        point[15] [ 0.208 -0.086 ]
+        z [0 1]
+    )
+    
+    hokuyo( pose [0.15 0 -0.1 0] )
+
+    # Report error-free position in world coordinates
+    localization "gps"
+    #localization_origin [ 0 0 0 0 ]
+
+    # Some more realistic localization error
+    localization "odom"
+    odom_error [ 0.01 0.01 0.0 0.1 ]
+)
+\end{lstlisting}
+% TODO sistemare gli spazzi bianchi
+
+\section{Localization and Navigation}
+
+\subsection{Mapping}
+\subsection{Localization}
+\subsection{Navigation}
+\subsection*{Trasformations}
+\subsection*{Sensor Information}
+\subsection*{Odometry Informations}
+\subsection*{Base Controller}
+\subsection{Global and Local planner algorithms}
+\subsection*{Global planner}
+\subsection*{Local planner}
+\section{Cost-maps configurations}
+\section{Recovery behaviours}
+

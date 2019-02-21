@@ -2,7 +2,6 @@
 
 namespace taskplanner
 {
-
 static bool OK = false;
 
 TaskPlanner::TaskPlanner(ros::NodeHandle &nh_)
@@ -40,6 +39,27 @@ void TaskPlanner::pa_print(ProcessAgent &pa)
     cout << pa.route[i].id_vertex << " ";
   }
   cout << "\n";
+}
+
+void TaskPlanner::ct_print(CandidateTask &ct)
+{
+  cout << "\nCandidateTask: \n"
+       << " -        id: " << ct.id << "\n"
+       << " -    subset: " << ct.subset << "\n"
+       << " - candidate: ";
+  cout << "{";
+  for (auto i = 0; i < ct.subset; i++)
+  {
+    auto el = ct.vv_t[i];
+    cout << "(";
+    for (auto j = 0; j < el.size()-1; j++)
+    {
+      cout << el[j]<<" ";
+    }
+    cout << el.back() <<")";
+  }
+  cout << "}"
+       << "\n";
 }
 
 void TaskPlanner::init(int argc, char **argv)
@@ -83,34 +103,34 @@ void TaskPlanner::init_Callback(const std_msgs::Int16MultiArrayConstPtr &msg)
 
   switch (type_msg)
   {
-    case (INIT_MSG):
-    {
-      // inizializzazione dei robot acquisisco Capacity
-      init_agent[value] = true;
-      auto c = msg->data[2];
-      TEAM_c += c;
-      c_print("TEAM_C: ", TEAM_c, red);
-      pa[value] = mkPA(value, c);
-      pa_print(pa[value]);
+  case (INIT_MSG):
+  {
+    // inizializzazione dei robot acquisisco Capacity
+    init_agent[value] = true;
+    auto c = msg->data[2];
+    TEAM_c += c;
+    c_print("TEAM_C: ", TEAM_c, red);
+    pa[value] = mkPA(value, c);
+    pa_print(pa[value]);
 
-      uint T_t = TEAM_t;
-      
-      for (int i = 0; i < TEAM_t; i++)
+    uint T_t = TEAM_t;
+
+    for (int i = 0; i < TEAM_t; i++)
+    {
+      if (init_agent[i] == true)
       {
-        if (init_agent[i] == true)
-        {
-          T_t--;
-        }
-      }
-      if (T_t == 0)
-      {
-        OK = true;
+        T_t--;
       }
     }
-    break;
+    if (T_t == 0)
+    {
+      OK = true;
+    }
+  }
+  break;
 
-    default:
-      break;
+  default:
+    break;
   }
 }
 
@@ -162,18 +182,18 @@ void TaskPlanner::compute_route_to_delivery(ProcessAgent *pa)
   int i = 0;
   switch (dst)
   {
-    case 11:
-      i = 3;
-      break;
-    case 16:
-      i = 5;
-      break;
-    case 21:
-      i = 7;
-      break;
-    default:
-      c_print("# ERR t.dst non esiste!", red);
-      break;
+  case 11:
+    i = 3;
+    break;
+  case 16:
+    i = 5;
+    break;
+  case 21:
+    i = 7;
+    break;
+  default:
+    c_print("# ERR t.dst non esiste!", red);
+    break;
   }
   // Route step;
   for (int j = 0; j < i; j++)
@@ -199,18 +219,18 @@ void TaskPlanner::compute_route_to_picktask(ProcessAgent *pa)
   auto dst = el->mission.back().dst;
   switch (dst)
   {
-    case 11:
-      i = 3;
-      break;
-    case 16:
-      i = 5;
-      break;
-    case 21:
-      i = 7;
-      break;
-    default:
-      c_print("# ERR t.dst non esiste!", red);
-      break;
+  case 11:
+    i = 3;
+    break;
+  case 16:
+    i = 5;
+    break;
+  case 21:
+    i = 7;
+    break;
+  default:
+    c_print("# ERR t.dst non esiste!", red);
+    break;
   }
   for (int j = i - 1; j >= 0; --j)
   {
@@ -362,13 +382,6 @@ void TaskPlanner::conclave(ProcessAgent &pa)
   // }
 }
 
-void TaskPlanner::ps_print(int s[], int size)
-{
-  for (int i = 1; i <= size; i++)
-    std::cout << s[i] - 1 << " ";
-  std::cout << std::endl;
-}
-
 set<set<Task>> TaskPlanner::powerSet(const set<Task> &t)
 {
   typedef set<Task>::const_iterator set_iter;
@@ -469,20 +482,20 @@ vector<Task> TaskPlanner::processedTask()
     for (auto i = 0; i < ts; i++)
     {
       Task t = *std::min_element(tasks.begin(), tasks.end(), pop_min_element);
-      c_print("t.demand: ", t.demand, magenta);
+      // c_print("t.demand: ", t.demand, magenta);
       if (t.demand <= tmp_c)
       {
         tmp_c -= t.demand;
-        c_print("tmp_c: ", tmp_c, red);
+        // c_print("tmp_c: ", tmp_c, red);
         t.take = true;
-        c_print("insert natblida, id_order:", t.order, green);
+        // c_print("insert natblida, id_order:", t.order, green);
         // task_set.insert(t);
         natblida.push_back(t);
         tasks.erase(find(tasks.begin(), tasks.end(), t));
       }
       else
       {
-        if (task_set.size() <= 0)
+        if (natblida.size() <= 0)
         {
           skip_tasks.push_back(t);
           tasks.erase(find(tasks.begin(), tasks.end(), t));
@@ -499,6 +512,65 @@ vector<Task> TaskPlanner::processedTask()
   }
 
   return natblida;
+}
+
+void TaskPlanner::prepare_missions()
+{
+  bool finish_task = true;
+  if (finish_task)
+  {
+    auto candidate = processedTask();
+    natblida.clear();
+    auto c_size = candidate.size();
+    try
+    {
+      partition::iterator it(c_size);
+      int id = 0;
+      while (true)
+      {
+        auto all_part = *it[candidate];
+        auto subset = it.subsets();
+        auto as = all_part.size();
+
+        CandidateTask ct;
+        ct.id = id;
+        ct.subset = subset;
+        ct.vv_t.resize(subset);
+
+        id++;
+
+        for (auto k = 0; k < subset; k++)
+        {
+          auto part = all_part[k];
+          for (auto j = 0; j < part.size(); j++)
+          {
+            ct.vv_t[k].push_back(part[j]);
+          }
+        }
+
+        ++it;
+
+        v_ct.push_back(ct);
+        ct_print(ct);
+      }
+    }
+    catch (std::overflow_error &)
+    {
+    }
+  }
+}
+
+void TaskPlanner::compute_best_subtask()
+{
+  // prepare_missions();
+  // for (auto i = 0 ; i < v_ct.size(); i++)
+  // {
+  //   auto el = v_ct[i];
+  //   for (auto j = 0; j < el.subset; j++)
+  //   {
+  //     auto tmp_el = el[j];
+  //   }
+  // }
 }
 
 void TaskPlanner::task_Callback(const patrolling_sim::TaskRequestConstPtr &tr)
@@ -570,262 +642,252 @@ void TaskPlanner::mission_Callback(const patrolling_sim::MissionRequestConstPtr 
 {
   c_print("Request Mission! id_robot: ", mr->ID_ROBOT, green);
 
-  task_planner::Task tm;
-  uint id_robot = mr->ID_ROBOT;
-  uint tmp_c = TEAM_c;
-  auto el = &pa[id_robot];
-  //        ^ importante!
+  prepare_missions();
 
-  auto nat = processedTask();
+  // task_planner::Task tm;
+  // uint id_robot = mr->ID_ROBOT;
+  // uint tmp_c = TEAM_c;
+  // auto el = &pa[id_robot];
+  // //        ^ importante!
 
-  int size = nat.size();
+  // auto nat = processedTask();
 
-  // optional second argument is the partition size (1--size)
+  // int size = nat.size();
 
-  try
-  {
-    partition::iterator it(size);
+  // // optional second argument is the partition size (1--size)
 
-    while (true)
-    {
-      auto all_part = *it[nat];
-
-      // cout << all_part << "\n";
-
-      auto as = all_part.size();
-
-      int c = 0;
-
-      for (auto i = 0; i < as; i++)
-      {
-        auto part = all_part[i];
-        ProcessTask pt;
-        c++;
-        for (auto j = 0; j < part.size(); j++)
-        {
-            pt.id = c;
-            pt.mission.push_back(part[j]);
-          cout << part[j] << " ";
-        }
-        cout << " \n";
-
-        v_pt.push_back(pt);
-      }
-
-      ++it;
-    }
-  }
-  catch (std::overflow_error &)
-  {
-  }
-
-  // partition::iterator it(ns);
-
-  // while (true)
+  // try
   // {
-  //   // std::cout << it << " : " << it.subsets() << " : ";
-  //   std::unique_ptr<std::vector<std::vector<char>>> part = it[v];
+  //   partition::iterator it(size);
 
-  //   cout << *it[v] << "\n"; // <---------
+  //   while (true)
+  //   {
+  //     auto all_part = *it[nat];
 
-  //   ++it;
+  //     // cout << all_part << "\n";
+
+  //     auto as = all_part.size();
+
+  //     int c = 0;
+
+  //     for (auto i = 0; i < as; i++)
+  //     {
+  //       auto part = all_part[i];
+  //       ProcessTask pt;
+  //       c++;
+  //       for (auto j = 0; j < part.size(); j++)
+  //       {
+  //         pt.id = c;
+  //         pt.mission.push_back(part[j]);
+  //         cout << part[j] << " ";
+  //       }
+  //       cout << " \n";
+
+  //       v_pt.push_back(pt);
+  //     }
+
+  //     ++it;
+  //   }
+  // }
+  // catch (std::overflow_error &)
+  // {
   // }
 
-  auto pset = powerSet(task_set);
+  // auto pset = powerSet(task_set);
 
-  cout << "pset.size(): " << pset.size() << "\n";
-  cout << "task_set.size(): " << task_set.size() << "\n";
+  // cout << "pset.size(): " << pset.size() << "\n";
+  // cout << "task_set.size(): " << task_set.size() << "\n";
 
-  uint id = 0;
+  // uint id = 0;
 
-  bool f = false;
+  // bool f = false;
 
-  for (set<set<Task>>::iterator iter = pset.begin(); iter != pset.end(); ++iter)
-  {
-    std::cout << "{ ";
-    char const *prefix = "";
-    uint temp_c = 0;
-    ProcessTask pt;
-    for (set<Task>::iterator iter2 = iter->begin(); iter2 != iter->end(); ++iter2)
-    {
-      std::cout << prefix << *iter2;
-      prefix = ", ";
-      temp_c += iter2->demand;
-      pt.id = id;
-      pt.mission.push_back(*iter2);
-    }
-    id++;
-    std::cout << " } demand: " << temp_c << "\n";
-    pt.tot_demand = temp_c;
-    if (f)
-    {
-      v_pt.push_back(pt);
-    }
-    f = true;
-  }
+  // for (set<set<Task>>::iterator iter = pset.begin(); iter != pset.end(); ++iter)
+  // {
+  //   std::cout << "{ ";
+  //   char const *prefix = "";
+  //   uint temp_c = 0;
+  //   ProcessTask pt;
+  //   for (set<Task>::iterator iter2 = iter->begin(); iter2 != iter->end(); ++iter2)
+  //   {
+  //     std::cout << prefix << *iter2;
+  //     prefix = ", ";
+  //     temp_c += iter2->demand;
+  //     pt.id = id;
+  //     pt.mission.push_back(*iter2);
+  //   }
+  //   id++;
+  //   std::cout << " } demand: " << temp_c << "\n";
+  //   pt.tot_demand = temp_c;
+  //   if (f)
+  //   {
+  //     v_pt.push_back(pt);
+  //   }
+  //   f = true;
+  // }
 
-  c_print("v_pt.size(); ", v_pt.size(), red);
+  // c_print("v_pt.size(); ", v_pt.size(), red);
 
-  for (auto i = 0; i < v_pt.size(); i++)
-  {
-    cout << "id: " << v_pt[i].id << "\n ";
-    for (auto j = 0; j < v_pt[i].mission.size(); j++)
-    {
-      cout << v_pt[i].mission[j].order << " ";
-    }
-    cout << "\n";
-  }
+  // for (auto i = 0; i < v_pt.size(); i++)
+  // {
+  //   cout << "id: " << v_pt[i].id << "\n ";
+  //   for (auto j = 0; j < v_pt[i].mission.size(); j++)
+  //   {
+  //     cout << v_pt[i].mission[j].order << " ";
+  //   }
+  //   cout << "\n";
+  // }
 
-  auto max_el = *std::max_element(pa, pa + TEAM_t);
-  cout << "elemento massimo " << max_el.CAPACITY << "\n";
+  // auto max_el = *std::max_element(pa, pa + TEAM_t);
+  // cout << "elemento massimo " << max_el.CAPACITY << "\n";
 
-  for (vector<ProcessTask>::iterator it = v_pt.begin(); it != v_pt.end();)
-  {
-    cout << "id: " << it->id << " demand:" << it->tot_demand << "\n";
-    if (it->tot_demand > max_el.CAPACITY)
-    {
-      c_print("SKIP", red);
-      cout << "id: " << it->id << " demand:" << it->tot_demand << "\n";
-      v_pt.erase(find(v_pt.begin(), v_pt.end(), *it));
-    }
-    else
-    {
-      ++it;
-    }
-  }
+  // for (vector<ProcessTask>::iterator it = v_pt.begin(); it != v_pt.end();)
+  // {
+  //   cout << "id: " << it->id << " demand:" << it->tot_demand << "\n";
+  //   if (it->tot_demand > max_el.CAPACITY)
+  //   {
+  //     c_print("SKIP", red);
+  //     cout << "id: " << it->id << " demand:" << it->tot_demand << "\n";
+  //     v_pt.erase(find(v_pt.begin(), v_pt.end(), *it));
+  //   }
+  //   else
+  //   {
+  //     ++it;
+  //   }
+  // }
 
-  for (auto i = 0; i < v_pt.size(); i++)
-  {
-    cout << "id: " << v_pt[i].id << "\n ";
-    for (auto j = 0; j < v_pt[i].mission.size(); j++)
-    {
-      cout << v_pt[i].mission[j].order << " ";
-    }
-    cout << "\ndemand: " << v_pt[i].tot_demand << "\n";
-  }
+  // for (auto i = 0; i < v_pt.size(); i++)
+  // {
+  //   cout << "id: " << v_pt[i].id << "\n ";
+  //   for (auto j = 0; j < v_pt[i].mission.size(); j++)
+  //   {
+  //     cout << v_pt[i].mission[j].order << " ";
+  //   }
+  //   cout << "\ndemand: " << v_pt[i].tot_demand << "\n";
+  // }
 
-  // calcolo il percorso diviso per il totdemand il percorso parte dalla sorgente
-  // destinazioni e di nuovo sorgente
-  for (auto j = 0; j < v_pt.size(); j++)
-  {
-    uint id_path = compute_cycle_dst(v_pt[j].mission);
-    switch (id_path)
-    {
-      case 1:
-      {
-        for (auto i = 0; i < 8; i++)
-        {
-          v_pt[j].route.push_back(p_11[i]);
-        }
-        v_pt[j].path_distance = ccor(v_pt[j].route);
-      }
-      break;
-      case 2:
-      {
-        for (auto i = 0; i < 12; i++)
-        {
-          v_pt[j].route.push_back(p_16[i]);
-        }
-        v_pt[j].path_distance = ccor(v_pt[j].route);
-      }
-      break;
-      case 3:
-      {
-        for (auto i = 0; i < 16; i++)
-        {
-          v_pt[j].route.push_back(p_21[i]);
-        }
-        v_pt[j].path_distance = ccor(v_pt[j].route);
-      }
-      break;
-      case 4:
-      {
-        for (auto i = 0; i < 14; i++)
-        {
-          v_pt[j].route.push_back(p_11_16[i]);
-        }
-        v_pt[j].path_distance = ccor(v_pt[j].route);
-      }
-      break;
+  // // calcolo il percorso diviso per il totdemand il percorso parte dalla sorgente
+  // // destinazioni e di nuovo sorgente
+  // for (auto j = 0; j < v_pt.size(); j++)
+  // {
+  //   uint id_path = compute_cycle_dst(v_pt[j].mission);
+  //   switch (id_path)
+  //   {
+  //     case 1:
+  //     {
+  //       for (auto i = 0; i < 8; i++)
+  //       {
+  //         v_pt[j].route.push_back(p_11[i]);
+  //       }
+  //       v_pt[j].path_distance = ccor(v_pt[j].route);
+  //     }
+  //     break;
+  //     case 2:
+  //     {
+  //       for (auto i = 0; i < 12; i++)
+  //       {
+  //         v_pt[j].route.push_back(p_16[i]);
+  //       }
+  //       v_pt[j].path_distance = ccor(v_pt[j].route);
+  //     }
+  //     break;
+  //     case 3:
+  //     {
+  //       for (auto i = 0; i < 16; i++)
+  //       {
+  //         v_pt[j].route.push_back(p_21[i]);
+  //       }
+  //       v_pt[j].path_distance = ccor(v_pt[j].route);
+  //     }
+  //     break;
+  //     case 4:
+  //     {
+  //       for (auto i = 0; i < 14; i++)
+  //       {
+  //         v_pt[j].route.push_back(p_11_16[i]);
+  //       }
+  //       v_pt[j].path_distance = ccor(v_pt[j].route);
+  //     }
+  //     break;
 
-      case 5:
-      {
-        for (auto i = 0; i < 18; i++)
-        {
-          v_pt[j].route.push_back(p_11_21[i]);
-        }
-        v_pt[j].path_distance = ccor(v_pt[j].route);
-      }
-      break;
-      case 6:
-      {
-        for (auto i = 0; i < 18; i++)
-        {
-          v_pt[j].route.push_back(p_16_21[i]);
-        }
-        v_pt[j].path_distance = ccor(v_pt[j].route);
-      }
-      break;
-      case 7:
-      {
-        for (auto i = 0; i < 20; i++)
-        {
-          v_pt[j].route.push_back(p_11_16_21[i]);
-        }
-        v_pt[j].path_distance = ccor(v_pt[j].route);
-      }
-      break;
-      default:
-      {
-        c_print("ERR", red);
-      }
-      break;
-    }
-  }
+  //     case 5:
+  //     {
+  //       for (auto i = 0; i < 18; i++)
+  //       {
+  //         v_pt[j].route.push_back(p_11_21[i]);
+  //       }
+  //       v_pt[j].path_distance = ccor(v_pt[j].route);
+  //     }
+  //     break;
+  //     case 6:
+  //     {
+  //       for (auto i = 0; i < 18; i++)
+  //       {
+  //         v_pt[j].route.push_back(p_16_21[i]);
+  //       }
+  //       v_pt[j].path_distance = ccor(v_pt[j].route);
+  //     }
+  //     break;
+  //     case 7:
+  //     {
+  //       for (auto i = 0; i < 20; i++)
+  //       {
+  //         v_pt[j].route.push_back(p_11_16_21[i]);
+  //       }
+  //       v_pt[j].path_distance = ccor(v_pt[j].route);
+  //     }
+  //     break;
+  //     default:
+  //     {
+  //       c_print("ERR", red);
+  //     }
+  //     break;
+  //   }
+  // }
 
-  for (auto i = 0; i < v_pt.size(); i++)
-  {
-    cout << "id: " << v_pt[i].id << "\n ";
-    for (auto j = 0; j < v_pt[i].mission.size(); j++)
-    {
-      cout << v_pt[i].mission[j].order << " ";
-    }
-    cout << "\ndemand: " << v_pt[i].tot_demand << "\n";
-    cout << "route: ";
-    for (auto k = 0; k < v_pt[i].route.size(); k++)
-    {
-      cout << v_pt[i].route[k] << " ";
-    }
-    cout << "\n";
-    cout << "PD: " << v_pt[i].path_distance << "\n";
+  // for (auto i = 0; i < v_pt.size(); i++)
+  // {
+  //   cout << "id: " << v_pt[i].id << "\n ";
+  //   for (auto j = 0; j < v_pt[i].mission.size(); j++)
+  //   {
+  //     cout << v_pt[i].mission[j].order << " ";
+  //   }
+  //   cout << "\ndemand: " << v_pt[i].tot_demand << "\n";
+  //   cout << "route: ";
+  //   for (auto k = 0; k < v_pt[i].route.size(); k++)
+  //   {
+  //     cout << v_pt[i].route[k] << " ";
+  //   }
+  //   cout << "\n";
+  //   cout << "PD: " << v_pt[i].path_distance << "\n";
 
-    p_q.push(v_pt[i]);
-  }
+  //   p_q.push(v_pt[i]);
+  // }
 
-  auto t = p_q.top();
+  // auto t = p_q.top();
 
-  c_print("PQ: ", red);
-  while (!p_q.empty())
-  {
-    cout << p_q.top() << " ";
-    p_q.pop();
-  }
-  cout << "\n";
+  // c_print("PQ: ", red);
+  // while (!p_q.empty())
+  // {
+  //   cout << p_q.top() << " ";
+  //   p_q.pop();
+  // }
+  // cout << "\n";
 
-  tm.ID_ROBOT = id_robot;
-  tm.demand = t.tot_demand;
-  tm.path_distance = t.path_distance;
+  // tm.ID_ROBOT = id_robot;
+  // tm.demand = t.tot_demand;
+  // tm.path_distance = t.path_distance;
 
-  for (auto i = 0; i < t.route.size(); i++)
-  {
-    cout << t.route[i] << " ";
-    tm.route.push_back(t.route[i]);
-  }
-  cout << "\n";
+  // for (auto i = 0; i < t.route.size(); i++)
+  // {
+  //   cout << t.route[i] << " ";
+  //   tm.route.push_back(t.route[i]);
+  // }
+  // cout << "\n";
 
-  pub_task.publish(tm);
-  ros::spinOnce();
-  sleep(1);
+  // pub_task.publish(tm);
+  // ros::spinOnce();
+  // sleep(1);
 }
 
-}  // namespace taskplanner
+} // namespace taskplanner

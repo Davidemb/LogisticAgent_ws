@@ -1,0 +1,85 @@
+Writing software for robots is difficult, particularly as the scale and scope
+of robotics continues to grow. Different types of robots can have wildly varying
+hardware, making code reuse non trivial. On top of this, the magnitude of
+the required code can be daunting, as it must contain a deep stack starting
+from driver-level software and continuing up through perception, abstract
+reasoning, and beyond.
+
+\section{Robot Operating System (ROS)}
+Our choice fell on ROS (Robot Operating System) which is a widespread
+open-source, meta-operating system for a robot. It provides several services
+that are commonly offered by an operating system, including hardware
+abstraction, low-level device control, implementation of commonly-used functionality,
+message-passing between processes, and package management. It is
+worth noting that the full source code of ROS is publicly available, ROS is
+distributed under the terms of the BSD license, which allows the development
+of both non-commercial and commercial projects.
+
+\subsection{Nomencalture and Architecture}
+In this section we simply outline the terminology adopted in the ROS
+community to allow an easy comprehension of the following discussion.
+\\
+The fundamental concepts of the ROS implementation are \textit{nodes}, \textit{messages},
+\textit{topics}, and \textit{services}.
+In ROS a system is typically comprised of many nodes. In this context, the term
+\textit{"node"} is interchangeable with \textit{"software module"}. The use of term 
+\textit{"node"} arises from visualization of ROS-based systems at runtime:
+when many nodes are running, it is convenient to render the peer-to-peer communications
+as a graph, called the \textit{computation graph}, with process as graph nodes and 
+the peer-to-peer links as arcs.
+\\
+Nodes communicate with each other by passing \textit{messages}. A message is a
+a strictly typed data structure. Standard primitive types (integer, floating
+point, boolean, etc.) are supported, as are arrays of primitive types and
+constants. Messages can be composed of other messages, and arrays of other
+messages, nested arbitrarily deep. Messages descriptions are usually stored
+in \texttt{my\_package/msg/MyMessageType.msg} and define the data structures for
+messages sent in ROS, called custom message. 
+Here is a simple example of a \texttt{*.msg} file that uses a header, some integer primitive,
+arrays of integer and array of other \texttt{*.msg} files. The message is specified 
+in a language neutral interface definition language (IDL) which uses very short text 
+files to describe its fields and allow an easy composition of complex messages:
+\\
+\begin{multicols}{2}
+\begin{lstlisting}
+    Header      header
+    bool        take
+    bool        go_home
+    uint32      ID_ROBOT
+    uint32      item
+    uint32      order
+    uint32      demand
+    uint32      dst
+    uint32      path_distance
+    uint32[]    route
+\end{lstlisting}
+
+\begin{lstlisting}
+    Header      header
+uint32      ID_ROBOT
+uint32      capacity
+Task[]      Mission
+\end{lstlisting}
+
+\end{multicols}
+
+
+
+
+\section{The Stage 2D Simulation}
+
+\section{Localization and Navigation}
+
+\subsection{Mapping}
+\subsection{Localization}
+\subsection{Navigation}
+\subsection*{Trasformations}
+\subsection*{Sensor Information}
+\subsection*{Odometry Informations}
+\subsection*{Base Controller}
+\subsection{Global and Local planner algorithms}
+\subsection*{Global planner}
+\subsection*{Local planner}
+\section{Cost-maps configurations}
+\section{Recovery behaviours}
+

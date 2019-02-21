@@ -181,6 +181,24 @@ ostream &operator<<(ostream &os, const ProcessTask &t)
      << "\n";
 }
 
+struct CandidateTask
+{
+  uint id;
+  uint subset;
+  vector<vector<Task>> vv_t;
+};
+
+inline CandidateTask mkCT(int id, int subset)
+{
+  CandidateTask ct;
+
+  ct.id = id;
+  ct.subset = subset;
+  ct.vv_t.resize(subset);
+
+  return ct; 
+}
+
 const std::string PS_path = ros::package::getPath("task_planner");
 
 class TaskPlanner
@@ -220,8 +238,11 @@ public:
   bool *init_agent;
   ProcessAgent *pa;
 
+  // bool finish_task = true;
+
 
   vector<ProcessTask> v_pt;
+  vector<CandidateTask> v_ct;
   priority_queue<ProcessTask> p_q;
 
   Task operator[](int i) const
@@ -232,9 +253,12 @@ public:
   {
     return tasks[i];
   }
+  
+  // vector<vector<>> v_v_T;
 
   void t_print(Task &t);
   void pa_print(ProcessAgent &pa);
+  void ct_print(CandidateTask &ct);
   void t_generator();
 
   void compute_route_to_delivery(ProcessAgent *pa);
@@ -246,10 +270,11 @@ public:
   uint compute_cycle_dst(vector<Task> mission);
 
   void conclave(ProcessAgent &pa);
-  void ps_print(int s[], int size);
   set<set<Task>> powerSet(const set<Task> &t);
 
   vector<Task> processedTask();
+  void prepare_missions();
+  void compute_best_subtask();
 
   void init(int argc, char **argv);
   void run();

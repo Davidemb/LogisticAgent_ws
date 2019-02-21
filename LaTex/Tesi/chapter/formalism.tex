@@ -29,11 +29,22 @@ of tasks will be allocated. However, since the task allocation process is repeat
 effectively serve a sequence of tasks. 
 In more detail, my model considers a set of items of different types $E = \{ e_1,...,e_N\}$,
 stored in a specific loading bay ($L$). The warehouse must serve a set of orders 
-$O=\{o_1,...,o_M\}$. Orders are processed in one of the unloading bays ($U_i$).
-Each order is defined by a vector od demand for each item type (the number of required 
+$O=\{o_1,...,o_M\}$. Orders are processed in one or more than one of the unloading bays ($U_i$).
+Each order is defined by a vector of demand for each item type (the number of required 
 items to close the order). Hence, $o_j = < d_{1,j},...,d_{N,j}>$, where $d_{i,j}$ is the 
 demand for order $j$ of items of type $i$. When an order is finished a new one arrives,
 and we assume to have no knowledge on future orders.
 The orders induce a set of $N \times M$ trasportation tasks $T = {t_{i,j}}$, with 
-$t_{i,j} = < d_{i,j}, P_{i,j}>$, where $t_{i,j}$ defines the task of transporting 
+$t_{i,j} = < d_{i,j}, dst_{i,j}, P_{i,j}>$, where $t_{i,j}$ defines the task of transporting 
 $d_{i,j}$ items of type $i$ for order $o_j$ (hence to unloading bay $U_j$).
+Each task has a destination bay for centralized coordination the $t_{i,j}$ has a set of edges
+$P_{i,j}$ which respects the strategy used. 
+I have a set of robot $R = \{r_1,...,r_K \}$ that can execute transportation tasks, where
+each robot has a defined load capacity for each item type $C_k = <c_{1,k},...,c_{N,k}>$, 
+hence $c_{i,k}$ is the load capacity of robot $k$ for items of type $i$. 
+
+
+%
+% ROS and stage parlare del pkg ????
+%
+
