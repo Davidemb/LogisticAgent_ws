@@ -1,6 +1,6 @@
 [Config]
-map: model5
-nrobots: 4
+map: model3
+nrobots: 2
 algorithm: CYCLE
 locmode: AMCL
 navmode: ros

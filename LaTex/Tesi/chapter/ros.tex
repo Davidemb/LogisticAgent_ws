@@ -492,17 +492,95 @@ Our robot can thus use this information to reason about laser scans in
 the \texttt{base\_link} frame and safely plan around obstacles in its environment.
 
 \subsection*{Sensor Information}
-The navigation stack uses information from sensors to avoid obstacles
-in the world, it assumes that these sensors are publishing either \texttt{sensor\_msgs/LaserScan}
+The navigation stack uses information from sensors to avoid obstacles in the world,
+it assumes that these sensors are publishing either \texttt{sensor\_msgs/LaserScan}
 or \texttt{sensor\_msgs/PointCloud} message over ROS.
 Publishing data correctly from sensors over ROS is important for the
-navigation stack to operate safely. If the navigation stack receives no infor-
-mation from a robot’s sensors, then of course it will drive blindly and, most
+navigation stack to operate safely. If the navigation stack receives no information
+from a robot’s sensors, then of course it will drive blindly and, most
 likely, hit things.
+%TODO figure of one robot on map with laser 
+Our \texttt{sensor\_msgs/LaserScan} message type, like many other messages sent 
+over ROS, contain \texttt{tf} frame and time dependent information. To standardize 
+how this information is sent, the \texttt{Header} message type is used as field
+in all such messages.
+The three field in the \texttt{Header} type are show below.
+ %inserti image Header message laser scan
+\begin{lstlisting}
+# Standard metadata for higher-level flow data types
+uint32 seq
+time stamp
+string frame_id
+\end{lstlisting}
+The \texttt{seq} field corresponds to an identifier that automatically increases
+as messages are sent from a given publisher. The \texttt{stamp} field stores time 
+information that should be associated with data in a message. The \texttt{frame\_id}
+field stores \texttt{tf} frame information that should be associated with data 
+in a message. 
+The body of the \texttt{sensor\_msgs/LaserScan} message holds informations about 
+any given scan and contains the associated geometric informations in the following
+form:
+\begin{lstlisting}
+# Laser scans angles are measured counter clockwise, with 0 facing forward
+Header header
+float32 angle_min # start angle of the scan [rad]
+float32 angle_max # end angle of the scan [rad]
+float32 angle_increment # angular distance between measurements [rad]
+float32 time_increment # time between measurements [seconds]
+float32 scan_time # time between scans [seconds]
+float32 range_min # minimum range value [m]
+float32 range_max # maximum range value [m]
+float32[] ranges # range data [m] (Note: values < range_min or > range_max
+should be discarded)
+float32[] intensities # intensity data [device-specific units]
+\end{lstlisting}
 
 \subsection*{Odometry Informations}
+The navigation stack requires that odometry information be published using 
+\texttt{tf} and the \texttt{nav\_msgs/Odometry} message. The last message in 
+required because \texttt{tf} alone does not provide any information about the 
+velocity of the robot, it is thus required that any \textit{odometry source} 
+publishes both this kind of information to \textit{move\_base}.
+\\
+The \texttt{nav\_msgs/Odometry} message stores an estimate of the position and 
+velocity of a robot in free space:
+\begin{lstlisting}
+# The pose in this message should be specified in the coordinate frame given
+by header.frame_id.
+# The twist in this message should be specified in the coordinate frame
+given by the child_frame_id
+Header header
+string child_frame_id
+geometry_msgs/PoseWithCovariance pose
+geometry_msgs/TwistWithCovariance twist
+\end{lstlisting}
+The \textit{pose} in this message corresponds to the estimated position of the 
+robot in the odometric frame of reference along with an optional covariance for 
+the certainty of that pose estimate. The \textit{twist} in this message corresponds
+to the robot's velocity in the child frame, normally the coordinate frame of the 
+mobile base, along with an optional covariance for certainty of that velocity estimate.
+\\
+In our case since the \texttt{stageros} node represents the odometric source for 
+the system,it is going to publish all the relevant trasformations between the
+coordinate frames it manages towards the \texttt{/tf} topic which maintains the current 
+trasformation tree for our system, and a \texttt{nav\_msgs/Odometry} message to 
+the \texttt{/odom} topic so that the navigation stack can retrieve velocity information
+from it.
+%Image tf connection
+
 \subsection*{Base Controller}
+As previously specified the navigation stack assumes that it can send velocity commands
+using a \texttt{geometry\_msgs/Twist} message assumed to be in the base coordinate
+frame of the robot on the \texttt{/cmd\_vel} topic. This means there must be a node 
+subscribing to the \texttt{/cmd\_vel} topic that is capable of talking 
+$(v_x,v_y,v_\theta) \longleftrightarrow $ (\texttt{cmd\_vel.linear.x}, \texttt{cmd\_vel.linear.y}, \texttt{cmd\_vel.angular.z})
+veloccities and converting them into motor commands to send a mobile base.
+\\
+In this work the \texttt{stageros} node subscribes to the \texttt{/cmd\_vel} topic
+simulating the movement of a real robot in a real environment.
+
 \subsection{Global and Local planner algorithms}
+
 \subsection*{Global planner}
 \subsection*{Local planner}
 \section{Cost-maps configurations}
