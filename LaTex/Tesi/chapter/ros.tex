@@ -580,7 +580,15 @@ In this work the \texttt{stageros} node subscribes to the \texttt{/cmd\_vel} top
 simulating the movement of a real robot in a real environment.
 
 \subsection{Global and Local planner algorithms}
-
+The \texttt{base\_local\_planner} is responsible for computing velicty commands
+to send to the mobile base of the robot given a high-level plan. In particular,
+this package adheres to the \texttt{BaseLocalPlanner} interface specified in the 
+\texttt{nav\_core} package which provides common interfaces for both \textit{global}
+and \textit{local} action planning.
+\\
+As we shall see, the local planner is seeded with the high-level plan produced by
+the global planner and the purpose of the \texttt{nav\_core} package is just to 
+provide common interfaces for navigation. 
 \subsection*{Global planner}
 \subsection*{Local planner}
 \section{Cost-maps configurations}
