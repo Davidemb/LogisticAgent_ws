@@ -1,6 +1,6 @@
-image: model5.pgm
-resolution: 0.0141
+image: src/patrolling_sim/maps/model5/model5.pgm
+resolution: 0.014100
 origin: [0.000000, 0.000000, 0.000000]
 negate: 0
-occupied_thresh: 0.10
-free_thresh: 0.10
+occupied_thresh: 0.65
+free_thresh: 0.196

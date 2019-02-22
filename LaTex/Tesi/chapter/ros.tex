@@ -65,7 +65,7 @@ a \texttt{Mission.msg} which is composed of task messages addressed to a specifi
 \end{multicols}
 
 These simple high-level message definitions is then parsed and processed by a code 
-generator module, one for each support language (currentrly C++), which generates 
+generator module, one for each support language (currentrly \texttt{C++}), which generates 
 native implementations that “feel” like native objects, and are automatically 
 serialized and deserialized by ROS as messages are sent and received.
 \\
@@ -241,12 +241,265 @@ is suffice for our purpose of having a mobile camera that moves around the world
 % TODO sistemare gli spazzi bianchi
 
 \section{Localization and Navigation}
+Purpose of this section is to describing how we address the two main problems in
+the context of mobile robotics: \textit{localization} and \textit{navigation}.
+The former deals with tracking the pose of the robot during its motion allowing
+it to localize itself in the map, the latter deals with driving the robot from a 
+starting position to a goal position trying to avoid potential obstacles.
+The complete code for the \texttt{launch} file in which this takes are solved is reported
+below.
+\begin{lstlisting}
+    <?xml version="1.0" encoding="UTF-8" ?>
+<launch>
+  <arg name="robotname" default="robot_0" />
+  <arg name="mapname" default="grid" />
+  <arg name="use_amcl" default="true" />
+  <arg name="use_move_base" default="true" />
+  <arg name="use_srrg_localizer" default="false" />
+  <arg name="use_spqrel_planner" default="false" />
+
+
+  <group ns="$(arg robotname)">    
+    
+    <!-- Run the map server -->
+    <node name="map_server" pkg="map_server" type="map_server" args="$(find patrolling_sim)/maps/$(arg mapname)/$(arg mapname).yaml" />
+
+    <!-- Standard ROS navigation modules -->
+    
+    <group if="$(arg use_amcl)">
+        <!--- AMCL -->
+        <include file="$(find patrolling_sim)/params/amcl/amcl_diff.launch" />       
+            
+        <!-- Override AMCL Frame Params to include prefix -->
+        <param name="/$(arg robotname)/amcl/base_frame_id" value="$(arg robotname)/base_link"/>
+        <param name="/$(arg robotname)/amcl/odom_frame_id" value="$(arg robotname)/odom"/>
+        <param name="/$(arg robotname)/amcl/global_frame_id" value="map"/> <!--common map frame for all robots -->
+    </group>
+        
+    <group if="$(arg use_move_base)">
+        <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
+            <rosparam file="$(find patrolling_sim)/params/move_base/costmap_common_params.yaml" command="load" ns="global_costmap" />
+            <rosparam file="$(find patrolling_sim)/params/move_base/costmap_common_params.yaml" command="load" ns="local_costmap" />
+            <rosparam file="$(find patrolling_sim)/params/move_base/local_costmap_params.yaml" command="load" />
+            <rosparam file="$(find patrolling_sim)/params/move_base/global_costmap_params.yaml" command="load" />
+            <rosparam file="$(find patrolling_sim)/params/move_base/base_local_planner_params.yaml" command="load" />
+            <!-- remap from="cmd_vel" to="desired_cmd_vel" / -->
+    
+            <!-- Override MOVE_BASE Frame Params to include prefix -->
+            <param name="global_costmap/laser_scan_sensor/sensor_frame" value="/$(arg robotname)/base_laser_link"/>
+            <param name="global_costmap/laser_scan_sensor/topic" value="/$(arg robotname)/base_scan"/>
+            <param name="global_costmap/robot_base_frame" value="/$(arg robotname)/base_link"/>   
+            <param name="local_costmap/global_frame" value="/$(arg robotname)/odom"/>
+            <param name="local_costmap/laser_scan_sensor/sensor_frame" value="/$(arg robotname)/base_laser_link"/>
+            <param name="local_costmap/laser_scan_sensor/topic" value="/$(arg robotname)/base_scan"/>
+            <param name="local_costmap/robot_base_frame" value="/$(arg robotname)/base_link"/> 
+        </node>
+    </group>
+
+
+    <!-- spqrel_navigation modules from RoCoCo lab Sapienza University of Rome, Italy -->       
+
+    <!--- srrg_localizer -->
+    <group if="$(arg use_srrg_localizer)">
+          <node pkg="tf" type="static_transform_publisher" name="link1_broadcaster" args="0 0 0 0 0 0 1 /map /$(arg robotname)/map 100" />
+      
+            
+          <node pkg="spqrel_navigation" type="srrg_localizer2d_node" name="srrg_localizer" output="screen">
+              <param name="global_frame_id" value="$(arg robotname)/map"/>
+              <param name="base_frame_id" value="$(arg robotname)/base_link"/>
+              <param name="odom_frame_id" value="$(arg robotname)/odom"/>
+              <param name="laser_topic" value="$(arg robotname)/base_scan"/>
+              <param name="use_gui" value="false"/>
+          </node>
+    </group>
+
+    <!--- spqrel_planner -->    
+    <group if="$(arg use_spqrel_planner)">            
+           <node pkg="spqrel_navigation" type="spqrel_planner_node" name="spqrel_planner" output="screen">
+              <param name="max_range" value="10.0"/>
+              <param name="max_linear_vel" value="1.0"/>
+              <param name="max_angular_vel" value="1.0"/>
+              <param name="global_frame_id" value="$(arg robotname)/map"/>
+              <param name="base_frame_id" value="$(arg robotname)/base_link"/>
+              <param name="laser_topic" value="$(arg robotname)/base_scan"/>
+              <param name="command_vel_topic" value="$(arg robotname)/cmd_vel"/>
+              <param name="robot_radius" value="0.3"/> <!-- Raggio del robot -->
+              <param name="use_gui" value="false"/>
+           </node>
+    </group>
+    <!-- INITIAL POSES FOR LOCALIZER -->
+    <include file="$(find patrolling_sim)/params/amcl/$(arg robotname)_initial_pose.xml" />
+  </group>
+</launch>
+\end{lstlisting}
 
 \subsection{Mapping}
+The robot navigation system can be initialized with or without an a priori, \textit{static map}.
+When initialized without a map, the robot only knows about obstacles that it has seen,
+and will make optimistic global plans through areas that it has not yet visitied
+which may traverse unknown space, potentially intersecting unseen obstacles. 
+As the robot receives more information about the world, it replans accordingly to
+avoid obstacles. Initialized with a static map, the robot will make informed plans 
+about distant parts of the environment, using the map as prior obstacle information.
+In our case we provide ROS with a static map of real laboratory in University of Verona.
+Doing so requires us to set the \textit{map\_server} node that reads a map from 
+disk and offers it via a ROS service:
+\begin{lstlisting}
+<!-- Run the map server -->
+<node name="map_server" pkg="map_server" type="map_server" 
+args="$(find patrolling_sim)/maps/$(arg mapname)/$(arg mapname).yaml" />
+\end{lstlisting}
+The current implementation of \textit{map\_server} convert color values in the map 
+image data into ternary occupancy values: \textit{free}(0), \textit{occupied}(100), and
+\textit{unknown}(-1).
+\\
+Maps manipulated by the tools in the \textit{map\_server} package are stored in a 
+pair of file: the \texttt{*.yaml} file describes the map meta-data and names the image 
+file while the image file encodes the occupancy data.
+\\
+The \texttt{*.yaml} file given as an argument to the \textit{map\_server} node is reported
+below with a brief description of it's parameters.
+\begin{lstlisting}
+# path to the image file containing the occupancy data.
+image: src/patrolling_sim/maps/model5/model5.pgm
+# resolution of the map, meters/pixel.
+resolution: 0.014100
+# the 2-D pose of the lower-left pixel in the map, as (x, y, yaw).
+origin: [0.000000, 0.000000, 0.000000]
+# whether the white/black free/occupied semantics should be reversed.
+negate: 0
+# pixels with occupancy probability greater than this are considered completely occupied.
+occupied_thresh: 0.65
+# pixels with occupancy probability less than this are considered completely free.
+free_thresh: 0.196
+\end{lstlisting}
+
 \subsection{Localization}
+Both in the case of a given static map or without a given static map, we
+require that the robot’s pose be tracked in a consistent global coordinate frame.
+When not using a map, the robot’s pose is usually estimated by integrating
+wheel odometry, possibly fused with data from an inertial measurement unit
+(IMU). When using a map, as in our case, the robot is usually localized using
+a probabilistic technique, in particular we adopt the Adaptive Monte Carlo
+Localization (\texttt{amcl}) system:
+\begin{lstlisting}
+<group if="$(arg use_amcl)">
+    <!--- AMCL -->
+    <include file="$(find patrolling_sim)/params/amcl/amcl_diff.launch" />       
+            
+    <!-- Override AMCL Frame Params to include prefix -->
+    <param name="/$(arg robotname)/amcl/base_frame_id" value="$(arg robotname)/base_link"/>
+    <param name="/$(arg robotname)/amcl/odom_frame_id" value="$(arg robotname)/odom"/>
+    
+    <!--common map frame for all robots -->
+    <param name="/$(arg robotname)/amcl/global_frame_id" value="map"/> 
+</group>
+\end{lstlisting}
+\texttt{amcl} is a probabilistic localization system for a robot moving in 2D.
+It implements the Adaptive (or KLD-sampling) Monte Carlo Localization
+approach which uses a particle filter to track the pose of a robot against
+a known map. The map of the environment where the robot has to localize
+itself must be given to the robot beforehand. In our case the map is provided
+by tha \textit{map\_server} node. This map is the so called \textit{occupacy map}
+like before mentioned: it contains a value for every location which indicates the 
+probability that this location is occupied by an object such as a wall. 
+\texttt{amcl} takes in a laser-based map, laser scans and outputs pose estimates.
+On startup, \texttt{amcl} initializes its particle filter according to the parameters
+provided. In this respect we remark that the \texttt{amcl} node is launched only 
+after having setting up three categories of ROS parameters that we use to configure 
+its behaviour: \textit{overall filter}, \textit{laser model} and \textit{odometry model}.
+The complete configuration file is reported below.
+\begin{lstlisting}
+<?xml version="1.0" encoding="UTF-8" ?>
+<launch>
+<arg name="robotname" default="robot_0" />
+<node pkg="amcl" type="amcl" name="amcl" args="scan:=base_scan">
+  <!-- Publish scans from best pose at a max of 10 Hz -->
+  <param name="odom_model_type" value="diff"/>
+  <param name="odom_alpha5" value="0.1"/>
+  <param name="transform_tolerance" value="0.2" />
+  <param name="gui_publish_rate" value="-10.0"/>
+  <param name="laser_max_beams" value="30"/>
+  <param name="min_particles" value="100"/>
+  <param name="max_particles" value="500"/>
+  <param name="kld_err" value="0.05"/>
+  <param name="kld_z" value="0.99"/>
+  <param name="odom_alpha1" value="0.2"/>
+  <param name="odom_alpha2" value="0.2"/>
+  <!-- translation std dev, m -->
+  <param name="odom_alpha3" value="0.8"/>
+  <param name="odom_alpha4" value="0.2"/>
+  <param name="laser_z_hit" value="0.5"/>
+  <param name="laser_z_short" value="0.05"/>
+  <param name="laser_z_max" value="0.05"/>
+  <param name="laser_z_rand" value="0.5"/>
+  <param name="laser_sigma_hit" value="0.2"/>
+  <param name="laser_lambda_short" value="0.1"/>
+  <param name="laser_lambda_short" value="0.1"/>
+  <param name="laser_model_type" value="likelihood_field"/>
+  <!-- <param name="laser_model_type" value="beam"/> -->
+  <param name="laser_likelihood_max_dist" value="2.0"/>
+  <param name="update_min_d" value="0.2"/>
+  <param name="update_min_a" value="0.5"/>
+  <param name="odom_frame_id" value="odom"/>
+  <param name="base_frame_id" value="base_link"/>
+  <param name="resample_interval" value="1"/>
+</node>
+</launch>
+\end{lstlisting}
+
 \subsection{Navigation}
+At high level the navigation system is quite simple. It takes in data from sensors,
+odometry, and a navigation goal, and outputs velocity commands that are sent to a 
+mobile base. The low-level architecture of system, however, is complex and consist 
+of many components that interacts together.
+\\
+For navigation purposes we rely on the \textit{move\_base} package which provides 
+an interface with the entire ROS navigation stack. The \textit{move\_base} package
+provides an implementation of an \textit{action} that, given a goal in the world,
+will attempt to reach it with a mobile base. It links together a \textit{global} and 
+\textit{local} planner to accomplish its navigation task, it also maintains two 
+costmaps, one for the global planner and one for the local planner.
+An architecture view of the node its interaction with other components is show in 
+Figure below. %TODO
+
+The pre-requisites of navigation stack, along with a brief description of it's main 
+components, are provided in the section below.
 \subsection*{Trasformations}
+Robotics systems often need to track spartial relationships between \textit{frames}
+for a variety of reasons: between a mobile robot and some fixed frame of reference 
+for localizzation or, as in our case, between the frame related to the mobile base 
+and the one related to the laser sensor. To simplify the treatment of spartial frames,
+a trasformation system has been written for ROS, called \texttt{tf}. The \texttt{tf} system 
+constructs a dynamic \textit{trasformation tree} which realtes all frames of reference 
+in the system. At an abstract level, a trasformation tree define \textit{offsets}
+in terms of both translation and rotation between different coordinate frames.
+\\
+Referring to our case of a simple robot consisting of a circular mobile base
+with a single laser support mounted on top of it we define two coordinate
+frames: one corresponding to the center point of the base of the robot and one
+for the center point of the laser support that is mounted on top of the base.
+We've called the coordinate frame attached to the modile base \texttt{base\_link}
+and the coordinate frame attached to the laser support \texttt{base\_laser\_link}.
+Once this configuration in defined, every time that we have some data from the laser 
+in the form of distances from the laser's center point and we want to take this data 
+and use it to help the mobile base avoid obastacles in the world we invoke the \texttt{tf}
+system which in the general case transforms the information towards the \texttt{base\_link}
+coordiante frame. Below we reported the Figure which rappresent the configuration of 
+\texttt{base\_link} and the \texttt{base\_laser\_link} frames.
+%TODO figure of robot.
+Our robot can thus use this information to reason about laser scans in
+the \texttt{base\_link} frame and safely plan around obstacles in its environment.
+
 \subsection*{Sensor Information}
+The navigation stack uses information from sensors to avoid obstacles
+in the world, it assumes that these sensors are publishing either \texttt{sensor\_msgs/LaserScan}
+or \texttt{sensor\_msgs/PointCloud} message over ROS.
+Publishing data correctly from sensors over ROS is important for the
+navigation stack to operate safely. If the navigation stack receives no infor-
+mation from a robot’s sensors, then of course it will drive blindly and, most
+likely, hit things.
+
 \subsection*{Odometry Informations}
 \subsection*{Base Controller}
 \subsection{Global and Local planner algorithms}
