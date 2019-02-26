@@ -127,8 +127,8 @@ void TaskPlanner::init_Callback(const std_msgs::Int16MultiArrayConstPtr &msg)
 
       ct_print(ele);
 
-      cout << "good? " << ele.good << "\n";
-      cout << ele << "\n";
+      // cout << "good? " << ele.good << "\n";
+      // cout << ele << "\n";
       for (auto i = 0; i < ele.subset; i++)
       {
         auto s_el = ele.vv_t[i].size();
@@ -140,7 +140,7 @@ void TaskPlanner::init_Callback(const std_msgs::Int16MultiArrayConstPtr &msg)
           v_pt.push_back(r);
           for (auto k = 0; k < e.size(); k++)
           {
-            cout << e[k] << " ";
+            // cout << e[k] << " ";
           }
           cout << "\n";
         }
@@ -149,12 +149,12 @@ void TaskPlanner::init_Callback(const std_msgs::Int16MultiArrayConstPtr &msg)
       for (auto h = 0; h < v_pt.size(); h++)
       {
         auto el = v_pt[h].route;
-        cout << "ROute: \n";
+        // cout << "ROute: \n";
         for (auto g = 0; g < el.size(); g++)
         {
-          cout << el[g] << " ";
+          // cout << el[g] << " ";
         }
-        cout << "\n";
+        // cout << "\n";
       }
 
       c_print("fine", green);

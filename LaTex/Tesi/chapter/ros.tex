@@ -590,7 +590,319 @@ As we shall see, the local planner is seeded with the high-level plan produced b
 the global planner and the purpose of the \texttt{nav\_core} package is just to 
 provide common interfaces for navigation. 
 \subsection*{Global planner}
-\subsection*{Local planner}
-\section{Cost-maps configurations}
-\section{Recovery behaviours}
+The global planner is given the obstacle and cost information contained
+in the global costmap, information from the robot’s localization system, and
+a goal in the world. From these, it creates a high-level plan for the robot
+to follow to reach the goal location. In more detail, the global planner will
+create a series of way-points for the local planner to achieve, these way-points
+assumes that the robot is circular in shape, and may in fact be infeasible for a
+more general case. Also, the global planner doesn’t take the dynamics of the
+robot into account so it can produce plans that are dynamically infeasible as
+well. While this ensures that the global planner returns in a small amount of
+time, it also means that the planner is \textit{optimistic} in the plans that it creates.
+However our robot is not much affected by this problems because it is circular
+in shape and does not have a particular dynamics to take into account.
+\\
+The global planner used for this nagivation system is \texttt{ROS navigation} stack
+% wiki/ros/navigation / amcl
+This planner, as started before, assumes a circular robot and operates on a costmap 
+to compute a navigation function that can later be used to find a \textit{minimum cost plan}
+from a start point to an end point in a grind.
+\\
+As outlined before, the global planner may produce a path for the robot that is infeasible,
+such as a plan that turns through a narrow way too tightly, causing the corners of the 
+robot to hit the surrounding obstacles. Because of its shortcomings, the global planner 
+is used only as a high-level guide for navigation in an environment and we also need a 
+\textit{local planner} for navigation.
 
+\subsection*{Local planner}
+The local planner is responsible for generating velocity commands for
+the mobile base that will safely move the robot towards a goal. The local
+planner is seeded with the plan produced by the global planner, and attempts
+to follow it as closely as possible while taking into account the kinematics
+and dynamics of the robot as well as the obstacle information stored in the
+costmap.
+\\
+The local planner used for this navigation system is \texttt{base\_local\_planner}.
+This package supports any robot footprint that can be represented as a convex
+polygon or circle, so it is fine for our circular-shaped robot.
+The \texttt{base\_local\_planner} package provides a \textit{controller} that drives
+a mobile base in the plane. This controller serves to connect the path planner
+to the robot. Using a map, the planner creates a trajectory for the robot to
+move from a start to a goal location. Along the way, the planner creates, at
+least locally around the robot, a value function, represented as a grid map.
+This value function encodes the costs of traversing through the grid cells
+based on their occupancy status. The controller uses this value function to determine 
+$v_x$, $v_y$ and $v_\theta$ velocities to send to the robot.
+\\
+In order to generate safe velocity commands to send to the mobile base,
+the local planner we adopt makes use of a technique known as the \textit{Dynamic
+Window Approach} (DWA) to forward simulate and select among potential
+commands based on a cost function. The basic idea is as follows:
+\begin{itemize}
+    \item First it discretely samples the robot’s control space (which means
+    samples from the set of achievable velocities $v_x$, $v_y$ and $v_\theta$ for just one
+    simulation step given the acceleration limits of the robot);
+    \item Then for each sampled velocity, it performs forward simulation from
+    the robot’s current state to predict what would happen if the sampled
+    velocity were applied for some (short) period of time;
+    \item Next it evaluates (score) each trajectory resulting from the forward
+    simulation, using a metric that incorporates characteristics such as
+    \textit{proximity to obstacles, proximity to the goal, proximity to the path produced 
+    by the global planner and speed} and it discards illegal trajectories
+    (those that collide with obstacles);
+    \item Finally it picks the highest-scoring trajectory and sends the associated
+    velocity to the mobile base;
+    \item Rinse and repeat.
+\end{itemize}
+In order to score trajectories efficiently, a map grid is used. For each
+control cycle, a grid is created around the robot (the size of the local costmap),
+and the global path is mapped onto this area. This means some of the grid
+cells will be marked with distance 0 to a path point, and distance 0 to the
+goal. A propagation algorithm then efficiently marks all other cells with their
+\textit{Manhattan distance} to the closest of the points marked with zero. The goal
+of the global path may often lie outside the small area covered by the map
+grid, so when scoring trajectories for proximity to goal, what is considered is
+the “local goal”, meaning the first path point which is inside the area having
+a consecutive point on the global path outside the area.
+\\
+We report here our configuration file for the local planner we adopt, it is
+worth noting that through setting the weights on each component of the cost
+function differently it is possible to change drastically the behaviour of the
+robot: for example it is possible to force it to stay close to the projection of
+the global path into the local costmap, or to stay quite far from obstacles
+changing consequently it’s trajectory across the map. The values below works
+well for our case since they take into account both the shape of the robot
+and the needs for computation. For a detailed description parameters see code below.
+\begin{lstlisting}
+controller_frequency: 5.0
+TrajectoryPlannerROS:
+
+# Robot Configuration Parameters
+max_vel_x: 1.00
+min_vel_x: 0.10
+max_trans_vel: 1.00
+min_trans_vel: 0.10
+max_rot_vel: 1.0
+min_in_place_rotational_vel: 0.1
+acc_lim_th: 0.75
+acc_lim_x: 0.50
+acc_lim_y: 0.50
+holonomic_robot: false
+
+# Goal Tolerance Parameters
+yaw_goal_tolerance: 6.28
+xy_goal_tolerance: 0.40
+
+# Controller Parameters 
+pdist_scale: 0.6
+gdist_scale: 0.8
+occdist_scale: 0.01 
+meter_scoring: true
+
+# Forward Simulation Parameters
+sim_time: 1.5
+vx_samples: 6
+vtheta_samples: 20
+
+# Trajectory Scoring Parameters
+heading_lookahead: 0.325
+dwa: true
+
+# Oscillation Prevention Parameters
+oscillation_reset_dist: 0.05
+\end{lstlisting}
+
+\section{Cost-maps configurations}
+The navigation stack uses two costmaps to store information about obstacles in the world.
+One costmap is used for \textit{global planning}, meaning creating long-term plans 
+over the entire environment, and the other is used for \textit{local planning} and 
+obstacle avoidance.
+\\
+In particular, the ROS package \texttt{costmap\_2D} provides an implementation
+of a 2D costmap that takes in sensor data from the world, build a 2D occupacy 
+grid of the data and inflates costs in a 2D costmap based on the occupacy grid 
+and a user specified \textit{inflation radius}.
+\\
+Because the robots we study are constrained to drive on flat ground, and
+cannot, for example, step or jump over obstructions, we assemble obstacle
+data into a planar costmap on which the planners operates. The costmap is
+initialized with our laboratory static map, but updates as new sensor data comes in
+to maintain an up-to-date view of the robot’s local and global environment.
+\\
+As previously specified, the laboratory image describes the occupacy state of each 
+cell of the map in the color of the corresponding pixel. Cells with occupacy 
+probability greater than the value stored in \texttt{occuped\_thresh} are considered
+completely occupied and are assigned a lethal cost, meaning that no part of the 
+robot's circular footprint is allowed to be inside of the corresponding two-dimensional cell.
+Then, inflation is performed in two dimension to propagate costs from obstacles out 
+to user-specified \textit{inflation radius}. Cells that are less than one inscribed
+radius of the robot away from an obstacle are assigned a uniformly high cost, after 
+which an exponential decay function is applied that will cause the cost to decrease 
+with the distance from the obstacles.
+
+\subsection{Common configuration}
+There are some configuration options that we want both global and local costmap 
+to follow. In our case the global configuration settings for both the costmaps are 
+as follows:
+\begin{lstlisting}
+obstacle_range: 0.50
+raytrace_range: 3.0
+robot_radius: 0.33
+inflation_radius: 0.33
+observation_sources: laser_scan_sensor
+laser_scan_sensor: {sensor_frame: base_laser_link,
+ data_type: LaserScan, topic: base_scan, marking: true, clearing: true}
+\end{lstlisting}
+The first two parameters set thresholds on obstacle information put into the 
+costmap. The \texttt{obstacle\_range} parameters determines the maximum range sensor
+reading that will result in an obstacle being put into the costmap.
+The \texttt{raytrace\_range} parameter determines the range to which we will ray-trace 
+freespace given a sensor reading.
+\\
+Next we set the radius of the robot since it is circular and the inflation radius 
+for the costmap. The inflation radius should be set to the maximum distance 
+from obstacles at which a cost should be incurred. 
+\\
+The \texttt{observation\_sources} parameter defines the sensor that is going to be passing 
+information to the costmap, the last line sets it's parameters. The \texttt{sensor\_frame}
+parameter is set to the name of the coordiante frame of the sensor, the \texttt{data\_type}
+parameter is set to \texttt{LaserScan} since this is the type of message used by the topic,
+and the \texttt{topic} parameter is set to the name of the topic that the sensor 
+publishes data on. The \texttt{marking} and \texttt{clearing} parameters determine 
+whether the sensor will be used to add obstacle information to the costmap, clear obstacle
+information from the costmap, or do both.
+
+\subsection{Global configuration}
+Below are our configuration settings for the \textit{global} costmap along with a
+description of their semantics:
+\begin{lstlisting}
+global_costmap:
+   global_frame: /map
+   robot_base_frame: base_link
+   update_frequency: 3.0
+   publish_frequency: 0.0
+   static_map: true
+   inflation_radius: 0.66
+\end{lstlisting}
+
+The \texttt{global\_frame} parameter defines what coordinate frame the costmap should
+run in, in this case, we'll choose the \texttt{map} frame. The \texttt{robot\_base\_frame}
+parameter defines the coordiante frame the costmap should reference for the base 
+of the robot. The \texttt{update\_frequency} parameter determines the frequency, in Hz, 
+at which the costmap will run its update loop. The \texttt{static\_map} parameter 
+determines whether or not the costmap should initialize itself based on a map served 
+by the \textit{map\_server}.
+
+\subsection{Local configuration}
+Below are our configuration settings for the \textit{local} costmap along with a 
+description of their semantics:
+\begin{lstlisting}
+local_costmap:
+   global_frame: odom
+   robot_base_frame: base_link
+   update_frequency: 3.0
+   publish_frequency: 2.0
+   static_map: false
+   rolling_window: true
+   width: 4.0
+   height: 4.0
+   resolution: 0.05
+\end{lstlisting}
+The \texttt{global\_frame}, \texttt{robot\_base\_frame}, \texttt{update\_frequency}
+and \texttt{static\_map} parameters are the same as described previously.
+The \texttt{publish\_frequency} parameter determines the rate, in Hz, at which 
+the costmap will publish visualization information. Setting the \texttt{rolling\_window}
+parameter to true means that the costmap will remain centered around the robot moves 
+through the world. The \texttt{width}, \texttt{height} and \texttt{resolution} 
+parameters set the width [m], height [m] and resolution [m/cell] of the costmap.
+
+\subsection{Local and global coordinate frames}
+We now briefly discuss why it is important to distinguish between global
+and local coordinate frames when building a navigation system. A global
+coordinate frame, such as the one used by the \textit{global planner} and specified
+through the \texttt{global\_frame: /map} parameter, is advantageous in that it
+provides a globally consistent frame of reference, but it is flawed in that it is
+subject to discontinuous jumps in its estimation of the robot’s position. For
+example, when the localization system is struggling to determine the robot’s
+position, it is not uncommon for the robot to teleport, on a single update
+step, from one location to another that is one meter away.
+\\
+A local coordinate frame, such as the one used by the \textit{local planner} and
+specified through the \texttt{global\_frame: /odom parameter}, has no such jumps,
+but presents its own flaws in that it is prone to drifting over time.
+\\
+In theory, all planning and obstacle avoidance could be performed in
+the global frame, but this may lead to problems when discrete jumps in
+localization occur. To illustrate this, consider the case in which a robot
+navigates through a narrow way with limited clearance on either side. If the
+navigation system attempts to plan in a global frame, localization jumps
+may drastically affects the robot’s obstacle information and a jump in the
+robot’s position of just a few centimetres to either side, combined with new
+sensor data, may actually be enough for the robot to consider that way as
+unfeasible. If the robot instead operates in a local frame, nearby obstacles
+are not affected by jumps in localization, and the robot can traverse through
+the way independently of any difficulties with the localization system.
+Thus, we use the global coordinate frame to create high-level plans for
+the robot but also a local coordinate frame for local planning and obstacle
+avoidance. To relate the two frames, the plan produced by the global planner
+is mapped from the global coordinate frame into the local coordinate frame
+on every cycle.
+
+\section{Recovery behaviours}
+The navigation system as described until now works well most of the time,
+attempting to achieve a goal pose with its base to within a user-specified
+tolerance, but there are still situations where the robot can get stuck.
+One common cause of failure for the navigation system is \textit{entrapment},
+where the robot is surrounded by obstacles and cannot find a valid plan to its goal.
+When the robot finds itself in this situation, a number of increasingly
+aggressive recovery behaviours are executed to attempt to clear out space,
+Figure %TODO 
+shows the relations among them. First, obstacles outside of a user 
+settable region will be cleared from the robot’s map.
+If this fails, the robot performs an in-place rotation to attempt to clear out
+space. If this too fails, a more aggressive map reset is attempted where the
+robot clears all obstacles that are outside of its circumscribed radius. After
+this, another in-place rotation is performed to clear space, and if this last
+step fails, the robot will abort on its goal which it now considers infeasible.
+After each of these behaviour completes, \texttt{move\_base} will attempt to make
+a plan. If planning is successful, \texttt{move\_base} will continue normal operation.
+Otherwise, the next recovery behaviour in the list will be executed.
+
+\section{Extension of Patrolling\_sim package}
+% devo dire nell related work che uso patrolling sim
+In this thesis, the problem of allocation task for logistic applications a given 
+environment with an arbitrary number of robots is studied. In this section, 
+details are given on how agents obtain the representation of the environment.
+
+\subsection{Obtaining a Topological representation}
+In \texttt{patrolling\_sim} package the topological map represent the area to travel 
+by a graph $G = (V,E)$ with vertices $v_i \in V$ and edges $e_{i,j} \in E$, enabling 
+robots to assess the topology of its surroundings. In this representation, vertices
+represent the load, unload bays and the travel locations, the edges represent
+the connectivity between those locations. The cost of an edge $|e_{i,j}|$ is defined  
+by the metric distance between vertex $v_i$ and $v_j$. $|V|$ and $|E|$ represent 
+the cardinality of the set $V$ and $E$, respectively. Seeing as undirected graphs are
+assumed, then: $|E| \le \frac{|V| \cdot (|V| -1)}{2}$. A path $\pi$ is composed 
+of an array of vertices in $V$.
+\\
+Since the topological maps considered in this context represent real-world 2D environments,
+it is assumed that $G$ has the following properties:
+\begin{itemize}
+    \item \textit{Undirected}: where $|e_{i,j}| = |e_{j,i}|$ and the edge weights safety the triangle inequality.
+    \item \textit{Connected}: where $\forall v_h,v_i \in V, \exists x = \{v_{h}, \cdots , v_{i}\}$.
+    \item \textit{Simple}: where two neighbor vertices $v_{i}$ and $v_{j}$ are connected 
+            by a unique edge $e_{i,j}$ and no graph loops exist.
+    \item \textit{Planar}: where a pair of edges $e_{g,h}, e_{i,j} \in E$ never crosses each other. 
+\end{itemize}
+As a consequence of there properties, $G$ is usually \textit{non-complete}; for 
+every pair $v_h, v_i \in V$ there may not exist an edge $|e_{h,i}|$ connecting 
+each pair of vertices.
+\\
+In this work, it noteworthy that any generic planar graph may be addressed, but for 
+our logistic application in the laboratory map the topological graph $G$ is \textit{complete}.
+% Preliminares Thesi david portugal 
+% formulazione del problema nel package
+
+% parlare di cosa si e' fatto per la mappa reale / coordinatore esterno 
+% adattamenti presi per far funzionare il tutto 
