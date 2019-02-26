@@ -10,6 +10,6 @@ public:
   virtual void onGoalComplete();
   virtual int compute_next_vertex();
 };
-}  // cycle opt agent
+} // namespace coa
 
 #include "impl/CycleOptAgent.i.hpp"

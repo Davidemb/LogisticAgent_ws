@@ -9,17 +9,16 @@
 
 #include "color_cout.hpp"
 #include "PatrolAgent.hpp"
-#include "CycleOptAgent.hpp"
+#include "CFAgent.hpp"
 
 using namespace std;
 
-//---[MAIN]---------------------------//
-
-int main (int argc, char** argv)
+int main(int argc, char **argv)
 {
-    coa::COA COA;
-    COA.init (argc, argv);
-    c_print("@ Inizializzazione finita!",green);
-    COA.run();
+    cfa::CFA CFA;
+    CFA.init(argc, argv);
+    c_print("@init",green);
+    CFA.run();
+
     return 0;
 }

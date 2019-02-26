@@ -136,6 +136,10 @@ add_library(CycleOptAgent
   src/CycleOptAgent.cpp
 )
 
+add_library(CFAgent 
+src/CFAgent.cpp
+)
+
 ########################################################################################################################
 
 ## Declare a cpp executable 
@@ -155,6 +159,12 @@ add_executable(CYCLEOPT src/CYCLE_Opt_Agent.cpp)
 add_dependencies(CYCLEOPT ${PROJECT_NAME}_gencpp ${catkin_EXPORTED_TARGETS})
 ## Specify libraries to link a library or executable target against
 target_link_libraries(CYCLEOPT PatrolAgent CycleOptAgent ${catkin_LIBRARIES})
+
+## Declare a cpp executable 
+add_executable(CFAGENT src/CF_Agent.cpp)
+add_dependencies(CFAGENT ${PROJECT_NAME}_gencpp ${catkin_EXPORTED_TARGETS})
+## Specify libraries to link a library or executable target against
+target_link_libraries(CFAGENT PatrolAgent CFAgent ${catkin_LIBRARIES})
 
 ########################################################################################################################
 
