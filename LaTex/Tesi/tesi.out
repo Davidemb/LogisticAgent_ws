@@ -11,7 +11,7 @@
 \BOOKMARK [0][-]{chapter.4}{Solution}{}% 11
 \BOOKMARK [1][-]{section.4.1}{Greedy Strategy Single robot : Single task \(GS1:1\)}{chapter.4}% 12
 \BOOKMARK [1][-]{section.4.2}{Set Partition Strategy Single robot : Multiple task \(SPS1:N\)}{chapter.4}% 13
-\BOOKMARK [1][-]{section.4.3}{Coalition formation Strategy Single robot : Multiple task \(CFS1:N\)}{chapter.4}% 14
+\BOOKMARK [1][-]{section.4.3}{Coalition Formation Strategy Single robot : Multiple task \(CFS1:N\)}{chapter.4}% 14
 \BOOKMARK [0][-]{chapter.5}{Empirical Setting}{}% 15
 \BOOKMARK [1][-]{section.5.1}{Robot Operating System \(ROS\)}{chapter.5}% 16
 \BOOKMARK [2][-]{subsection.5.1.1}{Nomencalture and Architecture}{section.5.1}% 17
