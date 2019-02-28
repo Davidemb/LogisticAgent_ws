@@ -248,6 +248,7 @@ public:
 
   //--------------------------------------------------------------------------
   void init_agent();
+  void init_agent2();
   void calc_route_to_src();
   void can_execute_decicion();
   void request_Task();

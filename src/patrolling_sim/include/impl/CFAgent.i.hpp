@@ -133,7 +133,7 @@ void CFA::run()
 
   while (ros::ok())
   {
-    init_agent();
+    init_agent2();
 
     if (goal_complete)
     {

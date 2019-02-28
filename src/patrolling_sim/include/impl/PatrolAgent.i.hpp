@@ -312,6 +312,33 @@ void PatrolAgent::init_agent()
   }
 }
 
+
+void PatrolAgent::init_agent2()
+{
+
+  bool f = true;
+  while (!OK)
+  {
+    // chiedo se dopo aver calcolato la via per la src posso andare se non posso
+    // aspetto
+    // e dopo looprate.sleep() richiedo se posso finalmente partire
+    if (f)
+    {
+      std_msgs::Int16MultiArray msg;
+      msg.data.push_back(ID_ROBOT);
+      msg.data.push_back(48);
+      msg.data.push_back(CAPACITY);
+      calc_route_to_src();
+      compute_cost_of_route();
+      pub_to_task_planner_init.publish(msg);
+      f = false;
+      ros::spinOnce();
+      sleep(0.1);
+    }
+    can_execute_decicion();
+  }
+}
+
 void PatrolAgent::run()
 {
   // get ready
