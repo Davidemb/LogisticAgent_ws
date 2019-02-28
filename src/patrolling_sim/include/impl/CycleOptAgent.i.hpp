@@ -13,6 +13,7 @@ int COA::compute_next_vertex()
     if (mission[id_task].take)
     {
       request_Mission();
+      // sleep(10);
     }
     else
     {
