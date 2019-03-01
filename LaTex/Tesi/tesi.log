@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2018.5.15)  28 FEB 2019 17:48
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2018.5.15)  1 MAR 2019 12:09
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -717,20 +717,20 @@ LaTeX Info: Thecontrolsequence`\]'isalreadyrobust on input line 129.
 ) (/home/dave/LogisticAgent_ws/LaTex/Tesi/tesi.aux)
 \openout1 = `tesi.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 44.
-LaTeX Font Info:    ... okay on input line 44.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 44.
-LaTeX Font Info:    ... okay on input line 44.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 44.
-LaTeX Font Info:    ... okay on input line 44.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 44.
-LaTeX Font Info:    ... okay on input line 44.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 44.
-LaTeX Font Info:    ... okay on input line 44.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 44.
-LaTeX Font Info:    ... okay on input line 44.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 44.
-LaTeX Font Info:    ... okay on input line 44.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 46.
+LaTeX Font Info:    ... okay on input line 46.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 46.
+LaTeX Font Info:    ... okay on input line 46.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 46.
+LaTeX Font Info:    ... okay on input line 46.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 46.
+LaTeX Font Info:    ... okay on input line 46.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 46.
+LaTeX Font Info:    ... okay on input line 46.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 46.
+LaTeX Font Info:    ... okay on input line 46.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 46.
+LaTeX Font Info:    ... okay on input line 46.
  (/usr/share/texlive/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
 \scratchcounter=\count143
@@ -757,7 +757,7 @@ Package grfext Info: Graphics extension search list:
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Live
 ))
 \AtBeginShipoutBox=\box62
-Package hyperref Info: Link coloring ON on input line 44.
+Package hyperref Info: Link coloring ON on input line 46.
  (/usr/share/texlive/texmf-dist/tex/latex/hyperref/nameref.sty
 Package: nameref 2016/05/21 v2.44 Cross-referencing by name of section
  (/usr/share/texlive/texmf-dist/tex/generic/oberdiek/gettitlestring.sty
@@ -765,9 +765,9 @@ Package: gettitlestring 2016/05/16 v1.5 Cleanup title references (HO)
 )
 \c@section@level=\count149
 )
-LaTeX Info: Redefining \ref on input line 44.
-LaTeX Info: Redefining \pageref on input line 44.
-LaTeX Info: Redefining \nameref on input line 44.
+LaTeX Info: Redefining \ref on input line 46.
+LaTeX Info: Redefining \pageref on input line 46.
+LaTeX Info: Redefining \nameref on input line 46.
  (/home/dave/LogisticAgent_ws/LaTex/Tesi/tesi.out) (/home/dave/LogisticAgent_ws/LaTex/Tesi/tesi.out)
 \@outlinefile=\write4
 \openout4 = `tesi.out'.
@@ -776,19 +776,14 @@ LaTeX Info: Redefining \nameref on input line 44.
 <tesi-frn.pdf, id=140, pagebox=cropbox, 597.50829pt x 845.0471pt>
 File: tesi-frn.pdf Graphic file (type pdf)
 <use tesi-frn.pdf>
-Package pdftex.def Info: tesi-frn.pdf  used on input line 47. on input line 47.
-Package pdftex.def Info: Requested size: 597.50682pt x 845.04504pt on input line 47.
+Package pdftex.def Info: tesi-frn.pdf  used on input line 49. on input line 49.
+Package pdftex.def Info: Requested size: 597.50682pt x 845.04504pt on input line 49.
  [1
 
 
  </home/dave/LogisticAgent_ws/LaTex/Tesi/tesi-frn.pdf{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}>] [2
 
-] (/home/dave/LogisticAgent_ws/LaTex/Tesi/tesi.toc
-Overfull \hbox (13.33868pt too wide) in paragraph at lines 16--16
- [][] [][][]\OT1/cmr/m/n/12 Coalition For-ma-tion Strat-egy Sin-gle robot : Mul-ti-ple task (CFS1:N)[][] [][]  
- []
-
-[3])
+] (/home/dave/LogisticAgent_ws/LaTex/Tesi/tesi.toc [3])
 \tf@toc=\write5
 \openout5 = `tesi.toc'.
 
@@ -817,13 +812,8 @@ Chapter 3.
 ]) [14]
 Chapter 4.
 (/home/dave/LogisticAgent_ws/LaTex/Tesi/chapter/solution.tex
-Overfull \hbox (2.98422pt too wide) in paragraph at lines 7--7
-[]\OT1/cmr/bx/n/17.28 Greedy Strat-egy Sin-gle robot : Sin-gle task
- []
-
-
-Overfull \hbox (5.8697pt too wide) in paragraph at lines 19--19
-[]\OT1/cmr/bx/n/17.28 Coalition For-ma-tion Strat-egy Sin-gle robot
+Overfull \hbox (11.12975pt too wide) in paragraph at lines 12--12
+[]\OT1/cmr/bx/n/17.28 Greedy Set Par-ti-tion Strat-egy Sin-gle robot
  []
 
 ) [15
@@ -1058,29 +1048,29 @@ Chapter 7.
 (/home/dave/LogisticAgent_ws/LaTex/Tesi/chapter/coclusions.tex) [45] [46
 
 ]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 102.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 104.
  [47]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 102.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 104.
  (/home/dave/LogisticAgent_ws/LaTex/Tesi/tesi.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 102.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 102.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 104.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 104.
 Package rerunfilecheck Info: File `tesi.out' has not changed.
-(rerunfilecheck)             Checksum: 1EFB41180F1A70EBEB9A6100A6798B8A;2464.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 102.
+(rerunfilecheck)             Checksum: 37732DE5009E299D0ADD7575CBA8E951;2449.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 104.
  ) 
 Here is how much of TeX's memory you used:
- 11274 strings out of 492995
- 158293 string characters out of 6135073
- 274861 words of memory out of 5000000
- 14197 multiletter control sequences out of 15000+600000
+ 11277 strings out of 492995
+ 158303 string characters out of 6135073
+ 274887 words of memory out of 5000000
+ 14200 multiletter control sequences out of 15000+600000
  10510 words of font info for 38 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  37i,10n,58p,308b,1847s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmcsc10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsl12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt12.pfb>
-Output written on /home/dave/LogisticAgent_ws/LaTex/Tesi/tesi.pdf (47 pages, 272709 bytes).
+Output written on /home/dave/LogisticAgent_ws/LaTex/Tesi/tesi.pdf (47 pages, 272784 bytes).
 PDF statistics:
- 935 PDF objects out of 1000 (max. 8388607)
- 861 compressed objects within 9 object streams
+ 936 PDF objects out of 1000 (max. 8388607)
+ 862 compressed objects within 9 object streams
  462 named destinations out of 1000 (max. 500000)
  278 words of extra memory for PDF output out of 10000 (max. 10000000)
 

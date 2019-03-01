@@ -111,7 +111,7 @@ class PatrolAgent
 protected:
   int TEAMSIZE;
   int ID_ROBOT;
-  int CAPACITY = 4;  //////////////////////////////////////////////////////////////////////////////////////////////
+  int CAPACITY = 3;  //////////////////////////////////////////////////////////////////////////////////////////////
 
   double xPos[NUM_MAX_ROBOTS];  // tabelas de posições (atençao ao index pro caso
                                 // de 1 so robot)
@@ -249,6 +249,7 @@ public:
   //--------------------------------------------------------------------------
   void init_agent();
   void init_agent2();
+  void init_agent3();
   void calc_route_to_src();
   void can_execute_decicion();
   void request_Task();

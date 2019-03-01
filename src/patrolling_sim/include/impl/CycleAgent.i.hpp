@@ -135,7 +135,7 @@ void CycleAgent::run()
   {
     // if (initialization)
     // {
-    init_agent();
+    init_agent3();
 
     if (goal_complete)
     {

@@ -11,9 +11,9 @@
 \contentsline {section}{\numberline {3.1}Description}{13}{section.3.1}
 \contentsline {section}{\numberline {3.2}Fomalization}{14}{section.3.2}
 \contentsline {chapter}{\numberline {4}Solution}{15}{chapter.4}
-\contentsline {section}{\numberline {4.1}Greedy Strategy Single robot : Single task (GS1:1)}{15}{section.4.1}
-\contentsline {section}{\numberline {4.2}Set Partition Strategy Single robot : Multiple task (SPS1:N)}{15}{section.4.2}
-\contentsline {section}{\numberline {4.3}Coalition Formation Strategy Single robot : Multiple task (CFS1:N)}{15}{section.4.3}
+\contentsline {section}{\numberline {4.1}Single robot : Single task (SR:ST)}{15}{section.4.1}
+\contentsline {section}{\numberline {4.2}Greedy Set Partition Strategy Single robot : Multiple task (GSP1:N)}{15}{section.4.2}
+\contentsline {section}{\numberline {4.3}Set Partition Strategy Single robot : Multiple task (SPS1:N)}{15}{section.4.3}
 \contentsline {chapter}{\numberline {5}Empirical Setting}{17}{chapter.5}
 \contentsline {section}{\numberline {5.1}Robot Operating System (ROS)}{17}{section.5.1}
 \contentsline {subsection}{\numberline {5.1.1}Nomencalture and Architecture}{17}{subsection.5.1.1}

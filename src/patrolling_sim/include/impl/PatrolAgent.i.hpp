@@ -11,6 +11,7 @@ void PatrolAgent::init(int argc, char **argv)
       argv[1]=__name:=XXXXXX
       argv[2]=grid
       argv[3]=ID_ROBOT
+      argv[4]= CAPACITY
   */
 
   srand(time(NULL));
@@ -26,6 +27,8 @@ void PatrolAgent::init(int argc, char **argv)
   {
     ID_ROBOT = atoi(argv[3]);
   }
+
+  // CAPACITY = atoi(argv[4]);
 
   /** D.Portugal: needed in case you "rosrun" from another folder **/
   chdir(PS_path.c_str());
@@ -327,6 +330,32 @@ void PatrolAgent::init_agent2()
       std_msgs::Int16MultiArray msg;
       msg.data.push_back(ID_ROBOT);
       msg.data.push_back(48);
+      msg.data.push_back(CAPACITY);
+      calc_route_to_src();
+      compute_cost_of_route();
+      pub_to_task_planner_init.publish(msg);
+      f = false;
+      ros::spinOnce();
+      sleep(0.1);
+    }
+    can_execute_decicion();
+  }
+}
+
+void PatrolAgent::init_agent3()
+{
+
+  bool f = true;
+  while (!OK)
+  {
+    // chiedo se dopo aver calcolato la via per la src posso andare se non posso
+    // aspetto
+    // e dopo looprate.sleep() richiedo se posso finalmente partire
+    if (f)
+    {
+      std_msgs::Int16MultiArray msg;
+      msg.data.push_back(ID_ROBOT);
+      msg.data.push_back(49);
       msg.data.push_back(CAPACITY);
       calc_route_to_src();
       compute_cost_of_route();

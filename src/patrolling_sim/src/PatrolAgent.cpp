@@ -411,8 +411,8 @@ bool PatrolAgent::check_interference(int robot_id)
   if (ros::Time::now().toSec() - last_interference < 10) // seconds
     return false;                                       // false if within 10 seconds from the last one
 
-  /* Poderei usar TEAMSIZE para afinar */
-  for (i = 0; i < robot_id; i++)
+  // /* Poderei usar TEAMSIZE para afinar */ <<<<<<<<<<<<<<<
+  for (i = 0; i <= robot_id; i++)
   { // percorrer vizinhos (assim asseguro q cada interferencia é so encontrada 1 vez)
 
     dist_quad = (xPos[i] - xPos[robot_id]) * (xPos[i] - xPos[robot_id]) +

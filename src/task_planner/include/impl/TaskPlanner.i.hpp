@@ -169,6 +169,26 @@ void TaskPlanner::init_Callback(const std_msgs::Int16MultiArrayConstPtr &msg)
       compute_CF();
     }
   }
+  break;
+
+  case (INIT_MSG3):
+  {
+    init_agent[value] = true;
+    auto c = msg->data[2];
+    TEAM_c += c;
+    c_print("TEAM_C: ", TEAM_c, red);
+    pa[value] = mkPA(value, c);
+    pa_print(pa[value]);
+    uint T_t = TEAM_t;
+    for (int i = 0; i < TEAM_t; i++)
+    {
+      if (init_agent[i] == true)
+      {
+        T_t--;
+      }
+    }
+  } 
+  break;
 
   default:
     break;
@@ -177,7 +197,7 @@ void TaskPlanner::init_Callback(const std_msgs::Int16MultiArrayConstPtr &msg)
 
 void TaskPlanner::t_generator()
 {
-  uint n_item = 3;
+  uint n_item = 3; 
   uint o = 0;
   uint n_demand = 3;
   uint j = 0;
@@ -567,29 +587,31 @@ void TaskPlanner::compute_CF()
     v_pt.push_back(pt);
   }
 
-  for (auto j = 0; j < v_pt.size(); j++)
-  {
-    cout << v_pt[j] << " ";
-  }
-  cout << "\n";
+  // for (auto j = 0; j < v_pt.size(); j++)
+  // {
+  //   cout << v_pt[j] << " ";
+  // }
+  // cout << "\n";
 
   // c_print ("madonna troia", magenta);
 
   for (auto k = 0; k < v_pt.size(); k++)
   {
     auto el = v_pt[k];
+    // c_print("el: ", el.id,red);
     for (auto q = 0; q < v_pt.size(); q++)
     {
       auto el2 = v_pt[q];
+      // c_print("el2: ", el.id, green);
 
       if (el.id != el2.id)
       {
         auto tmp_d = el.tot_demand + el2.tot_demand;
         if (tmp_d <= max_el.CAPACITY)
         {
-          c_print("new_pt",red);
+          // c_print("new_pt",red);
           ProcessTask n_pt;
-          n_pt.id = el.id; // il primo elemento della coppia prende l'id
+          n_pt.id = v_pt.size()+1; // il primo elemento della coppia prende l'id
           n_pt.tot_demand = tmp_d;
           for (auto t = 0; t < el.mission.size(); t++)
             n_pt.mission.push_back(el.mission[t]);
@@ -598,25 +620,37 @@ void TaskPlanner::compute_CF()
           uint id_path = compute_cycle_dst(n_pt.mission);
           compute_route(id_path, &n_pt);
 
-          cout << "nV: "<<n_pt.V << " elV: "<< el.V << " el2V: "<<el2.V << "\n";
-
+          // cout << "nV: "<<n_pt.V << " elV: "<< el.V << " el2V: "<<el2.V << "\n";
+          // cout << " ID----> nV: "<<n_pt.id << " elV: "<< el.id << " el2V: "<<el2.id << "\n";
+          
+          // minimization
           if ((n_pt.V - el.V - el2.V) < 0) // con < di zero allora accoppia
           {
             // cancella gli elementi el e el2 inserisci n_pt
             v_pt.erase(find(v_pt.begin(), v_pt.end(), el));
             v_pt.erase(find(v_pt.begin(), v_pt.end(), el2));
+            // cout << n_pt << "\n";
             v_pt.push_back(n_pt);
-            c_print("insert new tuple", red);
+            // for (auto h = 0; h < v_pt.size(); h++)
+            // {
+            //   cout << v_pt[h] << " ";
+            // }
+            // cout << "\n";
+            // c_print("insert new tuple", red);
+          }
+          else
+          {
+            delete &n_pt;
           }
         }
       }
-      else
-      {
-      }
+      break;  
     }
   }
   
   sort(v_pt.begin(), v_pt.end(),cmp_PT);
+
+  c_print("soluzione",red);
 
   for (auto j = 0; j < v_pt.size(); j++)
   {
