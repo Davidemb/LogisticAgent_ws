@@ -1,7 +1,7 @@
 [Config]
 map: model5
-nrobots: 4
-algorithm: CYCLEOPT
+nrobots: 2
+algorithm: CYCLE
 locmode: AMCL
 navmode: ros
 gwait: 0

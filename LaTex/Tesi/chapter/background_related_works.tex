@@ -1,40 +1,40 @@
-In this section, we detail the main issues for Multi-Robot system coordination 
+In this section, we detail the main issues for \mrs coordination 
 in industrial domains, then we provide a detailed discussion on coordination
 approaches, highlighting challenges and main solution techniques.
 
-\section{Multi-Robot system for Industrial Applications}
-In this thesis I also focus on industrial scenarios where robots have a high
-degree of autonomy and operate in a dynamic environment. 
-% 
-% 
-% Qua c'e da menzionare i paper letti finora in generale
-% 
-% 
-In this work, I consider a similar setting where a set or robots are involved
-in trasportations tasks for logistics. However, I focus on the specific problem
-of task assignment ...
+\section{Multi-Robot System for Industrial Applications}
+In this thesis we also focus on industrial scenarios where robots have a high
+degree of autonomy and operate in a dynamic environment.
+\\
+In article \cite{maxsum} robots must cooperate to maximizes the number of packages
+completed in the unit of time. To this end a crucial component is to avoid interferences
+when moving in the enviroment. They have formalised that problem as a Distributed 
+Constrained Optimization problem based their solution on the binary max-sum algorithm.
+\\
+The most recent paper in logistic scenario \cite{mapd}, uses a Token Passing approach 
+that solves the pickup-and-delivery tasks. The resulting algorithm takes kinematic 
+constraints during planning, computes continuos agent movements with given velocities
+that work on non-holonomic robots.
 
-% cosa faccio di diverso rispetto gli articoli in generale
+In this work, we consider a similar setting where a set of robots are involved
+in trasportations tasks for logistics. However, we focus on the specific problem
+of task assignment.
 
 \section{Coordination in Multi-Robot system}
-Coordination for Multi-Robot system (MRS) has been investigated from several diverse
+Coordination for \mrs has been investigated from several diverse
 perspectives and nowadays, there is a wide range of techniques that can be used to 
 orchestrate the actions and movements of robots operationg in the same enviroment.
-Specifically, the ability to effectively coordinate the actions of a MRS is a key 
+Specifically, the ability to effectively coordinate the actions of a \mrs is a key 
 requirement in several applications domains that range from disaster response to 
 environmental monitoring, militaty operations, manufacturing and logistics. 
 In all such domains, coordination has been addressed using various frameworks and 
 techniques and there are several survery papers dedicated to categorize such different
-approaches and identifying most prominent issues when developing MRS.
-% 
-% 
-% cosa fanno i paper letti fin'ora per coordinare i robot. ex: grafo, ecc
-% 
-% 
+approaches and identifying most prominent issues when developing \mrs.
 \\
-Given my focus on logistic scenarios, here I restrict my attention to coordination
+In the paper \cite{cooros} present and evaluate new ROS package for coordinated 
+multi-robot exploration. The packages allow completely distributed control and do 
+not rely on (but allow) central controllers.
+\\
+Given our focus on logistic scenarios, here we restrict our attention to coordination
 approaches based on optimization and specifically on task assignment as this the most 
 common framework for my reference application domain.
-
-% cosa faccio io di diverso rispetto gli articoli. nello specifico della coordinazione
-

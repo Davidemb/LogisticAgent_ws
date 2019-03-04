@@ -133,15 +133,18 @@ void TaskPlanner::init_Callback(const std_msgs::Int16MultiArrayConstPtr &msg)
         auto el = ele.vv_t[i];
         for (auto j = 0; j < s_el; j++)
         {
-          auto e = el[j].route;
+          // auto e = el[j].route;
           auto r = el[j];
           v_pt.push_back(r);
         }
       }
+      sort(v_pt.begin(), v_pt.end(),cmp_PT);
+
       for (auto h = 0; h < v_pt.size(); h++)
       {
-        auto el = v_pt[h].route;
+       cout << v_pt[h]<<" ";
       }
+      cout << " ";
       c_print("fine", green);
     }
   }
@@ -573,7 +576,6 @@ void TaskPlanner::compute_CF()
   auto max_el = *std::max_element(pa, pa + TEAM_t);
   cout << "elemento massimo " << max_el.CAPACITY << "\n";
 
-  // CF cf;
   int id_pt = 0;
   for (auto i = 0; i < tasks.size(); i++)
   {
@@ -587,31 +589,20 @@ void TaskPlanner::compute_CF()
     v_pt.push_back(pt);
   }
 
-  // for (auto j = 0; j < v_pt.size(); j++)
-  // {
-  //   cout << v_pt[j] << " ";
-  // }
-  // cout << "\n";
-
-  // c_print ("madonna troia", magenta);
-
   for (auto k = 0; k < v_pt.size(); k++)
   {
     auto el = v_pt[k];
-    // c_print("el: ", el.id,red);
     for (auto q = 0; q < v_pt.size(); q++)
     {
       auto el2 = v_pt[q];
-      // c_print("el2: ", el.id, green);
-
       if (el.id != el2.id)
       {
         auto tmp_d = el.tot_demand + el2.tot_demand;
         if (tmp_d <= max_el.CAPACITY)
         {
-          // c_print("new_pt",red);
           ProcessTask n_pt;
-          n_pt.id = v_pt.size()+1; // il primo elemento della coppia prende l'id
+          n_pt.id = v_pt.size()+1; 
+          //                    ^ prende la taglia piu uno: possibili id uguali! ma non importante.
           n_pt.tot_demand = tmp_d;
           for (auto t = 0; t < el.mission.size(); t++)
             n_pt.mission.push_back(el.mission[t]);
@@ -620,23 +611,13 @@ void TaskPlanner::compute_CF()
           uint id_path = compute_cycle_dst(n_pt.mission);
           compute_route(id_path, &n_pt);
 
-          // cout << "nV: "<<n_pt.V << " elV: "<< el.V << " el2V: "<<el2.V << "\n";
-          // cout << " ID----> nV: "<<n_pt.id << " elV: "<< el.id << " el2V: "<<el2.id << "\n";
-          
           // minimization
           if ((n_pt.V - el.V - el2.V) < 0) // con < di zero allora accoppia
           {
-            // cancella gli elementi el e el2 inserisci n_pt
-            v_pt.erase(find(v_pt.begin(), v_pt.end(), el));
+            cout << "i: "<<el.id<< " ed: "<<el2.id<< "\n";
+             v_pt.erase(find(v_pt.begin(), v_pt.end(), el));
             v_pt.erase(find(v_pt.begin(), v_pt.end(), el2));
-            // cout << n_pt << "\n";
             v_pt.push_back(n_pt);
-            // for (auto h = 0; h < v_pt.size(); h++)
-            // {
-            //   cout << v_pt[h] << " ";
-            // }
-            // cout << "\n";
-            // c_print("insert new tuple", red);
           }
           else
           {
@@ -646,6 +627,7 @@ void TaskPlanner::compute_CF()
       }
       break;  
     }
+    // break;
   }
   
   sort(v_pt.begin(), v_pt.end(),cmp_PT);
@@ -662,7 +644,7 @@ void TaskPlanner::compute_CF()
 
 void TaskPlanner::run()
 {
-  compute_CF();
+  // TODO
 }
 
 void TaskPlanner::task_Callback(const patrolling_sim::TaskRequestConstPtr &tr)

@@ -129,13 +129,15 @@ void CycleAgent::run()
 
   /* Run Algorithm */
 
+   init_agent3();
+
   ros::Rate loop_rate(30); // 0.033 seconds or 30Hz
 
   while (ros::ok())
   {
     // if (initialization)
     // {
-    init_agent3();
+    // init_agent3();
 
     if (goal_complete)
     {

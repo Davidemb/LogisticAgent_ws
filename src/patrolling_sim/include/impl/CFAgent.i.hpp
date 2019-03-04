@@ -128,12 +128,12 @@ void CFA::run()
   // ros::waitForShutdown();
 
   /* Run Algorithm */
+    init_agent2();
 
   ros::Rate loop_rate(30);  // 0.033 seconds or 30Hz
 
   while (ros::ok())
   {
-    init_agent2();
 
     if (goal_complete)
     {
