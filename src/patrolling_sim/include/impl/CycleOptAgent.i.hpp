@@ -128,12 +128,12 @@ void COA::run()
   // ros::waitForShutdown();
 
   /* Run Algorithm */
-    init_agent();
 
   ros::Rate loop_rate(30);  // 0.033 seconds or 30Hz
 
   while (ros::ok())
   {
+    init_agent();
 
     if (goal_complete)
     {

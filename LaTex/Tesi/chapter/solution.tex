@@ -64,42 +64,155 @@ We want minimize the cost of the gain, that can be defined as:
 if the gain $G$ is less than 0 then we allocate the pair and delete the element which
 form the coalition.
 
-The core of this algorithm is reported below as pseudocode.
+Later initialzation phase \texttt{init\_agent()} which all agents send their capacity and identifier,
+start the Coalition Formation algorithm \cite{cf_greedy}.
+When compute new one possible coalition the heuristic  $v(\cdot)$ has been used to calculate 
+the gain $G(C_{i,j})$ and if is negative that coalition is insered into the formation and the 
+$C_i$ , $C_j$ are deleted from this set.
+After that computation all subset coalition are sorted respecting the crescent order of heuristic
+value.
+
 \begin{algorithm}
-    \caption{Greedy Coalition Formation}\label{GSF}
-    % \begin{algorithmic}[1]
-        % Initialize partitions to singletons
-    $T = {{t_0},{t_1}, \cdots, {t_N}}$
-    % \end{algorithmic}
+\caption{Greedy Coalition Formation} \label{GCF}
+\begin{algorithmic}[1]
+\Procedure{GCF}{$tasks$}\Comment{all task to combination}
+\For{$C_i$}
+\For{$C_j$}
+  \If{$C_i \neq C_j \wedge C_{i,j}$ has total demand $<=$ max capacity forall agent}
+  \If{$v(C_{i,j})-v(C_i)-v(C_j) < 0$}
+
+        \texttt{insert(}$C_{i,j}$\texttt{)}
+
+        \texttt{delete(}$C_i$\texttt{)}
+  
+        \texttt{delete(}$C_j$\texttt{)} 
+
+        \texttt{break}
+  \EndIf
+  \EndIf
+\EndFor
+\EndFor
+\EndProcedure
+\end{algorithmic}
 \end{algorithm}
+
 
 \subsection{Set Partition Strategy Single robot : Multiple task (\sps)}
 
-This method consists to compute all possible coalitions of the task set and use only 
-the best coalition which is based on the previously mentioned heuristic $v$.
+This method consists to compute all possible coalitions of the task set 
+using Set Partition algorithm \cite{partition} and use only 
+the best coalition which is based on the previously mentioned heuristic $v(\cdot)$.
+
+After initialzation phase \texttt{init\_agent()} which all agents send their capacity and identifier,
+start the partition algorithm \cite{partition} that return all possible combination 
+of task.
+Then foreach combination the heuristic $v(\cdot)$ has been used to calculate the gain $G(C)$ of the 
+combination. Furthermore the combination with the lowest gain has been choose.
+So a subset of combination as been sort in a cresent order. 
+Then the firt subset of combination has the lowest value of heuristic function and 
+is the fisrt task assigned at the fist request from a robot.
+
+\begin{algorithm}
+  \caption{Compute best subset} \label{SP}
+  \begin{algorithmic}[1]
+  \Procedure{Compute best subset}{$SP$}\Comment{all subset of task}
+  \For{$subset_i \in SP$}
+  \If{$subset_{i}.demand >$ max capacity forall agents}
+  \texttt{delete(}$subset_i$\texttt{)}
+  
+  \texttt{break}
+  \EndIf
+    \For{$s_j \in subset_i$}
+      $v(s_j)$ 
+    \EndFor
+  \EndFor
+  \Comment{sort all $subset_i$ for lowest $v(\cdot)$} 
+  \EndProcedure
+  \end{algorithmic}
+  \end{algorithm}
+
+An example of solution with set $|T| = 4$:
+\begin{center}
+  % \centering
+  \begin{tabular}{|c|r|c|} \hline
+  \textbf{iteration} & \textbf{partition size} & \textbf{partition} \\ \hline
+  1    & 1    & \{\{a, b, c, d\}\}   \\
+  2    & 2    & \{\{a, b, c\}, \{d\}\}   \\
+  3    & 2    & \{\{a, b, d\}, \{c\}\}   \\
+  4    & 2    & \{\{a, b\}, \{c, d\}\}   \\
+  5    & 3    & \{\{a, b\}, \{c\}, \{d\}\}   \\
+  6    & 2    & \{\{a, c, d\}, \{b\}\}   \\
+  7    & 2    & \{\{a, c\}, \{b, d\}\}   \\
+  8    & 3    & \{\{a, c\}, \{b\},\{d\}\}   \\
+  9    & 2    & \{\{a, d\}, \{b, c\}\}   \\
+  10   & 2    & \{\{a\}, \{b, c, d\}\}   \\
+  11   & 3    & \{\{a\}, \{b, c\}, \{d\}\}   \\
+  12   & 3    & \{\{a, d\}, \{b\}, \{c\}\}   \\
+  13   & 3    & \{\{a\}, \{b, d\}, \{c\}\}   \\
+  14   & 3    & \{\{a\}, \{b\}, \{c, d\}\}   \\
+  15   & 4    & \{\{a\}, \{b\}, \{c\},\{d\}\}   \\ \hline       
+  \end{tabular}
+\end{center}
 
 \subsection*{Example with 9 tasks and 4 robots}
-Given a set of tasks $T = {{{t_0},{t_1}, \cdots, {t_9}}}$ defined like: 
+Given a set of tasks $T = \{  \{t_0\}, \{t_1\}, \cdots, \{t_8\} \}$ defined like: 
 ${t_i=(item, demand, unloading\_bay)}$. The agents have the same capacity $C_{0,1,2,3} = 4$.
 
-For \textbf{example}:
-\newline
-$T=\{t_0(A,1,U_0), t_1(B,1,U_1), t_2(C,1,U_2), t_3(A,2,U_0), t_4(B,2,U_1),t_5(C,2,U_2), t_6(A,3,U_0), t_7(B,3,U_1), t_8(C,3,U_2)\}$
+\begin{center}
+  % \centering
+  \begin{tabular}{|c|c|c|c|} \hline
+  \textbf{task} & \textbf{item} & \textbf{demand} & \textbf{unloading bay} \\ \hline
+  0    & A    & 1      & 0             \\
+  1    & B    & 2      & 1             \\
+  2    & C    & 3      & 2             \\
+  3    & A    & 1      & 0             \\
+  4    & B    & 2      & 1             \\
+  5    & C    & 3      & 2             \\
+  6    & A    & 1      & 0             \\
+  7    & B    & 2      & 1             \\
+  8    & C    & 3      & 2             \\ \hline       
+  \end{tabular}
+\end{center}
+
 
 The result of the Greedy Coalition Formation is:
-\newline
-$T'= \{ t_5(C,2,U_2), t_6(A,3,U_0),t_7(B,3,U_1),t_8 (C,3,U_2),t_{\{2,4\}}(\{C,B\},3,U_{1,2}), t_{\{0,1,3\}}(\{A,B\},4,U_{0,1}) \}$
+\begin{center}
+  \begin{tabular}{|c|c|c|c|} \hline
+  \textbf{task} & \textbf{item} & \textbf{demand} & \textbf{unloading bay} \\ \hline
+  \{3,2\}    & \{A,C\}    & 4     & \{0,2\}             \\
+  \{0,1\}    & \{A,B\}    & 3     & \{0,1\}             \\
+  \{6,4\}    & \{A,B\}    & 3     & \{0,1\}             \\
+  5    & C    & 3      & 2             \\
+  8    & C    & 3      & 2             \\        
+  7    & B    & 2      & 1             \\\hline
+  \end{tabular}
+\end{center}
 
 \begin{figure} [hbt]
     \centering
-    \includegraphics[width=\textwidth]{img/CF_graph.png}
-    \caption{An exemplar dedrogram representing a possible hierarchical
-    clusterung for 9 tasks. The horizontal line represents a cut of the dendrogram
-    and defines the coalition structure
-    $\{ t_5(C,2,U_2), t_6(A,3,U_0),t_7(B,3,U_1),t_8 (C,3,U_2),t_{\{2,4\}}(\{C,B\},3,U_{1,2}), t_{\{0,1,3\}}(\{A,B\},4,U_{0,1}) \}$.}
+    \includegraphics[width=\textwidth]{img/CF.png}
+    \caption{The horizontal line represents a cut of the dendrogram
+    and defines the coalition structure.}
     \label{fig:CF_graph}
 \end{figure}
 
+The result of the Set Partition is:
 
+  \begin{center}
+    \begin{tabular}{|c|c|c|c|} \hline
+    \textbf{task} & \textbf{item} & \textbf{demand} & \textbf{unloading bay} \\ \hline
+    \{4,7\}    & B    & 4     & \{1\}             \\
+    \{0,1,3\}  & \{A,B\}& 4    & \{0,1\}             \\
+    \{2,6\}    & \{C,A\}    & 4  & \{0,2\}             \\
+    5    & C    & 3      & 2             \\
+    8    & C    & 3      & 2             \\ \hline       
+    \end{tabular}
+  \end{center}
 
-
+  \begin{figure} [hbt]
+    \centering
+    \includegraphics[width=\textwidth]{img/SP.png}
+    \caption{The horizontal line represents a cut of the dendrogram
+    and defines the coalition structure.}
+    \label{fig:SP_graph}
+\end{figure}

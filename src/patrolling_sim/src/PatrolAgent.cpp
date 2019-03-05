@@ -476,7 +476,7 @@ void PatrolAgent::do_interference_behavior()
   ROS_INFO("Interference detected! Executing interference behavior...\n");
   send_interference(); // send interference to monitor for counting
 
-  // backup();
+  backup();
 
 #if 1
     // Stop the robot..
@@ -683,6 +683,7 @@ void PatrolAgent::resultsCB(const std_msgs::Int16MultiArray::ConstPtr &msg)
       ros::Duration wait(r); // seconds
 
       printf("Wait %.1f seconds (init pos:%s)\n", r, initial_positions.c_str());
+
 
       wait.sleep();
       initialize = false;
