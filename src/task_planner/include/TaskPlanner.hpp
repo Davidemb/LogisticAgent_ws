@@ -184,6 +184,21 @@ bool cmp_PT(const ProcessTask &A, const ProcessTask &B)
   return A.V < B.V ? 1: 0;
 }
 
+inline bool operator == (const ProcessTask &A, const Task &B)
+{
+  for (auto i = 0; i < A.mission.size(); i++)
+  {
+    if (B.order == A.mission[i].order)
+    {
+      return 1;
+    }
+    else
+    {
+      return 0;
+    }
+  }
+}
+
 struct CandidateTask {
   uint id;
   uint subset;
@@ -272,6 +287,7 @@ public:
   // bool finish_task = true;
 
   vector<ProcessTask> v_pt;
+  vector<ProcessTask> v_PT;
   vector<CandidateTask> v_ct;
   vector<CandidateTask> v_good;
   priority_queue<ProcessTask> pq_pt;

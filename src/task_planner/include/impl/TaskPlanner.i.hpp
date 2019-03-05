@@ -8,8 +8,7 @@ TaskPlanner::TaskPlanner(ros::NodeHandle &nh_)
 {
   sub_init = nh_.subscribe("init", 1, &TaskPlanner::init_Callback, this);
   sub_task = nh_.subscribe("need_task", 1, &TaskPlanner::task_Callback, this);
-  sub_mission =
-      nh_.subscribe("need_mission", 1, &TaskPlanner::mission_Callback, this);
+  sub_mission = nh_.subscribe("need_mission", 1, &TaskPlanner::mission_Callback, this);
 
   pub_task = nh_.advertise<task_planner::Task>("answer", 1);
   pub_results = nh_.advertise<std_msgs::Int16MultiArray>("results", 100);
@@ -65,14 +64,12 @@ void TaskPlanner::init(int argc, char **argv)
   srand(time(NULL));
   chdir(PS_path.c_str());
   string mapname = string(argv[1]);
-  string graph_file = "/home/dave/LogisticAgent_ws/src/patrolling_sim/maps/" +
-                      mapname + "/" + mapname + ".graph";
+  string graph_file = "/home/dave/LogisticAgent_ws/src/patrolling_sim/maps/" + mapname + "/" + mapname + ".graph";
   uint dimension = GetGraphDimension(graph_file.c_str());
   vertex_web = new vertex[dimension];
   GetGraphInfo(vertex_web, dimension, graph_file.c_str());
   uint nedges = GetNumberEdges(vertex_web, dimension);
-  printf("Loaded graph %s with %d nodes and %d edges\n", mapname.c_str(),
-         dimension, nedges);
+  printf("Loaded graph %s with %d nodes and %d edges\n", mapname.c_str(), dimension, nedges);
   TEAM_t = atoi(argv[3]);
 
   t_generator();
@@ -103,116 +100,119 @@ void TaskPlanner::init_Callback(const std_msgs::Int16MultiArrayConstPtr &msg)
 
   switch (type_msg)
   {
-  case (INIT_MSG):
-  {
-    // inizializzazione dei robot acquisisco Capacity
-    init_agent[value] = true;
-    auto c = msg->data[2];
-    TEAM_c += c;
-    c_print("TEAM_C: ", TEAM_c, red);
-    pa[value] = mkPA(value, c);
-    pa_print(pa[value]);
-    uint T_t = TEAM_t;
-    for (int i = 0; i < TEAM_t; i++)
+    case (INIT_MSG):
     {
-      if (init_agent[i] == true)
+      // inizializzazione dei robot acquisisco Capacity
+      init_agent[value] = true;
+      auto c = msg->data[2];
+      TEAM_c += c;
+      c_print("TEAM_C: ", TEAM_c, red);
+      pa[value] = mkPA(value, c);
+      pa_print(pa[value]);
+      uint T_t = TEAM_t;
+      for (int i = 0; i < TEAM_t; i++)
       {
-        T_t--;
-      }
-    }
-    if (T_t == 0)
-    {
-      OK = true;
-      compute_best_subtask();
-      auto ele = pq_ct.top();
-      ct_print(ele);
-
-      for (auto i = 0; i < ele.subset; i++)
-      {
-        auto s_el = ele.vv_t[i].size();
-        auto el = ele.vv_t[i];
-        for (auto j = 0; j < s_el; j++)
+        if (init_agent[i] == true)
         {
-          // auto e = el[j].route;
-          auto r = el[j];
-          v_pt.push_back(r);
+          T_t--;
         }
       }
-      sort(v_pt.begin(), v_pt.end(),cmp_PT);
-
-      for (auto h = 0; h < v_pt.size(); h++)
+      if (T_t == 0)
       {
-       cout << v_pt[h]<<" ";
-      }
-      cout << " ";
-      c_print("fine", green);
-    }
-  }
-  break;
+        OK = true;
+        compute_best_subtask();
+        auto ele = pq_ct.top();
+        ct_print(ele);
 
-  case (INIT_MSG2):
-  {
-    init_agent[value] = true;
-    auto c = msg->data[2];
-    TEAM_c += c;
-    c_print("TEAM_C: ", TEAM_c, red);
-    pa[value] = mkPA(value, c);
-    pa_print(pa[value]);
-    uint T_t = TEAM_t;
-    for (int i = 0; i < TEAM_t; i++)
-    {
-      if (init_agent[i] == true)
-      {
-        T_t--;
-      }
-    }
-    if (T_t == 0)
-    {
-      OK = true;
-      compute_CF();
-    }
-  }
-  break;
+        for (auto i = 0; i < ele.subset; i++)
+        {
+          auto s_el = ele.vv_t[i].size();
+          auto el = ele.vv_t[i];
+          for (auto j = 0; j < s_el; j++)
+          {
+            // auto e = el[j].route;
+            auto r = el[j];
+            v_pt.push_back(r);
+          }
+        }
+        sort(v_pt.begin(), v_pt.end(), cmp_PT);
 
-  case (INIT_MSG3):
-  {
-    init_agent[value] = true;
-    auto c = msg->data[2];
-    TEAM_c += c;
-    c_print("TEAM_C: ", TEAM_c, red);
-    pa[value] = mkPA(value, c);
-    pa_print(pa[value]);
-    uint T_t = TEAM_t;
-    for (int i = 0; i < TEAM_t; i++)
-    {
-      if (init_agent[i] == true)
-      {
-        T_t--;
+        for (auto h = 0; h < v_pt.size(); h++)
+        {
+          cout << v_pt[h] << " ";
+        }
+        cout << " ";
+        c_print("fine", green);
       }
     }
-  } 
-  break;
-
-  default:
     break;
+
+    case (INIT_MSG2):
+    {
+      init_agent[value] = true;
+      auto c = msg->data[2];
+      TEAM_c += c;
+      c_print("TEAM_C: ", TEAM_c, red);
+      pa[value] = mkPA(value, c);
+      pa_print(pa[value]);
+      uint T_t = TEAM_t;
+      for (int i = 0; i < TEAM_t; i++)
+      {
+        if (init_agent[i] == true)
+        {
+          T_t--;
+        }
+      }
+      if (T_t == 0)
+      {
+        OK = true;
+        compute_CF();
+      }
+    }
+    break;
+
+    case (INIT_MSG3):
+    {
+      init_agent[value] = true;
+      auto c = msg->data[2];
+      TEAM_c += c;
+      c_print("TEAM_C: ", TEAM_c, red);
+      pa[value] = mkPA(value, c);
+      pa_print(pa[value]);
+      uint T_t = TEAM_t;
+      for (int i = 0; i < TEAM_t; i++)
+      {
+        if (init_agent[i] == true)
+        {
+          T_t--;
+        }
+      }
+    }
+    break;
+
+    default:
+      break;
   }
 }
 
 void TaskPlanner::t_generator()
 {
-  uint n_item = 3; 
+  uint n_item = 3;
   uint o = 0;
   uint n_demand = 3;
   uint j = 0;
-  for (auto d = 1; d <= n_demand; d++)
+  for (auto h = 0; h < 3; h++)
   {
-    j = 0;
-    for (auto i = 0; i < n_item; i++)
+    for (auto d = 1; d <= n_demand; d++)
     {
-      tasks.push_back(mkTask(i, o, d, dst_vertex[j]));
-      j++;
-      // task_set.insert(mkTask(i,o,d,dst_vertex[j]));
-      o++;
+      j = 0;
+      for (auto i = 0; i < n_item; i++)
+      {
+        tasks.push_back(mkTask(i, o, d, dst_vertex[j]));
+        j++;
+        // task_set.insert(mkTask(i,o,d,dst_vertex[j]));
+        o++;
+      }
     }
   }
   nTask = tasks.size();
@@ -238,18 +238,18 @@ void TaskPlanner::compute_route_to_delivery(ProcessAgent *pa)
   int i = 0;
   switch (dst)
   {
-  case 11:
-    i = 3;
-    break;
-  case 16:
-    i = 5;
-    break;
-  case 21:
-    i = 7;
-    break;
-  default:
-    c_print("# ERR t.dst non esiste!", red);
-    break;
+    case 11:
+      i = 3;
+      break;
+    case 16:
+      i = 5;
+      break;
+    case 21:
+      i = 7;
+      break;
+    default:
+      c_print("# ERR t.dst non esiste!", red);
+      break;
   }
   // Route step;
   for (int j = 0; j < i; j++)
@@ -275,18 +275,18 @@ void TaskPlanner::compute_route_to_picktask(ProcessAgent *pa)
   auto dst = el->mission.back().dst;
   switch (dst)
   {
-  case 11:
-    i = 3;
-    break;
-  case 16:
-    i = 5;
-    break;
-  case 21:
-    i = 7;
-    break;
-  default:
-    c_print("# ERR t.dst non esiste!", red);
-    break;
+    case 11:
+      i = 3;
+      break;
+    case 16:
+      i = 5;
+      break;
+    case 21:
+      i = 7;
+      break;
+    default:
+      c_print("# ERR t.dst non esiste!", red);
+      break;
   }
   for (int j = i - 1; j >= 0; --j)
   {
@@ -411,97 +411,97 @@ void TaskPlanner::compute_route(uint id_path, ProcessTask *pt)
      7 = 11-16-21 */
   switch (id_path)
   {
-  case 1:
-  {
-    for (auto i = 0; i < 8; i++)
+    case 1:
     {
-      // v_pt[j].route.push_back(p_11[i]);
-      ele->route.push_back(p_11[i]);
+      for (auto i = 0; i < 8; i++)
+      {
+        // v_pt[j].route.push_back(p_11[i]);
+        ele->route.push_back(p_11[i]);
+      }
+      // v_pt[j].path_distance = ccor(v_pt[j].route);
+      ele->path_distance = ccor(ele->route);
+      ele->V = (double)ele->path_distance / (double)ele->tot_demand;
+      // c_print("V: ", ele->V, red);
     }
-    // v_pt[j].path_distance = ccor(v_pt[j].route);
-    ele->path_distance = ccor(ele->route);
-    ele->V = (double)ele->path_distance / (double)ele->tot_demand;
-    // c_print("V: ", ele->V, red);
-  }
-  break;
-  case 2:
-  {
-    for (auto i = 0; i < 12; i++)
+    break;
+    case 2:
     {
-      ele->route.push_back(p_16[i]);
+      for (auto i = 0; i < 12; i++)
+      {
+        ele->route.push_back(p_16[i]);
+      }
+      ele->path_distance = ccor(ele->route);
+      // ele->V = ele->path_distance / ele->tot_demand;
+      ele->V = (double)ele->path_distance / (double)ele->tot_demand;
+      // c_print("V: ", ele->V, red);
     }
-    ele->path_distance = ccor(ele->route);
-    // ele->V = ele->path_distance / ele->tot_demand;
-    ele->V = (double)ele->path_distance / (double)ele->tot_demand;
-    // c_print("V: ", ele->V, red);
-  }
-  break;
-  case 3:
-  {
-    for (auto i = 0; i < 16; i++)
+    break;
+    case 3:
     {
-      ele->route.push_back(p_21[i]);
+      for (auto i = 0; i < 16; i++)
+      {
+        ele->route.push_back(p_21[i]);
+      }
+      ele->path_distance = ccor(ele->route);
+      // ele->V = ele->path_distance / ele->tot_demand;
+      ele->V = (double)ele->path_distance / (double)ele->tot_demand;
+      // c_print("V: ", ele->V, red);
     }
-    ele->path_distance = ccor(ele->route);
-    // ele->V = ele->path_distance / ele->tot_demand;
-    ele->V = (double)ele->path_distance / (double)ele->tot_demand;
-    // c_print("V: ", ele->V, red);
-  }
-  break;
-  case 4:
-  {
-    for (auto i = 0; i < 14; i++)
+    break;
+    case 4:
     {
-      ele->route.push_back(p_11_16[i]);
+      for (auto i = 0; i < 14; i++)
+      {
+        ele->route.push_back(p_11_16[i]);
+      }
+      ele->path_distance = ccor(ele->route);
+      ele->V = (double)ele->path_distance / (double)ele->tot_demand;
+      // ele->V = ele->path_distance / ele->tot_demand;
+      // c_print("V: ", ele->V, red);
     }
-    ele->path_distance = ccor(ele->route);
-    ele->V = (double)ele->path_distance / (double)ele->tot_demand;
-    // ele->V = ele->path_distance / ele->tot_demand;
-    // c_print("V: ", ele->V, red);
-  }
-  break;
+    break;
 
-  case 5:
-  {
-    for (auto i = 0; i < 18; i++)
+    case 5:
     {
-      ele->route.push_back(p_11_21[i]);
+      for (auto i = 0; i < 18; i++)
+      {
+        ele->route.push_back(p_11_21[i]);
+      }
+      ele->path_distance = ccor(ele->route);
+      ele->V = (double)ele->path_distance / (double)ele->tot_demand;
+      // ele->V = ele->path_distance / ele->tot_demand;
+      // c_print("V: ", ele->V, red);
     }
-    ele->path_distance = ccor(ele->route);
-    ele->V = (double)ele->path_distance / (double)ele->tot_demand;
-    // ele->V = ele->path_distance / ele->tot_demand;
-    // c_print("V: ", ele->V, red);
-  }
-  break;
-  case 6:
-  {
-    for (auto i = 0; i < 18; i++)
+    break;
+    case 6:
     {
-      ele->route.push_back(p_16_21[i]);
+      for (auto i = 0; i < 18; i++)
+      {
+        ele->route.push_back(p_16_21[i]);
+      }
+      ele->path_distance = ccor(ele->route);
+      ele->V = (double)ele->path_distance / (double)ele->tot_demand;
+      // ele->V = ele->path_distance / ele->tot_demand;
+      // c_print("V: ", ele->V, red);
     }
-    ele->path_distance = ccor(ele->route);
-    ele->V = (double)ele->path_distance / (double)ele->tot_demand;
-    // ele->V = ele->path_distance / ele->tot_demand;
-    // c_print("V: ", ele->V, red);
-  }
-  break;
-  case 7:
-  {
-    for (auto i = 0; i < 20; i++)
+    break;
+    case 7:
     {
-      ele->route.push_back(p_11_16_21[i]);
+      for (auto i = 0; i < 20; i++)
+      {
+        ele->route.push_back(p_11_16_21[i]);
+      }
+      ele->path_distance = ccor(ele->route);
+      ele->V = (double)ele->path_distance / (double)ele->tot_demand;
+      // ele->V = ele->path_distance / ele->tot_demand;
+      // c_print("V: ", ele->V, red);
     }
-    ele->path_distance = ccor(ele->route);
-    ele->V = (double)ele->path_distance / (double)ele->tot_demand;
-    // ele->V = ele->path_distance / ele->tot_demand;
-    // c_print("V: ", ele->V, red);
-  }
-  break;
-  default:
-  {
-    c_print("ERR", red);
-  }
-  break;
+    break;
+    default:
+    {
+      c_print("ERR", red);
+    }
+    break;
   }
 }
 
@@ -519,7 +519,7 @@ void TaskPlanner::prepare_missions()
       auto all_part = *it[tasks];
       auto subset = it.subsets();
       auto as = all_part.size();
-      auto ct = mkCT(id, subset); // creo un Candidato
+      auto ct = mkCT(id, subset);  // creo un Candidato
       id++;
       int pt_id = 0;
       double tmp_V = 0;
@@ -589,19 +589,23 @@ void TaskPlanner::compute_CF()
     v_pt.push_back(pt);
   }
 
+  ProcessTask el;
+  ProcessTask el2;
+  auto t = v_pt.size();
   for (auto k = 0; k < v_pt.size(); k++)
   {
-    auto el = v_pt[k];
+    el = v_pt[k];
     for (auto q = 0; q < v_pt.size(); q++)
     {
-      auto el2 = v_pt[q];
+      el2 = v_pt[q];
       if (el.id != el2.id)
       {
         auto tmp_d = el.tot_demand + el2.tot_demand;
         if (tmp_d <= max_el.CAPACITY)
         {
           ProcessTask n_pt;
-          n_pt.id = v_pt.size()+1; 
+          n_pt.id = t;
+          t++;
           //                    ^ prende la taglia piu uno: possibili id uguali! ma non importante.
           n_pt.tot_demand = tmp_d;
           for (auto t = 0; t < el.mission.size(); t++)
@@ -612,12 +616,14 @@ void TaskPlanner::compute_CF()
           compute_route(id_path, &n_pt);
 
           // minimization
-          if ((n_pt.V - el.V - el2.V) < 0) // con < di zero allora accoppia
+          if ((n_pt.V - el.V - el2.V) < 0)  // con < di zero allora accoppia
           {
-            cout << "i: "<<el.id<< " ed: "<<el2.id<< "\n";
-             v_pt.erase(find(v_pt.begin(), v_pt.end(), el));
+            cout << "i: " << el.id << " ed: " << el2.id << "\n";
+            v_pt.erase(find(v_pt.begin(), v_pt.end(), el));
             v_pt.erase(find(v_pt.begin(), v_pt.end(), el2));
             v_pt.push_back(n_pt);
+            // pq_pt.push(n_pt);
+            break;
           }
           else
           {
@@ -625,21 +631,35 @@ void TaskPlanner::compute_CF()
           }
         }
       }
-      break;  
     }
+
+    // auto ele = pq_pt.top();
+
+    // for (auto i = 0; i < ele.mission.size(); i++)
+    // {
+    // //   // 
+    //   v_pt.erase(find(v_pt.begin(), v_pt.end(), ele.mission[i]));
+    //   // v_pt.erase(find(v_pt.begin(), v_pt.end(), el2));
+      
+    // }
+
+    // v_pt.push_back(ele);
+
+    // pq_pt.clear();
+
+    // pq_pt = priority_queue<ProcessTask> ();
     // break;
   }
-  
-  sort(v_pt.begin(), v_pt.end(),cmp_PT);
 
-  c_print("soluzione",red);
+  sort(v_pt.begin(), v_pt.end(), cmp_PT);
+
+  c_print("soluzione", red);
 
   for (auto j = 0; j < v_pt.size(); j++)
   {
     cout << v_pt[j] << " ";
   }
   cout << "\n";
-
 }
 
 void TaskPlanner::run()
@@ -680,13 +700,11 @@ void TaskPlanner::task_Callback(const patrolling_sim::TaskRequestConstPtr &tr)
     {
       tm.route.push_back(el->route[i].id_vertex);
       tm.condition.push_back(el->route[i].status);
-      cout << setw(3) << el->route[i].id_vertex << "   Status: [ "
-           << el->route[i].status << " ]"
+      cout << setw(3) << el->route[i].id_vertex << "   Status: [ " << el->route[i].status << " ]"
            << "\n";
     }
     cout << "\n";
-    c_print("% publish on topic mission! Task n: ", t.order, " ID_robot: ",
-            tm.ID_ROBOT, yellow);
+    c_print("% publish on topic mission! Task n: ", t.order, " ID_robot: ", tm.ID_ROBOT, yellow);
     pub_task.publish(tm);
     el->mission.clear();
     el->route.clear();
@@ -704,8 +722,7 @@ void TaskPlanner::task_Callback(const patrolling_sim::TaskRequestConstPtr &tr)
     tm.item = 3;
     tm.go_home = true;
     tm.dst = initial_position[id];
-    c_print("% publish on topic mission! go_home ID_robot: ", tm.ID_ROBOT,
-            yellow);
+    c_print("% publish on topic mission! go_home ID_robot: ", tm.ID_ROBOT, yellow);
     id++;
     pub_task.publish(tm);
     el->mission.clear();
@@ -715,8 +732,7 @@ void TaskPlanner::task_Callback(const patrolling_sim::TaskRequestConstPtr &tr)
   sleep(1);
 }
 
-void TaskPlanner::mission_Callback(
-    const patrolling_sim::MissionRequestConstPtr &mr)
+void TaskPlanner::mission_Callback(const patrolling_sim::MissionRequestConstPtr &mr)
 {
   c_print("Request Mission! id_robot: ", mr->ID_ROBOT, green);
 
@@ -732,9 +748,9 @@ void TaskPlanner::mission_Callback(
     tm.take = true;
     tm.go_home = false;
     tm.demand = pt.tot_demand;
-    tm.item = 0; // per ora!
+    tm.item = 0;  // per ora!
     tm.order = pt.id;
-    tm.dst = 0; // per ora
+    tm.dst = 0;  // per ora
     tm.path_distance = pt.path_distance;
     for (auto i = 0; i < pt.route.size(); i++)
     {
@@ -754,8 +770,7 @@ void TaskPlanner::mission_Callback(
     tm.item = 3;
     tm.go_home = true;
     tm.dst = initial_position[id];
-    c_print("% publish on topic mission! go_home ID_robot: ", tm.ID_ROBOT,
-            yellow);
+    c_print("% publish on topic mission! go_home ID_robot: ", tm.ID_ROBOT, yellow);
     id++;
     pub_task.publish(tm);
   }
@@ -764,4 +779,4 @@ void TaskPlanner::mission_Callback(
   c_print("fine", red);
 }
 
-} // namespace taskplanner
+}  // namespace taskplanner
