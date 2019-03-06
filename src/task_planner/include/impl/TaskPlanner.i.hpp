@@ -135,7 +135,7 @@ void TaskPlanner::init_Callback(const std_msgs::Int16MultiArrayConstPtr &msg)
             v_pt.push_back(r);
           }
         }
-        sort(v_pt.begin(), v_pt.end(), cmp_PT);
+        // sort(v_pt.begin(), v_pt.end(), cmp_PT);
 
         for (auto h = 0; h < v_pt.size(); h++)
         {
@@ -201,7 +201,7 @@ void TaskPlanner::t_generator()
   uint o = 0;
   uint n_demand = 3;
   uint j = 0;
-  for (auto h = 0; h < 2; h++)
+  for (auto h = 0; h < 3; h++)
   {
     j = 0;
     for (auto d = 1; d <= n_demand; d++)
@@ -651,7 +651,7 @@ void TaskPlanner::compute_CF()
     // break;
   }
 
-  sort(v_pt.begin(), v_pt.end(), cmp_PT);
+  // sort(v_pt.begin(), v_pt.end(), cmp_PT);
 
   c_print("soluzione", red);
 

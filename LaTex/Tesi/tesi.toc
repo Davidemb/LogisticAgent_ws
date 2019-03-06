@@ -32,4 +32,4 @@
 \contentsline {section}{\numberline {4.5}Extension of \texttt {patrolling\_sim} package}{45}{section.4.5}
 \contentsline {subsection}{\numberline {4.5.1}Obtaining a Topological representation}{45}{subsection.4.5.1}
 \contentsline {chapter}{\numberline {5}Experiments}{47}{chapter.5}
-\contentsline {chapter}{\numberline {6}Conclusions and Future Work}{49}{chapter.6}
+\contentsline {chapter}{\numberline {6}Conclusions and Future Work}{51}{chapter.6}

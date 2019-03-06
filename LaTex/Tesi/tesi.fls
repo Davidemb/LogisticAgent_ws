@@ -198,6 +198,8 @@ INPUT /home/dave/LogisticAgent_ws/LaTex/Tesi/chapter/ros.tex
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmtt12.tfm
 INPUT /home/dave/LogisticAgent_ws/LaTex/Tesi/chapter/experiments.tex
 INPUT /home/dave/LogisticAgent_ws/LaTex/Tesi/chapter/experiments.tex
+INPUT /home/dave/LogisticAgent_ws/LaTex/Tesi/chapter/result.tex
+INPUT /home/dave/LogisticAgent_ws/LaTex/Tesi/chapter/result.tex
 INPUT /home/dave/LogisticAgent_ws/LaTex/Tesi/chapter/coclusions.tex
 INPUT /home/dave/LogisticAgent_ws/LaTex/Tesi/chapter/coclusions.tex
 INPUT /home/dave/LogisticAgent_ws/LaTex/Tesi/chapter/biblio.tex

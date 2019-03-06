@@ -476,7 +476,7 @@ void PatrolAgent::do_interference_behavior()
   ROS_INFO("Interference detected! Executing interference behavior...\n");
   send_interference(); // send interference to monitor for counting
 
-  backup();
+  // backup();
 
 #if 1
     // Stop the robot..
