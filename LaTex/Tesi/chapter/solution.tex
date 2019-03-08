@@ -69,29 +69,23 @@ start the Coalition Formation algorithm \cite{cf_greedy}.
 When compute new one possible coalition the heuristic  $v(\cdot)$ has been used to calculate 
 the gain $G(C_{i,j})$ and if is negative that coalition is insered into the formation and the 
 $C_i$ , $C_j$ are deleted from this set.
-After that computation all subset coalition are sorted respecting the crescent order of heuristic
-value.
 
 \begin{algorithm}
 \caption{Greedy Coalition Formation} \label{GCF}
 \begin{algorithmic}[1]
-\Procedure{GCF}{$tasks$}\Comment{all task to combination}
-\For{$C_i$}
-\For{$C_j$}
-  \If{$C_i \neq C_j \wedge C_{i,j}$ has total demand $<=$ max capacity forall agent}
-  \If{$v(C_{i,j})-v(C_i)-v(C_j) < 0$}
-
-        \texttt{insert(}$C_{i,j}$\texttt{)}
-
-        \texttt{delete(}$C_i$\texttt{)}
-  
-        \texttt{delete(}$C_j$\texttt{)} 
-
-        \texttt{break}
+  \Procedure{GCF}{$T$}\Comment{$T$ = set of tasks}
+  \State \Comment{define $C$ the maximum capacity of the robots}
+  \For{$t_i \in T$}
+  \For{$t_j \in T$}
+\Comment{define $t_{i,j} = t_i \cup t_j$}
+\If{$(t_i \neq t_j) \wedge (demand(t_{i,j}) \leq C)$}
+\If{$v(t_{i,j})-v(t_i)-v(t_j) < 0$}
+        $T \setminus \{ t_i\} \setminus \{t_j\} \cup \{t_{i,j}\}$
   \EndIf
   \EndIf
 \EndFor
 \EndFor
+\State {\bf return} $T$
 \EndProcedure
 \end{algorithmic}
 \end{algorithm}
@@ -111,25 +105,6 @@ combination. Furthermore the combination with the lowest gain has been choose.
 So a subset of combination as been sort in a cresent order. 
 Then the firt subset of combination has the lowest value of heuristic function and 
 is the fisrt task assigned at the fist request from a robot.
-
-\begin{algorithm}
-  \caption{Compute best subset} \label{SP}
-  \begin{algorithmic}[1]
-  \Procedure{Compute best subset}{$SP$}\Comment{all subset of task}
-  \For{$subset_i \in SP$}
-  \If{$subset_{i}.demand >$ max capacity forall agents}
-  \texttt{delete(}$subset_i$\texttt{)}
-  
-  \texttt{break}
-  \EndIf
-    \For{$s_j \in subset_i$}
-      $v(s_j)$ 
-    \EndFor
-  \EndFor
-  \Comment{sort all $subset_i$ for lowest $v(\cdot)$} 
-  \EndProcedure
-  \end{algorithmic}
-  \end{algorithm}
 
 An example of solution with set $|T| = 4$:
 \begin{center}
@@ -154,9 +129,33 @@ An example of solution with set $|T| = 4$:
   \end{tabular}
 \end{center}
 
+\begin{algorithm}
+  \caption{Set Partition Strategy} \label{SP}
+  \begin{algorithmic}[1]
+  \Procedure{SPS}{$T^N$}\Comment{$T^N$= \texttt{partition(}$T$\texttt{)}}
+  \State \Comment{define $C$ the maximum capacity of the robots}
+  \For{$T_i \in T^N$}
+  \If{$demand(T_i) > C$}
+  $T^N \setminus T_i$
+  \EndIf
+    \For{$t_j \in T_i$}
+      $v(t_j)$ 
+    \EndFor
+  \EndFor
+  \Comment{sort all $T_i$ for lowest $v(\cdot)$} 
+  \State {\bf return} the first $T_i$
+  \EndProcedure
+  \end{algorithmic}
+\end{algorithm}
+
+
+
 \subsection*{Example with 9 tasks and 4 robots}
-Given a set of tasks $T = \{  \{t_0\}, \{t_1\}, \cdots, \{t_8\} \}$ defined like: 
-${t_i=(item, demand, unloading\_bay)}$. The agents have the same capacity $C_{0,1,2,3} = 4$.
+Given a set of tasks $T = \{  \{t_0\}, \{t_1\}, \cdots, \{t_8\} \}$ defined like:
+
+${t_i=(item, demand, unloading\_bay)}$.
+
+The agents have the same capacity $C_{0,1,2,3} = 4$.
 
 \begin{center}
   % \centering

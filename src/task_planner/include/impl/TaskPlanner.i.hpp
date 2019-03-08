@@ -201,7 +201,7 @@ void TaskPlanner::t_generator()
   uint o = 0;
   uint n_demand = 3;
   uint j = 0;
-  for (auto h = 0; h < 3; h++)
+  for (auto h = 0; h < 2; h++)
   {
     j = 0;
     for (auto d = 1; d <= n_demand; d++)

@@ -254,13 +254,16 @@ void PatrolAgent::calc_route_to_src()
 
   Task t;
   t.take = true;
-  Route step;
+  // Route step;
   for (int j = i; j < 5; j++)
   {
-    step.id_vertex = route_to_src[j];
-    step.status = false;
-    t.trail.push_back(step);
+     
+    t.trail.push_back(route_to_src[j]);
   }
+
+  int pd = ccor(t.trail);
+
+  t.path_distance = pd;
 
   mission.push_back(t);
 }
@@ -271,8 +274,8 @@ int PatrolAgent::compute_cost_of_route()
 
   for (int i = 1; i < mission.front().trail.size(); i++)
   {
-    anterior = mission.front().trail[i - 1].id_vertex;
-    proximo = mission.front().trail[i].id_vertex;
+    anterior = mission.front().trail[i - 1];
+    proximo = mission.front().trail[i];
 
     for (int j = 0; j < vertex_web[anterior].num_neigh; j++)
     {
@@ -287,6 +290,26 @@ int PatrolAgent::compute_cost_of_route()
   c_print("costo del percorso: ", current_dim_path, magenta);
 
   return current_dim_path;
+}
+
+int PatrolAgent::ccor(vector<uint> route)
+{
+  int custo_final = 0;
+  for (int i = 1; i < route.size(); i++)
+  {
+    int anterior = route[i - 1];
+    int proximo = route[i];
+
+    for (int j = 0; j < vertex_web[anterior].num_neigh; j++)
+    {
+      if (vertex_web[anterior].id_neigh[j] == proximo)
+      {
+        custo_final += vertex_web[anterior].cost[j];
+        break;
+      }
+    }
+  }
+  return custo_final;
 }
 
 void PatrolAgent::init_agent()
@@ -305,7 +328,7 @@ void PatrolAgent::init_agent()
       msg.data.push_back(46);
       msg.data.push_back(CAPACITY);
       calc_route_to_src();
-      compute_cost_of_route();
+      // compute_cost_of_route();
       pub_to_task_planner_init.publish(msg);
       f = false;
       ros::spinOnce();
@@ -332,7 +355,7 @@ void PatrolAgent::init_agent2()
       msg.data.push_back(48);
       msg.data.push_back(CAPACITY);
       calc_route_to_src();
-      compute_cost_of_route();
+      // compute_cost_of_route();
       pub_to_task_planner_init.publish(msg);
       f = false;
       ros::spinOnce();
@@ -358,7 +381,7 @@ void PatrolAgent::init_agent3()
       msg.data.push_back(49);
       msg.data.push_back(CAPACITY);
       calc_route_to_src();
-      compute_cost_of_route();
+      // compute_cost_of_route();
       pub_to_task_planner_init.publish(msg);
       f = false;
       ros::spinOnce();

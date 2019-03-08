@@ -90,8 +90,8 @@ the service by sending the request message and awaiting the reply.
 As for the topic-based paradigm a high-level description of a service is then
 parsed and processed by a code generator module which generates the corresponding
 native implementation in a supported target language.
-Usually C++ messages are generated in \texttt{my\_package/msg\_gen/cpp/include/my\_package},
-while C++ services are generated in \texttt{my\_package/srv\_gen/cpp/include/my\_package}.
+Usually \texttt{C++} messages are generated in \texttt{my\_package/msg\_gen/cpp/include/my\_package},
+while \texttt{C++} services are generated in \texttt{my\_package/srv\_gen/cpp/include/my\_package}.
 % TODO figura di differenze tra topic e service
 To support collaborative development, the ROS software system is organized into \textit{packages}.
 A ROS package is simply a directory which contains an XML file describing the package
@@ -136,15 +136,6 @@ code reports how it is launched:
         args="$(find patrolling_sim)/maps/$(arg map)/$(arg map).world" 
         output="screen" />
     </group>
-    <group if="$(arg custom_stage)">   
-        <node name="stageros" pkg="$(arg stage_pkg)" type="stageros" 
-        args="$(find patrolling_sim)/maps/$(arg map)/$(arg map).world"
-        output="screen">
-            <param name="base_frame" value="base_link" />
-            <param name="laser_topic" value="base_scan" />
-            <param name="laser_frame" value="base_laser_link" />
-        </node> 
-    </group>
 </launch>
 \end{lstlisting}
 
@@ -181,12 +172,10 @@ which has the same circular shape. As for the sensor properties we specify
 the following parameters described in:
 \begin{lstlisting}
 define hokuyo ranger
-(
-  sensor(           
+(sensor(           
     range [ 0.0  5.0 ] # the max/min range reported by the scanner, in meters.
     fov 230            # the angular field of view of the scanner, in degrees.
-    samples 1081       # the number of laser samples per scan.
-    )
+    samples 1081       # the number of laser samples per scan.)
   # model properties
   color "orange"
   size [ 0.1 0.1 0.1 ]
@@ -195,8 +184,7 @@ define hokuyo ranger
     point[1] [0 1]
     point[2] [1 1]
     point[3] [1 0]
-    z [0 1])
-)
+    z [0 1]))
 \end{lstlisting}
 The second included file (crobot.inc) defines the physical properties of
 the robot, as mentioned above we define it to have a circular shape which
@@ -207,7 +195,6 @@ is suffice for our purpose of having a mobile camera that moves around the world
     origin [0 0 0 0]
     gui_nose 0
     drive "diff"
-
     # This block approximates a circular shape of a Robot
     block( points 16
         point[0] [ 0.225 0.000 ]
@@ -226,19 +213,14 @@ is suffice for our purpose of having a mobile camera that moves around the world
         point[13] [ 0.086 -0.208 ]
         point[14] [ 0.159 -0.159 ]
         point[15] [ 0.208 -0.086 ]
-        z [0 1]
-    )
-    
+        z [0 1])
     hokuyo( pose [0.15 0 -0.1 0] )
-
     # Report error-free position in world coordinates
     localization "gps"
     #localization_origin [ 0 0 0 0 ]
-
     # Some more realistic localization error
     localization "odom"
-    odom_error [ 0.01 0.01 0.0 0.1 ]
-)
+    odom_error [ 0.01 0.01 0.0 0.1 ])
 \end{lstlisting}
 % TODO sistemare gli spazzi bianchi
 
@@ -248,110 +230,9 @@ the context of mobile robotics: \textit{localization} and \textit{navigation}.
 The former deals with tracking the pose of the robot during its motion allowing
 it to localize itself in the map, the latter deals with driving the robot from a 
 starting position to a goal position trying to avoid potential obstacles.
-The complete code for the \texttt{launch} file in which this takes are solved is reported
-below.
-\begin{lstlisting}
-    <?xml version="1.0" encoding="UTF-8" ?>
-<launch>
-<arg name="robotname" default="robot_0" />
-<arg name="mapname" default="grid" />
-<arg name="use_amcl" default="true" />
-<arg name="use_move_base" default="true" />
-<arg name="use_srrg_localizer" default="false" />
-<arg name="use_spqrel_planner" default="false" />
-<group ns="$(arg robotname)">    
-  
-  <!-- Run the map server -->
-  <node name="map_server" pkg="map_server" type="map_server"
-  args="$(find patrolling_sim)/maps/$(arg mapname)/$(arg mapname).yaml" />
-  <!-- Standard ROS navigation modules -->
-  
-  <group if="$(arg use_amcl)">
-      <!--- AMCL -->
-      <include file="$(find patrolling_sim)/params/amcl/amcl_diff.launch" />       
-          
-      <!-- Override AMCL Frame Params to include prefix -->
-      <param name="/$(arg robotname)/amcl/base_frame_id" 
-          value="$(arg robotname)/base_link"/>
-      <param name="/$(arg robotname)/amcl/odom_frame_id" 
-          value="$(arg robotname)/odom"/>
-      <param name="/$(arg robotname)/amcl/global_frame_id" 
-          value="map"/> <!--common map frame for all robots -->
-  </group>
-      
-  <group if="$(arg use_move_base)">
-      <node pkg="move_base" type="move_base" respawn="false" name="move_base"
-          output="screen">
-<rosparam file=
-    "$(find patrolling_sim)/params/move_base/costmap_common_params.yaml"
-      command="load" ns="global_costmap" />
-<rosparam file=
-    "$(find patrolling_sim)/params/move_base/costmap_common_params.yaml" 
-      command="load" ns="local_costmap" />
-<rosparam file=
-    "$(find patrolling_sim)/params/move_base/local_costmap_params.yaml"
-      command="load" />
-<rosparam file=
-    "$(find patrolling_sim)/params/move_base/global_costmap_params.yaml"
-      command="load" />
-<rosparam file=
-    "$(find patrolling_sim)/params/move_base/base_local_planner_params.yaml"
-      command="load" />
-          <!-- remap from="cmd_vel" to="desired_cmd_vel" / -->
-  
-          <!-- Override MOVE_BASE Frame Params to include prefix -->
-          <param name="global_costmap/laser_scan_sensor/sensor_frame" 
-              value="/$(arg robotname)/base_laser_link"/>
-          <param name="global_costmap/laser_scan_sensor/topic" 
-              value="/$(arg robotname)/base_scan"/>
-          <param name="global_costmap/robot_base_frame" 
-              value="/$(arg robotname)/base_link"/>   
-          <param name="local_costmap/global_frame" 
-              value="/$(arg robotname)/odom"/>
-          <param name="local_costmap/laser_scan_sensor/sensor_frame" 
-              value="/$(arg robotname)/base_laser_link"/>
-          <param name="local_costmap/laser_scan_sensor/topic" 
-              value="/$(arg robotname)/base_scan"/>
-          <param name="local_costmap/robot_base_frame" 
-              value="/$(arg robotname)/base_link"/> 
-      </node>
-  </group>
 
-  <!--- srrg_localizer -->
-  <group if="$(arg use_srrg_localizer)">
-    <node pkg="tf" type="static_transform_publisher" name="link1_broadcaster" 
-          args="0 0 0 0 0 0 1 /map /$(arg robotname)/map 100" />
-    <node pkg="spqrel_navigation" type="srrg_localizer2d_node" name="srrg_localizer"
-          output="screen">
-        <param name="global_frame_id" value="$(arg robotname)/map"/>
-        <param name="base_frame_id" value="$(arg robotname)/base_link"/>
-        <param name="odom_frame_id" value="$(arg robotname)/odom"/>
-        <param name="laser_topic" value="$(arg robotname)/base_scan"/>
-        <param name="use_gui" value="false"/>
-        </node>
-  </group>
-  <!--- spqrel_planner -->    
-  <group if="$(arg use_spqrel_planner)">            
-         <node pkg="spqrel_navigation" type="spqrel_planner_node" 
-         name="spqrel_planner" output="screen">
-            <param name="max_range" value="10.0"/>
-            <param name="max_linear_vel" value="1.0"/>
-            <param name="max_angular_vel" value="1.0"/>
-            <param name="global_frame_id" value="$(arg robotname)/map"/>
-            <param name="base_frame_id" value="$(arg robotname)/base_link"/>
-            <param name="laser_topic" value="$(arg robotname)/base_scan"/>
-            <param name="command_vel_topic" value="$(arg robotname)/cmd_vel"/>
-            <param name="robot_radius" value="0.3"/> <!-- Raggio del robot -->
-            <param name="use_gui" value="false"/>
-         </node>
-  </group>
-  <!-- INITIAL POSES FOR LOCALIZER -->
-  <include file=
-    "$(find patrolling_sim)/params/amcl/$(arg robotname)_initial_pose.xml" />
-</group>
-</launch>
-\end{lstlisting}
-
+{\bf TODO: Figura della simulazione}
+\newpage
 \subsection{Mapping}
 The robot navigation system can be initialized with or without an a priori, \textit{static map}.
 When initialized without a map, the robot only knows about obstacles that it has seen,
@@ -387,9 +268,11 @@ resolution: 0.014100
 origin: [0.000000, 0.000000, 0.000000]
 # whether the white/black free/occupied semantics should be reversed.
 negate: 0
-# pixels with occupancy probability greater than this are considered completely occupied.
+# pixels with occupancy probability greater than 
+# this are considered completely occupied.
 occupied_thresh: 0.65
-# pixels with occupancy probability less than this are considered completely free.
+# pixels with occupancy probability less than 
+# this are considered completely free.
 free_thresh: 0.196
 \end{lstlisting}
 
@@ -405,13 +288,11 @@ Localization (\texttt{amcl}) system:
 <group if="$(arg use_amcl)">
     <!--- AMCL -->
     <include file="$(find patrolling_sim)/params/amcl/amcl_diff.launch" />       
-
     <!-- Override AMCL Frame Params to include prefix -->
     <param name="/$(arg robotname)/amcl/base_frame_id" 
         value="$(arg robotname)/base_link"/>
     <param name="/$(arg robotname)/amcl/odom_frame_id" 
         value="$(arg robotname)/odom"/>
-    
     <!--common map frame for all robots -->
     <param name="/$(arg robotname)/amcl/global_frame_id" value="map"/> 
 </group>
@@ -698,7 +579,6 @@ and the needs for computation. For a detailed description parameters see code be
 \begin{lstlisting}
 controller_frequency: 5.0
 TrajectoryPlannerROS:
-
 # Robot Configuration Parameters
 max_vel_x: 1.00
 min_vel_x: 0.10
@@ -710,26 +590,21 @@ acc_lim_th: 0.75
 acc_lim_x: 0.50
 acc_lim_y: 0.50
 holonomic_robot: false
-
 # Goal Tolerance Parameters
 yaw_goal_tolerance: 6.28
 xy_goal_tolerance: 0.40
-
 # Controller Parameters 
 pdist_scale: 0.6
 gdist_scale: 0.8
 occdist_scale: 0.01 
 meter_scoring: true
-
 # Forward Simulation Parameters
 sim_time: 1.5
 vx_samples: 6
 vtheta_samples: 20
-
 # Trajectory Scoring Parameters
 heading_lookahead: 0.325
 dwa: true
-
 # Oscillation Prevention Parameters
 oscillation_reset_dist: 0.05
 \end{lstlisting}
@@ -927,3 +802,97 @@ our logistic application in the laboratory map the topological graph $G$ is a \t
 
 % parlare di cosa si e' fatto per la mappa reale / coordinatore esterno 
 % adattamenti presi per far funzionare il tutto 
+
+\subsection{\texttt{actionLib} and \texttt{move\_base}}
+
+The \texttt{actionLib} package provides tools to create servers that execute long-running
+tasks that can be preempted and create clients that interact with servers.
+Then this library is a standardized interface for interfacing with preemtable tasks.
+It is used when a node $A$ sends a request to node $B$ to perform some task. If the task is 
+"instantaneous", \textit{services} are suitable. The \textit{actions} are more adequate when 
+task takes time and we want to monitor, have continuous feedback and possibly cancel the 
+request during execution.
+The action client and server communicate with each other using a predefined action 
+protocol. This action protocol relies on ROS topic in a specified namespace in order to trasport 
+messages.
+
+\begin{figure} [hbt]
+    \centering
+    \includegraphics[width=\textwidth]{img/action_interface.png}
+    \caption{Client-Server Interaction}
+    \label{fig:action_interface}
+\end{figure}
+
+The communication messages used in this library is: 
+\begin{itemize}
+    \item \texttt{goal} - used to send new goals to server.
+    \item \texttt{cancel} - used to send cancel requests to server.
+    \item \texttt{status} - used to notify clients on the current state of every goal in the system.
+    \item \texttt{feedback} - used to send clients periodic auxiliary information for a goal.
+    \item \texttt{result} - used to send clients one-time auxiliary information upon completion of a goal.
+\end{itemize} 
+
+Action templates are defined by a name and some additional properties through an 
+\texttt{*.action} structure defined in ROS. Each instance of an action has a unique 
+\textit{Goal ID} which provides the action server and the action client with a robust 
+way to monitor the execution of a particular instance of an action.
+
+In our system, its used a \texttt{SimpleActionServer} that implements a single goal policy.
+So only one goal can have an active status at a time. When recived new goals preempt previous 
+goals based on the stamp in their \textit{Goal ID} field. And a \texttt{SimpleActionClient} which 
+implements a simplified \textit{ActionClient}.
+
+As previously mentioned, the \texttt{move\_base} package provides an implementation
+of an action that, given a goal in the world, will attempt to reach it with a mobile base.
+
+An example of \texttt{move\_base} \textit{ActionServer}:
+\begin{itemize}
+    \item {\bf Action Subscribed Topics:}
+    \begin{itemize}
+        \item \texttt{move\_base/goal} (\textit{move\_base\_msgs/MoveBaseActionGoal}): a goal for \texttt{move\_base} to pursue in the world.
+        \item \texttt{move\_base/cancel} (\textit{actionlib\_msgs/GoalID}): a request to cancel a specific goal.
+    \end{itemize} 
+    \item {\bf Action Published Topics:}
+    \begin{itemize}
+        \item \texttt{move\_base/feedback} (\textit{move\_base\_msgs/MoveBaseActionFeedback}): feedback contains the current position of the base in the world.
+        \item \texttt{move\_base/status} (\textit{actionlib\_msgs/GoalStatusArray}): provides status information on the goals that are sent to the \texttt{move\_base} action.
+        \item \texttt{move\_base/result} (\textit{move\_base\_msgs/MoveBaseActionResult}): result is empty for the \texttt{move\_base} action.
+    \end{itemize}
+\end{itemize}
+
+\subsection{\texttt{task\_planner} package}
+We extend the \texttt{patrolling\_sim} package creating a new extern package which 
+comunicate with it. 
+The \texttt{task\_planner} generate the finite task set, its receive the initialization message 
+from each robot and depending on the message start the different algorithm. 
+Then this package implements the centralized coordinator and return the \texttt{mission}
+for the robots.
+
+\begin{figure} [hbt]
+    \centering
+    \includegraphics[width=\textwidth]{img/rosgraph.png}
+    \caption{Report the \texttt{rqt\_graph}}
+    \label{fig:rqt_graph}
+\end{figure}
+
+In Figure \ref{fig:rqt_graph} we can see the communication between robots (\texttt{/patrol\_robot}$N$) 
+and \texttt{task\_planner}.
+\newpage
+
+The most important topisc are:
+\begin{itemize}
+    \item \texttt{/task\_planner/init}: receive the initialization message.
+    \item \texttt{/task\_planner/need\_task}: receive the task request.
+    \item \texttt{/task\_planner/need\_mission}: receive the mission request.
+    \item \texttt{/task\_planner/answer}: after computation phase for different algorithm return the subset of task must be allocate. 
+\end{itemize}
+
+
+
+
+
+
+
+
+
+

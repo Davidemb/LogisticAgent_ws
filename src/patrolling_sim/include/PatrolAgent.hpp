@@ -71,11 +71,6 @@
 
 namespace patrolagent
 {
-struct Route
-{
-  bool status;
-  uint id_vertex;
-};
 
 struct Task
 {
@@ -87,7 +82,7 @@ struct Task
   // int src;
   int dst;
   int path_distance;
-  std::vector<Route> trail;
+  std::vector<uint> trail;
 };
 
 ostream &operator<<(ostream &os, const Task &t)
@@ -95,8 +90,7 @@ ostream &operator<<(ostream &os, const Task &t)
   os << "\nRoute: \n";
   for (auto i = 0; t.trail.size(); i++)
   {
-    os << t.trail[i].id_vertex << " Status: "
-       << "[ " << t.trail[i].status << " ]\n";
+    os << t.trail[i]<<" ";
   }
   os << "\n";
 }
@@ -250,6 +244,9 @@ public:
   void init_agent();
   void init_agent2();
   void init_agent3();
+
+  int ccor(vector<uint> v); 
+
   void calc_route_to_src();
   void can_execute_decicion();
   void request_Task();

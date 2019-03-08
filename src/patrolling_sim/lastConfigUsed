@@ -1,6 +1,6 @@
 [Config]
 map: model5
-nrobots: 2
+nrobots: 4
 algorithm: CFAGENT
 locmode: AMCL
 navmode: ros

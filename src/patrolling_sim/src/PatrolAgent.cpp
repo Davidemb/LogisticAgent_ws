@@ -304,7 +304,7 @@ void PatrolAgent::goalDoneCallback(const actionlib::SimpleClientGoalState &state
       ROS_INFO("Backup");
 
       backup();
-/* 
+      /* 
       ROS_INFO("Clear costmap!");
 
        char srvname[80];
@@ -329,7 +329,7 @@ void PatrolAgent::goalDoneCallback(const actionlib::SimpleClientGoalState &state
       {
         ROS_ERROR("Failed to call service move_base/clear_costmaps");
       } */
- 
+
       ROS_INFO("Resend Goal!");
       ResendGoal = true;
     }
@@ -370,6 +370,7 @@ void PatrolAgent::send_task_reached()
   msg.data.push_back(TASK_REACHED_MSG_TYPE);
   msg.data.push_back(1);
   msg.data.push_back(mission.front().item);
+  cout << "### SEND path distance:" << mission.front().path_distance << "\n";
   msg.data.push_back(mission.front().path_distance);
   msg.data.push_back(interference_cnt);
   msg.data.push_back(resend_goal_count);
@@ -409,7 +410,7 @@ bool PatrolAgent::check_interference(int robot_id)
   double dist_quad;
 
   if (ros::Time::now().toSec() - last_interference < 10) // seconds
-    return false;                                       // false if within 10 seconds from the last one
+    return false;                                        // false if within 10 seconds from the last one
 
   // /* Poderei usar TEAMSIZE para afinar */ <<<<<<<<<<<<<<<
   for (i = 0; i <= robot_id; i++)
@@ -418,8 +419,8 @@ bool PatrolAgent::check_interference(int robot_id)
     dist_quad = (xPos[i] - xPos[robot_id]) * (xPos[i] - xPos[robot_id]) +
                 (yPos[i] - yPos[robot_id]) * (yPos[i] - yPos[robot_id]);
 
-    if ( dist_quad <= INTERFERENCE_DISTANCE * INTERFERENCE_DISTANCE)
-    { 
+    if (dist_quad <= INTERFERENCE_DISTANCE * INTERFERENCE_DISTANCE)
+    {
       // robots are ... meter or less apart
       //          ROS_INFO("Feedback: Robots are close. INTERFERENCE! Dist_Quad = %f", dist_quad);
       last_interference = ros::Time::now().toSec();
@@ -479,12 +480,12 @@ void PatrolAgent::do_interference_behavior()
   // backup();
 
 #if 1
-    // Stop the robot..
-    cancelGoal();
-    ROS_INFO("Robot stopped");
-    ros::Duration delay(1); // seconds
-    delay.sleep();
-    ResendGoal = true;
+      // Stop the robot..
+  cancelGoal();
+  ROS_INFO("Robot stopped");
+  ros::Duration delay(1); // seconds
+  delay.sleep();
+  ResendGoal = true;
 #else
   // get own "odom" positions...
   ros::spinOnce();
@@ -684,7 +685,6 @@ void PatrolAgent::resultsCB(const std_msgs::Int16MultiArray::ConstPtr &msg)
 
       printf("Wait %.1f seconds (init pos:%s)\n", r, initial_positions.c_str());
 
-
       wait.sleep();
       initialize = false;
     }
@@ -696,7 +696,6 @@ void PatrolAgent::resultsCB(const std_msgs::Int16MultiArray::ConstPtr &msg)
       end_simulation = true;
     }
 #endif
-
   }
 
   if (!initialize)
@@ -743,14 +742,14 @@ void PatrolAgent::receive_mission_Callback(const task_planner::TaskConstPtr &msg
       task.demand = msg->demand;
       task.dst = msg->dst;
       task.path_distance = msg->path_distance;
-      Route step; 
+      // Route step;
       for (auto i = 0; i < msg->route.size(); i++)
       {
-        step.id_vertex = msg->route[i];
-        step.status = msg->condition[i];
-        task.trail.push_back(step);
+        // step.id_vertex = msg->route[i];
+        // step.status = msg->condition[i];
+        task.trail.push_back(msg->route[i]);
       }
-      c_print("# insert task on mission!", red,Pr);
+      c_print("# insert task on mission!", red, Pr);
       mission.push_back(task);
       //  end_simulation = false;
     }
@@ -762,14 +761,15 @@ void PatrolAgent::receive_mission_Callback(const task_planner::TaskConstPtr &msg
       dijkstra(current_vertex, home, shortest_path, elem_s_path, vertex_web, dimension);
       Task t;
       t.take = msg->take;
-      Route step;
+      // Route step;
       for (auto i = 2; i < elem_s_path; i++)
       {
         // printf("path[%u] = %d\n", i, shortest_path[i]);
-        step.id_vertex = shortest_path[i];
-        step.status = false;
-        t.trail.push_back(step);
+        // step.status = false;
+        t.trail.push_back(shortest_path[i]);
       }
+      int pd = ccor(t.trail);
+      t.path_distance = pd;
       c_print("# insert task to go home!", magenta);
       mission.push_back(t);
     }
@@ -806,7 +806,7 @@ void PatrolAgent::broadcast_msg_Callback(const std_msgs::Int16MultiArray::ConstP
   break;
   case (START):
   {
-    c_print("PArte quello dopo",red,Pr);
+    c_print("PArte quello dopo", red, Pr);
     if (value == *it)
     {
       OK = true;
