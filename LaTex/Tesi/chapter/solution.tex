@@ -16,7 +16,7 @@ is merging the tasks with greedy approach.
 This method is a baseline for our logistic scenario.
 The important constraint of this approach is consider only one task allocated for 
 one robot at time.
-Given a set of tasks, the \texttt{task\_planner} assigns only one task at time,
+Given a set of tasks, the \texttt{task\_planner} (in section \ref{taskplanner}) assigns only one task at time,
 if the robot request a task.
 \\
 The set of tasks is ordered by the function mentioned below.
@@ -35,6 +35,13 @@ Such function sort the tasks based on the distance of the unloading bays and the
 The \texttt{task\_planner} post-processing all task, compute the route by a sequence 
 of vertices, and the cost of the path. After having assigned the task $t_{i,j}$ 
 it is deleted.
+
+This algorithm take linear time or $O(n)$ time, its time complexity is $O(n)$.
+
+\newpage
+This means that the running time increases at most linearly with the size of the input.
+More precisely, this means that there is a constant $c$ such that the running time is 
+at most $cn$ for every input of size $n$.
 
 \subsection{Greedy Set Partition Strategy Single robot : Multiple task (\gsp)}
 
@@ -90,6 +97,12 @@ $C_i$ , $C_j$ are deleted from this set.
 \end{algorithmic}
 \end{algorithm}
 
+This algorithm take polynomial time, its running time is upper bounded by a polynomial expression
+in the size of the input for the algorithm.
+
+More precisely, this algorithm take $O(n^k)$ for some positive constant $k$. 
+
+\newpage
 
 \subsection{Set Partition Strategy Single robot : Multiple task (\sps)}
 
@@ -105,29 +118,6 @@ combination. Furthermore the combination with the lowest gain has been choose.
 So a subset of combination as been sort in a cresent order. 
 Then the firt subset of combination has the lowest value of heuristic function and 
 is the fisrt task assigned at the fist request from a robot.
-
-An example of solution with set $|T| = 4$:
-\begin{center}
-  % \centering
-  \begin{tabular}{|c|r|c|} \hline
-  \textbf{iteration} & \textbf{partition size} & \textbf{partition} \\ \hline
-  1    & 1    & \{\{a, b, c, d\}\}   \\
-  2    & 2    & \{\{a, b, c\}, \{d\}\}   \\
-  3    & 2    & \{\{a, b, d\}, \{c\}\}   \\
-  4    & 2    & \{\{a, b\}, \{c, d\}\}   \\
-  5    & 3    & \{\{a, b\}, \{c\}, \{d\}\}   \\
-  6    & 2    & \{\{a, c, d\}, \{b\}\}   \\
-  7    & 2    & \{\{a, c\}, \{b, d\}\}   \\
-  8    & 3    & \{\{a, c\}, \{b\},\{d\}\}   \\
-  9    & 2    & \{\{a, d\}, \{b, c\}\}   \\
-  10   & 2    & \{\{a\}, \{b, c, d\}\}   \\
-  11   & 3    & \{\{a\}, \{b, c\}, \{d\}\}   \\
-  12   & 3    & \{\{a, d\}, \{b\}, \{c\}\}   \\
-  13   & 3    & \{\{a\}, \{b, d\}, \{c\}\}   \\
-  14   & 3    & \{\{a\}, \{b\}, \{c, d\}\}   \\
-  15   & 4    & \{\{a\}, \{b\}, \{c\},\{d\}\}   \\ \hline       
-  \end{tabular}
-\end{center}
 
 \begin{algorithm}
   \caption{Set Partition Strategy} \label{SP}
@@ -148,8 +138,40 @@ An example of solution with set $|T| = 4$:
   \end{algorithmic}
 \end{algorithm}
 
+The function \texttt{partition($\cdot$)} take exponential time. 
 
+More formally, this algorithm is exponential time because $T(n)$ is bounded by $O(2^{n^{k}})$ 
+for some constant $k$.
 
+\newpage
+An example of solution with set $|T| = 4$:
+\begin{center}
+  \begin{tabular}{|c|r|c|} \hline
+  \textbf{iteration} & \textbf{partition size} & \textbf{partition} \\ \hline
+  1    & 1    & \{\{a, b, c, d\}\}   \\
+  2    & 2    & \{\{a, b, c\}, \{d\}\}   \\
+  3    & 2    & \{\{a, b, d\}, \{c\}\}   \\
+  4    & 2    & \{\{a, b\}, \{c, d\}\}   \\
+  5    & 3    & \{\{a, b\}, \{c\}, \{d\}\}   \\
+  6    & 2    & \{\{a, c, d\}, \{b\}\}   \\
+  7    & 2    & \{\{a, c\}, \{b, d\}\}   \\
+  8    & 3    & \{\{a, c\}, \{b\},\{d\}\}   \\
+  9    & 2    & \{\{a, d\}, \{b, c\}\}   \\
+  10   & 2    & \{\{a\}, \{b, c, d\}\}   \\
+  11   & 3    & \{\{a\}, \{b, c\}, \{d\}\}   \\
+  12   & 3    & \{\{a, d\}, \{b\}, \{c\}\}   \\
+  13   & 3    & \{\{a\}, \{b, d\}, \{c\}\}   \\
+  14   & 3    & \{\{a\}, \{b\}, \{c, d\}\}   \\
+  15   & 4    & \{\{a\}, \{b\}, \{c\},\{d\}\}   \\ \hline       
+  \end{tabular}
+\end{center}
+
+For $|T| = 4$ takes 0.000043 seconds. If we increase the set, time increases exponentially.
+An example of $|T| = 12$ takes 2.8 seconds and $|T| = 13$ takes 21.2 seconds.
+
+For this reason in our experiment we limited the size of the task set at most 9 task.
+
+\newpage
 \subsection*{Example with 9 tasks and 4 robots}
 Given a set of tasks $T = \{  \{t_0\}, \{t_1\}, \cdots, \{t_8\} \}$ defined like:
 
@@ -207,11 +229,3 @@ The result of the Set Partition is:
     8    & C    & 3      & 2             \\ \hline       
     \end{tabular}
   \end{center}
-
-  \begin{figure} [hbt]
-    \centering
-    \includegraphics[width=\textwidth]{img/SP.png}
-    \caption{The horizontal line represents a cut of the dendrogram
-    and defines the coalition structure.}
-    \label{fig:SP_graph}
-\end{figure}

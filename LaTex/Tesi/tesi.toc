@@ -13,25 +13,25 @@
 \contentsline {section}{\numberline {3.3}Solution}{15}{section.3.3}
 \contentsline {subsection}{\numberline {3.3.1}Single robot : Single task (SR:ST )}{15}{subsection.3.3.1}
 \contentsline {subsection}{\numberline {3.3.2}Greedy Set Partition Strategy Single robot : Multiple task (GSP1:N )}{16}{subsection.3.3.2}
-\contentsline {subsection}{\numberline {3.3.3}Set Partition Strategy Single robot : Multiple task (SPS1:N )}{17}{subsection.3.3.3}
-\contentsline {chapter}{\numberline {4}Empirical Setting}{21}{chapter.4}
-\contentsline {section}{\numberline {4.1}Robot Operating System (ROS)}{21}{section.4.1}
-\contentsline {subsection}{\numberline {4.1.1}Nomencalture and Architecture}{21}{subsection.4.1.1}
-\contentsline {subsection}{\numberline {4.1.2}The Stage 2D Simulation}{24}{subsection.4.1.2}
-\contentsline {section}{\numberline {4.2}Localization and Navigation}{27}{section.4.2}
-\contentsline {subsection}{\numberline {4.2.1}Mapping}{28}{subsection.4.2.1}
-\contentsline {subsection}{\numberline {4.2.2}Localization}{29}{subsection.4.2.2}
-\contentsline {subsection}{\numberline {4.2.3}Navigation}{31}{subsection.4.2.3}
-\contentsline {subsection}{\numberline {4.2.4}Global and Local planner algorithms}{34}{subsection.4.2.4}
-\contentsline {section}{\numberline {4.3}Cost-maps configurations}{38}{section.4.3}
-\contentsline {subsection}{\numberline {4.3.1}Common configuration}{39}{subsection.4.3.1}
-\contentsline {subsection}{\numberline {4.3.2}Global configuration}{40}{subsection.4.3.2}
-\contentsline {subsection}{\numberline {4.3.3}Local configuration}{40}{subsection.4.3.3}
-\contentsline {subsection}{\numberline {4.3.4}Local and global coordinate frames}{41}{subsection.4.3.4}
-\contentsline {section}{\numberline {4.4}Recovery behaviours}{42}{section.4.4}
-\contentsline {section}{\numberline {4.5}Extension of \texttt {patrolling\_sim} package}{42}{section.4.5}
-\contentsline {subsection}{\numberline {4.5.1}Obtaining a Topological representation}{42}{subsection.4.5.1}
-\contentsline {subsection}{\numberline {4.5.2}\texttt {actionLib} and \texttt {move\_base}}{43}{subsection.4.5.2}
-\contentsline {subsection}{\numberline {4.5.3}\texttt {task\_planner} package}{45}{subsection.4.5.3}
-\contentsline {chapter}{\numberline {5}Experiments}{47}{chapter.5}
-\contentsline {chapter}{\numberline {6}Conclusions and Future Work}{53}{chapter.6}
+\contentsline {subsection}{\numberline {3.3.3}Set Partition Strategy Single robot : Multiple task (SPS1:N )}{18}{subsection.3.3.3}
+\contentsline {chapter}{\numberline {4}Empirical Setting}{23}{chapter.4}
+\contentsline {section}{\numberline {4.1}Robot Operating System (ROS)}{23}{section.4.1}
+\contentsline {subsection}{\numberline {4.1.1}Nomencalture and Architecture}{23}{subsection.4.1.1}
+\contentsline {subsection}{\numberline {4.1.2}The Stage 2D Simulation}{26}{subsection.4.1.2}
+\contentsline {section}{\numberline {4.2}Localization and Navigation}{29}{section.4.2}
+\contentsline {subsection}{\numberline {4.2.1}Mapping}{30}{subsection.4.2.1}
+\contentsline {subsection}{\numberline {4.2.2}Localization}{31}{subsection.4.2.2}
+\contentsline {subsection}{\numberline {4.2.3}Navigation}{33}{subsection.4.2.3}
+\contentsline {subsection}{\numberline {4.2.4}Global and Local planner algorithms}{36}{subsection.4.2.4}
+\contentsline {section}{\numberline {4.3}Cost-maps configurations}{40}{section.4.3}
+\contentsline {subsection}{\numberline {4.3.1}Common configuration}{41}{subsection.4.3.1}
+\contentsline {subsection}{\numberline {4.3.2}Global configuration}{42}{subsection.4.3.2}
+\contentsline {subsection}{\numberline {4.3.3}Local configuration}{42}{subsection.4.3.3}
+\contentsline {subsection}{\numberline {4.3.4}Local and global coordinate frames}{43}{subsection.4.3.4}
+\contentsline {section}{\numberline {4.4}Recovery behaviours}{44}{section.4.4}
+\contentsline {section}{\numberline {4.5}Extension of \texttt {patrolling\_sim} package}{44}{section.4.5}
+\contentsline {subsection}{\numberline {4.5.1}Obtaining a Topological representation}{44}{subsection.4.5.1}
+\contentsline {subsection}{\numberline {4.5.2}\texttt {actionLib} and \texttt {move\_base}}{45}{subsection.4.5.2}
+\contentsline {subsection}{\numberline {4.5.3}\texttt {task\_planner} package}{47}{subsection.4.5.3}
+\contentsline {chapter}{\numberline {5}Experiments}{49}{chapter.5}
+\contentsline {chapter}{\numberline {6}Conclusions and Future Work}{55}{chapter.6}
