@@ -1,20 +1,23 @@
 \section{Solution}
 
 In this section we propose the approaches with centralized coordination.
+In a warehouse the connection between robots is efficient and has no big limitations;
+in section \ref{chap:conclusions} the decentralized coordination will be dealt with.
 \begin{enumerate}
 \item The first strategy, mentioned above, is the \srst which consider only 
 one task allocated for one robot.
 
 \item The second strategy (\gsp) extends the first, the main concept of this strategy 
-is merging the tasks with greedy approach. 
+is composing the tasks in a single travel with greedy approach. 
 
-\item The last strategy \sps extends the second algorithm using a optimize merging tasks. 
+\item The last strategy \sps extends the second algorithm using an optimal approach
+to compose tasks. 
 \end{enumerate}
 
 \subsection{Single robot : Single task (\srst)}
 
 This method is a baseline for our logistic scenario.
-The important constraint of this approach is consider only one task allocated for 
+The important constraint of this approach is to consider only one task allocated for 
 one robot at time.
 Given a set of tasks, the \texttt{task\_planner} (in section \ref{taskplanner}) assigns only one task at time,
 if the robot request a task.
@@ -30,79 +33,30 @@ inline bool pop_min_element(const Task &A, const Task &B) {
     return 0;
   }
 \end{lstlisting}
-Such function sort the tasks based on the distance of the unloading bays and the demand of a specific task.
+Such function sorts the tasks based on the distance of the unloading bays and the demand of a specific task.
+For distance we consider the distance between loading bay $L$ and unloading bays $U_j$.
+Instead for demand is the weight of the item. If the demand of the task is less equal of 
+the capacity of the robot then it can  be allocated.
 
-The \texttt{task\_planner} post-processing all task, compute the route by a sequence 
-of vertices, and the cost of the path. After having assigned the task $t_{i,j}$ 
-it is deleted.
+After the choose of the task to allocate by using the function \texttt{compute\_route()} return the path $\pi$ of the task such as vector of vertices $\pi = \{v_1,\cdots,v_n\}$. 
+This vector is the path to execute the task, its start at loading bay and finish at the previously vertex of the staring vertex.
+For this path we calculate the path distance $|pi|$, precisely the cost of this trail.
+
+% definire la funzione formalmente, così da chiarire cosa intendi per percorso e cosa intendi per demand. 
+
+% Motiva anche perché dividiamo per il demand.
+
+% Discuti anche lo pseudocodice e chiarisci bene perché applichi questa strategia. 
+
+% definizione del task_planner piu avanti nel testo 
+% The \texttt{task\_planner} post-processing all task, compute the route by a sequence 
+% of vertices, and the cost of the path. After having assigned the task $t_{i,j}$ 
+% it is deleted.
 
 This algorithm take linear time or $O(n)$ time, its time complexity is $O(n)$.
-
-\newpage
 This means that the running time increases at most linearly with the size of the input.
 More precisely, this means that there is a constant $c$ such that the running time is 
 at most $cn$ for every input of size $n$.
-
-\subsection{Greedy Set Partition Strategy Single robot : Multiple task (\gsp)}
-
-The main concept of this approach is merging tasks using Greedy Coalition Formation
-based on \cite{cf_greedy} and \cite{cf_farinelli}. Where one wants to minimize the 
-team cost subject to the constraint that each task must be executed by a given 
-number of cooperative agents simultaneosly. Each task requires a number of different 
-demands, and each coalition for the task needs to provide the requered capabilities.
-
-For compute coalition the heuristic is based on the concept of Gain, which can be 
-defined for any pair of coalitions $C_i$, $C_j$ as:
-\[G(C_i,C_j) = v(\{C_i \cup C_j\}) - v(C_i) - v(C_j)\]
-where $v(C)$ is value of the characteristic function $v$ for coalition $C$. 
-In other words, this gain function captures the value of synergies between coalitions
-and is computed in constant time.
-
-The function $v$ for a coalition $C_i$ is defined as:
-\[ v(C_i) = \frac{|\pi_i|}{|demand_i|}\]
-where $|\pi_i|$ is the path distance between the loading bay $L$ and the unloading bays $U_j$
-and the $|demand_i|$ is the demand of the task.
-
-The same function for a pair of coalition $C_i$, $C_j$ can be defined as:
-\[  v(\{C_i \cup C_j\}) = \frac{|\pi_i|}{|demand_i|} + \frac{|\pi_j|}{|demand_j|} = \sum_{i,j} \frac{|\pi_{i,j}|}{|demand_{i,j}|} \]
-
-We want minimize the cost of the gain, that can be defined as:
-\[G(C_i,C_j) < 0 \]
-if the gain $G$ is less than 0 then we allocate the pair and delete the element which
-form the coalition.
-
-Later initialzation phase \texttt{init\_agent()} which all agents send their capacity and identifier,
-start the Coalition Formation algorithm \cite{cf_greedy}.
-When compute new one possible coalition the heuristic  $v(\cdot)$ has been used to calculate 
-the gain $G(C_{i,j})$ and if is negative that coalition is insered into the formation and the 
-$C_i$ , $C_j$ are deleted from this set.
-
-\begin{algorithm}
-\caption{Greedy Coalition Formation} \label{GCF}
-\begin{algorithmic}[1]
-  \Procedure{GCF}{$T$}\Comment{$T$ = set of tasks}
-  \State \Comment{define $C$ the maximum capacity of the robots}
-  \For{$t_i \in T$}
-  \For{$t_j \in T$}
-\Comment{define $t_{i,j} = t_i \cup t_j$}
-\If{$(t_i \neq t_j) \wedge (demand(t_{i,j}) \leq C)$}
-\If{$v(t_{i,j})-v(t_i)-v(t_j) < 0$}
-        $T \setminus \{ t_i\} \setminus \{t_j\} \cup \{t_{i,j}\}$
-  \EndIf
-  \EndIf
-\EndFor
-\EndFor
-\State {\bf return} $T$
-\EndProcedure
-\end{algorithmic}
-\end{algorithm}
-
-This algorithm take polynomial time, its running time is upper bounded by a polynomial expression
-in the size of the input for the algorithm.
-
-More precisely, this algorithm take $O(n^k)$ for some positive constant $k$. 
-
-\newpage
 
 \subsection{Set Partition Strategy Single robot : Multiple task (\sps)}
 
@@ -170,6 +124,69 @@ For $|T| = 4$ takes 0.000043 seconds. If we increase the set, time increases exp
 An example of $|T| = 12$ takes 2.8 seconds and $|T| = 13$ takes 21.2 seconds.
 
 For this reason in our experiment we limited the size of the task set at most 9 task.
+
+\subsection{Greedy Set Partition Strategy Single robot : Multiple task (\gsp)}
+
+The main concept of this approach is merging tasks using Greedy Coalition Formation
+based on \cite{cf_greedy} and \cite{cf_farinelli}. Where one wants to minimize the 
+team cost subject to the constraint that each task must be executed by a given 
+number of cooperative agents simultaneosly. Each task requires a number of different 
+demands, and each coalition for the task needs to provide the requered capabilities.
+
+For compute coalition the heuristic is based on the concept of Gain, which can be 
+defined for any pair of coalitions $C_i$, $C_j$ as:
+\[G(C_i,C_j) = v(\{C_i \cup C_j\}) - v(C_i) - v(C_j)\]
+where $v(C)$ is value of the characteristic function $v$ for coalition $C$. 
+In other words, this gain function captures the value of synergies between coalitions
+and is computed in constant time.
+
+The function $v$ for a coalition $C_i$ is defined as:
+\[ v(C_i) = \frac{|\pi_i|}{|demand_i|}\]
+where $|\pi_i|$ is the path distance between the loading bay $L$ and the unloading bays $U_j$
+and the $|demand_i|$ is the demand of the task.
+
+The same function for a pair of coalition $C_i$, $C_j$ can be defined as:
+\[  v(\{C_i \cup C_j\}) = \frac{|\pi_i|}{|demand_i|} + \frac{|\pi_j|}{|demand_j|} = \sum_{i,j} \frac{|\pi_{i,j}|}{|demand_{i,j}|} \]
+
+We want minimize the cost of the gain, that can be defined as:
+\[G(C_i,C_j) < 0 \]
+if the gain $G$ is less than 0 then we allocate the pair and delete the element which
+form the coalition.
+
+Later initialzation phase \texttt{init\_agent()} which all agents send their capacity and identifier,
+start the Coalition Formation algorithm \cite{cf_greedy}.
+When compute new one possible coalition the heuristic  $v(\cdot)$ has been used to calculate 
+the gain $G(C_{i,j})$ and if is negative that coalition is insered into the formation and the 
+$C_i$ , $C_j$ are deleted from this set.
+
+\begin{algorithm}
+\caption{Greedy Coalition Formation} \label{GCF}
+\begin{algorithmic}[1]
+  \Procedure{GCF}{$T$}\Comment{$T$ = set of tasks}
+  \State \Comment{define $C$ the maximum capacity of the robots}
+  \For{$t_i \in T$}
+  \For{$t_j \in T$}
+\Comment{define $t_{i,j} = t_i \cup t_j$}
+\If{$(t_i \neq t_j) \wedge (demand(t_{i,j}) \leq C)$}
+\If{$v(t_{i,j})-v(t_i)-v(t_j) < 0$}
+        $T \setminus \{ t_i\} \setminus \{t_j\} \cup \{t_{i,j}\}$
+  \EndIf
+  \EndIf
+\EndFor
+\EndFor
+\State {\bf return} $T$
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
+
+This algorithm take polynomial time, its running time is upper bounded by a polynomial expression
+in the size of the input for the algorithm.
+
+More precisely, this algorithm take $O(n^k)$ for some positive constant $k$. 
+
+\newpage
+
+
 
 \newpage
 \subsection*{Example with 9 tasks and 4 robots}

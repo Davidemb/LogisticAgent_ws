@@ -106,7 +106,7 @@ def getSimulationRunning():
 # Terminates if simulation is stopped (/simulation_running param is false)
 # or if timeout is reached (if this is >0)
 # CUSTOM_STAGE: use of extended API for stage (requires custom stage and stage_ros).
-def run_experiment(MAP, NROBOTS, INITPOS, ALG_SHORT, LOC_MODE, NAV_MODULE, GWAIT, COMMDELAY, TERM, TIMEOUT, CUSTOM_STAGE, SPEEDUP):
+def run_experiment(MAP, NROBOTS, INITPOS, ALG_SHORT, LOC_MODE, NAV_MODULE, GWAIT, COMMDELAY, TERM, TIMEOUT, CUSTOM_STAGE, SPEEDUP, CAPACITY):
 
     ALG = findAlgName(ALG_SHORT)
     print 'Run the experiment'
@@ -122,6 +122,7 @@ def run_experiment(MAP, NROBOTS, INITPOS, ALG_SHORT, LOC_MODE, NAV_MODULE, GWAIT
     print 'Timeout ',TIMEOUT
     print 'Custom Stage ',CUSTOM_STAGE
     print 'Simulator speed-up ',SPEEDUP    
+    print 'Capacity', CAPACITY
 
     if (TIMEOUT>0):
         TIMEOUT = TIMEOUT + 10 # Let's give more time to complete actions and logging
@@ -220,7 +221,7 @@ def run_experiment(MAP, NROBOTS, INITPOS, ALG_SHORT, LOC_MODE, NAV_MODULE, GWAIT
             now = datetime.datetime.now()
             dateString = now.strftime("%Y-%m-%d-%H:%M")
             #cmd = 'bash -c \'rosrun patrolling_sim '+ALG+' __name:=patrol_robot'+str(i)+' '+MAP+' '+str(i)+' > logs/'+ALG+'-'+dateString+'-robot'+str(i)+'.log \''
-            cmd = 'bash -c \'rosrun patrolling_sim '+ALG+' __name:=patrol_robot'+str(i)+' '+MAP+' '+str(i)+'\''
+            cmd = 'bash -c \'rosrun patrolling_sim '+ALG+' __name:=patrol_robot'+str(i)+' '+MAP+' '+str(i)+' '+str(CAPACITY)+' '+'\''
         print cmd
         if (TERM == 'xterm'):
 	     os.system('xterm -e  "'+cmd+'" &')
@@ -455,12 +456,13 @@ def main():
     TIMEOUT = int(sys.argv[10])
     CUSTOM_STAGE = False
     SPEEDUP = 1.0
+    CAPACITY = sys.argv[13]
     if (len(sys.argv)>=12):
       CUSTOM_STAGE = sys.argv[11]
     if (len(sys.argv)>=13):
       SPEEDUP = float(sys.argv[12])
     
-    run_experiment(MAP, NROBOTS, INITPOS, ALG_SHORT, LOC_MODE, NAV_MODULE, GWAIT, COMMDELAY, TERM, TIMEOUT, CUSTOM_STAGE,SPEEDUP)
+    run_experiment(MAP, NROBOTS, INITPOS, ALG_SHORT, LOC_MODE, NAV_MODULE, GWAIT, COMMDELAY, TERM, TIMEOUT, CUSTOM_STAGE,SPEEDUP,CAPACITY)
 
  
 

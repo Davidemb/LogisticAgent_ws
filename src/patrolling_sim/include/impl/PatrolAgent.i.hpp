@@ -28,7 +28,7 @@ void PatrolAgent::init(int argc, char **argv)
     ID_ROBOT = atoi(argv[3]);
   }
 
-  // CAPACITY = atoi(argv[4]);
+  CAPACITY = atoi(argv[4]);
 
   /** D.Portugal: needed in case you "rosrun" from another folder **/
   chdir(PS_path.c_str());

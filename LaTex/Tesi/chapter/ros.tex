@@ -310,45 +310,7 @@ On startup, \texttt{amcl} initializes its particle filter according to the param
 provided. In this respect we remark that the \texttt{amcl} node is launched only 
 after having setting up three categories of ROS parameters that we use to configure 
 its behaviour: \textit{overall filter}, \textit{laser model} and \textit{odometry model}.
-The complete configuration file is reported below.
-\begin{lstlisting}
-<?xml version="1.0" encoding="UTF-8" ?>
-<launch>
-<arg name="robotname" default="robot_0" />
-<node pkg="amcl" type="amcl" name="amcl" args="scan:=base_scan">
-  <!-- Publish scans from best pose at a max of 10 Hz -->
-  <param name="odom_model_type" value="diff"/>
-  <param name="odom_alpha5" value="0.1"/>
-  <param name="transform_tolerance" value="0.2" />
-  <param name="gui_publish_rate" value="-10.0"/>
-  <param name="laser_max_beams" value="30"/>
-  <param name="min_particles" value="100"/>
-  <param name="max_particles" value="500"/>
-  <param name="kld_err" value="0.05"/>
-  <param name="kld_z" value="0.99"/>
-  <param name="odom_alpha1" value="0.2"/>
-  <param name="odom_alpha2" value="0.2"/>
-  <!-- translation std dev, m -->
-  <param name="odom_alpha3" value="0.8"/>
-  <param name="odom_alpha4" value="0.2"/>
-  <param name="laser_z_hit" value="0.5"/>
-  <param name="laser_z_short" value="0.05"/>
-  <param name="laser_z_max" value="0.05"/>
-  <param name="laser_z_rand" value="0.5"/>
-  <param name="laser_sigma_hit" value="0.2"/>
-  <param name="laser_lambda_short" value="0.1"/>
-  <param name="laser_lambda_short" value="0.1"/>
-  <param name="laser_model_type" value="likelihood_field"/>
-  <!-- <param name="laser_model_type" value="beam"/> -->
-  <param name="laser_likelihood_max_dist" value="2.0"/>
-  <param name="update_min_d" value="0.2"/>
-  <param name="update_min_a" value="0.5"/>
-  <param name="odom_frame_id" value="odom"/>
-  <param name="base_frame_id" value="base_link"/>
-  <param name="resample_interval" value="1"/>
-</node>
-</launch>
-\end{lstlisting}
+The complete configuration file is reported in section \ref{app:A}.
 
 \subsection{Navigation}
 At high level the navigation system is quite simple. It takes in data from sensors,
@@ -765,8 +727,10 @@ After each of these behaviour completes, \texttt{move\_base} will attempt to mak
 a plan. If planning is successful, \texttt{move\_base} will continue normal operation.
 Otherwise, the next recovery behaviour in the list will be executed.
 
-\section{Extension of \texttt{patrolling\_sim} package}
+\section{\texttt{logistic\_sim} package}
 % devo dire nell related work che uso patrolling sim
+The \texttt{logistic\_sim} is the extension of the \texttt{patrolling\_sim} package
+\footnote{Multi-Robot Patrolling Stage/ROS Simulation Package. http://wiki.ros.org/patrolling\_sim}.
 In this thesis, the problem of allocation task for logistic applications a given 
 environment with an arbitrary number of robots is studied. In this section, 
 details are given on how agents obtain the representation of the environment.

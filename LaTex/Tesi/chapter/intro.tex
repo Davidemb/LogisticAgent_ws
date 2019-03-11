@@ -1,7 +1,12 @@
-One of the fundamental areas in Robotics is Multi-Robot Systems (MRS). More particularly,
+The use of \mrs is a key aspects to obtain effective solutions in several real world
+applications such as for example \footnote{See for example the Kiva system used by Amazon in their warehouse https://www.wired.com/2009/01/retailrobots/.}.
+\\
+More particularly,
 this thesis addresses the cooperation of a team of mobile robots in logistic missions.
 The main aspects studied herein are strategies for effective logistic performance,
 agent's coordination, scalability and applicability in real-life situations.
+In our logistic application the robot team execute specific tasks modeled as exogenous events 
+that are characterized by a pick-up location and a delivery location each.
 % Real-life situation?
 \newline
 This introductory chapter presents the context of the research in order to clarify
@@ -9,49 +14,53 @@ the motivation and significance of the problem.
 In addition, some guidelines about \mrs in general and, more specifically,
 agents in logistic missions are herein introduced to lay the groundwork to 
 approach the problem in hands. 
-Finally, an overview of the document is given. 
+Finally, we provide an overview of the thesis content. 
 
 \section{Context and Motivation}
 In recent years, robotics has been one of the scientific fields with the most substantial
-advances. Within the diverse areas that it embraces, mobile robotics has
-had great focus in the last decades from roboticists (i.e., researchers on robotics)
-around the world. In particular, issues like autonomous navigation, path planning,
+advances. Among the different areas of robotics, mobile robotics gained in the last decades 
+significant attention roboticists (i.e., researchers on robotics)
+around the world. In particular, issues such as autonomous navigation, path planning,
 self-localization, coordination of robots, cooperative dynamics, mapping, exploration 
-and coverage have become popular and have benefited from the progress
+and coverage have become popular topics and have exploited the progress
 of artificial intelligence, control theory, real-time systems, sensors’ development,
 electronics, communication systems and systems integration \cite{parker}.
 \newline
-Nowadays, we expect to see robots with many different shapes operating in
+Nowadays, we see different types of robots operating in
 different environments as on land, underwater, in the air, suspended on wires,
 climbing and so on. This evident growth is extremely motivating for the development
  and contribution of new developments by the community.
 \newline
+% Da sistemare 
 Security applications are a fundamental task with unquestionable impact on
 society. Combining this fact with the technological evolution observed in the last
 decades, it becomes clear that robot assistance can be a valuable resource by
-taking advantage of robots’ expendability. In particular, Multi-Robot allocator task for logistic applications
-has high utility and is considered as a contemporary area with some relevant work
-presented in the last decade, especially in terms of strategies for coordinating
-teams of robots. However, many of the studies in the literature present unrealistic
-simplifications, strong limitations or questionable applicability as illustrated later
-on. Therefore, there is an eminent potential to explore in this context.
+taking advantage of robots’ ability to cary out tedious or dangerous tasks for a very long time.
+In particular, Multi-Robot allocator task for logistic applications
+has high utility and is considered as a key area where the use of robots can have a 
+dramatic impact on productivity in last decade, especially in terms of strategies for coordinating
+teams of robots. 
+A key point in for effective application of \mrs in logistic application is to coordiante 
+actions of the robot platforms \cite{maxsum}.
+However, many of the studies in the literature present unrealistic
+simplifications, strong limitations or questionable applicability as illustrated \ref{mrs:logistic} . Therefore, there is an eminent potential to explore in this context.
 \newline
-Moreover, the allocator task for logistic applications problem is very challenging
+Task allocation for logistic applications problem is very challenging
 in the context of \mrs, because agents must navigate autonomously,
-coordinate their actions in a distributed or centralized way and acquire information
-about the surrounding space, possibly with communication constraints and independently
-of the number of robots in the team and the enviroment's dimension.
+coordinate their actions and acquire information
+about the surrounding enviroment, possibly with communication constraints and should be able to achieve good performance 
+on the number of robots in the team and the enviroment's dimension.
 All of these features lead to an excellent case study in mobile robotics
 and conclusions drawn from such studies may support the development of future
-approaches not only in the logistic domain but also in \mrs, in
+approaches not only in the logistic domain but also in \mrs in
 general.
 
 \section{Multi-Robot Systems}
-In many applications, an autonomous mobile robot equipped with different
-sensors may adequately complete a given assignment. However, in several situations,
-it proves to be more expensive, less efficient and less robust than using a \mrs.
+Logistic applications can significantly benefit from the use of several robots, however  
+(as we discussed above) the effective use of \mrs in logistic applications requires a 
+significant effort to delevop an effective and efficient coordinated solution.
 In some cases, due to the need of combining different tasks and the dynamics of the environment.
-
+% da espandere
 Some characteristics of \mrs include distributed control, autonomy,
 communicative agents and greater fault-tolerance.
 A single robot may be vulnerable to hostile environments or attackers, for example, in military actions.
@@ -68,19 +77,33 @@ assigned to a task.
 A coordination mechanism must exist to establish relationships between agents so
 that they can accomplish the mission effectively.
 
-\section{The Multi-Robot System for logistic applications}
+\section{The Multi-Robot System for logistic applications} \label{mrs:logistic}
 Logistic apllication an infrastructure with multiple robots is no different than other Multi-Robot
 assignments, in the sense that it incorporates all the previously mentioned
-characteristics of \mrs. To understand this problem, it is important to firstly
+characteristics of \mrs. To understand this problem, it is important to first
 introduce the definition of logistic application.
 
 \begin{mydef}
     Industrial Logistics, the set of operations related to the procurement,
-    destination and storage of materials and products of large industry; the coordination and provisioning of people or things for the purpose of higher production efficiency.
+    destination and storage of materials and products of large industry; 
+    the coordination and provisioning of people or things for the purpose of higher production efficiency.
 \end{mydef}
 
 Many real-world applications of \mrs require agents to operate
 in known common environments. The agents are constantly engaged with new tasks and have
-to navigate between locations where the tasks need to be executed. On the other hand,
-the \mrs for logistic applications, given a set of agents attend 
+to navigate between locations where the tasks need to be executed. In particular,
+the \mrs for logistic applications, the set of robots must complete a stream attend 
 to stream of incoming pickup-and-delivery tasks.
+
+
+% devi completare questo paragrafo aggiungendo:
+
+% -- dire quale problema hai affrontato in particolare: magazzino con mappa realistica, spiega bene il problema di pick up and delivery , descrivere i problemi specifici (path finding, task assignment), citare il avoro su MRS coordination in logistic di koenig e dire che rispetto a quello ci concentriamo sulla capacità dei robot.
+
+% -- descrivere le soluzioni proposte
+
+% -- descrivere il setting sperimentale ed i risultati principali.
+
+% Aggiungere una sezione: Thesis contribution in cui elechi i contributi.
+
+% Aggiungere una sezione thesis outline che riassume i capitoli seguenti.

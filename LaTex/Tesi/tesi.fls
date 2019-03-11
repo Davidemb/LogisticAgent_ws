@@ -171,6 +171,8 @@ INPUT /home/dave/LogisticAgent_ws/LaTex/Tesi/chapter/abstract.tex
 INPUT /home/dave/LogisticAgent_ws/LaTex/Tesi/chapter/abstract.tex
 INPUT /home/dave/LogisticAgent_ws/LaTex/Tesi/chapter/intro.tex
 INPUT /home/dave/LogisticAgent_ws/LaTex/Tesi/chapter/intro.tex
+INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm
+INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmr17.tfm
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmbx12.tfm
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmti12.tfm
@@ -194,10 +196,10 @@ INPUT /home/dave/LogisticAgent_ws/LaTex/Tesi/chapter/ros.tex
 INPUT /home/dave/LogisticAgent_ws/LaTex/Tesi/chapter/ros.tex
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmtt12.tfm
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmtt12.tfm
+INPUT /home/dave/LogisticAgent_ws/LaTex/Tesi/img/action_interface.png
+INPUT /home/dave/LogisticAgent_ws/LaTex/Tesi/img/action_interface.png
+INPUT /home/dave/LogisticAgent_ws/LaTex/Tesi/img/action_interface.png
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmsltt10.tfm
-INPUT /home/dave/LogisticAgent_ws/LaTex/Tesi/img/action_interface.png
-INPUT /home/dave/LogisticAgent_ws/LaTex/Tesi/img/action_interface.png
-INPUT /home/dave/LogisticAgent_ws/LaTex/Tesi/img/action_interface.png
 INPUT /home/dave/LogisticAgent_ws/LaTex/Tesi/img/rosgraph.png
 INPUT /home/dave/LogisticAgent_ws/LaTex/Tesi/img/rosgraph.png
 INPUT /home/dave/LogisticAgent_ws/LaTex/Tesi/img/rosgraph.png
@@ -207,6 +209,10 @@ INPUT /home/dave/LogisticAgent_ws/LaTex/Tesi/chapter/result.tex
 INPUT /home/dave/LogisticAgent_ws/LaTex/Tesi/chapter/result.tex
 INPUT /home/dave/LogisticAgent_ws/LaTex/Tesi/chapter/coclusions.tex
 INPUT /home/dave/LogisticAgent_ws/LaTex/Tesi/chapter/coclusions.tex
+INPUT /home/dave/LogisticAgent_ws/LaTex/Tesi/chapter/script.tex
+INPUT /home/dave/LogisticAgent_ws/LaTex/Tesi/chapter/script.tex
+INPUT /home/dave/LogisticAgent_ws/LaTex/Tesi/chapter/tabelle.tex
+INPUT /home/dave/LogisticAgent_ws/LaTex/Tesi/chapter/tabelle.tex
 INPUT /home/dave/LogisticAgent_ws/LaTex/Tesi/chapter/biblio.tex
 INPUT /home/dave/LogisticAgent_ws/LaTex/Tesi/chapter/biblio.tex
 INPUT /home/dave/LogisticAgent_ws/LaTex/Tesi/tesi.aux
@@ -222,6 +228,7 @@ INPUT /usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb
 INPUT /usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb
 INPUT /usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb
 INPUT /usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb
+INPUT /usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb
 INPUT /usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb
 INPUT /usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsl12.pfb
 INPUT /usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsltt10.pfb

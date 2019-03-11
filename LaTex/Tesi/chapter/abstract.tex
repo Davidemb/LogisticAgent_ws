@@ -4,21 +4,22 @@
 Robotics technology has recently matured sufficiently to deploy autonomous
 robotic systems for daily use in several applications: from disaster response
 to environmental monitoring and logistics.
-In this project present and evaluate the principal difference of central and 
-distributed allocator task coordinator. 
-In these applications we address off-line coordination, by casting the Multi-Robot
+In this project we present and evaluate the main difference of central allocator task coordinator. 
+In this application we address off-line coordination, by casting the Multi-Robot
 logistics problem as a task assignment problem and proposing three solution 
 techniques: Single robot Single task (\srst), which is 
 a baseline greedy approach,  Greedy Set Partition Strategy Single robot Multiple task 
 (\gsp) and Set Partition Strategy Single robot Multiple task (\sps),
-which are based on merging task for improve the spend time.
+which are based on merging task to minimize the task completion time.
 \\
 We evaluate the performance of our system in a realistic simulation enviroment
 (build with ROS and stage). In particular, in the simulated enviroment we compare
-our task assignment approaches with previously methods mentioned.
+our task assignment approaches with the baseline greedy approch. Results show that fully
+exploiting the capacities of robots is key to optimze system performance and that the 
+\gsp achieves similar performance to \sps while being able to scale up to many tasks.
 \newline
 \newline
-\textbf{Keywords:} Multi-Robot Task Allocator, logistic applications, Multi-Robot
+\textbf{Keywords:} Multi-Robot Task Allocation, logistic applications, Multi-Robot
 systems, coordination, task assignment
 
 % TODO: primi risultati e considierazioni
