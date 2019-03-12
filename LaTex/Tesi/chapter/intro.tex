@@ -7,7 +7,6 @@ The main aspects studied herein are strategies for effective logistic performanc
 agent's coordination, scalability and applicability in real-life situations.
 In our logistic application the robot team execute specific tasks modeled as exogenous events 
 that are characterized by a pick-up location and a delivery location each.
-% Real-life situation?
 \newline
 This introductory chapter presents the context of the research in order to clarify
 the motivation and significance of the problem. 
@@ -36,6 +35,10 @@ Security applications are a fundamental task with unquestionable impact on
 society. Combining this fact with the technological evolution observed in the last
 decades, it becomes clear that robot assistance can be a valuable resource by
 taking advantage of robots’ ability to cary out tedious or dangerous tasks for a very long time.
+
+The principal scope of the \mrs in logistic application is reduce the costs of the production phase 
+and increase the productivity that the robots guarantee in these applications.
+
 In particular, Multi-Robot allocator task for logistic applications
 has high utility and is considered as a key area where the use of robots can have a 
 dramatic impact on productivity in last decade, especially in terms of strategies for coordinating
@@ -43,29 +46,45 @@ teams of robots.
 A key point in for effective application of \mrs in logistic application is to coordiante 
 actions of the robot platforms \cite{maxsum}.
 However, many of the studies in the literature present unrealistic
-simplifications, strong limitations or questionable applicability as illustrated \ref{mrs:logistic} . Therefore, there is an eminent potential to explore in this context.
+simplifications, strong limitations or questionable applicability as illustrated \ref{mrs:logistic}.
+Therefore, there is an eminent potential to explore in this context.
 \newline
 Task allocation for logistic applications problem is very challenging
 in the context of \mrs, because agents must navigate autonomously,
 coordinate their actions and acquire information
-about the surrounding enviroment, possibly with communication constraints and should be able to achieve good performance 
+about the surrounding enviroment, possibly with communication constraints and 
+should be able to achieve good performance 
 on the number of robots in the team and the enviroment's dimension.
+Clearly, cooperation among robots is one of the most decisive issues in this context,
+since robots most efficiently work together in order to improve the performance of the system as a whole.
 All of these features lead to an excellent case study in mobile robotics
 and conclusions drawn from such studies may support the development of future
 approaches not only in the logistic domain but also in \mrs in
 general.
 
 \section{Multi-Robot Systems}
-Logistic applications can significantly benefit from the use of several robots, however  
-(as we discussed above) the effective use of \mrs in logistic applications requires a 
-significant effort to delevop an effective and efficient coordinated solution.
-In some cases, due to the need of combining different tasks and the dynamics of the environment.
-% da espandere
+During the last two decades, researchers in the field of mobile robotics have begun 
+to investigate problems that involve multiple robot rather than using single robot, and 
+research in \mrs has witnessed notorious progress an never before.
+In many applications, an autonomous mobile robot equipped with different sensors
+may adequately complete a given assignment. However, in several situations. it proves
+to be more expensive, less efficient and less robust than using a \mrs. 
+In some cases, due to the need of combining different tasks and the dynamics of the environment,
+it is only viable to achieve the mission with a multiple distributed autonomous robotic system.  
 Some characteristics of \mrs include distributed control, autonomy,
 communicative agents and greater fault-tolerance.
 A single robot may be vulnerable to hostile environments or attackers, for example, in military actions.
 In such scenarios, agents would greatly benefit from the assistance of nearby agents during emergencies,
 failures or malfunctions.
+
+Logistic applications can significantly benefit from the use of several robots, however  
+(as we discussed above) the effective use of \mrs in logistic applications requires a 
+significant effort to delevop an effective and efficient coordinated solution.
+
+Most missions are solved much quicker it robots operate in parallel. 
+Increasing robustness and reliability of the solution is also feasible in \mrs by 
+introducing redundancies in the capabilities across robot team member and graceful 
+performance degradation, remaining functional if some of the agents fail.
 
 One of the main difficulties when approaching these systems is to coordinate
 many robots to perform a complex, global task in an efficient manner, maximizing
@@ -77,25 +96,109 @@ assigned to a task.
 A coordination mechanism must exist to establish relationships between agents so
 that they can accomplish the mission effectively.
 
-\section{The Multi-Robot System for logistic applications} \label{mrs:logistic}
+\section{Multi-Robot Systems for logistic applications} \label{mrs:logistic}
 Logistic apllication an infrastructure with multiple robots is no different than other Multi-Robot
 assignments, in the sense that it incorporates all the previously mentioned
 characteristics of \mrs. To understand this problem, it is important to first
 introduce the definition of logistic application.
 
 \begin{mydef}
-    Industrial Logistics, the set of operations related to the procurement,
-    destination and storage of materials and products of large industry; 
-    the coordination and provisioning of people or things for the purpose of higher production efficiency.
+    The industrial logistics is the process of planning, organization and control of all the activities of handling and storage of goods, which, starting from the suppliers and reaching up to the end user, guarantee an adequate level of service to the customer consistent with the costs to it associated
+    \footnote{See Basic concepts of Industrial Logistics and Logistics System https://elearning.unito.it/sme/pluginfile.php/36284/mod\_folder/content/0/LOGISTICA}.
 \end{mydef}
 
+A traditional warehouse employee typically spends most of his or her time walking 
+around the warehouse to gather all of the items for an order. In manual warehouse,
+a picker might walk between seven and fifteen miles per shift \footnote{http://www.businessinsider.com/working-conditions-at-an-amazon-warehouse-2013-2?IR=T}. 
+To save labor by reducing the time spent walking, a lot company adopt \mrs to improving 
+the productivity and have an efficient service for customers.
+
 Many real-world applications of \mrs require agents to operate
-in known common environments. The agents are constantly engaged with new tasks and have
+in known common environments. 
+Our logistic scenario is a map of laboratory for industry 4.0 (ICE lab) with a modern production line,
+extended with equipment for augmented reality and digital production, and connected with the university
+computational platform plus new hubs.
+
+Below is reported the Figure \ref{fig:ICE lab} of the Industrial Computer Engineering Laboratory used in our 
+logistc scenario.
+
+\begin{figure} [hbt]
+    \centering
+    \includegraphics[width=\textwidth]{img/model1.pdf}
+    \caption{This is our logistic scenario of Industial Computer Engineering Laboratory}
+    \label{fig:ICE lab}
+\end{figure}
+
+The map used in the simulator is scaled to have measurements in real enviroment.
+In this map we have build the logistic system to perform pick-up and delivery tasks.
+
+An pick-up and delivery task is characterized by a pickup location and a delovery location.
+An agent has to move from its current location via the pickup location of the task to
+delivery location of the task. When the agent reaches the pickup location, it starts 
+to execute the task and the task is removed from the task set.
+
+Wheeled mobile robots mostly operate over a differential drive mechanism. It consists 
+of two motors attached wirh wheels on a similar axis. Both motor drives are independent 
+of each other's movement. The common access of both motors is known as their center of curvature.
+The agent cannot move in the direction along axis. Since both motors can move independently,
+their velocities are also different and we can easily vary the trajectory of movement by varying
+velocities. The velocities of both drivers must be synchronized in order to move 
+the agent in the desired path. 
+The robot constructs a two-dimensional geometric representation of its environment
+using the laser scanner. It utilizes a combination of this geometric data and odometry
+information supplied through the wheel encoders to determine its current location.
+For more information about navigation and localization see section \ref{ros:navloc}.
+We focus our study to task-allocation problems where one wants to minimize the team 
+cost subject to the constraint that each task must be executed by a given number 
+of cooperative agents simultaneously.
+For \mrs coordination in logistic application there are a lot technique,
+in automated warehouse, where agents are constantly engaged with new task, one agent
+has to be assigned to each delivery task avoiding collisions with other agents. 
+In \cite{mapd} and \cite{mapf} paper has recently received a lot of attention.
+They present two decoupled MAPD algorithms, Token Passing (TP) and Token Passing with
+Task Swaps (TPTS). Where agents operate in known common enviroments modeled such as 
+grids, for each task in a given 2-dimensional 4-neighbor grid with blocked and unblocked 
+cells. The multi-agent pathfinding problem is to compute collision-free paths for 
+multiple agents, in a post-processing step to adapt its paths to continuous forward 
+movements with given traslational velocities and point turns with given rotation velocities.
+They take kinematic constraints for instance the robot can turn around only 90 degree at time
+and can perform only one task at time. 
+In our techniques not consider kinematic constraints and our robots can perform more than one task at time, 
+if the capacity of robots are enough.
+Then we can allocate more than one task and execute its in one shot.
+The agents are constantly engaged with new tasks and have
 to navigate between locations where the tasks need to be executed. In particular,
 the \mrs for logistic applications, the set of robots must complete a stream attend 
 to stream of incoming pickup-and-delivery tasks.
+ 
+\section{Thesis contribution}
 
+% contributi quello che ho fatto e perche'
 
+\section{Thesis outline}
+
+% da riscrivere
+
+Having answered the questions "What problem is addressed in this thesis?" and 
+"Why are we studying this problem?", it id fundamental to answer an additional question,
+which is: "How is the problem going to be solved?". This question requires a more 
+in-depth answer, that is detailed throughout the rest of thesis.
+
+Initially, an analysis of relevant literature concerning related work to the \mrs 
+is conducted in chapter \ref{chap:related}. This allows to formulate the problem 
+and extract some weaknesses inherent to previous works, so as to present the goals and contributions
+proposed in this thesis.
+
+In chapter \ref{chap:problem} we detail our reference scenario for \mrs coordination and 
+well as the formalization of the problem we addressed and the solutions we propose.
+Where we introduce the baseline approach for our experiments to then focus on two techniques
+which are based on composing task to minimize the task completion time.
+
+Later on, in chapter \ref{chap:ros} a prelimenary framework to solve the \mrs in logistic 
+application. 
+
+Finally, the last chapter sums up the work and provides final conclusions and future
+directions of research.
 % devi completare questo paragrafo aggiungendo:
 
 % -- dire quale problema hai affrontato in particolare: magazzino con mappa realistica, spiega bene il problema di pick up and delivery , descrivere i problemi specifici (path finding, task assignment), citare il avoro su MRS coordination in logistic di koenig e dire che rispetto a quello ci concentriamo sulla capacità dei robot.

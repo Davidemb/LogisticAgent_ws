@@ -113,7 +113,7 @@ is:
     roslaunch [package] [filename.launch]
 \end{lstlisting}
 
-\subsection{The Stage 2D Simulation}
+\subsection{The Stage 2D Simulator}
 For visualization purposes we adopted the Stage 2D robot simulator
 which provides a virtual world populated by mobile robots and enriched with
 sensors, actuators and both approximate and exact localization. Stage is
@@ -224,7 +224,7 @@ is suffice for our purpose of having a mobile camera that moves around the world
 \end{lstlisting}
 % TODO sistemare gli spazzi bianchi
 
-\section{Localization and Navigation}
+\section{Localization and Navigation} \label{ros:navloc}
 Purpose of this section is to describing how we address the two main problems in
 the context of mobile robotics: \textit{localization} and \textit{navigation}.
 The former deals with tracking the pose of the robot during its motion allowing
@@ -329,6 +329,7 @@ Figure below. %TODO
 
 The pre-requisites of navigation stack, along with a brief description of it's main 
 components, are provided in the section below.
+
 \subsection*{Trasformations}
 Robotics systems often need to track spartial relationships between \textit{frames}
 for a variety of reasons: between a mobile robot and some fixed frame of reference 
@@ -453,6 +454,7 @@ and \textit{local} action planning.
 As we shall see, the local planner is seeded with the high-level plan produced by
 the global planner and the purpose of the \texttt{nav\_core} package is just to 
 provide common interfaces for navigation. 
+
 \subsection*{Global planner}
 The global planner is given the obstacle and cost information contained
 in the global costmap, information from the robot’s localization system, and

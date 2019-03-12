@@ -3,35 +3,37 @@
 \contentsline {chapter}{\numberline {1}Introduction}{7}{chapter.1}
 \contentsline {section}{\numberline {1.1}Context and Motivation}{7}{section.1.1}
 \contentsline {section}{\numberline {1.2}Multi-Robot Systems}{9}{section.1.2}
-\contentsline {section}{\numberline {1.3}The Multi-Robot System for logistic applications}{9}{section.1.3}
-\contentsline {chapter}{\numberline {2}Background and Related Works}{11}{chapter.2}
-\contentsline {section}{\numberline {2.1}Multi-Robot System for Logistics Applications}{11}{section.2.1}
-\contentsline {section}{\numberline {2.2}Coordination in Multi-Robot system}{12}{section.2.2}
-\contentsline {chapter}{\numberline {3}Problem formalization and Solution}{13}{chapter.3}
-\contentsline {section}{\numberline {3.1}Description}{13}{section.3.1}
-\contentsline {section}{\numberline {3.2}Fomalization}{14}{section.3.2}
-\contentsline {section}{\numberline {3.3}Solution}{15}{section.3.3}
-\contentsline {subsection}{\numberline {3.3.1}Single robot : Single task (SR:ST )}{15}{subsection.3.3.1}
-\contentsline {subsection}{\numberline {3.3.2}Set Partition Strategy Single robot : Multiple task (SPS1:N )}{16}{subsection.3.3.2}
-\contentsline {subsection}{\numberline {3.3.3}Greedy Set Partition Strategy Single robot : Multiple task (GSP1:N )}{18}{subsection.3.3.3}
-\contentsline {chapter}{\numberline {4}Empirical Setting}{23}{chapter.4}
-\contentsline {section}{\numberline {4.1}Robot Operating System (ROS)}{23}{section.4.1}
-\contentsline {subsection}{\numberline {4.1.1}Nomencalture and Architecture}{23}{subsection.4.1.1}
-\contentsline {subsection}{\numberline {4.1.2}The Stage 2D Simulation}{26}{subsection.4.1.2}
-\contentsline {section}{\numberline {4.2}Localization and Navigation}{29}{section.4.2}
-\contentsline {subsection}{\numberline {4.2.1}Mapping}{30}{subsection.4.2.1}
-\contentsline {subsection}{\numberline {4.2.2}Localization}{31}{subsection.4.2.2}
-\contentsline {subsection}{\numberline {4.2.3}Navigation}{32}{subsection.4.2.3}
-\contentsline {subsection}{\numberline {4.2.4}Global and Local planner algorithms}{35}{subsection.4.2.4}
-\contentsline {section}{\numberline {4.3}Cost-maps configurations}{39}{section.4.3}
-\contentsline {subsection}{\numberline {4.3.1}Common configuration}{40}{subsection.4.3.1}
-\contentsline {subsection}{\numberline {4.3.2}Global configuration}{41}{subsection.4.3.2}
-\contentsline {subsection}{\numberline {4.3.3}Local configuration}{41}{subsection.4.3.3}
-\contentsline {subsection}{\numberline {4.3.4}Local and global coordinate frames}{42}{subsection.4.3.4}
-\contentsline {section}{\numberline {4.4}Recovery behaviours}{43}{section.4.4}
-\contentsline {section}{\numberline {4.5}\texttt {logistic\_sim} package}{43}{section.4.5}
-\contentsline {subsection}{\numberline {4.5.1}Obtaining a Topological representation}{44}{subsection.4.5.1}
-\contentsline {subsection}{\numberline {4.5.2}\texttt {actionLib} and \texttt {move\_base}}{44}{subsection.4.5.2}
-\contentsline {subsection}{\numberline {4.5.3}\texttt {task\_planner} package}{46}{subsection.4.5.3}
-\contentsline {chapter}{\numberline {5}Empirical Results}{49}{chapter.5}
-\contentsline {chapter}{\numberline {6}Conclusions and Future Work}{51}{chapter.6}
+\contentsline {section}{\numberline {1.3}Multi-Robot Systems for logistic applications}{10}{section.1.3}
+\contentsline {section}{\numberline {1.4}Thesis contribution}{13}{section.1.4}
+\contentsline {section}{\numberline {1.5}Thesis outline}{13}{section.1.5}
+\contentsline {chapter}{\numberline {2}Background and Related Works}{15}{chapter.2}
+\contentsline {section}{\numberline {2.1}Multi-Robot System for Logistics Applications}{15}{section.2.1}
+\contentsline {section}{\numberline {2.2}Coordination in Multi-Robot Systems}{16}{section.2.2}
+\contentsline {chapter}{\numberline {3}Multi-Robot task allocation for pick-up and delivery}{19}{chapter.3}
+\contentsline {section}{\numberline {3.1}Problem description}{19}{section.3.1}
+\contentsline {section}{\numberline {3.2}Problem fomalization}{20}{section.3.2}
+\contentsline {section}{\numberline {3.3}Proposed solution}{21}{section.3.3}
+\contentsline {subsection}{\numberline {3.3.1}Single robot : Single task (SR:ST )}{21}{subsection.3.3.1}
+\contentsline {subsection}{\numberline {3.3.2}Set Partition Strategy - Single robot : Multiple task (SPS1:N )}{22}{subsection.3.3.2}
+\contentsline {subsection}{\numberline {3.3.3}Greedy Set Partition Strategy - Single robot : Multiple task (GSP1:N )}{24}{subsection.3.3.3}
+\contentsline {chapter}{\numberline {4}Empirical Setting}{29}{chapter.4}
+\contentsline {section}{\numberline {4.1}Robot Operating System (ROS)}{29}{section.4.1}
+\contentsline {subsection}{\numberline {4.1.1}Nomencalture and Architecture}{29}{subsection.4.1.1}
+\contentsline {subsection}{\numberline {4.1.2}The Stage 2D Simulator}{32}{subsection.4.1.2}
+\contentsline {section}{\numberline {4.2}Localization and Navigation}{35}{section.4.2}
+\contentsline {subsection}{\numberline {4.2.1}Mapping}{36}{subsection.4.2.1}
+\contentsline {subsection}{\numberline {4.2.2}Localization}{37}{subsection.4.2.2}
+\contentsline {subsection}{\numberline {4.2.3}Navigation}{38}{subsection.4.2.3}
+\contentsline {subsection}{\numberline {4.2.4}Global and Local planner algorithms}{41}{subsection.4.2.4}
+\contentsline {section}{\numberline {4.3}Cost-maps configurations}{45}{section.4.3}
+\contentsline {subsection}{\numberline {4.3.1}Common configuration}{46}{subsection.4.3.1}
+\contentsline {subsection}{\numberline {4.3.2}Global configuration}{47}{subsection.4.3.2}
+\contentsline {subsection}{\numberline {4.3.3}Local configuration}{47}{subsection.4.3.3}
+\contentsline {subsection}{\numberline {4.3.4}Local and global coordinate frames}{48}{subsection.4.3.4}
+\contentsline {section}{\numberline {4.4}Recovery behaviours}{49}{section.4.4}
+\contentsline {section}{\numberline {4.5}\texttt {logistic\_sim} package}{49}{section.4.5}
+\contentsline {subsection}{\numberline {4.5.1}Obtaining a Topological representation}{50}{subsection.4.5.1}
+\contentsline {subsection}{\numberline {4.5.2}\texttt {actionLib} and \texttt {move\_base}}{50}{subsection.4.5.2}
+\contentsline {subsection}{\numberline {4.5.3}\texttt {task\_planner} package}{52}{subsection.4.5.3}
+\contentsline {chapter}{\numberline {5}Empirical Results}{55}{chapter.5}
+\contentsline {chapter}{\numberline {6}Conclusions and Future Work}{57}{chapter.6}

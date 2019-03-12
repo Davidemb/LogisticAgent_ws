@@ -1,4 +1,4 @@
-\section{Solution}
+\section{Proposed solution}
 
 In this section we propose the approaches with centralized coordination.
 In a warehouse the connection between robots is efficient and has no big limitations;
@@ -43,7 +43,7 @@ This vector is the path to execute the task, its start at loading bay and finish
 For this path we calculate the path distance $|pi|$, precisely the cost of this trail.
 
 % definire la funzione formalmente, così da chiarire cosa intendi per percorso e cosa intendi per demand. 
-
+% ???? funzioni da definire formalmente
 % Motiva anche perché dividiamo per il demand.
 
 % Discuti anche lo pseudocodice e chiarisci bene perché applichi questa strategia. 
@@ -58,7 +58,7 @@ This means that the running time increases at most linearly with the size of the
 More precisely, this means that there is a constant $c$ such that the running time is 
 at most $cn$ for every input of size $n$.
 
-\subsection{Set Partition Strategy Single robot : Multiple task (\sps)}
+\subsection{Set Partition Strategy - Single robot : Multiple task (\sps)}
 
 This method consists to compute all possible coalitions of the task set 
 using Set Partition algorithm \cite{partition} and use only 
@@ -125,7 +125,7 @@ An example of $|T| = 12$ takes 2.8 seconds and $|T| = 13$ takes 21.2 seconds.
 
 For this reason in our experiment we limited the size of the task set at most 9 task.
 
-\subsection{Greedy Set Partition Strategy Single robot : Multiple task (\gsp)}
+\subsection{Greedy Set Partition Strategy - Single robot : Multiple task (\gsp)}
 
 The main concept of this approach is merging tasks using Greedy Coalition Formation
 based on \cite{cf_greedy} and \cite{cf_farinelli}. Where one wants to minimize the 
@@ -185,7 +185,6 @@ in the size of the input for the algorithm.
 More precisely, this algorithm take $O(n^k)$ for some positive constant $k$. 
 
 \newpage
-
 
 
 \newpage
