@@ -179,6 +179,8 @@ INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmti12.tfm
 INPUT /home/dave/LogisticAgent_ws/LaTex/Tesi/img/model1.pdf
 INPUT /home/dave/LogisticAgent_ws/LaTex/Tesi/img/model1.pdf
 INPUT /home/dave/LogisticAgent_ws/LaTex/Tesi/img/model1.pdf
+INPUT /usr/share/texlive/texmf-dist/tex/latex/base/omscmr.fd
+INPUT /usr/share/texlive/texmf-dist/tex/latex/base/omscmr.fd
 INPUT /home/dave/LogisticAgent_ws/LaTex/Tesi/chapter/background_related_works.tex
 INPUT /home/dave/LogisticAgent_ws/LaTex/Tesi/chapter/background_related_works.tex
 INPUT /home/dave/LogisticAgent_ws/LaTex/Tesi/chapter/formalism.tex
@@ -190,8 +192,6 @@ INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmbx12.tfm
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmr10.tfm
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmtt10.tfm
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmcsc10.tfm
-INPUT /usr/share/texlive/texmf-dist/tex/latex/base/omscmr.fd
-INPUT /usr/share/texlive/texmf-dist/tex/latex/base/omscmr.fd
 INPUT /home/dave/LogisticAgent_ws/LaTex/Tesi/img/CF.png
 INPUT /home/dave/LogisticAgent_ws/LaTex/Tesi/img/CF.png
 INPUT /home/dave/LogisticAgent_ws/LaTex/Tesi/img/CF.png

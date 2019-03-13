@@ -5,33 +5,147 @@ approaches, highlighting challenges and main solution techniques.
 \section{Multi-Robot System for Logistics Applications}
 In this thesis we focus on industrial scenarios where robots have a high
 degree of autonomy and operate in a dynamic environment.
-\\
-In article \cite{maxsum} robots must cooperate to maximizes the number of packages
-completed in the unit of time. To this end a crucial component is to avoid interferences
-when moving in the enviroment. They have formalised that problem as a Distributed 
-Constrained Optimization problem based their solution on the binary max-sum algorithm.
-\\
-The most recent paper in logistic scenario \cite{mapd}, uses a Token Passing approach 
-that solves the pickup-and-delivery tasks. The resulting algorithm takes kinematic 
-constraints during planning, computes continuos agent movements with given velocities
-that work on non-holonomic robots.
+
+% coocoo 
+In this article \cite{coocoo} they presented the Kiva warehouse-management system 
+create a paradigm for pick-pack-and-ship warehouse that improves worker productivity \footnote{https://www.amazonrobotics.com/\#/} .
+The Kiva system uses movable storage shelves that can be lifted by small, autonomous robots.
+By bringing the product to the worker, productivity is increased by a factor of two or more,
+while simultaneously improving accountability and flexibility.
+The key innovation in the Kiva system is the application of
+inexpensive robots capable of lifting and carrying
+three-foot-square shelving units, called \textit{inventory pods}.
+The robots, called \textit{drive units}, transport the inventory pods from storage
+locations to stations where workers can pick items off the shelves and
+put them into shipping cartons. Throughout the
+day, the picker stays in her station while a continuous stream of robots presents
+pick-faces. By moving the inventory to the worker, rather than the
+other way around, we typically see worker productivity at least double.
+The Kiva drive units operate in a controlled, known enviroment, greatly simplifying
+the design problem and making the solution pratical.
+Another distinguishing attribute of \mrs is the extent to which agents are cooperative 
+(in the sense that they must coordinate activities to achieve a system goal) 
+or are self-interested and have independent, often conflicting, objectives.
+Although the overall system is cooperative, the Kiva robots are essentially independent.
+Warehouses and distribution centers play a critical role in the flow of goods from 
+manufacturers to consumers. They serve as giant routing centers in which pallets
+of products from different manufacturers are split, and the items are redirected
+into outgoing containers.
+The drive units are small enough to fit under the inventory pod and are outfitted
+with a mechanical lifting mechanism that allows them to lift pods off
+the ground. The pods consist of a stack of trays,
+each of which is subdivided into bins. A variety of
+tray sizes and bin sizes create the mixture of storage locations for the profile
+of products the warehouse stores.
+A Kiva installation is arranged on a
+grid with storage zones in the middle and inventory stations spread around the perimeter.
+The drive units are used to move the inventory pods with the correct bins
+from their storage locations to the inventory stations where a pick worker removes 
+the desired products from the desired bin. Note that the pod
+has four faces, and the drive unit may need to rotate the pod in order to present
+the correct face.
+When a picker is done with a pod, the drive unit
+stores it in an empty storage location.
+For compute the path planning the environment is defined such as a grind costitutes 
+a two-dimensional graph of paths that may be given weights at design time. 
+The drive units use a standard implementation of $A^*$ to plan paths to storage locations 
+and inventory stations. The drive unit agents also maintain a list of highlevel 
+goals and are responsible for prioritizing the goals and accomplishing them as efficiently
+as possible. Then the drive unit agent decides which station to visit first and in 
+what sequence to show the faces to minimize travel time. 
+
+% token passing
+
+The most recent papers in logistic scenario \cite{mapf} and \cite{mapd}, are definited 
+the Multi-Agent Pickup and Delivery problem (MAPD) where a large number of agents attend to
+stream of incoming pickup-and-delivery tasks. They using a Token Passing (TP) approach
+for implement MAPD algorithm that is efficient and effective. The MAPD algorithm takes 
+kinematic constraints of real robot into account direclty during planning, computes 
+continuous agent movements with given velocities that work on non-holonomic robot rather than
+discrete agent movements with uniform velocity.
+TP assumes, like many Multi-Agent pathfinding algorithms, discrete agent movements 
+in the main compass directions with uniform velocity but can use a post-processing step 
+to adapt its paths to continuous forward movements with given translational velocities 
+and point turns with given rotational velocities. 
+Unfortunately, the resulting paths might then not be effective since planning is oblivious 
+to this transformation. TP needs to repeatdly plan time-minimal paths for agents 
+that avoid collisions with the paths of the other agents. 
+The important implication for this paper is that agents repeatdly plan paths for themselves,
+considering the other agents as dynamic obstacles that follow their paths and with which 
+collisions need to be avoided. The agents use space-time $A^*$ for this single-agent path planning.
+A set of endpoints is any subset of cells that contains at least all start cells of agents and all 
+pickup and delivery cells of tasks. The pickup and delivery cells are called task endpoints.
+The other endpoints are called non-task endpoints.
+TP operates as follows for a given set of endpoints: It uses
+a token (a synchronized block of shared memory) that stores
+the task set and the current paths, one for each agent.
+The system repeatedly updates the task set in the token to contain
+all unassigned tasks in the system and then sends the token
+to some agent that is currently not following a path. The
+agent with the token considers all tasks in the task set whose
+pickup and delivery cells are different from the end cells of
+all paths in the token.
+
+Overview of TP works:
+\begin{enumerate}
+    \item If such tasks exist, then the agent
+    assigns itself that task among these tasks whose pickup cell
+    it can arrive at the earliest, removes the task from the task
+    set, computes two time-minimal paths in the token, one that
+    moves the agent from its current cell to the pickup cell of
+    the task and then one that moves the agent from the pickup
+    cell to the delivery cell of the task, concatenates the two
+    paths into one path, and stores the resulting path.
+
+    \item If no such tasks exist and the agent is not in the delivery cell
+    of any task in the task set, then it stores the empty path in
+    the token (to wait at its current cell).
+
+    \item Otherwise, the
+    agent computes and stores a time-minimal path in the token
+    that moves the agent from its current cell to some endpoint
+    that is different from both the delivery cells of all tasks in
+    the task set and from the end cells of all paths in the token.
+\end{enumerate}
+Each path the
+agent computes has two properties: (1) It avoids collisions
+with all other paths in the token; (2) No other paths in the
+token use its end cell after its end time. Finally, the agent
+releases the token, follows its path, and waits at the end cell
+of the path.
+Tey demonstrate the benefit of their approach for automated warehouse.
+Otherwise, they take kinematic constraints for instance the robot can turn around only 90 degree at time
+and can perform only one task at time \footnote{Lifelong Path Planning with Kinematic Constraints for Multi-Agent Pickup and Delivery https://www.youtube.com/watch?v=RTJvJYJVxJk\&t=30s}. 
+This limitation in our system does not preside.
+
+% Profe logic 
+In article \cite{maxsum} they focus on approaches that are based on algorithms
+widely used to solve graphical models and constraint optimization problems, such as
+the max-sum algorithm. They analyse the coordination problem faced by a set of robots
+operating in a warehouse logistic application. In this context robots must trasport 
+items from loading to unloading bays so to complete packages to be delivered to customers.
+Robots must cooperate to maximizes the number of packages completed in the unit of time.
+To this end crucial component is to avoid interferences when moving in the enviroment. 
+They show how such problem can be formalised as a Distributed Constrained Optimization 
+problem (DCOP )and they provide a solution based on the binary max-sum algorithm.
+In more detail, in this paper \cite{maxsum}, they provide DCOP model for the task 
+assignment problem faced by robots involved in logistics operations in a warehouse.
+Among the various solution approaches for DCOPs they advocate the use of
+heuristic algorithms, and specifically the max-sum, an iterative message passing
+approach that has been shown to provide solutions of high quality for systems
+operating in real-time and with limited computation and communication resources.
+When the decicions of one robot affect only a small subset of team, because
+the message update step, a key operation of max-sum, has a computation completely that 
+is exponential in the number of robots that can perform the same task. 
+This exponential element can be a significant limitation for large scale, real-time systems.
+To combat this, they show that for specifc types of constraints and using binary variables,
+such exponential element can be reduced to a polynomial. Hence, they can use the max-sum 
+approach for large-scale systems that must operate with real-time constraints.
+
 
 In this work, we consider a similar setting where a set of robots are involved
 in trasportations tasks for logistics. However, we focus on the specific problem
 of task assignment.
-
-% Sposta la sezione su MRS in logistics descrivendo almeno questi tre paper se ne trovi altri meglio: 
-
-% Hang Ma, Jiaoyang Li, T. K. Satish Kumar, Sven Koenig:
-% Lifelong Multi-Agent Path Finding for Online Pickup and Delivery Tasks. AAMAS 2017: 837-845
-
-% Peter R. Wurman, Raffaello D'Andrea, and Mick Mountz. 2007. Coordinating hundreds of cooperative, autonomous vehicles in warehouses. In Proceedings of the 19th national conference on Innovative applications of artificial intelligence - Volume 2 (IAAI'07), William Cheetham (Ed.), Vol. 2. AAAI Press 1752-1759.
-
-
-% A. Farinelli, N. Boscolo, E. Zanotto, E. Pagello, Advanced Approaches
-% for Multi-Robot Coordination in Logistic Scenarios, April 2017.
-
-% Per ogni paper devi spiegare bene quali sono le basi dell'approccio e come si differenzia dal tuo approccio (e.g. quello di koenig non considera la capacità etc.). Per ogni paper che descrivi devi considerare più o meno messa pagina o anche una non poche righe (solo per darti una idea del dettaglio con cui devi descrivere i paper).
 
 \section{Coordination in Multi-Robot Systems}
 Coordination for \mrs has been investigated from several diverse
@@ -43,11 +157,40 @@ environmental monitoring, militaty operations, manufacturing and logistics.
 In all such domains, coordination has been addressed using various frameworks and 
 techniques and there are several survery papers dedicated to categorize such different
 approaches and identifying most prominent issues when developing \mrs.
-\\
-In the paper \cite{cooros} present and evaluate new ROS package for coordinated 
+
+In this paper \cite{cooros} present and evaluate new ROS package for coordinated 
 multi-robot exploration. The packages allow completely distributed control and do 
 not rely on (but allow) central controllers.
-\\
+Their integration including application layer
+protocols allows out of the box installation and execution. The
+communication package enables reliable ad hoc communication
+allowing to exchange local maps between robots which are
+merged to a global map (for more detail see section \ref{ros:glplanner}).
+Exploration uses the global map
+to spatially spread robots and decrease exploration time. The
+intention of the implementation is to offer basic functionality for
+coordinated multi-robot systems and to enable other research
+groups to experimentally work on multi-robot systems.
+They use the terms "loacl" and "global" to distinguish contexts of a single robot and
+the complete multi-robot system. 
+A local map is the map created by each individual robot, while the global map includes
+local maps of all robots. Communication enables the exchange of data. Lastly, coordinated
+exploration utilizes communication and the global map to organize the \mrs by assigning
+frontiers to robots. 
+
+They contribution in to present ROS package that enable Multi-Robot exploration implementing 
+the aforementioned required components:
+\begin{itemize}
+    \item ad hoc communication between robots.
+    \item construction of global maps from local maps.
+    \item exploration of unknown environments.
+\end{itemize}
+
+% paper profe 
+
+In this work \cite{focoo} they focus on \mrs coordination, presented a survery of recent 
+work in the area by specifically examining the forms of cooperation and coordination realized 
+in the \mrs.
 Robotics systems may range from simple sensors, acquiring and processing data, to 
 complex human-like machines, able to interact with the enviroment in fairly complex way. 
 Moreover, it is not easy to give a definition of the level of autonomy that is required 
@@ -70,24 +213,73 @@ capabilities. In addiction, the software techniques developed for the robotic ap
 take advantage of the hardware improvements and provide complex and reliable solutions for the basic 
 tasks that a robot should be able to perform, while acting in real world environments:
 localization, path planning, object trasportation, object recognition and tracking, etc. 
-% approcci su auction 
+In addiction, the work in this area can be classified from several points of view. 
+Their main motivation is the study and evaluation of the ability to take advantage
+of coordination to improve system performance. Therefore,
+the classification we propose is focused on the coordination aspects 
+and thus inspired by the relationships with the field of multi-agent systems.
+They proposed the taxonomy for classifying the works on \mrs in characterized by two 
+groups of dimensions: \textit{coordinatin dimensions} and \textit{system dimensions}.
+For a suitable classification of the works it is important to clearly define the dimensions
+that are used:
+\begin{itemize}
+    \item \textit{cooperation level:} is the ability of the system to cooperate in order 
+    to accomplish a specific task. A cooperative system is composed of "robots that operate together
+    to perform some global task". 
+    \item \textit{knowledge level:} is concerned with the knowledge that each robot in the team
+    has about its team mates.
+    \item \textit{coordinatin level:} is the mechanisms used for cooperation in which the actions performed by each 
+    robotic agents "in such a way that the whole ends up being a coherent and high-performance operaiton".
+    The underlying feature is the \textit{coordiantion protcol}, that is defined as a set
+    of rules that the robots must follow in order to interact with each other in the enviroment. 
+    \item \textit{organization level:} is the way the decicion system is realized within the \mrs. 
+    Introduces a distinction in the forms of coordination, distinguishing centralized approaches
+    from distributed ones. In particular, a centralized system has a sgent (\textit{leader}) that is in
+    charge of organizing the work of other agents;the leader
+    is involved in the decision process for the whole team, while
+    the other members can act only according to the directions of
+    the leader. 
+    Instead, a distributed system is composed ao agents which are completely autonomous in the 
+    decision process with respect to each other; in this case of systems a leader does not exist. 
+\end{itemize}
+In this paper they have addressed the recent developments in the field of \mrs, focusing 
+on those approaches that are targeted to specific applications and motivated by engineering
+considerations. Specifically, they have presented a taxonomy with the aim of highlighting 
+the coordination aspects of the recent proposals in the literature: we have defined a set of coordination
+dimensions for the classification of the approaches to team coordination, together with a set of system dimensions that account
+for the design choices that are more relevant to the team organization.
+
+In out system using a central coordinator that give the actions to execute at all robots, which know the static environment and moving in their given task independently.
+
+Another important article \cite{market-based} focus they work on coordinatin for complex tasks.
+Complex task are tasks that can be solved in many possible way. Their work is currently 
+limited to complex tasks that can be decomposed into multiple subtasks related by Boolen logic operators.
+They generalizing task descriptions into task trees, which allows tasks to be traded
+in a market setting at variable level of abstraction. 
+The task allocation problem addresses the issue of finding task-to-robot assignments the optimize
+global cost objectives. 
+They address the general problem of allocating complex tasks to a team of autonomous robots.
+Complex tasks are tasks that require high-level decision-making or planning,
+and may have many potential solution strategies.
+Complex tasks are usually identified with problems involving multiple interacting components.
+These interactions can come from relationships between subtasks such
+as Boolean logic operations or precedence constraints. 
+Additionally, if there are multiple robots, complex tasks may
+require reasoning about interactions between the robots executing them.
+Specifically, they look at tasks hierarchically
+related by \textit{AND} and \textit{OR} logical operators.
+The main contribution of this paper are to identify the complex task allocation problem
+can be more efficiently solved by not decoupling the solution into separate allocation
+and decomposition phases, and to propose a solution concept that unifies these two stages.
+The approach is not optimal, but produces highly efficient solutions in unknown
+and dynamic domains using distributed local knowledge and decentralized planning 
+to continually improve upon global costs.
+
+In contrast to this article in our system we have simple tasks to compose in more complex tasks.
+The interconnection between the various tasks is given by a heuristic that normalizes the cost of the route 
+based on the number of objects transported in a composed task.
 
 % frase finale
 Given our focus on logistic scenarios, here we restrict our attention to coordination
 approaches based on optimization and specifically on task assignment as this the most 
 common framework for my reference application domain.
-
-% Quest parte va espansa molto descrivendo quali sono gli approcci per ottenere MRS coordination.
-
-% Guarda questo paper per prendere spunto:
-
-% Alessandro Farinelli, Luca Iocchi, Daniele Nardi:
-% Multirobot systems: a classification focused on coordination. IEEE Trans. Systems, Man, and Cybernetics, Part B 34(5): 2015-2028 (2004)
-
-% Descrivi in particolare gli approcci basati su auction (ad esempio questo:
-
-% Robert Zlot, Anthony Stentz:
-% Market-based Multirobot Coordination for Complex Tasks. I. J. Robotics Res. 25(1): 73-101 (2006)
-%  )
-
-
