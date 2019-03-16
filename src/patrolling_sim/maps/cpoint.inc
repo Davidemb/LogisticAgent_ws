@@ -20,5 +20,5 @@ define cpoint model (
         point[15] [ 0.208 -0.086 ]
         z [0 1]
     )
-    size [0.10 0.10 -0.1]
+    size [0.25 0.25 -0.1]
 )

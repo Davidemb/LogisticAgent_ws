@@ -1,0 +1,24 @@
+In this thesis we have shown how our system can perform pickup-and-delivery tasks.
+We evaluate the performance of our system in a realistic simulation enviroment,
+precisely on the ICE Laboratory build with ROS and stage. 
+In particular we compared our task assignment approches with the baseline greedy 
+approch.
+
+We have discovered that a coalition formation problem can approximate the results 
+of a set partion problem in less time complexity.
+
+Because we are focused on a centralized coordinator in the future works we want to 
+perform a distributed coordiantor using a recent stategy studied before to implement 
+our approaches.
+In more detail on \cite{mapd} they used a Token Passing strategy with kinematic 
+constraints but consider only one task assigned to one robot at time.
+We want to extend this limitations considering the possibility of assigning more 
+tasks in one travel.
+That strategy should be more flessible, adaptive at the situation on the traveling
+orders then fault-tolenace. 
+
+The scope set at the beginning of the thesis have been reached.
+The results comfirmed the expectations. 
+
+Then in coclusion the \gsp algorithm aproximate the \sps strategy on the same task set,
+calculating the solution in polynomial time complexity.

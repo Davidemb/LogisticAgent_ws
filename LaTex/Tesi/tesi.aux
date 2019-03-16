@@ -57,60 +57,80 @@
 \newlabel{chap:problem}{{3}{25}{Multi-Robot task allocation for pick-up and delivery}{chapter.3}{}}
 \@writefile{toc}{\contentsline {section}{\numberline {3.1}Problem description}{25}{section.3.1}}
 \@writefile{toc}{\contentsline {section}{\numberline {3.2}Problem fomalization}{26}{section.3.2}}
-\@writefile{toc}{\contentsline {section}{\numberline {3.3}Proposed solution}{27}{section.3.3}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.3.1}Single robot : Single task (SR:ST )}{27}{subsection.3.3.1}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3.1}{\ignorespaces Comparison of the union of two paths $P$ and $P'$ to form a single path $\pi = P \cup P'$.}}{27}{figure.3.1}}
+\@writefile{toc}{\contentsline {section}{\numberline {3.3}Proposed solution}{29}{section.3.3}}
+\newlabel{solution}{{3.3}{29}{Proposed solution}{section.3.3}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.3.1}Single robot : Single task (SR:ST )}{29}{subsection.3.3.1}}
+\@writefile{loa}{\contentsline {algorithm}{\numberline {1}{\ignorespaces Pop minimum element}}{29}{algorithm.1}}
+\newlabel{SP}{{1}{29}{Single robot : Single task (\srst )}{algorithm.1}{}}
 \citation{partition}
+\@writefile{lof}{\contentsline {figure}{\numberline {3.2}{\ignorespaces Example of execution SR:ST with 4 agents with capacity 4 and 9 tasks.}}{30}{figure.3.2}}
+\newlabel{fig:srst}{{3.2}{30}{Example of execution \srst with 4 agents with capacity 4 and 9 tasks}{figure.3.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.3.2}Set Partition Strategy - Single robot : Multiple task (SPS1:N )}{30}{subsection.3.3.2}}
 \citation{partition}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.3.2}Set Partition Strategy - Single robot : Multiple task (SPS1:N )}{28}{subsection.3.3.2}}
-\@writefile{loa}{\contentsline {algorithm}{\numberline {1}{\ignorespaces Set Partition Strategy}}{29}{algorithm.1}}
-\newlabel{SP}{{1}{29}{Set Partition Strategy - Single robot : Multiple task (\sps )}{algorithm.1}{}}
+\@writefile{loa}{\contentsline {algorithm}{\numberline {2}{\ignorespaces Set Partition Strategy}}{31}{algorithm.2}}
+\newlabel{SP}{{2}{31}{Set Partition Strategy - Single robot : Multiple task (\sps )}{algorithm.2}{}}
 \citation{cf_greedy}
 \citation{cf_farinelli}
 \citation{cf_greedy}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3.3.3}Greedy Set Partition Strategy - Single robot : Multiple task (GSP1:N )}{30}{subsection.3.3.3}}
-\@writefile{loa}{\contentsline {algorithm}{\numberline {2}{\ignorespaces Greedy Coalition Formation}}{31}{algorithm.2}}
-\newlabel{GCF}{{2}{31}{Greedy Set Partition Strategy - Single robot : Multiple task (\gsp )}{algorithm.2}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {3.1}{\ignorespaces The horizontal line represents a cut of the dendrogram and defines the coalition structure.}}{33}{figure.3.1}}
-\newlabel{fig:CF_graph}{{3.1}{33}{The horizontal line represents a cut of the dendrogram and defines the coalition structure}{figure.3.1}{}}
-\@writefile{toc}{\contentsline {chapter}{\numberline {4}Empirical Setting}{35}{chapter.4}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.3.3}Greedy Set Partition Strategy - Single robot : Multiple task (GSP1:N )}{32}{subsection.3.3.3}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3.3}{\ignorespaces Example of execution SPS1:N with 4 agents with capacity 4 and 9 tasks. See example \ref  {example}}}{33}{figure.3.3}}
+\newlabel{fig:srst}{{3.3}{33}{Example of execution \sps with 4 agents with capacity 4 and 9 tasks. See example \ref {example}}{figure.3.3}{}}
+\@writefile{loa}{\contentsline {algorithm}{\numberline {3}{\ignorespaces Greedy Coalition Formation}}{33}{algorithm.3}}
+\newlabel{GCF}{{3}{33}{Greedy Set Partition Strategy - Single robot : Multiple task (\gsp )}{algorithm.3}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3.4}{\ignorespaces Example of execution GSP1:N with 4 agents with capacity 4 and 9 tasks. See example \ref  {example}}}{34}{figure.3.4}}
+\newlabel{fig:srst}{{3.4}{34}{Example of execution \gsp with 4 agents with capacity 4 and 9 tasks. See example \ref {example}}{figure.3.4}{}}
+\newlabel{example}{{3.3.3}{34}{Example with 9 tasks and 4 robots}{section*.3}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {3.1}{\ignorespaces The task set $\mathcal  {T}$ for 9 tasks}}{34}{table.3.1}}
+\newlabel{tab:t4}{{3.1}{34}{The task set $\mathcal {T}$ for 9 tasks}{table.3.1}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {3.2}{\ignorespaces The result of the Set Partition Strategy (SPS1:N )}}{35}{table.3.2}}
+\newlabel{tab:sps}{{3.2}{35}{The result of the Set Partition Strategy (\sps )}{table.3.2}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {3.3}{\ignorespaces The result of the Greedy Set Partition (GSP1:N )}}{35}{table.3.3}}
+\newlabel{tab:gsp}{{3.3}{35}{The result of the Greedy Set Partition (\gsp )}{table.3.3}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3.5}{\ignorespaces The horizontal line represents a cut on executin defines the coalition structure.}}{36}{figure.3.5}}
+\newlabel{fig:CF_graph}{{3.5}{36}{The horizontal line represents a cut on executin defines the coalition structure}{figure.3.5}{}}
+\@writefile{toc}{\contentsline {chapter}{\numberline {4}Empirical Setting}{37}{chapter.4}}
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
-\newlabel{chap:ros}{{4}{35}{Empirical Setting}{chapter.4}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {4.1}Robot Operating System (ROS)}{35}{section.4.1}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.1.1}Nomencalture and Architecture}{35}{subsection.4.1.1}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.1.2}The Stage 2D Simulator}{38}{subsection.4.1.2}}
-\@writefile{toc}{\contentsline {section}{\numberline {4.2}Localization and Navigation}{41}{section.4.2}}
-\newlabel{ros:navloc}{{4.2}{41}{Localization and Navigation}{section.4.2}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.2.1}Mapping}{42}{subsection.4.2.1}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.2.2}Localization}{43}{subsection.4.2.2}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.2.3}Navigation}{44}{subsection.4.2.3}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.2.4}Global and Local planner algorithms}{47}{subsection.4.2.4}}
-\newlabel{ros:glplanner}{{4.2.4}{47}{Global and Local planner algorithms}{subsection.4.2.4}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {4.3}Cost-maps configurations}{51}{section.4.3}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.3.1}Common configuration}{52}{subsection.4.3.1}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.3.2}Global configuration}{53}{subsection.4.3.2}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.3.3}Local configuration}{53}{subsection.4.3.3}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.3.4}Local and global coordinate frames}{54}{subsection.4.3.4}}
-\@writefile{toc}{\contentsline {section}{\numberline {4.4}Recovery behaviours}{55}{section.4.4}}
-\@writefile{toc}{\contentsline {section}{\numberline {4.5}\texttt  {logistic\_sim} package}{55}{section.4.5}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.5.1}Obtaining a Topological representation}{56}{subsection.4.5.1}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.5.2}\texttt  {actionLib} and \texttt  {move\_base}}{56}{subsection.4.5.2}}
-\@writefile{lof}{\contentsline {figure}{\numberline {4.1}{\ignorespaces Client-Server Interaction}}{57}{figure.4.1}}
-\newlabel{fig:action_interface}{{4.1}{57}{Client-Server Interaction}{figure.4.1}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4.5.3}\texttt  {task\_planner} package}{58}{subsection.4.5.3}}
-\newlabel{taskplanner}{{4.5.3}{58}{\texttt {task\_planner} package}{subsection.4.5.3}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {4.2}{\ignorespaces Report the \texttt  {rqt\_graph}}}{59}{figure.4.2}}
-\newlabel{fig:rqt_graph}{{4.2}{59}{Report the \texttt {rqt\_graph}}{figure.4.2}{}}
-\@writefile{toc}{\contentsline {chapter}{\numberline {5}Empirical Results}{61}{chapter.5}}
+\newlabel{chap:ros}{{4}{37}{Empirical Setting}{chapter.4}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {4.1}Robot Operating System (ROS)}{37}{section.4.1}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1.1}Nomencalture and Architecture}{37}{subsection.4.1.1}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1.2}The Stage 2D Simulator}{40}{subsection.4.1.2}}
+\@writefile{toc}{\contentsline {section}{\numberline {4.2}Localization and Navigation}{43}{section.4.2}}
+\newlabel{ros:navloc}{{4.2}{43}{Localization and Navigation}{section.4.2}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2.1}Mapping}{43}{subsection.4.2.1}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2.2}Localization}{45}{subsection.4.2.2}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2.3}Navigation}{46}{subsection.4.2.3}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2.4}Global and Local planner algorithms}{49}{subsection.4.2.4}}
+\newlabel{ros:glplanner}{{4.2.4}{49}{Global and Local planner algorithms}{subsection.4.2.4}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {4.3}Cost-maps configurations}{53}{section.4.3}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.3.1}Common configuration}{54}{subsection.4.3.1}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.3.2}Global configuration}{55}{subsection.4.3.2}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.3.3}Local configuration}{55}{subsection.4.3.3}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.3.4}Local and global coordinate frames}{56}{subsection.4.3.4}}
+\@writefile{toc}{\contentsline {section}{\numberline {4.4}Recovery behaviours}{57}{section.4.4}}
+\@writefile{toc}{\contentsline {section}{\numberline {4.5}\texttt  {logistic\_sim} package}{57}{section.4.5}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.5.1}Obtaining a Topological representation}{58}{subsection.4.5.1}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.5.2}\texttt  {actionLib} and \texttt  {move\_base}}{58}{subsection.4.5.2}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4.1}{\ignorespaces Client-Server Interaction}}{59}{figure.4.1}}
+\newlabel{fig:action_interface}{{4.1}{59}{Client-Server Interaction}{figure.4.1}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.5.3}\texttt  {task\_planner} package}{60}{subsection.4.5.3}}
+\newlabel{taskplanner}{{4.5.3}{60}{\texttt {task\_planner} package}{subsection.4.5.3}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4.2}{\ignorespaces Report the \texttt  {rqt\_graph}}}{61}{figure.4.2}}
+\newlabel{fig:rqt_graph}{{4.2}{61}{Report the \texttt {rqt\_graph}}{figure.4.2}{}}
+\@writefile{toc}{\contentsline {chapter}{\numberline {5}Empirical Results}{63}{chapter.5}}
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
-\newlabel{chap:results}{{5}{61}{Empirical Results}{chapter.5}{}}
-\@writefile{toc}{\contentsline {chapter}{\numberline {6}Conclusions and Future Work}{63}{chapter.6}}
+\newlabel{chap:results}{{5}{63}{Empirical Results}{chapter.5}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {5.1}{\ignorespaces Results of our experiments on ICE Laboratory}}{66}{table.5.1}}
+\newlabel{tab:result}{{5.1}{66}{Results of our experiments on ICE Laboratory}{table.5.1}{}}
+\citation{mapd}
+\@writefile{toc}{\contentsline {chapter}{\numberline {6}Conclusions and Future Work}{67}{chapter.6}}
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
-\newlabel{chap:conclusions}{{6}{63}{Conclusions and Future Work}{chapter.6}{}}
-\newlabel{app:A}{{6}{65}{Appendix A}{section*.11}{}}
-\newlabel{app:B}{{6}{67}{Appendix B}{section*.13}{}}
+\newlabel{chap:conclusions}{{6}{67}{Conclusions and Future Work}{chapter.6}{}}
+\newlabel{app:A}{{6}{69}{Appendix A}{section*.11}{}}
+\newlabel{app:B}{{6}{71}{Appendix B}{section*.13}{}}
 \bibcite{parker}{1}
 \bibcite{maxsum}{2}
 \bibcite{mapd}{3}

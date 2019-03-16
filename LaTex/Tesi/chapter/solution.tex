@@ -1,93 +1,108 @@
-\section{Proposed solution}
+\newpage
+\section{Proposed solution} \label{solution}
 
 In this section we propose the approaches with centralized coordination.
-In a warehouse the connection between robots is efficient and has no big limitations;
-in section \ref{chap:conclusions} the decentralized coordination will be dealt with.
+In a warehouse the connection between robots is efficient and has no big limitations.
 \begin{enumerate}
-\item The first strategy, mentioned above, is the \srst which consider only 
-one task allocated for one robot.
+  \item The first strategy, mentioned above, is the \srst which consider only 
+  one task allocated for one robot.
 
-\item The second strategy (\gsp) extends the first, the main concept of this strategy 
-is composing the tasks in a single travel with greedy approach. 
-
-\item The last strategy \sps extends the second algorithm using an optimal approach
-to compose tasks. 
+  \item The second strategy \sps using an optimal approach
+  to compose tasks. Precisely resolve the set partition problem of set tasks $\mathcal{T}$ . 
+  
+  \item The last strategy (\gsp) extends the first algorithm,
+  the main concept of this strategy is composing the tasks in a single travel with greedy coalition formation approach. 
+  
 \end{enumerate}
+
+In section \ref{chap:conclusions} as a future development we want to explore a distributed 
+method because in this thesis we  only focused in centralized method.  
 
 \subsection{Single robot : Single task (\srst)}
 
 This method is a baseline for our logistic scenario.
 The important constraint of this approach is to consider only one task allocated for 
 one robot at time.
-Given a set of tasks, the \texttt{task\_planner} (in section \ref{taskplanner}) assigns only one task at time,
-if the robot request a task.
 \\
 The set of tasks is ordered by the function mentioned below.
-\begin{lstlisting}
-inline bool pop_min_element(const Task &A, const Task &B) {
-    if ((A.dst < B.dst) && (A.demand < B.demand)) {
-      return 1;
-    } else if (A.dst == B.dst) {
-      return 1;
-    }
-    return 0;
-  }
-\end{lstlisting}
+\begin{algorithm}
+  \caption{Pop minimum element} \label{SP}
+  \begin{algorithmic}[1]
+    
+    \Procedure{PME}{$T_i, T_j \in \mathcal{T}$}
+    \If{$(demand(T_i) < demand(T_j)) \wedge (dst(T_i) < dst(T_j))$}
+    \State {\bf return} true
+    \Else
+    \If{$dst(T_i) = dst(T_j)$}
+    \State {\bf return} true
+    \EndIf
+    \State {\bf return} false
+    \EndIf
+    \EndProcedure
+  \end{algorithmic}
+\end{algorithm}
+\newpage
 Such function sorts the tasks based on the distance of the unloading bays and the demand of a specific task.
-For distance we consider the distance between loading bay $L$ and unloading bays $U_j$.
-Instead for demand is the weight of the item. If the demand of the task is less equal of 
-the capacity of the robot then it can  be allocated.
+For distance we consider the euclidean distance between loading bay $L$ and unloading bays $U_j$.
+Instead for demand is the weight of the item.
 
-After the choose of the task to allocate by using the function \texttt{compute\_route()} return the path $\pi$ of the task such as vector of vertices $\pi = \{v_1,\cdots,v_n\}$. 
-This vector is the path to execute the task, its start at loading bay and finish at the previously vertex of the staring vertex.
-For this path we calculate the path distance $|pi|$, precisely the cost of this trail.
+After the choose of the task to allocate by using the function $f(P)$ return the path distance, precisely the cost of the trail.
 
-% definire la funzione formalmente, così da chiarire cosa intendi per percorso e cosa intendi per demand. 
-% ???? funzioni da definire formalmente
-% Motiva anche perché dividiamo per il demand.
+For this method we do not use the function $p(\cdot)$ because we have only one task for robot
+then the task already has the path. As mentioned above, we do not combine routes.
 
-% Discuti anche lo pseudocodice e chiarisci bene perché applichi questa strategia. 
-
-% definizione del task_planner piu avanti nel testo 
-% The \texttt{task\_planner} post-processing all task, compute the route by a sequence 
-% of vertices, and the cost of the path. After having assigned the task $t_{i,j}$ 
-% it is deleted.
+For completeness in this method we do not consider the heuristic function $v(\cdot)$ because the demand for all
+task is always 1. Because we allocate only one task for one robot at time.
 
 This algorithm take linear time or $O(n)$ time, its time complexity is $O(n)$.
 This means that the running time increases at most linearly with the size of the input.
 More precisely, this means that there is a constant $c$ such that the running time is 
 at most $cn$ for every input of size $n$.
 
+
+
+\begin{figure} [hbt]
+  \centering
+  \includegraphics[width=\textwidth]{img/cycle1.png}
+  \caption{Example of execution \srst with 4 agents with capacity 4 and 9 tasks.}
+  \label{fig:srst}
+\end{figure}
+
+
+
 \subsection{Set Partition Strategy - Single robot : Multiple task (\sps)}
 
-This method consists to compute all possible coalitions of the task set 
+This method consists to compute all possible patitions of the task set 
 using Set Partition algorithm \cite{partition} and use only 
-the best coalition which is based on the previously mentioned heuristic $v(\cdot)$.
+the best partition which is based on the previously mentioned heuristic $v(\cdot)$.
 
-After initialzation phase \texttt{init\_agent()} which all agents send their capacity and identifier,
-start the partition algorithm \cite{partition} that return all possible combination 
-of task.
-Then foreach combination the heuristic $v(\cdot)$ has been used to calculate the gain $G(C)$ of the 
-combination. Furthermore the combination with the lowest gain has been choose.
-So a subset of combination as been sort in a cresent order. 
-Then the firt subset of combination has the lowest value of heuristic function and 
-is the fisrt task assigned at the fist request from a robot.
+After initialzation phase which all agents send their capacity and identifier,
+start the partition algorithm \cite{partition} that return all possible patitions of subsets combination 
+of tasks $P^N$.
+
+Then foreach partitions the heuristic $v(\cdot)$ has been used to calculate the loss.
+For calculate the loss $L$ of a partition we have to calculate the $v(\cdot)$ for all elements in
+the subsets partition and finally sum all values for all subsets. 
+Furthermore the combination with the lowest loss has been choose.
+So a subset of combination as been sort in a increasing order. 
+Then the first subset of combination has the lowest value of heuristic function 
+is the first task assigned at the first request from a robot.
 
 \begin{algorithm}
   \caption{Set Partition Strategy} \label{SP}
   \begin{algorithmic}[1]
-  \Procedure{SPS}{$T^N$}\Comment{$T^N$= \texttt{partition(}$T$\texttt{)}}
+  \Procedure{SPS}{$P^N$}\Comment{$P^N$= \texttt{partition(}$\mathcal{T}$\texttt{)}}
   \State \Comment{define $C$ the maximum capacity of the robots}
-  \For{$T_i \in T^N$}
-  \If{$demand(T_i) > C$}
-  $T^N \setminus T_i$
+  \For{$P_i \in P^N$}
+  \If{$demand(P_i) > C$}
+  $P^N \setminus P_i$
   \EndIf
-    \For{$t_j \in T_i$}
-      $v(t_j)$ 
+    \For{$S_j \in P_i$}
+      $v(S_j)$ 
     \EndFor
   \EndFor
-  \Comment{sort all $T_i$ for lowest $v(\cdot)$} 
-  \State {\bf return} the first $T_i$
+  \Comment{sort all $P_i$ for lowest $v(\cdot)$} 
+  \State {\bf return} the first $P_i$
   \EndProcedure
   \end{algorithmic}
 \end{algorithm}
@@ -98,7 +113,8 @@ More formally, this algorithm is exponential time because $T(n)$ is bounded by $
 for some constant $k$.
 
 \newpage
-An example of solution with set $|T| = 4$:
+
+An example of solution with set $|\mathcal{T}| = 4$:
 \begin{center}
   \begin{tabular}{|c|r|c|} \hline
   \textbf{iteration} & \textbf{partition size} & \textbf{partition} \\ \hline
@@ -120,61 +136,49 @@ An example of solution with set $|T| = 4$:
   \end{tabular}
 \end{center}
 
-For $|T| = 4$ takes 0.000043 seconds. If we increase the set, time increases exponentially.
-An example of $|T| = 12$ takes 2.8 seconds and $|T| = 13$ takes 21.2 seconds.
 
-For this reason in our experiment we limited the size of the task set at most 9 task.
+
+For $|\mathcal{T}| = 4$ takes 0.000043 seconds. If we increase the set, time increases exponentially.
+An example of $|\mathcal{T}| = 12$ takes 2.8 seconds and $|\mathcal{T}| = 13$ takes 21.2 seconds.
+
+For this reason in our experiment we limited the size of the task set at most 9 tasks.
+
+\begin{figure} [hbt]
+  \centering
+  \includegraphics[width=\textwidth]{img/opt.png}
+  \caption{Example of execution \sps with 4 agents with capacity 4 and 9 tasks. See example \ref{example}}
+  \label{fig:srst}
+\end{figure}
 
 \subsection{Greedy Set Partition Strategy - Single robot : Multiple task (\gsp)}
-
-The main concept of this approach is merging tasks using Greedy Coalition Formation
+The main concept of this approach is composing tasks using Greedy Coalition Formation
 based on \cite{cf_greedy} and \cite{cf_farinelli}. Where one wants to minimize the 
 team cost subject to the constraint that each task must be executed by a given 
 number of cooperative agents simultaneosly. Each task requires a number of different 
 demands, and each coalition for the task needs to provide the requered capabilities.
 
-For compute coalition the heuristic is based on the concept of Gain, which can be 
-defined for any pair of coalitions $C_i$, $C_j$ as:
-\[G(C_i,C_j) = v(\{C_i \cup C_j\}) - v(C_i) - v(C_j)\]
-where $v(C)$ is value of the characteristic function $v$ for coalition $C$. 
-In other words, this gain function captures the value of synergies between coalitions
-and is computed in constant time.
-
-The function $v$ for a coalition $C_i$ is defined as:
-\[ v(C_i) = \frac{|\pi_i|}{|demand_i|}\]
-where $|\pi_i|$ is the path distance between the loading bay $L$ and the unloading bays $U_j$
-and the $|demand_i|$ is the demand of the task.
-
-The same function for a pair of coalition $C_i$, $C_j$ can be defined as:
-\[  v(\{C_i \cup C_j\}) = \frac{|\pi_i|}{|demand_i|} + \frac{|\pi_j|}{|demand_j|} = \sum_{i,j} \frac{|\pi_{i,j}|}{|demand_{i,j}|} \]
-
-We want minimize the cost of the gain, that can be defined as:
-\[G(C_i,C_j) < 0 \]
-if the gain $G$ is less than 0 then we allocate the pair and delete the element which
-form the coalition.
-
-Later initialzation phase \texttt{init\_agent()} which all agents send their capacity and identifier,
+Later initialzation phase which all agents send their capacity and identifier,
 start the Coalition Formation algorithm \cite{cf_greedy}.
 When compute new one possible coalition the heuristic  $v(\cdot)$ has been used to calculate 
-the gain $G(C_{i,j})$ and if is negative that coalition is insered into the formation and the 
-$C_i$ , $C_j$ are deleted from this set.
+the loss $L(T_{i,j})$ and if is negative that coalition is insered into the formation and the 
+$T_i$ , $T_j$ are deleted from the task set $\mathcal{T}$.
 
 \begin{algorithm}
 \caption{Greedy Coalition Formation} \label{GCF}
 \begin{algorithmic}[1]
-  \Procedure{GCF}{$T$}\Comment{$T$ = set of tasks}
+  \Procedure{GCF}{$\mathcal{T}$}\Comment{$\mathcal{T}$ = set of tasks}
   \State \Comment{define $C$ the maximum capacity of the robots}
-  \For{$t_i \in T$}
-  \For{$t_j \in T$}
-\Comment{define $t_{i,j} = t_i \cup t_j$}
-\If{$(t_i \neq t_j) \wedge (demand(t_{i,j}) \leq C)$}
-\If{$v(t_{i,j})-v(t_i)-v(t_j) < 0$}
-        $T \setminus \{ t_i\} \setminus \{t_j\} \cup \{t_{i,j}\}$
+  \For{$T_i \in \mathcal{T}$}
+  \For{$T_j \in \mathcal{T}$}
+\Comment{define $T_{i,j} = T_i \cup T_j$}
+\If{$(T_i \neq T_j) \wedge (demand(T_{i,j}) \leq C)$}
+\If{$v(T_{i,j})-v(T_i)-v(T_j) < 0$}
+       \State $\mathcal{T} \setminus \{ T_i\} \setminus \{T_j\}$ $\mathcal{T} \cup \{T_{i,j}\}$
   \EndIf
   \EndIf
 \EndFor
 \EndFor
-\State {\bf return} $T$
+\State {\bf return} $\mathcal{T}$
 \EndProcedure
 \end{algorithmic}
 \end{algorithm}
@@ -184,35 +188,66 @@ in the size of the input for the algorithm.
 
 More precisely, this algorithm take $O(n^k)$ for some positive constant $k$. 
 
-\newpage
+\begin{figure} [hbt]
+  \centering
+  \includegraphics[width=\textwidth]{img/cf.png}
+  \caption{Example of execution \gsp with 4 agents with capacity 4 and 9 tasks. See example \ref{example}}
+  \label{fig:srst}
+\end{figure}
 
 
 \newpage
-\subsection*{Example with 9 tasks and 4 robots}
-Given a set of tasks $T = \{  \{t_0\}, \{t_1\}, \cdots, \{t_8\} \}$ defined like:
+\subsection*{Example with 9 tasks and 4 robots} \label{example}
+Given a set of tasks $\mathcal{T}= \{  \{T_0\}, \{T_1\}, \cdots, \{T_8\} \}$ defined like:
 
-${t_i=(item, demand, unloading\_bay)}$.
+${T_i=(item, demand, unloading\_bay)}$.
 
 The agents have the same capacity $C_{0,1,2,3} = 4$.
-
+\begin{table}[hbt]
 \begin{center}
   % \centering
   \begin{tabular}{|c|c|c|c|} \hline
-  \textbf{task} & \textbf{item} & \textbf{demand} & \textbf{unloading bay} \\ \hline
-  0    & A    & 1      & 0             \\
-  1    & B    & 2      & 1             \\
-  2    & C    & 3      & 2             \\
-  3    & A    & 1      & 0             \\
-  4    & B    & 2      & 1             \\
-  5    & C    & 3      & 2             \\
-  6    & A    & 1      & 0             \\
-  7    & B    & 2      & 1             \\
-  8    & C    & 3      & 2             \\ \hline       
+    \textbf{task} & \textbf{item} & \textbf{demand} & \textbf{unloading bay} \\ \hline
+    0    & A    & 1      & 0             \\
+    1    & B    & 2      & 1             \\
+    2    & C    & 3      & 2             \\
+    3    & A    & 1      & 0             \\
+    4    & B    & 2      & 1             \\
+    5    & C    & 3      & 2             \\
+    6    & A    & 1      & 0             \\
+    7    & B    & 2      & 1             \\
+    8    & C    & 3      & 2             \\ \hline       
   \end{tabular}
+  \caption{The task set $\mathcal{T}$ for 9 tasks}
+  \label{tab:t4} 
 \end{center}
+\end{table}
 
+Given a finite task set $\mathcal{T}$ we can see how our strategies works.
+For this example we have created a video of the simulations execution, in ROS and stage, which are available on YouTube \footnote{YouTube site https://youtu.be/XbdBklu98HE}.
+\newpage
+The \sps created 5 orders to perform all elements in the tasks set.
 
-The result of the Greedy Coalition Formation is:
+In the table \ref{tab:sps} we can see the partition composed by subsets of tasks.
+\begin{table}[hbt]
+  \begin{center}
+    \begin{tabular}{|c|c|c|c|} \hline
+    \textbf{task} & \textbf{item} & \textbf{demand} & \textbf{unloading bay} \\ \hline
+    \{4,7\}    & B    & 4     & \{1\}             \\
+    \{0,1,3\}  & \{A,B\}& 4    & \{0,1\}             \\
+    \{2,6\}    & \{C,A\}    & 4  & \{0,2\}             \\
+    5    & C    & 3      & 2             \\
+    8    & C    & 3      & 2             \\ \hline       
+    \end{tabular}
+    \caption{The result of the Set Partition Strategy (\sps)}
+    \label{tab:sps}
+  \end{center}
+\end{table}
+
+The \gsp creted 6 orders, one more than \sps, to perform all elements in the tasks set.
+
+In table \ref{tab:gsp} we can see the partition composed by subsets of tasks.
+\begin{table}[hbt]
 \begin{center}
   \begin{tabular}{|c|c|c|c|} \hline
   \textbf{task} & \textbf{item} & \textbf{demand} & \textbf{unloading bay} \\ \hline
@@ -223,25 +258,21 @@ The result of the Greedy Coalition Formation is:
   8    & C    & 3      & 2             \\        
   7    & B    & 2      & 1             \\\hline
   \end{tabular}
+  \caption{The result of the Greedy Set Partition (\gsp)}
+  \label{tab:gsp}
 \end{center}
+\end{table}
+
+\newpage
+In this Figure \ref{fig:CF_graph} we can see because the Greedy approach is less
+complex than \sps. On the execution before to create a coalition is checked if its can 
+be allocated. This check is the value of the loss of the coalition, if is less than zero
+the colaition is insered in the solution else break the cycle for and pass another coalition.  
 
 \begin{figure} [hbt]
     \centering
     \includegraphics[width=\textwidth]{img/CF.png}
-    \caption{The horizontal line represents a cut of the dendrogram
-    and defines the coalition structure.}
+    \caption{The horizontal line represents a cut on executin defines the coalition structure.}
     \label{fig:CF_graph}
 \end{figure}
 
-The result of the Set Partition is:
-
-  \begin{center}
-    \begin{tabular}{|c|c|c|c|} \hline
-    \textbf{task} & \textbf{item} & \textbf{demand} & \textbf{unloading bay} \\ \hline
-    \{4,7\}    & B    & 4     & \{1\}             \\
-    \{0,1,3\}  & \{A,B\}& 4    & \{0,1\}             \\
-    \{2,6\}    & \{C,A\}    & 4  & \{0,2\}             \\
-    5    & C    & 3      & 2             \\
-    8    & C    & 3      & 2             \\ \hline       
-    \end{tabular}
-  \end{center}

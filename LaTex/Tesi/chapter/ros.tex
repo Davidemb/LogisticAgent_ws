@@ -231,8 +231,11 @@ The former deals with tracking the pose of the robot during its motion allowing
 it to localize itself in the map, the latter deals with driving the robot from a 
 starting position to a goal position trying to avoid potential obstacles.
 
-{\bf TODO: Figura della simulazione}
-\newpage
+\begin{figure} [hbt]
+    \centering
+    \includegraphics[width=\textwidth]{img/prospective.png}
+\end{figure}
+
 \subsection{Mapping}
 The robot navigation system can be initialized with or without an a priori, \textit{static map}.
 When initialized without a map, the robot only knows about obstacles that it has seen,
@@ -633,6 +636,7 @@ publishes data on. The \texttt{marking} and \texttt{clearing} parameters determi
 whether the sensor will be used to add obstacle information to the costmap, clear obstacle
 information from the costmap, or do both.
 
+\newpage
 \subsection{Global configuration}
 Below are our configuration settings for the \textit{global} costmap along with a
 description of their semantics:

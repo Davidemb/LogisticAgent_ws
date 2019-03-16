@@ -1,52 +1,100 @@
+In this chapter we will present the results of the empirical experiments conducted 
+to test the three strategies in a simulated autonomous warehouse with a central 
+coordinator.
 
+The experiments were performed on Intel Core i5-2520M CPU 2.50GHz $\times$ 4
+, ram 7,7 GiB \footnote{For more about architecture used https://support.lenovo.com/my/it/solutions/pd015734}.
+
+We were made 10 executions for each configuration.
+The configuration of our experiments are:
+\begin{itemize}
+    \item the size of the task set $\mathcal{T}$, the fisrt number reported on configuration column.
+    \item the capacities $C$ of the robots team. Note that in the basic method (\srst) we do not consider the capacity of robots because a task is assigned to each robot regardless of the demand of the tasks.
+    \item the last number reported on configuration column is the number of the team size.
+\end{itemize}
+
+All of this experiments is performed on ICE laboraty map \footnote{See on site the Computer Engineering for Industry 4.0 http://www.di.univr.it/}. 
+
+The second column of the table \ref{tab:result} reported the algorithm used to that experiment.
+For see the different results we sorted the algorithms for the average time to notice the improving performance aspects. 
+
+The next column reported the average time of the experiments and the standard error of the mean (SEM)\footnote{See https://en.wikipedia.org/wiki/Standard\_error}. 
+
+The study sample can be described entirely by two parameters: 
+the mean and the standard deviation ($\sigma$). The $\sigma$ represents the variability within the sample;
+the larger the $\sigma$, the higher the variability within the sample. 
+Although it is clear that samples should always be summarized by the mean and $\sigma$. 
+The $\bar{\sigma}$ is used in inferential statistics to give an estimate of how the mean of the sample is related to the mean of the underlying population.
+Although the $\sigma$ and the $\bar{\sigma}$ are related, they give two very different types of information.
+Whereas the $\sigma$ estimates the variability in the study sample, 
+the $\bar{\sigma}$ estimates the precision and uncertainty of how the study sample represents the underlying population.
+In other words, the $\sigma$ tells us the distribution of individual data points around the mean, and the $\bar{\sigma}$ informs us how precise our estimate of the mean is.
+
+The formula for the sample standard deviation is:
+\[ \sigma={\sqrt {\frac {\sum _{i=1}^{N}(x_{i}-{\bar {x}})^{2}}{N-1}}} \]
+where $\{x_1, \cdots, x_N\}$ are the observed values of the sample items, $\bar{x}$ it the mean value of these observations, 
+and $N$ is the number of observations in the sample. 
+
+The standar error of the mean ($\bar{\sigma}$) can be expressed as:
+\[\bar{\sigma} ={\frac {\sigma }{\sqrt {N}}}\]
+where $\sigma$ is the standar deviation of the population and $N$ is the size (number of observations) of the sample.
+
+In the next columns are reported the average time of the simulation  ($\overline{Time}$), tha average interference ($\overline{Interference}$) and the average distance traveled ($\overline{Distance}$).
+In the last column are reported the average $\bar{\sigma}$ for the team robots. In other worlds for one experiment are 
+calculated the $\bar{\sigma}$ of the distance for every robot and after is calculated the average.   
 
 \begin{table}[hbt]
     \centering
     \begin{tabular}{|c|c|c|c|c|c|} \hline
     {\bf Configuration} & {\bf Algorithm} & {\bf $ \overline{Time}$} & {\bf $\overline{Interference}$} & {\bf $\overline{Distance}$} & {\bf $\bar{\sigma}(Distance)$}         \\ \hline
-    *6/-/2               & \srst           & 218.32$[\pm 6.19]$        & 63.45   & 3747.90 &  87.8\\ \hline 
-    *6/3/2               & \gsp            & 194.52$[\pm 6.42]$        & 49.65    & 3401.15 & 251.37  \\ 
-    *                    & \sps            & 177.00$[\pm 1.99]$        & 49.34    & 3132.5 & 0  \\ \hline
-    *6/5/2               & \gsp            & 142.08$[\pm 1.39]$       &   42.2        & 2714.25      &  206.43  \\
-    *                    & \sps            & 138.98$[\pm 2.41]$       &  39.38   &  2601.25  &  156.47   \\ \hline
-    *6/-/4               & \srst           & 124.52$[\pm 3.12]$        & 42    & 2194.75 &  114.2 \\ \hline
-    *6/3/4               & \gsp            & 117.44$[\pm 1.85]$        & 35.75   & 1769 & 43.83  \\ 
-    *                    & \sps            & 115.28$[\pm 4.10]$        & 33.5   & 1702.5 & 23.67  \\ \hline
-    *6/5/4               & \gsp            &  93.4$[\pm 1.01]$         & 29     & 1688.5 &  34.5   \\
-    *                     & \sps            &  91.8$[\pm 2.14]$        & 30.75  & 1546.5 & 35.8  \\ \hline
-    *9/-/2               & \srst           & 292.24$[\pm 3.06]$      &  85.5  & 5201.5 & 34.76\\ \hline
-    *9/3/2              & \gsp            & 265.72$[\pm 2.64]$      & 71.5   & 4491.5  & 0  \\ 
-    *                   & \sps            & 240.74$[\pm 10.42]$        & 75.5    & 4232.5 & 310.43 \\ \hline
-    * 9/5/2             & \gsp          & 232.84$[\pm 4.71]$      &  68.85  &  4041.25  &  236 \\
-    *                   & \sps           &168.34$[\pm 2.03]$       &   50.5   & 3132.5 &  0  \\ \hline 
-    *9/-/4               & \srst           & 178.55$[\pm 4.23]$     & 52  & 2755.75 & 135.8 \\ \hline
-    *9/3/4               & \gsp            & 152.55$[\pm 2.87]$     & 46.75 & 2200 & 113.4 \\ 
-    *                   & \sps            & 134.23$[\pm 3.25]$     &  40.63   & 2182.5 & 27 \\ \hline
-    *9/5/4              & \gsp           &134.23$[\pm 3.26]$        & 40.6    & 2098.3     &   93.45    \\
-    *                   & \sps           &93.05$[\pm 5.15]$         & 32.25    & 1530.25 &   0 \\ \hline    
-    
-    *21/-/2             & \srst           & 629.10$[\pm 8.84]$        & 154.6   &11773.5 &  229.75 \\ \hline
-    *21/3/2              & \gsp            & 561.93$[\pm 8.00]$     &  134.3  &10133.16 &  201.2   \\ 
-    *21/5/2              & \gsp            & 497.45$[\pm 6.15]$      & 126  & 9079 & 210.4  \\ \hline
-    *21/-/4              & \srst           & 402.12$[\pm 5.06]$     & 132.25  & 6232.35 &  295.1 \\ \hline
-    @21/3/4              & \gsp            &  & &  & -  \\ 
-    @21/5/4              & \gsp            &  & &  & -  \\ \hline
-   *42/-/2              & \srst           & 1283.2$[\pm 25.27]$     & 336   & 22446.63 &  323.8 \\ \hline
-    @42/3/2              & \gsp            & &  &  & -  \\ 
-    @42/5/2              & \gsp            & &  &  & -  \\ \hline
-    @42/-/4              & \srst           & &  &  &  - \\ \hline
-    @42/3/4              & \gsp            & &  &  & -  \\ 
-    @42/5/4              & \gsp            & &  &  & -  \\ \hline
+    6/-/2               & \srst           & 218.32$[\pm 6.19]$        & 63.45   & 3747.90 &  87.8\\ \hline 
+    6/3/2               & \gsp            & 194.52$[\pm 6.42]$        & 49.65    & 3401.15 & 251.37  \\ 
+                        & \sps            & 177.00$[\pm 1.99]$        & 49.34    & 3132.5 & 0  \\ \hline
+    6/5/2               & \gsp            & 142.08$[\pm 1.39]$       &   42.2        & 2714.25      &  206.43  \\
+                        & \sps            & 138.98$[\pm 2.41]$       &  39.38   &  2601.25  &  156.47   \\ \hline
+    6/-/4               & \srst           & 124.52$[\pm 3.12]$        & 42    & 2194.75 &  114.2 \\ \hline
+    6/3/4               & \gsp            & 117.44$[\pm 1.85]$        & 35.75   & 1769 & 43.83  \\ 
+                        & \sps            & 115.28$[\pm 4.10]$        & 33.5   & 1702.5 & 23.67  \\ \hline
+    6/5/4               & \gsp            &  93.4$[\pm 1.01]$         & 29     & 1688.5 &  34.5   \\
+                         & \sps            &  91.8$[\pm 2.14]$        & 30.75  & 1546.5 & 35.8  \\ \hline
+    9/-/2               & \srst           & 292.24$[\pm 3.06]$      &  85.5  & 5201.5 & 34.76\\ \hline
+    9/3/2              & \gsp            & 265.72$[\pm 2.64]$      & 71.5   & 4491.5  & 0  \\ 
+                       & \sps            & 240.74$[\pm 10.42]$        & 75.5    & 4232.5 & 310.43 \\ \hline
+     9/5/2             & \gsp          & 232.84$[\pm 4.71]$      &  68.85  &  4041.25  &  236 \\
+                       & \sps           &168.34$[\pm 2.03]$       &   50.5   & 3132.5 &  0  \\ \hline 
+    9/-/4               & \srst           & 178.55$[\pm 4.23]$     & 52  & 2755.75 & 135.8 \\ \hline
+    9/3/4               & \gsp            & 152.55$[\pm 2.87]$     & 46.75 & 2200 & 113.4 \\ 
+                       & \sps            & 134.23$[\pm 3.25]$     &  40.63   & 2182.5 & 27 \\ \hline
+    9/5/4              & \gsp           &134.23$[\pm 3.26]$        & 40.6    & 2098.3     &   93.45    \\
+                       & \sps           &93.05$[\pm 5.15]$         & 32.25    & 1530.25 &   0 \\ \hline    
+    21/-/2             & \srst           & 629.10$[\pm 8.84]$        & 154.6   &11773.5 &  229.75 \\ \hline
+    21/3/2              & \gsp            & 561.93$[\pm 8.00]$     &  134.3  &10133.16 &  201.2   \\ 
+    21/5/2              & \gsp            & 497.45$[\pm 6.15]$      & 126  & 9079 & 210.4  \\ \hline
+    21/-/4              & \srst           & 402.12$[\pm 5.06]$     & 132.25  & 6232.35 &  295.1 \\ \hline
+    21/3/4              & \gsp            & 343.23$[\pm 6.10]$ & 98.23 & 5231.25 & 342.2   \\ 
+    21/5/4              & \gsp            & 294.40$[\pm 7.60]$ & 77.63 & 4683.25 & 367.5  \\ \hline
 \end{tabular}
+\caption{Results of our experiments on ICE Laboratory}
+\label{tab:result}
 \end{table}
 
+% consideraioni dei risultai
+\newpage
 
+From the table \ref{tab:result} shown we can notice, as previously expected 
+considerations, that the strategy \gsp approximates the \sps strategy. 
+Based on the complexity of the strategies used, the results respects inital expectations. 
+Because using a polynomial complexity it is possible to have a solution close to the 
+calculated solution for a more complex and complete problem. In other words, 
+by calculating all the possible solutions we can have a good task allocation spending 
+less computational time. 
 
-
-
-
-
-
+In the last column ($\bar{\sigma}(Distance)$) we can see that the task allocation 
+is  not always the same. It means that in different experiments, which the same configuration,
+are assigned different tasks for different robots. 
+If the value of the $\bar{\sigma}$ is equal to zero then it means that the task allocation is 
+always the same for 10 times, that define a tightly allocation. In contrast, higher value of $\bar{\sigma}$
+define a loosely allocation.  
 
 
 

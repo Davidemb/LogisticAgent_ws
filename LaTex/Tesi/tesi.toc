@@ -12,28 +12,28 @@
 \contentsline {chapter}{\numberline {3}Multi-Robot task allocation for pick-up and delivery}{25}{chapter.3}
 \contentsline {section}{\numberline {3.1}Problem description}{25}{section.3.1}
 \contentsline {section}{\numberline {3.2}Problem fomalization}{26}{section.3.2}
-\contentsline {section}{\numberline {3.3}Proposed solution}{27}{section.3.3}
-\contentsline {subsection}{\numberline {3.3.1}Single robot : Single task (SR:ST )}{27}{subsection.3.3.1}
-\contentsline {subsection}{\numberline {3.3.2}Set Partition Strategy - Single robot : Multiple task (SPS1:N )}{28}{subsection.3.3.2}
-\contentsline {subsection}{\numberline {3.3.3}Greedy Set Partition Strategy - Single robot : Multiple task (GSP1:N )}{30}{subsection.3.3.3}
-\contentsline {chapter}{\numberline {4}Empirical Setting}{35}{chapter.4}
-\contentsline {section}{\numberline {4.1}Robot Operating System (ROS)}{35}{section.4.1}
-\contentsline {subsection}{\numberline {4.1.1}Nomencalture and Architecture}{35}{subsection.4.1.1}
-\contentsline {subsection}{\numberline {4.1.2}The Stage 2D Simulator}{38}{subsection.4.1.2}
-\contentsline {section}{\numberline {4.2}Localization and Navigation}{41}{section.4.2}
-\contentsline {subsection}{\numberline {4.2.1}Mapping}{42}{subsection.4.2.1}
-\contentsline {subsection}{\numberline {4.2.2}Localization}{43}{subsection.4.2.2}
-\contentsline {subsection}{\numberline {4.2.3}Navigation}{44}{subsection.4.2.3}
-\contentsline {subsection}{\numberline {4.2.4}Global and Local planner algorithms}{47}{subsection.4.2.4}
-\contentsline {section}{\numberline {4.3}Cost-maps configurations}{51}{section.4.3}
-\contentsline {subsection}{\numberline {4.3.1}Common configuration}{52}{subsection.4.3.1}
-\contentsline {subsection}{\numberline {4.3.2}Global configuration}{53}{subsection.4.3.2}
-\contentsline {subsection}{\numberline {4.3.3}Local configuration}{53}{subsection.4.3.3}
-\contentsline {subsection}{\numberline {4.3.4}Local and global coordinate frames}{54}{subsection.4.3.4}
-\contentsline {section}{\numberline {4.4}Recovery behaviours}{55}{section.4.4}
-\contentsline {section}{\numberline {4.5}\texttt {logistic\_sim} package}{55}{section.4.5}
-\contentsline {subsection}{\numberline {4.5.1}Obtaining a Topological representation}{56}{subsection.4.5.1}
-\contentsline {subsection}{\numberline {4.5.2}\texttt {actionLib} and \texttt {move\_base}}{56}{subsection.4.5.2}
-\contentsline {subsection}{\numberline {4.5.3}\texttt {task\_planner} package}{58}{subsection.4.5.3}
-\contentsline {chapter}{\numberline {5}Empirical Results}{61}{chapter.5}
-\contentsline {chapter}{\numberline {6}Conclusions and Future Work}{63}{chapter.6}
+\contentsline {section}{\numberline {3.3}Proposed solution}{29}{section.3.3}
+\contentsline {subsection}{\numberline {3.3.1}Single robot : Single task (SR:ST )}{29}{subsection.3.3.1}
+\contentsline {subsection}{\numberline {3.3.2}Set Partition Strategy - Single robot : Multiple task (SPS1:N )}{30}{subsection.3.3.2}
+\contentsline {subsection}{\numberline {3.3.3}Greedy Set Partition Strategy - Single robot : Multiple task (GSP1:N )}{32}{subsection.3.3.3}
+\contentsline {chapter}{\numberline {4}Empirical Setting}{37}{chapter.4}
+\contentsline {section}{\numberline {4.1}Robot Operating System (ROS)}{37}{section.4.1}
+\contentsline {subsection}{\numberline {4.1.1}Nomencalture and Architecture}{37}{subsection.4.1.1}
+\contentsline {subsection}{\numberline {4.1.2}The Stage 2D Simulator}{40}{subsection.4.1.2}
+\contentsline {section}{\numberline {4.2}Localization and Navigation}{43}{section.4.2}
+\contentsline {subsection}{\numberline {4.2.1}Mapping}{43}{subsection.4.2.1}
+\contentsline {subsection}{\numberline {4.2.2}Localization}{45}{subsection.4.2.2}
+\contentsline {subsection}{\numberline {4.2.3}Navigation}{46}{subsection.4.2.3}
+\contentsline {subsection}{\numberline {4.2.4}Global and Local planner algorithms}{49}{subsection.4.2.4}
+\contentsline {section}{\numberline {4.3}Cost-maps configurations}{53}{section.4.3}
+\contentsline {subsection}{\numberline {4.3.1}Common configuration}{54}{subsection.4.3.1}
+\contentsline {subsection}{\numberline {4.3.2}Global configuration}{55}{subsection.4.3.2}
+\contentsline {subsection}{\numberline {4.3.3}Local configuration}{55}{subsection.4.3.3}
+\contentsline {subsection}{\numberline {4.3.4}Local and global coordinate frames}{56}{subsection.4.3.4}
+\contentsline {section}{\numberline {4.4}Recovery behaviours}{57}{section.4.4}
+\contentsline {section}{\numberline {4.5}\texttt {logistic\_sim} package}{57}{section.4.5}
+\contentsline {subsection}{\numberline {4.5.1}Obtaining a Topological representation}{58}{subsection.4.5.1}
+\contentsline {subsection}{\numberline {4.5.2}\texttt {actionLib} and \texttt {move\_base}}{58}{subsection.4.5.2}
+\contentsline {subsection}{\numberline {4.5.3}\texttt {task\_planner} package}{60}{subsection.4.5.3}
+\contentsline {chapter}{\numberline {5}Empirical Results}{63}{chapter.5}
+\contentsline {chapter}{\numberline {6}Conclusions and Future Work}{67}{chapter.6}

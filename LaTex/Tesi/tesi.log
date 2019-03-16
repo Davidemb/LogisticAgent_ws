@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2018.5.15)  13 MAR 2019 17:56
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2018.5.15)  15 MAR 2019 18:35
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -523,7 +523,7 @@ Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 28
 )
 \Hy@SectionHShift=\skip51
 )
-Package hyperref Info: Option `colorlinks' set `true' on input line 19.
+Package hyperref Info: Option `colorlinks' set `true' on input line 20.
  (/home/dave/LogisticAgent_ws/LaTex/Tesi/frontespizio.sty
 Package: frontespizio 2009/04/03 1.1 (Enrico Gregorio)
  (/usr/share/texlive/texmf-dist/tex/latex/tools/afterpage.sty
@@ -714,23 +714,33 @@ LaTeX Info: Thecontrolsequence`\]'isalreadyrobust on input line 129.
 \l_MT_below_intertext_sep=\dimen138
 \l_MT_above_shortintertext_sep=\dimen139
 \l_MT_below_shortintertext_sep=\dimen140
-) (/home/dave/LogisticAgent_ws/LaTex/Tesi/tesi.aux)
+) (/home/dave/LogisticAgent_ws/LaTex/Tesi/tesi.aux
+
+LaTeX Warning: Label `SP' multiply defined.
+
+
+LaTeX Warning: Label `fig:srst' multiply defined.
+
+
+LaTeX Warning: Label `fig:srst' multiply defined.
+
+)
 \openout1 = `tesi.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 48.
-LaTeX Font Info:    ... okay on input line 48.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 48.
-LaTeX Font Info:    ... okay on input line 48.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 48.
-LaTeX Font Info:    ... okay on input line 48.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 48.
-LaTeX Font Info:    ... okay on input line 48.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 48.
-LaTeX Font Info:    ... okay on input line 48.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 48.
-LaTeX Font Info:    ... okay on input line 48.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 48.
-LaTeX Font Info:    ... okay on input line 48.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 49.
+LaTeX Font Info:    ... okay on input line 49.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 49.
+LaTeX Font Info:    ... okay on input line 49.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 49.
+LaTeX Font Info:    ... okay on input line 49.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 49.
+LaTeX Font Info:    ... okay on input line 49.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 49.
+LaTeX Font Info:    ... okay on input line 49.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 49.
+LaTeX Font Info:    ... okay on input line 49.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 49.
+LaTeX Font Info:    ... okay on input line 49.
  (/usr/share/texlive/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
 \scratchcounter=\count143
@@ -757,7 +767,7 @@ Package grfext Info: Graphics extension search list:
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Live
 ))
 \AtBeginShipoutBox=\box62
-Package hyperref Info: Link coloring ON on input line 48.
+Package hyperref Info: Link coloring ON on input line 49.
  (/usr/share/texlive/texmf-dist/tex/latex/hyperref/nameref.sty
 Package: nameref 2016/05/21 v2.44 Cross-referencing by name of section
  (/usr/share/texlive/texmf-dist/tex/generic/oberdiek/gettitlestring.sty
@@ -765,9 +775,9 @@ Package: gettitlestring 2016/05/16 v1.5 Cleanup title references (HO)
 )
 \c@section@level=\count149
 )
-LaTeX Info: Redefining \ref on input line 48.
-LaTeX Info: Redefining \pageref on input line 48.
-LaTeX Info: Redefining \nameref on input line 48.
+LaTeX Info: Redefining \ref on input line 49.
+LaTeX Info: Redefining \pageref on input line 49.
+LaTeX Info: Redefining \nameref on input line 49.
  (/home/dave/LogisticAgent_ws/LaTex/Tesi/tesi.out) (/home/dave/LogisticAgent_ws/LaTex/Tesi/tesi.out)
 \@outlinefile=\write4
 \openout4 = `tesi.out'.
@@ -776,8 +786,8 @@ LaTeX Info: Redefining \nameref on input line 48.
 <tesi-frn.pdf, id=152, pagebox=cropbox, 597.50829pt x 845.0471pt>
 File: tesi-frn.pdf Graphic file (type pdf)
 <use tesi-frn.pdf>
-Package pdftex.def Info: tesi-frn.pdf  used on input line 51. on input line 51.
-Package pdftex.def Info: Requested size: 597.50682pt x 845.04504pt on input line 51.
+Package pdftex.def Info: tesi-frn.pdf  used on input line 52. on input line 52.
+Package pdftex.def Info: Requested size: 597.50682pt x 845.04504pt on input line 52.
  [1
 
 
@@ -848,216 +858,260 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 
 ]
 Chapter 3.
-(/home/dave/LogisticAgent_ws/LaTex/Tesi/chapter/formalism.tex [25]) (/home/dave/LogisticAgent_ws/LaTex/Tesi/chapter/solution.tex
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
-
+(/home/dave/LogisticAgent_ws/LaTex/Tesi/chapter/formalism.tex [25]
 Overfull \hbox (77.47734pt too wide) has occurred while \output is active
 \OT1/cmr/m/n/12 26 \OT1/cmr/m/sl/12 CHAPTER 3.  MULTI-ROBOT TASK ALLOCATION FOR PICK-UP AND DELIVERY
  []
 
 [26]
-LaTeX Font Info:    Font shape `OT1/cmtt/bx/n' in size <10.95> not available
-(Font)              Font shape `OT1/cmtt/m/n' tried instead on input line 27.
-
-Overfull \hbox (20.9455pt too wide) in paragraph at lines 41--44
-[]\OT1/cmr/m/n/12 After the choose of the task to al-lo-cate by us-ing the func-tion \OT1/cmtt/m/n/12 compute[]route()
- []
-
-[27]
-Package hyperref Info: bookmark level for unknown algorithm defaults to 0 on input line 77.
-
+<img/p1p2_cut.png, id=395, 875.27pt x 480.79625pt>
+File: img/p1p2_cut.png Graphic file (type png)
+<use img/p1p2_cut.png>
+Package pdftex.def Info: img/p1p2_cut.png  used on input line 74. on input line 74.
+Package pdftex.def Info: Requested size: 190.0pt x 104.36691pt on input line 74.
+<img/p3_cut.png, id=397, 878.28125pt x 480.79625pt>
+File: img/p3_cut.png Graphic file (type png)
+<use img/p3_cut.png>
+Package pdftex.def Info: img/p3_cut.png  used on input line 75. on input line 75.
+Package pdftex.def Info: Requested size: 190.0pt x 104.00743pt on input line 75.
+ [27 </home/dave/LogisticAgent_ws/LaTex/Tesi/img/p1p2_cut.png> </home/dave/LogisticAgent_ws/LaTex/Tesi/img/p3_cut.png>]) (/home/dave/LogisticAgent_ws/LaTex/Tesi/chapter/solution.tex
 Overfull \hbox (77.47734pt too wide) has occurred while \output is active
 \OT1/cmr/m/n/12 28 \OT1/cmr/m/sl/12 CHAPTER 3.  MULTI-ROBOT TASK ALLOCATION FOR PICK-UP AND DELIVERY
  []
 
-[28] [29]
+[28]
+Package hyperref Info: bookmark level for unknown algorithm defaults to 0 on input line 29.
+ [29]
+<img/cycle1.png, id=419, 1451.4225pt x 505.89pt>
+File: img/cycle1.png Graphic file (type png)
+<use img/cycle1.png>
+Package pdftex.def Info: img/cycle1.png  used on input line 66. on input line 66.
+Package pdftex.def Info: Requested size: 390.0pt x 135.92825pt on input line 66.
+
 Overfull \hbox (77.47734pt too wide) has occurred while \output is active
 \OT1/cmr/m/n/12 30 \OT1/cmr/m/sl/12 CHAPTER 3.  MULTI-ROBOT TASK ALLOCATION FOR PICK-UP AND DELIVERY
  []
 
-[30] [31]
-<img/CF.png, id=445, 764.8575pt x 357.335pt>
-File: img/CF.png Graphic file (type png)
-<use img/CF.png>
-Package pdftex.def Info: img/CF.png  used on input line 230. on input line 230.
-Package pdftex.def Info: Requested size: 390.0pt x 182.20572pt on input line 230.
-)
+[30 </home/dave/LogisticAgent_ws/LaTex/Tesi/img/cycle1.png (PNG copy)>] [31]
+<img/opt.png, id=435, 1451.4225pt x 506.89375pt>
+File: img/opt.png Graphic file (type png)
+<use img/opt.png>
+Package pdftex.def Info: img/opt.png  used on input line 148. on input line 148.
+Package pdftex.def Info: Requested size: 390.0pt x 136.19797pt on input line 148.
+
 Overfull \hbox (77.47734pt too wide) has occurred while \output is active
 \OT1/cmr/m/n/12 32 \OT1/cmr/m/sl/12 CHAPTER 3.  MULTI-ROBOT TASK ALLOCATION FOR PICK-UP AND DELIVERY
  []
 
-[32] [33 </home/dave/LogisticAgent_ws/LaTex/Tesi/img/CF.png>]
+[32]
+<img/cf.png, id=448, 1450.41875pt x 505.89pt>
+File: img/cf.png Graphic file (type png)
+<use img/cf.png>
+Package pdftex.def Info: img/cf.png  used on input line 193. on input line 193.
+Package pdftex.def Info: Requested size: 390.0pt x 136.02089pt on input line 193.
+ [33 </home/dave/LogisticAgent_ws/LaTex/Tesi/img/opt.png (PNG copy)>]
 Overfull \hbox (77.47734pt too wide) has occurred while \output is active
 \OT1/cmr/m/n/12 34 \OT1/cmr/m/sl/12 CHAPTER 3.  MULTI-ROBOT TASK ALLOCATION FOR PICK-UP AND DELIVERY
  []
 
-[34
+[34 </home/dave/LogisticAgent_ws/LaTex/Tesi/img/cf.png (PNG copy)>] [35]
+<img/CF.png, id=475, 764.8575pt x 357.335pt>
+File: img/CF.png Graphic file (type png)
+<use img/CF.png>
+Package pdftex.def Info: img/CF.png  used on input line 274. on input line 274.
+Package pdftex.def Info: Requested size: 390.0pt x 182.20572pt on input line 274.
+)
+Overfull \hbox (77.47734pt too wide) has occurred while \output is active
+\OT1/cmr/m/n/12 36 \OT1/cmr/m/sl/12 CHAPTER 3.  MULTI-ROBOT TASK ALLOCATION FOR PICK-UP AND DELIVERY
+ []
+
+[36 </home/dave/LogisticAgent_ws/LaTex/Tesi/img/CF.png>]
+Chapter 4.
+(/home/dave/LogisticAgent_ws/LaTex/Tesi/chapter/ros.tex [37
 
 ]
-Chapter 4.
-(/home/dave/LogisticAgent_ws/LaTex/Tesi/chapter/ros.tex [35]
+LaTeX Font Info:    Font shape `OT1/cmtt/bx/n' in size <10.95> not available
+(Font)              Font shape `OT1/cmtt/m/n' tried instead on input line 46.
+
 Overfull \hbox (36.24619pt too wide) in paragraph at lines 67--112
 \OT1/cmr/m/n/12 while \OT1/cmtt/m/n/12 C++ \OT1/cmr/m/n/12 ser-vices are gen-er-ated in \OT1/cmtt/m/n/12 my[]package/srv[]gen/cpp/include/my[]package\OT1/cmr/m/n/12 .
  []
 
-[36]
+[38]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [37]
+ [39]
 Overfull \hbox (7.8089pt too wide) in paragraph at lines 136--137
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
  []
 
-[38]
+[40]
 Overfull \hbox (50.34933pt too wide) in paragraph at lines 176--177
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
  []
 
-[39] [40] [41]
-Overfull \hbox (23.90552pt too wide) in paragraph at lines 250--251
+[41] [42]
+<img/prospective.png, id=603, 1381.16pt x 805.0075pt>
+File: img/prospective.png Graphic file (type png)
+<use img/prospective.png>
+Package pdftex.def Info: img/prospective.png  used on input line 236. on input line 236.
+Package pdftex.def Info: Requested size: 390.0pt x 227.30449pt on input line 236.
+ [43 </home/dave/LogisticAgent_ws/LaTex/Tesi/img/prospective.png (PNG copy)>]
+Overfull \hbox (23.90552pt too wide) in paragraph at lines 253--254
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
  []
 
 
-Overfull \hbox (6.65945pt too wide) in paragraph at lines 269--270
+Overfull \hbox (6.65945pt too wide) in paragraph at lines 272--273
 [][][][][][][][][][][][][][][][][][][][][][][][][][] 
  []
 
-[42]
-Overfull \hbox (33.10327pt too wide) in paragraph at lines 290--291
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [44]
+Overfull \hbox (33.10327pt too wide) in paragraph at lines 293--294
 [][][][][][][][][][][][][][][][][][][][][][][][][][][] 
  []
 
 
-Overfull \hbox (10.10852pt too wide) in paragraph at lines 297--298
+Overfull \hbox (10.10852pt too wide) in paragraph at lines 300--301
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
  []
 
-[43] [44]
-Overfull \hbox (24.0569pt too wide) in paragraph at lines 360--374
+[45] [46]
+Overfull \hbox (24.0569pt too wide) in paragraph at lines 363--377
 \OT1/cmr/m/n/12 world, it as-sumes that these sen-sors are pub-lish-ing ei-ther \OT1/cmtt/m/n/12 sensor[]msgs/LaserScan
  []
 
-[45]
-Overfull \hbox (35.4029pt too wide) in paragraph at lines 389--390
+
+Overfull \hbox (35.4029pt too wide) in paragraph at lines 392--393
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
  []
 
 
-Overfull \hbox (6.65945pt too wide) in paragraph at lines 393--394
+Overfull \hbox (6.65945pt too wide) in paragraph at lines 396--397
 [][][][][][][][][][][][][][][][][][][][][] 
  []
 
-
-Overfull \hbox (35.4029pt too wide) in paragraph at lines 398--399
+[47]
+Overfull \hbox (35.4029pt too wide) in paragraph at lines 401--402
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
  []
 
 
-Overfull \hbox (46.90027pt too wide) in paragraph at lines 413--414
+Overfull \hbox (46.90027pt too wide) in paragraph at lines 416--417
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
  []
 
 
-Overfull \hbox (18.15683pt too wide) in paragraph at lines 415--416
+Overfull \hbox (18.15683pt too wide) in paragraph at lines 418--419
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
  []
 
-[46]
-Overfull \hbox (7.90646pt too wide) in paragraph at lines 437--446
+[48]
+Overfull \hbox (7.90646pt too wide) in paragraph at lines 440--449
 \OT1/cmr/m/n/12 (\OML/cmm/m/it/12 v[]; v[]; v[]\OT1/cmr/m/n/12 ) \OMS/cmsy/m/n/12  []!$ \OT1/cmr/m/n/12 (\OT1/cmtt/m/n/12 cmd[]vel.linear.x\OT1/cmr/m/n/12 , \OT1/cmtt/m/n/12 cmd[]vel.linear.y\OT1/cmr/m/n/12 , \OT1/cmtt/m/n/12 cmd[]vel.angular.z\OT1/cmr/m/n/12 )
  []
 
+[49] [50] [51]
+Underfull \vbox (badness 10000) has occurred while \output is active []
 
-Underfull \vbox (badness 3312) has occurred while \output is active []
+ [52]
+Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [47] [48] [49]
-Underfull \vbox (badness 2165) has occurred while \output is active []
-
- [50] [51]
-Overfull \hbox (17.58192pt too wide) in paragraph at lines 615--616
+ [53]
+Overfull \hbox (17.58192pt too wide) in paragraph at lines 618--619
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
  []
 
-[52] [53] [54]
+[54] [55] [56]
 LaTeX Font Info:    Font shape `OT1/cmtt/bx/n' in size <17.28> not available
-(Font)              Font shape `OT1/cmtt/m/n' tried instead on input line 732.
+(Font)              Font shape `OT1/cmtt/m/n' tried instead on input line 736.
 
-Underfull \hbox (badness 10000) in paragraph at lines 735--735
+Underfull \hbox (badness 10000) in paragraph at lines 739--739
 [][][]\OT1/cmr/m/n/10 Multi-Robot Pa-trolling Stage/ROS Sim-u-la-tion Pack-age.
  []
 
-[55]
+[57]
 LaTeX Font Info:    Font shape `OT1/cmtt/bx/n' in size <14.4> not available
-(Font)              Font shape `OT1/cmtt/m/n' tried instead on input line 772.
- [56]
-<img/action_interface.png, id=777, 453.695pt x 186.296pt>
+(Font)              Font shape `OT1/cmtt/m/n' tried instead on input line 776.
+ [58]
+<img/action_interface.png, id=800, 453.695pt x 186.296pt>
 File: img/action_interface.png Graphic file (type png)
 <use img/action_interface.png>
-Package pdftex.def Info: img/action_interface.png  used on input line 787. on input line 787.
-Package pdftex.def Info: Requested size: 390.0pt x 160.1432pt on input line 787.
- [57 </home/dave/LogisticAgent_ws/LaTex/Tesi/img/action_interface.png>]
-Overfull \hbox (6.95961pt too wide) in paragraph at lines 823--824
+Package pdftex.def Info: img/action_interface.png  used on input line 791. on input line 791.
+Package pdftex.def Info: Requested size: 390.0pt x 160.1432pt on input line 791.
+ [59 </home/dave/LogisticAgent_ws/LaTex/Tesi/img/action_interface.png>]
+Overfull \hbox (6.95961pt too wide) in paragraph at lines 827--828
 []\OT1/cmtt/m/n/12 move[]base/feedback \OT1/cmr/m/n/12 (\OT1/cmr/m/it/12 move[]base[]msgs/MoveBaseActionFeedback\OT1/cmr/m/n/12 ):
  []
 
 
-Overfull \hbox (7.9034pt too wide) in paragraph at lines 824--825
+Overfull \hbox (7.9034pt too wide) in paragraph at lines 828--829
 []\OT1/cmtt/m/n/12 move[]base/status \OT1/cmr/m/n/12 (\OT1/cmr/m/it/12 ac-tion-lib[]msgs/GoalStatusArray\OT1/cmr/m/n/12 ): pro-vides sta-
  []
 
-<img/rosgraph.png, id=785, 2087.8pt x 1872.9975pt>
+<img/rosgraph.png, id=808, 2087.8pt x 1872.9975pt>
 File: img/rosgraph.png Graphic file (type png)
 <use img/rosgraph.png>
-Package pdftex.def Info: img/rosgraph.png  used on input line 839. on input line 839.
-Package pdftex.def Info: Requested size: 390.0pt x 349.8715pt on input line 839.
+Package pdftex.def Info: img/rosgraph.png  used on input line 843. on input line 843.
+Package pdftex.def Info: Requested size: 390.0pt x 349.8715pt on input line 843.
 
-Overfull \hbox (25.22871pt too wide) in paragraph at lines 844--846
+Overfull \hbox (25.22871pt too wide) in paragraph at lines 848--850
 []\OT1/cmr/m/n/12 In Fig-ure [][]4.2[][] we can see the com-mu-ni-ca-tion be-tween robots (\OT1/cmtt/m/n/12 /patrol[]robot$\OML/cmm/m/it/12 N$\OT1/cmr/m/n/12 )
  []
 
-[58]) [59 </home/dave/LogisticAgent_ws/LaTex/Tesi/img/rosgraph.png>] [60
+[60]) [61 </home/dave/LogisticAgent_ws/LaTex/Tesi/img/rosgraph.png>] [62
 
 ]
 Chapter 5.
 (/home/dave/LogisticAgent_ws/LaTex/Tesi/chapter/experiments.tex) (/home/dave/LogisticAgent_ws/LaTex/Tesi/chapter/result.tex
-Overfull \hbox (79.95322pt too wide) in paragraph at lines 5--41
+Overfull \hbox (11.8898pt too wide) in paragraph at lines 6--6
+[][][]\OT1/cmr/m/n/10 For more about ar-chi-tec-ture used https://support.lenovo.com/my/it/solutions/pd015734| 
+ []
+
+[63]
+Overfull \hbox (79.95322pt too wide) in paragraph at lines 48--77
  [][] 
  []
 
-) [61] [62]
+[64]) [65] [66]
 Chapter 6.
-(/home/dave/LogisticAgent_ws/LaTex/Tesi/chapter/coclusions.tex) [63
+(/home/dave/LogisticAgent_ws/LaTex/Tesi/chapter/coclusions.tex) [67
 
-] [64
+] [68
 
-] (/home/dave/LogisticAgent_ws/LaTex/Tesi/chapter/script.tex [65]) (/home/dave/LogisticAgent_ws/LaTex/Tesi/chapter/tabelle.tex [66]) (/home/dave/LogisticAgent_ws/LaTex/Tesi/chapter/biblio.tex [67] [68] [69] [70] [71] [72] [73
+] (/home/dave/LogisticAgent_ws/LaTex/Tesi/chapter/script.tex [69]) (/home/dave/LogisticAgent_ws/LaTex/Tesi/chapter/tabelle.tex [70]) (/home/dave/LogisticAgent_ws/LaTex/Tesi/chapter/biblio.tex [71] [72] [73] [74] [75] [76] [77
 
 ])
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 116.
- [74]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 116.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 117.
+ [78]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 117.
  (/home/dave/LogisticAgent_ws/LaTex/Tesi/tesi.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 116.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 116.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 117.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 117.
 Package rerunfilecheck Info: File `tesi.out' has not changed.
 (rerunfilecheck)             Checksum: FEA2F5338B0A2FBDA29D23431158FB18;2776.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 116.
+
+
+LaTeX Warning: There were multiply-defined labels.
+
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 117.
  ) 
 Here is how much of TeX's memory you used:
- 11314 strings out of 492995
- 158818 string characters out of 6135073
- 291150 words of memory out of 5000000
- 14260 multiletter control sequences out of 15000+600000
+ 11361 strings out of 492995
+ 159477 string characters out of 6135073
+ 295665 words of memory out of 5000000
+ 14293 multiletter control sequences out of 15000+600000
  11772 words of font info for 44 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 37i,11n,58p,408b,1845s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 37i,11n,58p,408b,1847s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmcsc10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsl12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsltt10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt12.pfb>
-Output written on /home/dave/LogisticAgent_ws/LaTex/Tesi/tesi.pdf (74 pages, 1254393 bytes).
+Output written on /home/dave/LogisticAgent_ws/LaTex/Tesi/tesi.pdf (78 pages, 1483580 bytes).
 PDF statistics:
- 1051 PDF objects out of 1200 (max. 8388607)
- 938 compressed objects within 10 object streams
- 419 named destinations out of 1000 (max. 500000)
- 322 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 1095 PDF objects out of 1200 (max. 8388607)
+ 968 compressed objects within 10 object streams
+ 427 named destinations out of 1000 (max. 500000)
+ 352 words of extra memory for PDF output out of 10000 (max. 10000000)
 
