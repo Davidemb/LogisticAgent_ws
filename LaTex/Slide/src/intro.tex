@@ -1,0 +1,129 @@
+
+    \begin{frame}[fragile]{Industrial Logistics}
+        The {\bf industrial logistics} is the process of {\bf planning}, {\bf organization}
+        and {\bf control} of all the activities of handling and {\bf storage} of goods, which, starting
+        from the suppliers and reaching up to the end user, guarantee an adequate
+        level of {\bf service} to the customer consistent with the {\bf costs} to it associated
+
+        \begin{figure}[hbt]
+            \centering
+            \includegraphics[width=\textwidth]{img/ind4.png}
+        \end{figure}
+    \end{frame}
+
+    \begin{frame}[fragile]{Multi-Robot Systems for logistic applications}
+
+        \begin{figure}[hbt]
+            \centering
+            \includegraphics[width=\textwidth]{img/kiva.png}
+        \end{figure}
+        
+        \begin{center}
+        Kiva warehouse-management system
+        \end{center}
+    \end{frame}
+
+    \begin{frame}[fragile]{Thesis contribution}
+        \begin{center}
+        The contribution of this thesis:
+        \end{center}
+        \begin{columns}
+            \begin{column}{.7\textwidth}
+           
+            \begin{itemize}
+            \item extension of  \texttt{ROS}  package
+            \item proposing three tequnique:
+            \begin{enumerate}
+                \item Single robot : Single task (SR:ST) 
+                \item Set Partition Strategy - Single robot : Multiple task (SPS1:N)
+                \item Greedy Set Partition Strategy - Single robot : Multiple task (GSP1:N)
+            \end{enumerate}
+                \item real scenario: Computer Engineering for Industry 4.0 Laboratory (ICE Lab) 
+            \end{itemize}
+            \end{column}
+            \begin{column}{.4\textwidth}
+            \begin{figure}
+                \subfloat{\includegraphics[scale=0.45]{img/ros}}\qquad
+                \subfloat{\includegraphics[scale=0.45]{img/ice}}
+            \end{figure}
+            \end{column}
+        \end{columns}
+    \end{frame}
+
+
+    \begin{frame}[fragile]{ICE Laboratory}
+        \begin{figure}[hbt]
+            \centering
+            \includegraphics[width=\textwidth]{img/model1}
+        \end{figure}
+    \end{frame}
+
+    \begin{frame}[fragile]{ICE Laboratory for logistic application}
+        \begin{figure}[hbt]
+            \centering
+            \includegraphics[width=\textwidth]{img/labgrafo}
+        \end{figure}
+
+        {\color{red}{$\bullet$}}  Loading bay
+        \\
+        {\color{blue}{$\bullet$}}  Unloading bays
+        \\
+        {\color{black}{$\circ$}}  Vertices
+    \end{frame}
+
+    \begin{frame}[fragile]{Set Partition Strategy - Single robot : Multiple task (SPS1:N)}
+         \begin{columns}
+            \begin{column}{.7\textwidth}
+                \begin{center}
+                    \begin{tabular}{|c|r|c|} \hline
+                    \textbf{iteration} & \textbf{partition size} & \textbf{partition} \\ \hline
+                    1    & 1    & \{\{a, b, c, d\}\}   \\
+                    2    & 2    & \{\{a, b, c\}, \{d\}\}   \\
+                    3    & 2    & \{\{a, b, d\}, \{c\}\}   \\
+                    4    & 2    & \{\{a, b\}, \{c, d\}\}   \\
+                    5    & 3    & \{\{a, b\}, \{c\}, \{d\}\}   \\
+                    6    & 2    & \{\{a, c, d\}, \{b\}\}   \\
+                    7    & 2    & \{\{a, c\}, \{b, d\}\}   \\
+                    8    & 3    & \{\{a, c\}, \{b\},\{d\}\}   \\
+                    9    & 2    & \{\{a, d\}, \{b, c\}\}   \\
+                    10   & 2    & \{\{a\}, \{b, c, d\}\}   \\
+                    11   & 3    & \{\{a\}, \{b, c\}, \{d\}\}   \\
+                    12   & 3    & \{\{a, d\}, \{b\}, \{c\}\}   \\
+                    13   & 3    & \{\{a\}, \{b, d\}, \{c\}\}   \\
+                    14   & 3    & \{\{a\}, \{b\}, \{c, d\}\}   \\
+                    15   & 4    & \{\{a\}, \{b\}, \{c\},\{d\}\}   \\ \hline       
+                    \end{tabular}
+                  \end{center}
+            \end{column}
+            \begin{column}{.4\textwidth}
+            \begin{figure}
+                \includegraphics[width=\textwidth]{img/exp}
+            \end{figure}
+            \end{column}
+        \end{columns}
+    \end{frame}
+
+    \begin{frame}[fragile]{Greedy Set Partition Strategy - Single robot : Multiple task (GSP1:N)}
+    \end{frame}
+
+    \begin{frame}[fragile]{ROS package Logistic\_sim}
+        \begin{figure}[hbt]
+            \centering
+            \includegraphics[scale=0.12]{img/rosgraph}
+        \end{figure}
+    \end{frame}
+
+    \begin{frame}[fragile]{Empirical Results}
+    \end{frame}
+
+    \begin{frame}[fragile]{Video}
+    \end{frame}
+
+    \begin{frame}[fragile]{Conclusions and Future Work}
+    \end{frame}
+
+
+
+
+
+

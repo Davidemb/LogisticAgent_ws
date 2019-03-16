@@ -17,5 +17,4 @@ floorplan (
   bitmap "model5.pgm"
 )
 
-include "robots.inc"
 include "point.inc"

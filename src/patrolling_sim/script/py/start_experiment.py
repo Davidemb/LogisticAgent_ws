@@ -198,9 +198,9 @@ def run_experiment(MAP, NROBOTS, INITPOS, ALG_SHORT, LOC_MODE, NAV_MODULE, GWAIT
 	    #print gcmd
 	    os.system(gcmd)
     os.system('sleep 5')
-    print 'bash -c \rosrun task_planner TaskPlanner'
-    os.system('gnome-terminal  --tab -e "bash -c \'rosrun task_planner TaskPlanner\'" &')    
-    os.system('sleep 5')   
+    # print 'bash -c \rosrun task_planner TaskPlanner'
+    # os.system('gnome-terminal  --tab -e "bash -c \'rosrun task_planner TaskPlanner\'" &')    
+    # os.system('sleep 5')   
         
     # Start patrol behaviors
     gcmd = 'gnome-terminal '
