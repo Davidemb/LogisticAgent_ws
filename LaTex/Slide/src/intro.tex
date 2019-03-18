@@ -210,7 +210,14 @@ form the subset.
     \end{frame}
 
     \begin{frame}[fragile]{Video}
-        \movie[height=6.5cm,width=11.5cm,loop]{}{video/video.mp4}
+        % \movie[height=6.5cm,width=11.5cm,showcontrols,poster]{}{video/video.mp4}
+        \centering
+    \includemedia[height=0.7\linewidth,width=1\linewidth,activate=pageopen,
+    passcontext,
+    transparent,
+    addresource=video/video.mp4,
+    flashvars={source=video/video.mp4}
+    ]{}{VPlayer.swf}
     \end{frame}
 
     \begin{frame}[fragile]{ROS package Logistic\_sim}
