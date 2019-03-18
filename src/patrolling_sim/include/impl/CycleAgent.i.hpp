@@ -13,6 +13,7 @@ int CycleAgent::compute_next_vertex()
     vertex = mission[id_task].trail[id_vertex];
     if (mission[id_task].take)
     {
+      c_print("RequestTask",green);
       request_Task();
     }
     else

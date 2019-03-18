@@ -18,3 +18,4 @@ floorplan (
 )
 
 include "point.inc"
+include "robots.inc"

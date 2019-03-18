@@ -1,10 +1,9 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2018.5.15)  17 MAR 2019 10:35
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2018.5.15)  18 MAR 2019 09:06
 entering extended mode
  restricted \write18 enabled.
- file:line:error style messages enabled.
  %&-line parsing enabled.
-**/home/dave/LogisticAgent_ws/LaTex/Tesi/tesi.tex
-(/home/dave/LogisticAgent_ws/LaTex/Tesi/tesi.tex
+**tesi.tex
+(./tesi.tex
 LaTeX2e <2017-04-15>
 Babel <3.10> and hyphenation patterns for 84 language(s) loaded.
 (/usr/share/texlive/texmf-dist/tex/latex/base/book.cls
@@ -24,29 +23,38 @@ File: bk12.clo 2014/09/29 v1.4h Standard LaTeX file (size option)
 \abovecaptionskip=\skip41
 \belowcaptionskip=\skip42
 \bibindent=\dimen102
-) (/usr/share/texlive/texmf-dist/tex/latex/graphics/graphicx.sty
+)
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/graphicx.sty
 Package: graphicx 2017/06/01 v1.1a Enhanced LaTeX Graphics (DPC,SPQR)
- (/usr/share/texlive/texmf-dist/tex/latex/graphics/keyval.sty
+
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/keyval.sty
 Package: keyval 2014/10/28 v1.15 key=value parser (DPC)
 \KV@toks@=\toks14
-) (/usr/share/texlive/texmf-dist/tex/latex/graphics/graphics.sty
+)
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/graphics.sty
 Package: graphics 2017/06/13 v1.2b Standard LaTeX Graphics (DPC,SPQR)
- (/usr/share/texlive/texmf-dist/tex/latex/graphics/trig.sty
+
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/trig.sty
 Package: trig 2016/01/03 v1.10 sin cos tan (DPC)
-) (/usr/share/texlive/texmf-dist/tex/latex/graphics-cfg/graphics.cfg
+)
+(/usr/share/texlive/texmf-dist/tex/latex/graphics-cfg/graphics.cfg
 File: graphics.cfg 2016/06/04 v1.11 sample graphics configuration
 )
 Package graphics Info: Driver file: pdftex.def on input line 99.
- (/usr/share/texlive/texmf-dist/tex/latex/graphics-def/pdftex.def
+
+(/usr/share/texlive/texmf-dist/tex/latex/graphics-def/pdftex.def
 File: pdftex.def 2017/06/17 v1.0e Graphics/color driver for pdftex
 ))
 \Gin@req@height=\dimen103
 \Gin@req@width=\dimen104
-) (/usr/share/texlive/texmf-dist/tex/generic/babel/babel.sty
+)
+(/usr/share/texlive/texmf-dist/tex/generic/babel/babel.sty
 Package: babel 2017/05/19 3.10 The Babel package
- (/usr/share/texlive/texmf-dist/tex/generic/babel-english/english.ldf
+
+(/usr/share/texlive/texmf-dist/tex/generic/babel-english/english.ldf
 Language: english 2017/06/06 v3.3r English support from the babel system
- (/usr/share/texlive/texmf-dist/tex/generic/babel/babel.def
+
+(/usr/share/texlive/texmf-dist/tex/generic/babel/babel.def
 File: babel.def 2017/05/19 3.10 Babel common definitions
 \babel@savecnt=\count88
 \U@D=\dimen105
@@ -54,17 +62,20 @@ File: babel.def 2017/05/19 3.10 Babel common definitions
 \l@canadian = a dialect from \language\l@american 
 \l@australian = a dialect from \language\l@british 
 \l@newzealand = a dialect from \language\l@british 
-)) (/usr/share/texlive/texmf-dist/tex/latex/base/inputenc.sty
+))
+(/usr/share/texlive/texmf-dist/tex/latex/base/inputenc.sty
 Package: inputenc 2015/03/17 v1.2c Input encoding file
 \inpenc@prehook=\toks15
 \inpenc@posthook=\toks16
- (/usr/share/texlive/texmf-dist/tex/latex/base/utf8.def
+
+(/usr/share/texlive/texmf-dist/tex/latex/base/utf8.def
 File: utf8.def 2017/01/28 v1.1t UTF-8 support for inputenc
 Now handling font encoding OML ...
 ... no UTF-8 mapping file for font encoding OML
 Now handling font encoding T1 ...
 ... processing UTF-8 mapping file for font encoding T1
- (/usr/share/texlive/texmf-dist/tex/latex/base/t1enc.dfu
+
+(/usr/share/texlive/texmf-dist/tex/latex/base/t1enc.dfu
 File: t1enc.dfu 2017/01/28 v1.1t UTF-8 support for inputenc
    defining Unicode char U+00A0 (decimal 160)
    defining Unicode char U+00A1 (decimal 161)
@@ -304,7 +315,8 @@ File: t1enc.dfu 2017/01/28 v1.1t UTF-8 support for inputenc
 )
 Now handling font encoding OT1 ...
 ... processing UTF-8 mapping file for font encoding OT1
- (/usr/share/texlive/texmf-dist/tex/latex/base/ot1enc.dfu
+
+(/usr/share/texlive/texmf-dist/tex/latex/base/ot1enc.dfu
 File: ot1enc.dfu 2017/01/28 v1.1t UTF-8 support for inputenc
    defining Unicode char U+00A0 (decimal 160)
    defining Unicode char U+00A1 (decimal 161)
@@ -344,7 +356,8 @@ File: ot1enc.dfu 2017/01/28 v1.1t UTF-8 support for inputenc
 )
 Now handling font encoding OMS ...
 ... processing UTF-8 mapping file for font encoding OMS
- (/usr/share/texlive/texmf-dist/tex/latex/base/omsenc.dfu
+
+(/usr/share/texlive/texmf-dist/tex/latex/base/omsenc.dfu
 File: omsenc.dfu 2017/01/28 v1.1t UTF-8 support for inputenc
    defining Unicode char U+00A7 (decimal 167)
    defining Unicode char U+00B6 (decimal 182)
@@ -367,11 +380,14 @@ Now handling font encoding U ...
    defining Unicode char U+2026 (decimal 8230)
    defining Unicode char U+2122 (decimal 8482)
    defining Unicode char U+2423 (decimal 9251)
-)) (/usr/share/texlive/texmf-dist/tex/latex/algorithmicx/algpseudocode.sty
+))
+(/usr/share/texlive/texmf-dist/tex/latex/algorithmicx/algpseudocode.sty
 Package: algpseudocode 
- (/usr/share/texlive/texmf-dist/tex/latex/base/ifthen.sty
+
+(/usr/share/texlive/texmf-dist/tex/latex/base/ifthen.sty
 Package: ifthen 2014/09/29 v1.1c Standard LaTeX ifthen package (DPC)
-) (/usr/share/texlive/texmf-dist/tex/latex/algorithmicx/algorithmicx.sty
+)
+(/usr/share/texlive/texmf-dist/tex/latex/algorithmicx/algorithmicx.sty
 Package: algorithmicx 2005/04/27 v1.2 Algorithmicx
 
 Document Style algorithmicx 1.2 - a greatly improved `algorithmic' style
@@ -398,9 +414,12 @@ Package: amsthm 2015/03/04 v2.20.2
 \thm@postskip=\skip47
 \thm@headsep=\skip48
 \dth@everypar=\toks22
-) (/usr/share/texlive/texmf-dist/tex/latex/algorithms/algorithm.sty
-Package: algorithm 2009/08/24 v0.1 Document Style `algorithm' - floating environment
- (/usr/share/texlive/texmf-dist/tex/latex/float/float.sty
+)
+(/usr/share/texlive/texmf-dist/tex/latex/algorithms/algorithm.sty
+Package: algorithm 2009/08/24 v0.1 Document Style `algorithm' - floating enviro
+nment
+
+(/usr/share/texlive/texmf-dist/tex/latex/float/float.sty
 Package: float 2001/11/08 v1.3d Float enhancements (AL)
 \c@float@type=\count96
 \float@exts=\toks23
@@ -410,21 +429,27 @@ Package: float 2001/11/08 v1.3d Float enhancements (AL)
 )
 \@float@every@algorithm=\toks25
 \c@algorithm=\count97
-) (/usr/share/texlive/texmf-dist/tex/latex/graphics/rotating.sty
+)
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/rotating.sty
 Package: rotating 2016/08/11 v2.16d rotated objects in LaTeX
 \c@r@tfl@t=\count98
 \rotFPtop=\skip49
 \rotFPbot=\skip50
 \rot@float@box=\box28
 \rot@mess@toks=\toks26
-) (/usr/share/texlive/texmf-dist/tex/latex/tools/enumerate.sty
+)
+(/usr/share/texlive/texmf-dist/tex/latex/tools/enumerate.sty
 Package: enumerate 2015/07/23 v3.00 enumerate extensions (DPC)
 \@enLab=\toks27
-) (/usr/share/texlive/texmf-dist/tex/latex/hyperref/hyperref.sty
+)
+(/usr/share/texlive/texmf-dist/tex/latex/hyperref/hyperref.sty
 Package: hyperref 2017/03/14 v6.85a Hypertext links for LaTeX
- (/usr/share/texlive/texmf-dist/tex/generic/oberdiek/hobsub-hyperref.sty
+
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/hobsub-hyperref.sty
 Package: hobsub-hyperref 2016/05/16 v1.14 Bundle oberdiek, subset hyperref (HO)
- (/usr/share/texlive/texmf-dist/tex/generic/oberdiek/hobsub-generic.sty
+
+
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/hobsub-generic.sty
 Package: hobsub-generic 2016/05/16 v1.14 Bundle oberdiek, subset generic (HO)
 Package: hobsub 2016/05/16 v1.14 Construct package bundles (HO)
 Package: infwarerr 2016/05/16 v1.4 Providing info/warning/error messages (HO)
@@ -442,13 +467,15 @@ Package etexcmds Info: Could not find \expanded.
 (etexcmds)             In the latter case, load this package earlier.
 Package: kvsetkeys 2016/05/16 v1.17 Key value parser (HO)
 Package: kvdefinekeys 2016/05/16 v1.4 Define keys (HO)
-Package: pdftexcmds 2017/03/19 v0.25 Utility functions of pdfTeX for LuaTeX (HO)
+Package: pdftexcmds 2017/03/19 v0.25 Utility functions of pdfTeX for LuaTeX (HO
+)
 Package pdftexcmds Info: LuaTeX not detected.
 Package pdftexcmds Info: \pdf@primitive is available.
 Package pdftexcmds Info: \pdf@ifprimitive is available.
 Package pdftexcmds Info: \pdfdraftmode found.
 Package: pdfescape 2016/05/16 v1.14 Implements pdfTeX's escape features (HO)
-Package: bigintcalc 2016/05/16 v1.4 Expandable calculations on big integers (HO)
+Package: bigintcalc 2016/05/16 v1.4 Expandable calculations on big integers (HO
+)
 Package: bitset 2016/05/16 v1.2 Handle bit-vector datatype (HO)
 Package: uniquecounter 2016/05/16 v1.3 Provide unlimited unique counter (HO)
 )
@@ -461,23 +488,28 @@ Package atveryend Info: \enddocument detected (standard20110627).
 Package: atbegshi 2016/06/09 v1.18 At begin shipout hook (HO)
 Package: refcount 2016/05/16 v3.5 Data extraction from label references (HO)
 Package: hycolor 2016/05/16 v1.8 Color options for hyperref/bookmark (HO)
-) (/usr/share/texlive/texmf-dist/tex/generic/ifxetex/ifxetex.sty
+)
+(/usr/share/texlive/texmf-dist/tex/generic/ifxetex/ifxetex.sty
 Package: ifxetex 2010/09/12 v0.6 Provides ifxetex conditional
-) (/usr/share/texlive/texmf-dist/tex/latex/oberdiek/auxhook.sty
+)
+(/usr/share/texlive/texmf-dist/tex/latex/oberdiek/auxhook.sty
 Package: auxhook 2016/05/16 v1.4 Hooks for auxiliary files (HO)
-) (/usr/share/texlive/texmf-dist/tex/latex/oberdiek/kvoptions.sty
+)
+(/usr/share/texlive/texmf-dist/tex/latex/oberdiek/kvoptions.sty
 Package: kvoptions 2016/05/16 v3.12 Key value format for package options (HO)
 )
 \@linkdim=\dimen106
 \Hy@linkcounter=\count99
 \Hy@pagecounter=\count100
- (/usr/share/texlive/texmf-dist/tex/latex/hyperref/pd1enc.def
+
+(/usr/share/texlive/texmf-dist/tex/latex/hyperref/pd1enc.def
 File: pd1enc.def 2017/03/14 v6.85a Hyperref: PDFDocEncoding definition (HO)
 Now handling font encoding PD1 ...
 ... no UTF-8 mapping file for font encoding PD1
 )
 \Hy@SavedSpaceFactor=\count101
- (/usr/share/texlive/texmf-dist/tex/latex/latexconfig/hyperref.cfg
+
+(/usr/share/texlive/texmf-dist/tex/latex/latexconfig/hyperref.cfg
 File: hyperref.cfg 2002/06/06 v1.2 hyperref configuration of TeXLive
 )
 Package hyperref Info: Hyper figures OFF on input line 4498.
@@ -488,7 +520,8 @@ Package hyperref Info: Backreferencing OFF on input line 4518.
 Package hyperref Info: Implicit mode ON; LaTeX internals redefined.
 Package hyperref Info: Bookmarks ON on input line 4751.
 \c@Hy@tempcnt=\count102
- (/usr/share/texlive/texmf-dist/tex/latex/url/url.sty
+
+(/usr/share/texlive/texmf-dist/tex/latex/url/url.sty
 \Urlmuskip=\muskip10
 Package: url 2013/09/16  ver 3.4  Verb mode for urls, etc.
 )
@@ -517,25 +550,32 @@ Package hyperref Message: Driver (autodetected): hpdftex.
 File: hpdftex.def 2017/03/14 v6.85a Hyperref driver for pdfTeX
 \Fld@listcount=\count107
 \c@bookmark@seq@number=\count108
- (/usr/share/texlive/texmf-dist/tex/latex/oberdiek/rerunfilecheck.sty
+
+(/usr/share/texlive/texmf-dist/tex/latex/oberdiek/rerunfilecheck.sty
 Package: rerunfilecheck 2016/05/16 v1.8 Rerun checks for auxiliary files (HO)
-Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 282.
+Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 2
+82.
 )
 \Hy@SectionHShift=\skip51
 )
 Package hyperref Info: Option `colorlinks' set `true' on input line 20.
- (/home/dave/LogisticAgent_ws/LaTex/Tesi/frontespizio.sty
+
+(./frontespizio.sty
 Package: frontespizio 2009/04/03 1.1 (Enrico Gregorio)
- (/usr/share/texlive/texmf-dist/tex/latex/tools/afterpage.sty
+
+(/usr/share/texlive/texmf-dist/tex/latex/tools/afterpage.sty
 Package: afterpage 2014/10/28 v1.08 After-Page Package (DPC)
 \AP@output=\toks28
 \AP@partial=\box29
 \AP@footins=\box30
-) (/usr/share/texlive/texmf-dist/tex/latex/eso-pic/eso-pic.sty
+)
+(/usr/share/texlive/texmf-dist/tex/latex/eso-pic/eso-pic.sty
 Package: eso-pic 2015/07/21 v2.0g eso-pic (RN)
- (/usr/share/texlive/texmf-dist/tex/latex/xcolor/xcolor.sty
+
+(/usr/share/texlive/texmf-dist/tex/latex/xcolor/xcolor.sty
 Package: xcolor 2016/05/11 v2.12 LaTeX color extensions (UK)
- (/usr/share/texlive/texmf-dist/tex/latex/graphics-cfg/color.cfg
+
+(/usr/share/texlive/texmf-dist/tex/latex/graphics-cfg/color.cfg
 File: color.cfg 2016/01/02 v1.6 sample color configuration
 )
 Package xcolor Info: Driver file: pdftex.def on input line 225.
@@ -554,7 +594,8 @@ Package xcolor Info: Model `wave' substituted by `hsb' on input line 1371.
 
 )
 \c@mydef=\count109
- (/usr/share/texlive/texmf-dist/tex/latex/listings/listings.sty
+
+(/usr/share/texlive/texmf-dist/tex/latex/listings/listings.sty
 \lst@mode=\count110
 \lst@gtempboxa=\box31
 \lst@token=\toks29
@@ -567,22 +608,28 @@ Package xcolor Info: Model `wave' substituted by `hsb' on input line 1371.
 \lst@newlines=\count114
 \lst@lineno=\count115
 \lst@maxwidth=\dimen113
- (/usr/share/texlive/texmf-dist/tex/latex/listings/lstmisc.sty
+
+(/usr/share/texlive/texmf-dist/tex/latex/listings/lstmisc.sty
 File: lstmisc.sty 2015/06/04 1.6 (Carsten Heinz)
 \c@lstnumber=\count116
 \lst@skipnumbers=\count117
 \lst@framebox=\box32
-) (/usr/share/texlive/texmf-dist/tex/latex/listings/listings.cfg
+)
+(/usr/share/texlive/texmf-dist/tex/latex/listings/listings.cfg
 File: listings.cfg 2015/06/04 1.6 listings configuration
 ))
 Package: listings 2015/06/04 1.6 (Carsten Heinz)
- (/usr/share/texlive/texmf-dist/tex/latex/listings/lstlang1.sty
+
+(/usr/share/texlive/texmf-dist/tex/latex/listings/lstlang1.sty
 File: lstlang1.sty 2015/06/04 1.6 listings language file
-) (/usr/share/texlive/texmf-dist/tex/latex/listings/lstlang1.sty
+)
+(/usr/share/texlive/texmf-dist/tex/latex/listings/lstlang1.sty
 File: lstlang1.sty 2015/06/04 1.6 listings language file
-) (/usr/share/texlive/texmf-dist/tex/latex/listings/lstmisc.sty
+)
+(/usr/share/texlive/texmf-dist/tex/latex/listings/lstmisc.sty
 File: lstmisc.sty 2015/06/04 1.6 (Carsten Heinz)
-) (/usr/share/texlive/texmf-dist/tex/latex/tools/multicol.sty
+)
+(/usr/share/texlive/texmf-dist/tex/latex/tools/multicol.sty
 Package: multicol 2017/04/11 v1.8q multicolumn formatting (FMi)
 \c@tracingmulticols=\count118
 \mult@box=\box33
@@ -630,9 +677,11 @@ Package: multicol 2017/04/11 v1.8q multicolumn formatting (FMi)
 \mult@nat@firstbox=\box57
 \colbreak@box=\box58
 \mc@col@check@num=\count126
-) (/usr/share/texlive/texmf-dist/tex/latex/mathtools/mathtools.sty
+)
+(/usr/share/texlive/texmf-dist/tex/latex/mathtools/mathtools.sty
 Package: mathtools 2017/05/24 v1.19 mathematical typesetting tools
- (/usr/share/texlive/texmf-dist/tex/latex/tools/calc.sty
+
+(/usr/share/texlive/texmf-dist/tex/latex/tools/calc.sty
 Package: calc 2014/10/28 v4.3 Infix arithmetic (KKT,FJ)
 \calc@Acount=\count127
 \calc@Bcount=\count128
@@ -644,23 +693,28 @@ LaTeX Info: Redefining \setlength on input line 80.
 LaTeX Info: Redefining \addtolength on input line 81.
 \calc@Ccount=\count129
 \calc@Cskip=\skip56
-) (/usr/share/texlive/texmf-dist/tex/latex/mathtools/mhsetup.sty
+)
+(/usr/share/texlive/texmf-dist/tex/latex/mathtools/mhsetup.sty
 Package: mhsetup 2017/03/31 v1.3 programming setup (MH)
-) (/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsmath.sty
+)
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsmath.sty
 Package: amsmath 2016/11/05 v2.16a AMS math features
 \@mathmargin=\skip57
 
 For additional information on amsmath, use the `?' option.
 (/usr/share/texlive/texmf-dist/tex/latex/amsmath/amstext.sty
 Package: amstext 2000/06/29 v2.01 AMS text
- (/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsgen.sty
+
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsgen.sty
 File: amsgen.sty 1999/11/30 v2.0 generic functions
 \@emptytoks=\toks30
 \ex@=\dimen125
-)) (/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsbsy.sty
+))
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsbsy.sty
 Package: amsbsy 1999/11/29 v1.2d Bold Symbols
 \pmbraise@=\dimen126
-) (/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsopn.sty
+)
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsopn.sty
 Package: amsopn 2016/03/08 v2.02 operator names
 )
 \inf@bad=\count130
@@ -714,7 +768,7 @@ LaTeX Info: Thecontrolsequence`\]'isalreadyrobust on input line 129.
 \l_MT_below_intertext_sep=\dimen138
 \l_MT_above_shortintertext_sep=\dimen139
 \l_MT_below_shortintertext_sep=\dimen140
-) (/home/dave/LogisticAgent_ws/LaTex/Tesi/tesi.aux
+) (./tesi.aux
 
 LaTeX Warning: Label `SP' multiply defined.
 
@@ -756,21 +810,28 @@ LaTeX Font Info:    ... okay on input line 49.
 \everyMPtoPDFconversion=\toks36
 ) (/usr/share/texlive/texmf-dist/tex/latex/oberdiek/epstopdf-base.sty
 Package: epstopdf-base 2016/05/15 v2.6 Base part for package epstopdf
- (/usr/share/texlive/texmf-dist/tex/latex/oberdiek/grfext.sty
+
+(/usr/share/texlive/texmf-dist/tex/latex/oberdiek/grfext.sty
 Package: grfext 2016/05/16 v1.2 Manage graphics extensions (HO)
 )
-Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 438.
+Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
+38.
 Package grfext Info: Graphics extension search list:
-(grfext)             [.pdf,.png,.jpg,.mps,.jpeg,.jbig2,.jb2,.PDF,.PNG,.JPG,.JPEG,.JBIG2,.JB2,.eps]
+(grfext)             [.pdf,.png,.jpg,.mps,.jpeg,.jbig2,.jb2,.PDF,.PNG,.JPG,.JPE
+G,.JBIG2,.JB2,.eps]
 (grfext)             \AppendGraphicsExtensions on input line 456.
- (/usr/share/texlive/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
-File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Live
+
+(/usr/share/texlive/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
+File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
+e
 ))
 \AtBeginShipoutBox=\box62
 Package hyperref Info: Link coloring ON on input line 49.
- (/usr/share/texlive/texmf-dist/tex/latex/hyperref/nameref.sty
+
+(/usr/share/texlive/texmf-dist/tex/latex/hyperref/nameref.sty
 Package: nameref 2016/05/21 v2.44 Cross-referencing by name of section
- (/usr/share/texlive/texmf-dist/tex/generic/oberdiek/gettitlestring.sty
+
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/gettitlestring.sty
 Package: gettitlestring 2016/05/16 v1.5 Cleanup title references (HO)
 )
 \c@section@level=\count149
@@ -778,7 +839,8 @@ Package: gettitlestring 2016/05/16 v1.5 Cleanup title references (HO)
 LaTeX Info: Redefining \ref on input line 49.
 LaTeX Info: Redefining \pageref on input line 49.
 LaTeX Info: Redefining \nameref on input line 49.
- (/home/dave/LogisticAgent_ws/LaTex/Tesi/tesi.out) (/home/dave/LogisticAgent_ws/LaTex/Tesi/tesi.out)
+
+(./tesi.out) (./tesi.out)
 \@outlinefile=\write4
 \openout4 = `tesi.out'.
 
@@ -787,17 +849,19 @@ LaTeX Info: Redefining \nameref on input line 49.
 File: tesi-frn.pdf Graphic file (type pdf)
 <use tesi-frn.pdf>
 Package pdftex.def Info: tesi-frn.pdf  used on input line 52. on input line 52.
-Package pdftex.def Info: Requested size: 597.50682pt x 845.04504pt on input line 52.
+
+Package pdftex.def Info: Requested size: 597.50682pt x 845.04504pt on input lin
+e 52.
  [1
 
 
- </home/dave/LogisticAgent_ws/LaTex/Tesi/tesi-frn.pdf{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}>] [2
+ <./tesi-frn.pdf{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}>] [2
 
-] (/home/dave/LogisticAgent_ws/LaTex/Tesi/tesi.toc [3])
+] (./tesi.toc [3])
 \tf@toc=\write5
 \openout5 = `tesi.toc'.
 
- [4] (/home/dave/LogisticAgent_ws/LaTex/Tesi/chapter/abstract.tex
+ [4] (./chapter/abstract.tex
 Underfull \hbox (badness 10000) in paragraph at lines 1--24
 
  []
@@ -811,96 +875,119 @@ Underfull \hbox (badness 10000) in paragraph at lines 1--24
 
 ]
 Chapter 1.
-(/home/dave/LogisticAgent_ws/LaTex/Tesi/chapter/intro.tex
+(./chapter/intro.tex
 Underfull \hbox (badness 5431) in paragraph at lines 2--2
-[][][]\OT1/cmr/m/n/10 See for ex-am-ple the Kiva sys-tem used by Ama-zon in their ware-house
+[][][]\OT1/cmr/m/n/10 See for ex-am-ple the Kiva sys-tem used by Ama-zon in the
+ir ware-house
  []
 
 [7]
 Underfull \vbox (badness 2435) has occurred while \output is active []
 
- [8] [9]
+ [8]
+[9]
 Underfull \hbox (badness 10000) in paragraph at lines 107--107
-[][][]\OT1/cmr/m/n/10 See Ba-sic con-cepts of In-dus-trial Lo-gis-tics and Lo-gis-tics Sys-tem
+[][][]\OT1/cmr/m/n/10 See Ba-sic con-cepts of In-dus-trial Lo-gis-tics and Lo-g
+is-tics Sys-tem
  []
 
 
 Underfull \hbox (badness 10000) in paragraph at lines 112--112
-[][][]\OT1/cmr/m/n/10 http://www.businessinsider.com/working-conditions-at-an-amazon-warehouse-2013-
+[][][]\OT1/cmr/m/n/10 http://www.businessinsider.com/working-conditions-at-an-a
+mazon-warehouse-2013-
  []
 
 
 
-pdfTeX warning: pdflatex (file /home/dave/LogisticAgent_ws/LaTex/Tesi/img/model1.pdf): PDF inclusion: found PDF version <1.7>, but at most version <1.5> allowed
+pdfTeX warning: pdflatex (file ./img/model1.pdf): PDF inclusion: found PDF vers
+ion <1.7>, but at most version <1.5> allowed
 <img/model1.pdf, id=276, pagebox=cropbox, 1195.46625pt x 845.1575pt>
 File: img/model1.pdf Graphic file (type pdf)
 <use img/model1.pdf>
-Package pdftex.def Info: img/model1.pdf  used on input line 127. on input line 127.
-Package pdftex.def Info: Requested size: 390.0pt x 275.71751pt on input line 127.
+Package pdftex.def Info: img/model1.pdf  used on input line 127. on input line 
+127.
+Package pdftex.def Info: Requested size: 390.0pt x 275.71751pt on input line 12
+7.
 [10]
 Underfull \vbox (badness 2050) has occurred while \output is active []
 
- [11 </home/dave/LogisticAgent_ws/LaTex/Tesi/img/model1.pdf>] [12]
+ [11 <./img/model1.pdf>] [12]
 LaTeX Font Info:    Try loading font information for OMS+cmr on input line 178.
+
  (/usr/share/texlive/texmf-dist/tex/latex/base/omscmr.fd
 File: omscmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <12> not available
 (Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 178.
- [13]) [14]
+
+[13]) [14]
 Chapter 2.
-(/home/dave/LogisticAgent_ws/LaTex/Tesi/chapter/background_related_works.tex [15
+(./chapter/background_related_works.tex [15
 
 ]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [16] [17] [18] [19] [20] [21] [22]) [23] [24
+ [16]
+[17] [18] [19] [20] [21] [22]) [23] [24
 
 ]
 Chapter 3.
-(/home/dave/LogisticAgent_ws/LaTex/Tesi/chapter/formalism.tex [25]
+(./chapter/formalism.tex [25]
 Overfull \hbox (77.47734pt too wide) has occurred while \output is active
-\OT1/cmr/m/n/12 26 \OT1/cmr/m/sl/12 CHAPTER 3.  MULTI-ROBOT TASK ALLOCATION FOR PICK-UP AND DELIVERY
+\OT1/cmr/m/n/12 26 \OT1/cmr/m/sl/12 CHAPTER 3.  MULTI-ROBOT TASK ALLOCATION FOR
+ PICK-UP AND DELIVERY
  []
 
 [26]
 <img/p1p2_cut.png, id=395, 875.27pt x 480.79625pt>
 File: img/p1p2_cut.png Graphic file (type png)
 <use img/p1p2_cut.png>
-Package pdftex.def Info: img/p1p2_cut.png  used on input line 74. on input line 74.
-Package pdftex.def Info: Requested size: 190.0pt x 104.36691pt on input line 74.
+Package pdftex.def Info: img/p1p2_cut.png  used on input line 74. on input line
+ 74.
+Package pdftex.def Info: Requested size: 190.0pt x 104.36691pt on input line 74
+.
 <img/p3_cut.png, id=397, 878.28125pt x 480.79625pt>
 File: img/p3_cut.png Graphic file (type png)
 <use img/p3_cut.png>
-Package pdftex.def Info: img/p3_cut.png  used on input line 75. on input line 75.
-Package pdftex.def Info: Requested size: 190.0pt x 104.00743pt on input line 75.
- [27 </home/dave/LogisticAgent_ws/LaTex/Tesi/img/p1p2_cut.png> </home/dave/LogisticAgent_ws/LaTex/Tesi/img/p3_cut.png>]) (/home/dave/LogisticAgent_ws/LaTex/Tesi/chapter/solution.tex
+Package pdftex.def Info: img/p3_cut.png  used on input line 75. on input line 7
+5.
+Package pdftex.def Info: Requested size: 190.0pt x 104.00743pt on input line 75
+.
+ [27 <./img/p1p2_cut.png> <./img/p3_cut.png>]) (./chapter/solution.tex
 Overfull \hbox (77.47734pt too wide) has occurred while \output is active
-\OT1/cmr/m/n/12 28 \OT1/cmr/m/sl/12 CHAPTER 3.  MULTI-ROBOT TASK ALLOCATION FOR PICK-UP AND DELIVERY
+\OT1/cmr/m/n/12 28 \OT1/cmr/m/sl/12 CHAPTER 3.  MULTI-ROBOT TASK ALLOCATION FOR
+ PICK-UP AND DELIVERY
  []
 
 [28]
-Package hyperref Info: bookmark level for unknown algorithm defaults to 0 on input line 29.
+Package hyperref Info: bookmark level for unknown algorithm defaults to 0 on in
+put line 29.
  [29]
 <img/cycle1.png, id=419, 1451.4225pt x 505.89pt>
 File: img/cycle1.png Graphic file (type png)
 <use img/cycle1.png>
-Package pdftex.def Info: img/cycle1.png  used on input line 66. on input line 66.
-Package pdftex.def Info: Requested size: 390.0pt x 135.92825pt on input line 66.
+Package pdftex.def Info: img/cycle1.png  used on input line 66. on input line 6
+6.
+Package pdftex.def Info: Requested size: 390.0pt x 135.92825pt on input line 66
+.
 
 Overfull \hbox (77.47734pt too wide) has occurred while \output is active
-\OT1/cmr/m/n/12 30 \OT1/cmr/m/sl/12 CHAPTER 3.  MULTI-ROBOT TASK ALLOCATION FOR PICK-UP AND DELIVERY
+\OT1/cmr/m/n/12 30 \OT1/cmr/m/sl/12 CHAPTER 3.  MULTI-ROBOT TASK ALLOCATION FOR
+ PICK-UP AND DELIVERY
  []
 
-[30 </home/dave/LogisticAgent_ws/LaTex/Tesi/img/cycle1.png (PNG copy)>] [31]
+[30 <./img/cycle1.png (PNG copy)>] [31]
 <img/opt.png, id=435, 1451.4225pt x 506.89375pt>
 File: img/opt.png Graphic file (type png)
 <use img/opt.png>
-Package pdftex.def Info: img/opt.png  used on input line 148. on input line 148.
-Package pdftex.def Info: Requested size: 390.0pt x 136.19797pt on input line 148.
+Package pdftex.def Info: img/opt.png  used on input line 148. on input line 148
+.
+Package pdftex.def Info: Requested size: 390.0pt x 136.19797pt on input line 14
+8.
 
 Overfull \hbox (77.47734pt too wide) has occurred while \output is active
-\OT1/cmr/m/n/12 32 \OT1/cmr/m/sl/12 CHAPTER 3.  MULTI-ROBOT TASK ALLOCATION FOR PICK-UP AND DELIVERY
+\OT1/cmr/m/n/12 32 \OT1/cmr/m/sl/12 CHAPTER 3.  MULTI-ROBOT TASK ALLOCATION FOR
+ PICK-UP AND DELIVERY
  []
 
 [32]
@@ -908,33 +995,41 @@ Overfull \hbox (77.47734pt too wide) has occurred while \output is active
 File: img/cf.png Graphic file (type png)
 <use img/cf.png>
 Package pdftex.def Info: img/cf.png  used on input line 193. on input line 193.
-Package pdftex.def Info: Requested size: 390.0pt x 136.02089pt on input line 193.
- [33 </home/dave/LogisticAgent_ws/LaTex/Tesi/img/opt.png (PNG copy)>]
+
+Package pdftex.def Info: Requested size: 390.0pt x 136.02089pt on input line 19
+3.
+ [33 <./img/opt.png (PNG copy)>]
 Overfull \hbox (77.47734pt too wide) has occurred while \output is active
-\OT1/cmr/m/n/12 34 \OT1/cmr/m/sl/12 CHAPTER 3.  MULTI-ROBOT TASK ALLOCATION FOR PICK-UP AND DELIVERY
+\OT1/cmr/m/n/12 34 \OT1/cmr/m/sl/12 CHAPTER 3.  MULTI-ROBOT TASK ALLOCATION FOR
+ PICK-UP AND DELIVERY
  []
 
-[34 </home/dave/LogisticAgent_ws/LaTex/Tesi/img/cf.png (PNG copy)>] [35]
+[34 <./img/cf.png (PNG copy)>] [35]
 <img/CF.png, id=475, 764.8575pt x 357.335pt>
 File: img/CF.png Graphic file (type png)
 <use img/CF.png>
 Package pdftex.def Info: img/CF.png  used on input line 274. on input line 274.
-Package pdftex.def Info: Requested size: 390.0pt x 182.20572pt on input line 274.
+
+Package pdftex.def Info: Requested size: 390.0pt x 182.20572pt on input line 27
+4.
 )
 Overfull \hbox (77.47734pt too wide) has occurred while \output is active
-\OT1/cmr/m/n/12 36 \OT1/cmr/m/sl/12 CHAPTER 3.  MULTI-ROBOT TASK ALLOCATION FOR PICK-UP AND DELIVERY
+\OT1/cmr/m/n/12 36 \OT1/cmr/m/sl/12 CHAPTER 3.  MULTI-ROBOT TASK ALLOCATION FOR
+ PICK-UP AND DELIVERY
  []
 
-[36 </home/dave/LogisticAgent_ws/LaTex/Tesi/img/CF.png>]
+[36 <./img/CF.png>]
 Chapter 4.
-(/home/dave/LogisticAgent_ws/LaTex/Tesi/chapter/ros.tex [37
+(./chapter/ros.tex [37
 
 ]
 LaTeX Font Info:    Font shape `OT1/cmtt/bx/n' in size <10.95> not available
 (Font)              Font shape `OT1/cmtt/m/n' tried instead on input line 46.
 
 Overfull \hbox (36.24619pt too wide) in paragraph at lines 67--112
-\OT1/cmr/m/n/12 while \OT1/cmtt/m/n/12 C++ \OT1/cmr/m/n/12 ser-vices are gen-er-ated in \OT1/cmtt/m/n/12 my[]package/srv[]gen/cpp/include/my[]package\OT1/cmr/m/n/12 .
+\OT1/cmr/m/n/12 while \OT1/cmtt/m/n/12 C++ \OT1/cmr/m/n/12 ser-vices are gen-er
+-ated in \OT1/cmtt/m/n/12 my[]package/srv[]gen/cpp/include/my[]package\OT1/cmr/
+m/n/12 .
  []
 
 [38]
@@ -948,15 +1043,18 @@ Overfull \hbox (7.8089pt too wide) in paragraph at lines 136--137
 [40]
 Overfull \hbox (50.34933pt too wide) in paragraph at lines 176--177
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
+
  []
 
 [41] [42]
 <img/prospective.png, id=603, 1381.16pt x 805.0075pt>
 File: img/prospective.png Graphic file (type png)
 <use img/prospective.png>
-Package pdftex.def Info: img/prospective.png  used on input line 236. on input line 236.
-Package pdftex.def Info: Requested size: 390.0pt x 227.30449pt on input line 236.
- [43 </home/dave/LogisticAgent_ws/LaTex/Tesi/img/prospective.png (PNG copy)>]
+Package pdftex.def Info: img/prospective.png  used on input line 236. on input 
+line 236.
+Package pdftex.def Info: Requested size: 390.0pt x 227.30449pt on input line 23
+6.
+ [43 <./img/prospective.png (PNG copy)>]
 Overfull \hbox (23.90552pt too wide) in paragraph at lines 253--254
 [][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
  []
@@ -981,7 +1079,8 @@ Overfull \hbox (10.10852pt too wide) in paragraph at lines 300--301
 
 [45] [46]
 Overfull \hbox (24.0569pt too wide) in paragraph at lines 363--377
-\OT1/cmr/m/n/12 world, it as-sumes that these sen-sors are pub-lish-ing ei-ther \OT1/cmtt/m/n/12 sensor[]msgs/LaserScan
+\OT1/cmr/m/n/12 world, it as-sumes that these sen-sors are pub-lish-ing ei-ther
+ \OT1/cmtt/m/n/12 sensor[]msgs/LaserScan
  []
 
 
@@ -1011,7 +1110,10 @@ Overfull \hbox (18.15683pt too wide) in paragraph at lines 418--419
 
 [48]
 Overfull \hbox (7.90646pt too wide) in paragraph at lines 440--449
-\OT1/cmr/m/n/12 (\OML/cmm/m/it/12 v[]; v[]; v[]\OT1/cmr/m/n/12 ) \OMS/cmsy/m/n/12  []!$ \OT1/cmr/m/n/12 (\OT1/cmtt/m/n/12 cmd[]vel.linear.x\OT1/cmr/m/n/12 , \OT1/cmtt/m/n/12 cmd[]vel.linear.y\OT1/cmr/m/n/12 , \OT1/cmtt/m/n/12 cmd[]vel.angular.z\OT1/cmr/m/n/12 )
+\OT1/cmr/m/n/12 (\OML/cmm/m/it/12 v[]; v[]; v[]\OT1/cmr/m/n/12 ) \OMS/cmsy/m/n/
+12  []!$ \OT1/cmr/m/n/12 (\OT1/cmtt/m/n/12 cmd[]vel.linear.x\OT1/cmr/m/n/12 , \
+OT1/cmtt/m/n/12 cmd[]vel.linear.y\OT1/cmr/m/n/12 , \OT1/cmtt/m/n/12 cmd[]vel.an
+gular.z\OT1/cmr/m/n/12 )
  []
 
 [49] [50] [51]
@@ -1031,6 +1133,7 @@ LaTeX Font Info:    Font shape `OT1/cmtt/bx/n' in size <17.28> not available
 
 Underfull \hbox (badness 10000) in paragraph at lines 739--739
 [][][]\OT1/cmr/m/n/10 Multi-Robot Pa-trolling Stage/ROS Sim-u-la-tion Pack-age.
+
  []
 
 [57]
@@ -1040,35 +1143,44 @@ LaTeX Font Info:    Font shape `OT1/cmtt/bx/n' in size <14.4> not available
 <img/action_interface.png, id=800, 453.695pt x 186.296pt>
 File: img/action_interface.png Graphic file (type png)
 <use img/action_interface.png>
-Package pdftex.def Info: img/action_interface.png  used on input line 791. on input line 791.
-Package pdftex.def Info: Requested size: 390.0pt x 160.1432pt on input line 791.
- [59 </home/dave/LogisticAgent_ws/LaTex/Tesi/img/action_interface.png>]
+Package pdftex.def Info: img/action_interface.png  used on input line 791. on i
+nput line 791.
+Package pdftex.def Info: Requested size: 390.0pt x 160.1432pt on input line 791
+.
+ [59 <./img/action_interface.png>]
 Overfull \hbox (6.95961pt too wide) in paragraph at lines 827--828
-[]\OT1/cmtt/m/n/12 move[]base/feedback \OT1/cmr/m/n/12 (\OT1/cmr/m/it/12 move[]base[]msgs/MoveBaseActionFeedback\OT1/cmr/m/n/12 ):
+[]\OT1/cmtt/m/n/12 move[]base/feedback \OT1/cmr/m/n/12 (\OT1/cmr/m/it/12 move[]
+base[]msgs/MoveBaseActionFeedback\OT1/cmr/m/n/12 ):
  []
 
 
 Overfull \hbox (7.9034pt too wide) in paragraph at lines 828--829
-[]\OT1/cmtt/m/n/12 move[]base/status \OT1/cmr/m/n/12 (\OT1/cmr/m/it/12 ac-tion-lib[]msgs/GoalStatusArray\OT1/cmr/m/n/12 ): pro-vides sta-
+[]\OT1/cmtt/m/n/12 move[]base/status \OT1/cmr/m/n/12 (\OT1/cmr/m/it/12 ac-tion-
+lib[]msgs/GoalStatusArray\OT1/cmr/m/n/12 ): pro-vides sta-
  []
 
 <img/rosgraph.png, id=808, 2087.8pt x 1872.9975pt>
 File: img/rosgraph.png Graphic file (type png)
 <use img/rosgraph.png>
-Package pdftex.def Info: img/rosgraph.png  used on input line 843. on input line 843.
-Package pdftex.def Info: Requested size: 390.0pt x 349.8715pt on input line 843.
+Package pdftex.def Info: img/rosgraph.png  used on input line 843. on input lin
+e 843.
+Package pdftex.def Info: Requested size: 390.0pt x 349.8715pt on input line 843
+.
 
 Overfull \hbox (25.22871pt too wide) in paragraph at lines 848--850
-[]\OT1/cmr/m/n/12 In Fig-ure [][]4.2[][] we can see the com-mu-ni-ca-tion be-tween robots (\OT1/cmtt/m/n/12 /patrol[]robot$\OML/cmm/m/it/12 N$\OT1/cmr/m/n/12 )
+[]\OT1/cmr/m/n/12 In Fig-ure [][]4.2[][] we can see the com-mu-ni-ca-tion be-tw
+een robots (\OT1/cmtt/m/n/12 /patrol[]robot$\OML/cmm/m/it/12 N$\OT1/cmr/m/n/12 
+)
  []
 
-[60]) [61 </home/dave/LogisticAgent_ws/LaTex/Tesi/img/rosgraph.png>] [62
+[60]) [61 <./img/rosgraph.png>] [62
 
 ]
 Chapter 5.
-(/home/dave/LogisticAgent_ws/LaTex/Tesi/chapter/experiments.tex) (/home/dave/LogisticAgent_ws/LaTex/Tesi/chapter/result.tex
+(./chapter/experiments.tex) (./chapter/result.tex
 Overfull \hbox (11.8898pt too wide) in paragraph at lines 6--6
-[][][]\OT1/cmr/m/n/10 For more about ar-chi-tec-ture used https://support.lenovo.com/my/it/solutions/pd015734| 
+[][][]\OT1/cmr/m/n/10 For more about ar-chi-tec-ture used https://support.lenov
+o.com/my/it/solutions/pd015734| 
  []
 
 [63]
@@ -1078,17 +1190,19 @@ Overfull \hbox (79.95322pt too wide) in paragraph at lines 48--77
 
 [64]) [65] [66]
 Chapter 6.
-(/home/dave/LogisticAgent_ws/LaTex/Tesi/chapter/coclusions.tex) [67
+(./chapter/coclusions.tex) [67
 
 ] [68
 
-] (/home/dave/LogisticAgent_ws/LaTex/Tesi/chapter/script.tex [69]) (/home/dave/LogisticAgent_ws/LaTex/Tesi/chapter/tabelle.tex [70]) (/home/dave/LogisticAgent_ws/LaTex/Tesi/chapter/biblio.tex [71] [72] [73] [74] [75] [76] [77
+] (./chapter/script.tex [69])
+(./chapter/tabelle.tex [70]) (./chapter/biblio.tex [71] [72] [73] [74] [75]
+[76] [77
 
 ])
 Package atveryend Info: Empty hook `BeforeClearDocument' on input line 117.
  [78]
 Package atveryend Info: Empty hook `AfterLastShipout' on input line 117.
- (/home/dave/LogisticAgent_ws/LaTex/Tesi/tesi.aux)
+ (./tesi.aux)
 Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 117.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 117.
 Package rerunfilecheck Info: File `tesi.out' has not changed.
@@ -1100,15 +1214,32 @@ LaTeX Warning: There were multiply-defined labels.
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 117.
  ) 
 Here is how much of TeX's memory you used:
- 11361 strings out of 492995
- 159477 string characters out of 6135073
+ 11359 strings out of 492995
+ 157869 string characters out of 6135073
  295665 words of memory out of 5000000
  14293 multiletter control sequences out of 15000+600000
  11772 words of font info for 44 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 37i,11n,58p,408b,1847s stack positions out of 5000i,500n,10000p,200000b,80000s
-</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmcsc10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsl12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsltt10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt12.pfb>
-Output written on /home/dave/LogisticAgent_ws/LaTex/Tesi/tesi.pdf (78 pages, 1483496 bytes).
+ 37i,11n,58p,369b,1847s stack positions out of 5000i,500n,10000p,200000b,80000s
+</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></us
+r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx9.pfb></usr/share
+/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmcsc10.pfb></usr/share/texl
+ive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/te
+xmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/share/texlive/texmf-di
+st/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/share/texlive/texmf-dist/font
+s/type1/public/amsfonts/cm/cmmi8.pfb></usr/share/texlive/texmf-dist/fonts/type1
+/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public
+/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfon
+ts/cm/cmr6.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cm
+r7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb><
+/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsl12.pfb></usr/s
+hare/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsltt10.pfb></usr/share
+/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texli
+ve/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/share/texlive/texm
+f-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb></usr/share/texlive/texmf-dist
+/fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/share/texlive/texmf-dist/fonts
+/type1/public/amsfonts/cm/cmtt12.pfb>
+Output written on tesi.pdf (78 pages, 1483030 bytes).
 PDF statistics:
  1095 PDF objects out of 1200 (max. 8388607)
  968 compressed objects within 10 object streams

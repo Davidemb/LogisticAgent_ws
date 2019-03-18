@@ -1,12 +1,13 @@
 \frametitle{Conclusions and Future Work}
-\begin{itemize}
+In conclusion:
+        \begin{itemize}
             \item Good behavior of GSP comparison a SPS.
             \item The quality of solutions found by GSP is comparable with the
             quality of solutions found by SPS.
             \item Coalition Formation problem can approximate the results
-            of a set partion problem in less time complexity.
+            of a set partion problem in {\bf less} time complexity.
         \end{itemize}
-        Because we are focused on a {\bf centralized coordinator} in the future works we want to
+        We are focused on a {\bf centralized coordinator} in the future works we want to
         perform a {\bf distributed coordiantion}.
 
         That strategy should be more {\bf flessible}, {\bf adaptive} at the situation on the traveling

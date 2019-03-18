@@ -72,10 +72,10 @@
     \end{frame}
 
     \begin{frame}[fragile]{Problem formalization}
-        Given a set of tasks $\mathcal{T}$ it define intrinsically a se of orders $O$.
+        Given a set of tasks $\mathcal{T}$ it defines intrinsically a set of orders $O$.
         One order perform a subset $S$ of $\mathcal{T}$, $S\subseteq\mathcal{T}$.
 
-        $S = \{T_1,\cdots,T_k\}$ for each element we combine their paths $P$ to form
+        $S = \{T_1,\cdots,T_k\}$ for each element we {\bf combine} their paths $P$ to form
         a single path $\pi = \{v_1,\cdots,v_i\}$.
         \begin{figure}
            
@@ -86,10 +86,10 @@
     \end{frame}
 
     \begin{frame}[fragile]{Problem formalization 2}
-        Because we maximize the total demand ($d_S$) we calculate the sum the single demand for each element in the subset.
+       We {\bf maximize} the total demand ($d_S$) we calculate the sum the single demand for each element in the subset.
 \[d_S =demand(T_1) + \cdots + demand(T_k)\]
 The heuristic function $v(\cdot)$ which
-can be defined for any task $T$ or subsets $S$:
+can be defined for any task $T$ or subset $S$:
 \[ v(S) = \frac{f(\pi)}{d_S}\]
 
 For compute the best partition of tasks the heuristic is based on the concept of {\bf loss} $L$,
@@ -97,7 +97,7 @@ which can be defined for any pair of subset $S_i$, $S_j$ as:
 \[L(S_i,S_j) = v(\{ S_i \cup S_j\}) - v(S_i) - v(S_j)\]
 where $v(S)$ is value of the characteristic function $v(\cdot)$ for subset $S$.
 
-We want minimize the cost of the {\bf loss}, that can be defined as:
+We want {\bf minimize} the cost of the {\bf loss}, that can be defined as:
 \[L(S_i,S_j) < 0 \]
 if the loss $L$ is less than 0 then we allocate the pair and delete the element which
 form the subset.
@@ -176,7 +176,7 @@ form the subset.
                         8    & C    & 3      & 2             \\ \hline       
                       \end{tabular} 
                     \end{center}
-                    Because often in the logistic environments robots are all equal. 
+                    Often in the logistic environments robots are all equal. 
             
     \end{frame}
 
@@ -210,7 +210,7 @@ form the subset.
     \end{frame}
 
     \begin{frame}[fragile]{Video}
-        \movie[height=6.5cm,width=11.5cm,loop]{}{video/allinone2per.mp4}
+        \movie[height=6.5cm,width=11.5cm,loop]{}{video/video.mp4}
     \end{frame}
 
     \begin{frame}[fragile]{ROS package Logistic\_sim}
@@ -256,14 +256,15 @@ form the subset.
    
 
     \begin{frame}[fragile]{Conclusions and Future Work}
+        In conclusion: 
         \begin{itemize}
             \item Good behavior of GSP comparison a SPS.
             \item The quality of solutions found by GSP is comparable with the 
             quality of solutions found by SPS.
             \item Coalition Formation problem can approximate the results 
-            of a set partion problem in less time complexity.
+            of a set partion problem in {\bf less} time complexity.
         \end{itemize}
-        Because we are focused on a {\bf centralized coordinator} in the future works we want to 
+        We are focused on a {\bf centralized coordinator} in the future works we want to 
         perform a {\bf distributed coordiantion}.
 
         That strategy should be more {\bf flessible}, {\bf adaptive} at the situation on the traveling
