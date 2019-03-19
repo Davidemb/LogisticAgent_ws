@@ -1,14 +1,31 @@
-\frametitle{Conclusions and Future Work}
-In conclusion:
-        \begin{itemize}
-            \item Good behavior of GSP comparison a SPS.
-            \item The quality of solutions found by GSP is comparable with the
-            quality of solutions found by SPS.
-            \item Coalition Formation problem can approximate the results
-            of a set partion problem in {\bf less} time complexity.
-        \end{itemize}
-        We are focused on a {\bf centralized coordinator} in the future works we want to
-        perform a {\bf distributed coordiantion}.
-
-        That strategy should be more {\bf flessible}, {\bf adaptive} at the situation on the traveling
-        orders then {\bf fault-tolenace}.
+\frametitle{All Results}
+\resizebox{\linewidth}{4.3cm}{
+        \begin{tabular}{|c|c|c|c|c|c|} \hline
+            {\bf Configuration} & {\bf Algorithm} & {\bf $ \overline{Time}$} & {\bf $\overline{Interference}$} & {\bf $\overline{Distance}$} & {\bf $\bar{\sigma}(Distance)$}         \\ \hline
+            6/-/2               & {\bf \srst}           & {\color{blue}{218.32}}$[\pm 6.19]$        & 63.45   & {\color{blue}{3747.90}} &  87.8\\ \hline
+            6/3/2               & \gsp            & {\color{red}{194.52}}$[\pm 6.42]$        & 49.65    & {\color{red}{3401.15}} & 251.37  \\
+                                & \textsl{\sps}            & {\color{green}{177.00}}$[\pm 1.99]$        & 49.34  & {\color{green}{3132.5 }}& {\bf 0}  \\ \hline
+            6/5/2               & \gsp            & {\color{red}{142.08}}$[\pm 1.39]$       &   42.2    & {\color{red}{2714.25  }}    &  206.43  \\
+                                & \textsl{\sps}            & {\color{green}{138.98}}$[\pm 2.41]$       &  39.38  & {\color{green}{ 2601.25 }} &  156.47   \\ \hline
+            6/-/4               & {\bf \srst}           & {\color{blue}{124.52}}$[\pm 3.12]$        & 42      & {\color{blue}{2194.75 }}&  114.2 \\ \hline
+            6/3/4               & \gsp            & {\color{red}{117.44}}$[\pm 1.85]$        & 35.75    & {\color{red}{1769 }}& 43.83  \\
+                                & \textsl{\sps}            & {\color{green}{115.28}}$[\pm 4.10]$        & 33.5   & {\color{green}{1702.5 }}& 23.67  \\ \hline
+            6/5/4               & \gsp            & {\color{red}{ 93.4}}$[\pm 1.01]$         & 29       & {\color{red}{1688.5 }}&  34.5   \\
+                                & \textsl{\sps}            & {\color{green}{ 91.8}}$[\pm 2.14]$        & 30.75   & {\color{green}{1546.5 }}& 35.8  \\ \hline
+            9/-/2               & {\bf \srst}           & {\color{blue}{292.24}}$[\pm 3.06]$      &  85.5     & {\color{blue}{5201.5 }}& 34.76\\ \hline
+            9/3/2              & \gsp            & {\color{red}{265.72}}$[\pm 2.64]$      & 71.5        & {\color{red}{4491.5  }}& {\bf 0}  \\
+                               & \textsl{\sps}            & {\color{green}{240.74}}$[\pm 10.42]$        & 75.5   & {\color{green}{4232.5 }}& 310.43 \\ \hline
+             9/5/2             & \gsp            & {\color{red}{232.84}}$[\pm 4.71]$      &  68.85      & {\color{red}{ 4041.25 }} &  236 \\
+                               & \textsl{\sps}            & {\color{green}{168.34}}$[\pm 2.03]$       &   50.5   & {\color{green}{3132.5 }}& {\bf 0 } \\ \hline
+            9/-/4               & {\bf \srst}          & {\color{blue}{178.55}}$[\pm 4.23]$    & 52           & {\color{blue}{2755.75}}& 135.8 \\ \hline
+            9/3/4               & \gsp           & {\color{red}{152.55}}$[\pm 2.87]$     & 46.75        & {\color{red}{2200 }}& 113.4 \\
+                               & \textsl{\sps}            & {\color{green}{134.23}}$[\pm 3.25]$     &  40.63     & {\color{green}{2182.5 }}& 27 \\ \hline
+            9/5/4              & \gsp           &  {\color{red}{134.23}}$[\pm 3.26]$        & 40.6      & {\color{red}{2098.3   }}  &   93.45    \\
+                               & \textsl{\sps}           &  {\color{green}{93.05}}$[\pm 5.15]$         & 32.25   & {\color{green}{1530.25 }}&   {\bf 0} \\ \hline
+            21/-/2             & {\bf \srst}           & {\color{blue}{629.10}}$[\pm 8.84]$        & 154.6    & {\color{blue}{11773.5 }}&  229.75 \\ \hline
+            21/3/2              & \gsp           & {\color{red}{561.93}}$[\pm 8.00]$     &  134.3       & {\color{red}{10133.16 }}&  201.2   \\
+      21/5/2              & \gsp           & {\color{red}{497.45}}$[\pm 6.15]$      & 126         & {\color{red}{9079}} & 210.4  \\ \hline
+            21/-/4              & {\bf \srst}          & {\color{blue}{402.12}}$[\pm 5.06]$     & 132.25      & {\color{blue}{6232.35 }}&  295.1 \\ \hline
+            21/3/4              & \gsp           & {\color{red}{343.23}}$[\pm 6.10]$ & 98.23            & {\color{red}{5231.25 }}& 342.2   \\
+            21/5/4              & \gsp           & {\color{red}{294.40}}$[\pm 7.60]$ & 77.63            & {\color{red}{4683.25 }}& 367.5  \\ \hline
+        \end{tabular}}
