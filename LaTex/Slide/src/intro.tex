@@ -24,6 +24,7 @@
             \centering
             \includegraphics[width=\textwidth]{img/ind4.png}
         \end{figure}
+        {\let\thefootnote\relax\footnote{{http://www.assimpresa.org/limpresa-del-futuro-verso-industry-4-0/}}}  
     \end{frame}
 
     \begin{frame}[fragile]{Multi-Robot Systems for logistic applications}
@@ -33,19 +34,21 @@
             \includegraphics[width=\textwidth]{img/kiva.png}
         \end{figure}
         
-        \begin{center}
-        {\bf Kiva} warehouse-management system.
-        \end{center}
+        
+    {\bf Kiva} warehouse-management system. 
+    Focus on Multi-Robot system for robotics warehouse, allocate one task for one robot.
+    {\let\thefootnote\relax\footnote{{Coordinating Hundreds of
+    Cooperative, Autonomous
+    Vehicles in Warehouses.}}}
+    {\let\thefootnote\relax\footnote{{Lifelong Path Planning with Kinematic Constraints
+    for Multi-Agent Pickup and Delivery.}}}
     \end{frame}
 
     \begin{frame}[fragile]{Thesis contribution}
-        % \begin{center}
-        % The contribution of this thesis:
-        % \end{center}
         \begin{columns}
             \begin{column}{.7\textwidth}
-            
-            How to {\bf partition} a finite set of task $\mathcal{T}$
+            We focus on task allocation for {\bf one} robot {\bf multiple} task,            
+            resolving a {\bf partition} set of task $\mathcal{T}$
             
             \begin{itemize}
                 
@@ -74,7 +77,6 @@
             \end{column}
         \end{columns}
     \end{frame}
-
 
     \begin{frame}[fragile]{ICE Laboratory}
         \begin{figure}[hbt]
@@ -117,13 +119,6 @@
         The heuristic function $v(\cdot)$ which
         can be defined for any task $T$ or subset $S$:
         \[ v(S) = \frac{f(\pi)}{d_S}\]
-
-        For compute the {\bf best partition} the heuristic is based on the concept of {\bf loss} $L$,
-        which can be defined for any pair of subset $S_i$, $S_j$ as:
-        \[L(S_i,S_j) = v(\{ S_i \cup S_j\}) - v(S_i) - v(S_j)\]
-
-        We want {\bf minimize} the cost:
-        \[L(S_i,S_j) < 0 \]
     \end{frame}
 
     \begin{frame}[fragile]{Single robot : Single task (SR:ST)}
@@ -137,36 +132,15 @@
 {\bf one robot} at time.
     \end{frame}
 
-    \begin{frame}[fragile]{Set Partition Strategy - Single robot : Multiple task (SPS1:N)}
-         \begin{columns}
-            \begin{column}{.7\textwidth}
-                \begin{center}
-                    \begin{tabular}{|c|r|c|} \hline
-                    \textbf{iteration} & \textbf{partition size} & \textbf{partition} \\ \hline
-                    1    & 1    & \{\{a, b, c, d\}\}   \\
-                    2    & 2    & \{\{a, b, c\}, \{d\}\}   \\
-                    3    & 2    & \{\{a, b, d\}, \{c\}\}   \\
-                    4    & 2    & \{\{a, b\}, \{c, d\}\}   \\
-                    5    & 3    & \{\{a, b\}, \{c\}, \{d\}\}   \\
-                    6    & 2    & \{\{a, c, d\}, \{b\}\}   \\
-                    7    & 2    & \{\{a, c\}, \{b, d\}\}   \\
-                    8    & 3    & \{\{a, c\}, \{b\},\{d\}\}   \\
-                    9    & 2    & \{\{a, d\}, \{b, c\}\}   \\
-                    10   & 2    & \{\{a\}, \{b, c, d\}\}   \\
-                    11   & 3    & \{\{a\}, \{b, c\}, \{d\}\}   \\
-                    12   & 3    & \{\{a, d\}, \{b\}, \{c\}\}   \\
-                    13   & 3    & \{\{a\}, \{b, d\}, \{c\}\}   \\
-                    14   & 3    & \{\{a\}, \{b\}, \{c, d\}\}   \\
-                    15   & 4    & \{\{a\}, \{b\}, \{c\},\{d\}\}   \\ \hline       
-                    \end{tabular}
-                  \end{center}
-            \end{column}
-            \begin{column}{.4\textwidth}
-            \begin{figure}
-                \includegraphics[width=\textwidth]{img/exp}
-            \end{figure}
-            \end{column}
-        \end{columns}
+
+    \begin{frame}[fragile]{Problem formalization 3}
+
+        For compute the {\bf best partition} the heuristic is based on the concept of {\bf loss} $L$,
+        which can be defined for any pair of subset $S_i$, $S_j$ as:
+        \[L(S_i,S_j) = v(\{ S_i \cup S_j\}) - v(S_i) - v(S_j)\]
+
+        We want {\bf minimize} the cost:
+        \[L(S_i,S_j) < 0 \]
     \end{frame}
 
     \begin{frame}[fragile]{Greedy Set Partition Strategy - Single robot : Multiple task (GSP1:N)}
@@ -176,6 +150,42 @@
             \includegraphics[width=\textwidth]{img/SP.png}
         \end{figure}
     \end{frame}
+
+
+    \begin{frame}[fragile]{Set Partition Strategy - Single robot : Multiple task (SPS1:N)}
+        \begin{columns}
+           \begin{column}{.7\textwidth}
+               \begin{center}
+                   \begin{tabular}{|c|r|c|} \hline
+                   \textbf{iteration} & \textbf{partition size} & \textbf{partition} \\ \hline
+                   1    & 1    & \{\{a, b, c, d\}\}   \\
+                   2    & 2    & \{\{a, b, c\}, \{d\}\}   \\
+                   3    & 2    & \{\{a, b, d\}, \{c\}\}   \\
+                   4    & 2    & \{\{a, b\}, \{c, d\}\}   \\
+                   5    & 3    & \{\{a, b\}, \{c\}, \{d\}\}   \\
+                   6    & 2    & \{\{a, c, d\}, \{b\}\}   \\
+                   7    & 2    & \{\{a, c\}, \{b, d\}\}   \\
+                   8    & 3    & \{\{a, c\}, \{b\},\{d\}\}   \\
+                   9    & 2    & \{\{a, d\}, \{b, c\}\}   \\
+                   10   & 2    & \{\{a\}, \{b, c, d\}\}   \\
+                   11   & 3    & \{\{a\}, \{b, c\}, \{d\}\}   \\
+                   12   & 3    & \{\{a, d\}, \{b\}, \{c\}\}   \\
+                   13   & 3    & \{\{a\}, \{b, d\}, \{c\}\}   \\
+                   14   & 3    & \{\{a\}, \{b\}, \{c, d\}\}   \\
+                   15   & 4    & \{\{a\}, \{b\}, \{c\},\{d\}\}   \\ \hline       
+                   \end{tabular}
+                 \end{center}
+           \end{column}
+           \begin{column}{.4\textwidth}
+            \begin{center}
+           $\argmin_{P} \sum_{S \in P} v(S)$
+            \end{center}
+           \begin{figure}
+               \includegraphics[width=\textwidth]{img/exp}
+           \end{figure}
+           \end{column}
+       \end{columns}
+   \end{frame}
 
     \begin{frame}[fragile]{Example}
         \begin{center}
@@ -233,40 +243,6 @@
        
     \end{frame}
 
-    \begin{frame}[fragile]{Video}
-    \centering
-    \includemedia[height=0.7\linewidth,width=1\linewidth,activate=pageopen,
-    passcontext,
-    transparent,
-    addresource=video/video.mp4,
-    flashvars={source=video/video.mp4}
-    ]{}{VPlayer.swf}
-    \end{frame}
-
-    \begin{frame}[fragile]{Empirical Results}
-        \begin{table}[hbt]
-         \resizebox{\linewidth}{2.5cm}{
-        \begin{tabular}{|c|c|c|c|c|c|} \hline
-            {\bf Configuration} & {\bf Algorithm} & {\bf $ \overline{Time}$} & {\bf $\overline{Interference}$} & {\bf $\overline{Distance}$} & {\bf $\bar{\sigma}(Distance)$}         \\ \hline
-            6/-/4               & {\bf \srst}           & {\color{blue}{124.52}}$[\pm 3.12]$        & 42      & {\color{blue}{2194.75 }}&  114.2 \\ \hline
-            6/3/4               & \gsp            & {\color{red}{117.44}}$[\pm 1.85]$        & 35.75    & {\color{red}{1769 }}& 43.83  \\ 
-                                & \textsl{\sps}            & {\color{green}{115.28}}$[\pm 4.10]$        & 33.5   & {\color{green}{1702.5 }}& 23.67  \\ \hline
-            6/5/4               & \gsp            & {\color{red}{ 93.4}}$[\pm 1.01]$         & 29       & {\color{red}{1688.5 }}&  34.5   \\
-                                & \textsl{\sps}            & {\color{green}{ 91.8}}$[\pm 2.14]$        & 30.75   & {\color{green}{1546.5 }}& 35.8  \\ \hline
-            9/-/4               & {\bf \srst}          & {\color{blue}{178.55}}$[\pm 4.23]$    & 52           & {\color{blue}{2755.75}}& 135.8 \\ \hline
-            9/3/4               & \gsp           & {\color{red}{152.55}}$[\pm 2.87]$     & 46.75        & {\color{red}{2200 }}& 113.4 \\ 
-                               & \textsl{\sps}            & {\color{green}{134.23}}$[\pm 3.25]$     &  40.63     & {\color{green}{2182.5 }}& 27 \\ \hline
-            9/5/4              & \gsp           &  {\color{red}{134.23}}$[\pm 3.26]$        & 40.6      & {\color{red}{2098.3   }}  &   93.45    \\
-                               & \textsl{\sps}           &  {\color{green}{93.05}}$[\pm 5.15]$         & 32.25   & {\color{green}{1530.25 }}&   {\bf 0} \\ \hline    
-            21/-/4              & {\bf \srst}          & {\color{blue}{402.12}}$[\pm 5.06]$     & 132.25      & {\color{blue}{6232.35 }}&  295.1 \\ \hline
-            21/3/4              & \gsp           & {\color{red}{343.23}}$[\pm 6.10]$ & 98.23            & {\color{red}{5231.25 }}& 342.2   \\ 
-            21/5/4              & \gsp           & {\color{red}{294.40}}$[\pm 7.60]$ & 77.63            & {\color{red}{4683.25 }}& 367.5  \\ \hline
-        \end{tabular}}
-    \end{table}
-        The {\bf configuration} is based on the size of the task set $\mathcal{T}$, the robot's {\bf capacity} and number of the {\bf team} robots.
-
-        We performed 260 experiments with 18 different settings.
-    \end{frame}
 
     \begin{frame}[fragile]{Empirical Methodology}
        
@@ -296,7 +272,51 @@
         {\bf Navigation} purpose we rely on \texttt{move\_base} package which create an interface with \texttt{ROS} navigation stack.
     \end{frame}
 
-   
+    \begin{frame}[fragile]{ROS package Logistic\_sim}
+        \begin{figure}[hbt]
+            \centering
+            \includegraphics[scale=0.25]{img/rosgraph}
+        \end{figure}
+    \end{frame}
+
+
+    \begin{frame}[fragile]{Video}
+    \centering
+    \includemedia[height=0.7\linewidth,width=1\linewidth,activate=pageopen,
+    passcontext,
+    transparent,
+    addresource=video/video.mp4,
+    flashvars={source=video/video.mp4}
+    ]{}{VPlayer.swf}
+    \end{frame}
+
+    \begin{frame}[fragile]{Empirical Results}
+        The {\bf configuration} is based on the size of the task set $\mathcal{T}$, the robot's {\bf capacity} and number of the {\bf team} robots.
+
+        We performed 260 experiments with 18 different settings.
+        \begin{table}[hbt]
+         \resizebox{\linewidth}{2.5cm}{
+        \begin{tabular}{|c|c|c|c|c|c|} \hline
+            {\bf Configuration} & {\bf Algorithm} & {\bf $ \overline{Time}$} & {\bf $\overline{Interference}$} & {\bf $\overline{Distance}$} & {\bf $\bar{\sigma}(Distance)$}         \\ \hline
+            6/-/4               &  \srst          & {\color{blue}{124.52}}$[\pm 3.12]$        & 42      & {\color{blue}{2194.75 }}&  114.2 \\ \hline
+            6/3/4               & \gsp            & {\color{red}{117.44}}$[\pm 1.85]$        & 35.75    & {\color{red}{1769 }}& 43.83  \\ 
+                                & {\bf \sps} & {\bf 115.28}$[\pm 4.10]$        & {\bf 33.5}   & {\bf 1702.5 }& {\bf 23.67}  \\ \hline
+            6/5/4               & \gsp            &  {\color{red}{93.4}} $[\pm 1.01]$         & 29       & {\color{red}{1688.5 }}&  34.5   \\
+                                & {\bf \sps}      & {\bf 91.8}$[\pm 2.14]$        & {\bf 30.75 }  & {\bf 1546.5}& {\bf 35.8}  \\ \hline
+            9/-/4               &  \srst          & {\color{blue}{178.55}}$[\pm 4.23]$    & 52           & {\color{blue}{2755.75}}& 135.8 \\ \hline
+            9/3/4               & \gsp           & {\color{red}{152.55}}$[\pm 2.87]$     & 46.75        & {\color{red}{2200 }}& 113.4 \\ 
+                               & {\bf \sps}            & {\bf 134.23}$[\pm 3.25]$     &  {\bf 40.63}     & {\bf 2182.5}& {\bf 27} \\ \hline
+            9/5/4              & \gsp           &  {\color{red}{134.23}}$[\pm 3.26]$        & 40.6      & {\color{red}{2098.3}}  &   93.45    \\
+                               & {\bf \sps}           &  {\bf 93.05}$[\pm 5.15]$         & {\bf 32.25}   & {\bf 1530.25 }&   {\bf 0} \\ \hline    
+            21/-/4              &  \srst          & {\color{blue}{402.12}}$[\pm 5.06]$     & 132.25      & {\color{blue}{6232.35 }}&  295.1 \\ \hline
+            21/3/4              & \gsp           & {\color{red}{343.23}}$[\pm 6.10]$ & 98.23            & {\color{red}{5231.25 }}& 342.2   \\ 
+            21/5/4              & \gsp           & {\color{red}{294.40}}$[\pm 7.60]$ & 77.63            & {\color{red}{4683.25 }}& 367.5  \\ \hline
+        \end{tabular}}
+    \end{table}
+       
+    \end{frame}
+
+
 
     \begin{frame}[fragile]{Conclusions and Future Work}
         In conclusion: 
@@ -304,13 +324,13 @@
             \item The results respects the expectations.
             \item The quality of solutions found by GSP is comparable with the 
             quality of solutions found by SPS.
-            \item Coalition Formation problem can approximate the results 
-            of a Set Partion problem in {\bf less} time complexity.
+            \item GSP problem can approximate the results 
+            of a SPS problem in {\bf less} time.
         \end{itemize}
-        We are focused on a {\bf centralized coordinator} in the future works we want to 
+        We focus on a {\bf centralized coordinator}.Future works we want to 
         perform a {\bf distributed coordiantion}.
 
-        That strategy should be more {\bf flessible}, {\bf adaptive} at the traffic on the traveling then {\bf fault-tolenace}. 
+    Allocation strategy should be more {\bf flessible}, {\bf adaptive} to traffic then {\bf fault-tolenace}. 
     \end{frame}
 
     \begin{frame}
@@ -319,14 +339,8 @@
         \end{center}
     \end{frame}
 
-    \begin{frame}[fragile]{ROS package Logistic\_sim}
-        \begin{figure}[hbt]
-            \centering
-            \includegraphics[scale=0.25]{img/rosgraph}
-        \end{figure}
-    \end{frame}
-
-    \begin{frame}[fragile]{ROS package Logistic\_sim 2}
+  
+      \begin{frame}[fragile]{ROS package Logistic\_sim}
         \begin{figure}[hbt]
             \centering
             \includegraphics[scale=0.12]{img/rosgraph1}
