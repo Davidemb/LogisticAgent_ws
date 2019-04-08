@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2018.5.15)  20 MAR 2019 17:46
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2018.5.15)  21 MAR 2019 10:49
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -2399,13 +2399,7 @@ Overfull \vbox (24.34714pt too high) detected at line 388
 
 Package atveryend Info: Empty hook `BeforeClearDocument' on input line 67.
 Package atveryend Info: Empty hook `AfterLastShipout' on input line 67.
- (./main.aux
-*************************************************
-* pdfbase warning: "rerun"
-* 
-* Rerun to get internal references right!
-*************************************************
-)
+ (./main.aux)
 Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 67.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 67.
 Package rerunfilecheck Info: File `main.out' has not changed.
@@ -2420,10 +2414,10 @@ LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
  ) 
 Here is how much of TeX's memory you used:
- 44530 strings out of 492995
- 1041050 string characters out of 6135073
+ 44531 strings out of 492995
+ 1041063 string characters out of 6135073
  1293885 words of memory out of 5000000
- 47198 multiletter control sequences out of 15000+600000
+ 47199 multiletter control sequences out of 15000+600000
  541561 words of font info for 64 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  71i,13n,102p,10376b,800s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -2439,10 +2433,10 @@ lic/amsfonts/cm/cmssi8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/am
 sfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts
 /cm/cmsy7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmt
 t10.pfb>
-Output written on main.pdf (23 pages, 7926319 bytes).
+Output written on main.pdf (23 pages, 7926577 bytes).
 PDF statistics:
- 247 PDF objects out of 1000 (max. 8388607)
- 171 compressed objects within 2 object streams
+ 250 PDF objects out of 1000 (max. 8388607)
+ 174 compressed objects within 2 object streams
  47 named destinations out of 1000 (max. 500000)
- 189 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 201 words of extra memory for PDF output out of 10000 (max. 10000000)
 
