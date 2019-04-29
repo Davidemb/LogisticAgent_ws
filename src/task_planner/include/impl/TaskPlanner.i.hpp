@@ -2,7 +2,6 @@
 
 namespace taskplanner
 {
-static bool OK = false;
 
 TaskPlanner::TaskPlanner(ros::NodeHandle &nh_)
 {
@@ -11,7 +10,9 @@ TaskPlanner::TaskPlanner(ros::NodeHandle &nh_)
   sub_mission = nh_.subscribe("need_mission", 1, &TaskPlanner::mission_Callback, this);
 
   pub_task = nh_.advertise<task_planner::Task>("answer", 1);
-  pub_results = nh_.advertise<std_msgs::Int16MultiArray>("results", 100);
+  pub_init = nh_.advertise<std_msgs::Int16MultiArray>("init", 1);
+  // pub_results = nh_.advertise<std_msgs::Int16MultiArray>("results", 100);
+  pub_results = nh_.advertise<tcp_interface::RCOMMessage>("results", 100);
 }
 
 void TaskPlanner::t_print(Task &t)
@@ -119,7 +120,6 @@ void TaskPlanner::init_Callback(const std_msgs::Int16MultiArrayConstPtr &msg)
       }
       if (T_t == 0)
       {
-        OK = true;
         compute_best_subtask();
         auto ele = pq_ct.top();
         ct_print(ele);
@@ -165,7 +165,6 @@ void TaskPlanner::init_Callback(const std_msgs::Int16MultiArrayConstPtr &msg)
       }
       if (T_t == 0)
       {
-        OK = true;
         compute_CF();
       }
     }
@@ -186,6 +185,11 @@ void TaskPlanner::init_Callback(const std_msgs::Int16MultiArrayConstPtr &msg)
         {
           T_t--;
         }
+      }
+      if (T_t == 0)
+      {
+        // posso fare qualcosa tipo avvisare i robot che possono partire
+        // ma chi parte? direi in modo sequenziale... serve ricevitore del messaggio
       }
     }
     break;

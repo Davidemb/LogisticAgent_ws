@@ -11,7 +11,8 @@ void PatrolAgent::init(int argc, char **argv)
       argv[1]=__name:=XXXXXX
       argv[2]=grid
       argv[3]=ID_ROBOT
-      argv[4]= CAPACITY
+      argv[4]=robotname
+      argv[5]= CAPACITY
   */
 
   srand(time(NULL));
@@ -28,7 +29,8 @@ void PatrolAgent::init(int argc, char **argv)
     ID_ROBOT = atoi(argv[3]);
   }
 
-  CAPACITY = atoi(argv[4]);
+  robotname = string(argv[4]);
+  // CAPACITY = atoi(argv[5]);
 
   /** D.Portugal: needed in case you "rosrun" from another folder **/
   chdir(PS_path.c_str());
@@ -72,7 +74,7 @@ void PatrolAgent::init(int argc, char **argv)
   aborted_count = 0;
   resend_goal_count = 0;
   communication_delay = 0.0;
-  lost_message_rate = 0.0;
+  lost_message_rate = 0.50;
   goal_reached_wait = 0.0;
 
   /* Define Starting Vertex/Position (Launch File Parameters) */
@@ -86,15 +88,11 @@ void PatrolAgent::init(int argc, char **argv)
   wait.sleep();
 
   double initial_x, initial_y;
-  std::vector<double> list;
+  // std::vector<double> list;
+  XmlRpc::XmlRpcValue list;
   nh.getParam("initial_pos", list);
 
-  if (list.empty())
-  {
-    ROS_ERROR("No initial positions given: check \"initial_pos\" parameter.");
-    ros::shutdown();
-    exit(-1);
-  }
+  ROS_ASSERT(list.getType() == XmlRpc::XmlRpcValue::TypeArray);
 
   int value = ID_ROBOT;
   if (value == -1)
@@ -102,12 +100,22 @@ void PatrolAgent::init(int argc, char **argv)
     value = 0;
   }
 
-  initial_x = list[2 * value];
-  initial_y = list[2 * value + 1];
+  ROS_ASSERT(list[2 * value].getType() == XmlRpc::XmlRpcValue::TypeDouble);
+  initial_x = static_cast<double>(list[2 * value]);
 
-  printf("initial position: x = %f, y = %f\n", initial_x, initial_y);
+  ROS_ASSERT(list[2 * value + 1].getType() == XmlRpc::XmlRpcValue::TypeDouble);
+  initial_y = static_cast<double>(list[2 * value + 1]);
+
+  //   printf("initial position: x = %f, y = %f\n", initial_x, initial_y);
   current_vertex = IdentifyVertex(vertex_web, dimension, initial_x, initial_y);
-  printf("initial vertex = %d\n\n", current_vertex);
+  //   printf("initial vertex = %d\n\n",current_vertex);
+
+  // initial_x = list[2 * value];
+  // initial_y = list[2 * value + 1];
+
+  // printf("initial position: x = %f, y = %f\n", initial_x, initial_y);
+  // current_vertex = IdentifyVertex(vertex_web, dimension, initial_x, initial_y);
+  // printf("initial vertex = %d\n\n", current_vertex);
 
   // instantaneous idleness and last visit initialized with zeros:
   instantaneous_idleness = new double[dimension];
@@ -126,31 +134,44 @@ void PatrolAgent::init(int argc, char **argv)
   }
 
   // Publicar dados de "odom" para nó de posições
-  positions_pub = nh.advertise<nav_msgs::Odometry>("positions", 1); // only concerned about the most recent
+  // positions_pub = nh.advertise<nav_msgs::Odometry>("positions", 1); // only concerned about the most recent
 
   // Subscrever posições de outros robots
-  positions_sub = nh.subscribe<nav_msgs::Odometry>("positions", 10, boost::bind(&PatrolAgent::positionsCB, this, _1));
+  // positions_sub = nh.subscribe<nav_msgs::Odometry>("positions", 10, boost::bind(&PatrolAgent::positionsCB, this, _1));
 
   char string1[40];
   char string2[40];
-  char string3[40];
-  char string4[40];
+  // char string3[40];
+  // char string4[40];
+
+  // if (ID_ROBOT == -1)
+  // {
+  //   strcpy(string1, "odom");    // string = "odom"
+  //   strcpy(string2, "cmd_vel"); // string = "cmd_vel"
+  //   strcpy(string3, "vetrex");
+  //   strcpy(string4, "vetrex_web");
+  //   TEAMSIZE = 1;
+  // }
+  // else
+  // {
+  //   sprintf(string1, "robot_%d/odom", ID_ROBOT);
+  //   sprintf(string2, "robot_%d/cmd_vel", ID_ROBOT);
+  //   sprintf(string3, "robot_%d/vertex", ID_ROBOT);
+  //   sprintf(string4, "robot_%d/vertex_web", ID_ROBOT);
+
+  //   TEAMSIZE = ID_ROBOT + 1;
+  // }
 
   if (ID_ROBOT == -1)
   {
-    strcpy(string1, "odom");    // string = "odom"
-    strcpy(string2, "cmd_vel"); // string = "cmd_vel"
-    strcpy(string3, "vetrex");
-    strcpy(string4, "vetrex_web");
+    strcpy(string1, "amcl_pose"); //string = "odom"
+    //strcpy (string2,"cmd_vel"); //string = "cmd_vel"
     TEAMSIZE = 1;
   }
   else
   {
-    sprintf(string1, "robot_%d/odom", ID_ROBOT);
-    sprintf(string2, "robot_%d/cmd_vel", ID_ROBOT);
-    sprintf(string3, "robot_%d/vertex", ID_ROBOT);
-    sprintf(string4, "robot_%d/vertex_web", ID_ROBOT);
-
+    sprintf(string1, "%s/amcl_pose", robotname.c_str());
+    // sprintf(string2,"%s/cmd_vel",robotname.c_str());
     TEAMSIZE = ID_ROBOT + 1;
   }
 
@@ -158,10 +179,10 @@ void PatrolAgent::init(int argc, char **argv)
   listener = new tf::TransformListener();
 
   // Cmd_vel to backup:
-  cmd_vel_pub = nh.advertise<geometry_msgs::Twist>(string2, 1);
+  // cmd_vel_pub = nh.advertise<geometry_msgs::Twist>(string2, 1);
 
   // Subscrever para obter dados de "odom" do robot corrente
-  odom_sub = nh.subscribe<nav_msgs::Odometry>(string1, 1, boost::bind(&PatrolAgent::odomCB, this, _1));
+  // odom_sub = nh.subscribe<nav_msgs::Odometry>(string1, 1, boost::bind(&PatrolAgent::odomCB, this, _1));
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   sub_to_task_planner_mission = nh.subscribe<task_planner::Task>(
@@ -182,17 +203,19 @@ void PatrolAgent::init(int argc, char **argv)
 
   // sub_vertex_web = nh.subscribe<patrolling_sim::VertexWeb>(string4, 1,
   // boost::bind(&PatrolAgent::receive_vertex_web_Callback, this, _1));
-
+  pose_sub = nh.subscribe<geometry_msgs::PoseWithCovarianceStamped>(string1, 1, boost::bind(&PatrolAgent::poseCB, this, _1)); //size of the buffer = 1 (?)
   ros::spinOnce();
 
   // Publicar dados para "results"
-  results_pub = nh.advertise<std_msgs::Int16MultiArray>("results", 100);
+  // results_pub = nh.advertise<std_msgs::Int16MultiArray>("results", 100);
   // results_sub = nh.subscribe("results", 10, resultsCB); //Subscrever
   // "results" vindo dos robots
-  results_sub = nh.subscribe<std_msgs::Int16MultiArray>("results", 100,
-                                                        boost::bind(&PatrolAgent::resultsCB, this,
-                                                                    _1)); // Subscrever "results" vindo dos robots
+  // results_sub = nh.subscribe<std_msgs::Int16MultiArray>("results", 100,
+  // boost::bind(&PatrolAgent::resultsCB, this,
+  // _1)); // Subscrever "results" vindo dos robots
 
+  rcom_pub = nh.advertise<tcp_interface::RCOMMessage>("RCOMMessage", 100);
+  rcom_sub = nh.subscribe<tcp_interface::RCOMMessage>("RCOMMessage", 100, boost::bind(&PatrolAgent::resultsCB, this, _1));
   // last time comm delay has been applied
   last_communication_delay_time = ros::Time::now().toSec();
 
@@ -257,7 +280,7 @@ void PatrolAgent::calc_route_to_src()
   // Route step;
   for (int j = i; j < 5; j++)
   {
-     
+
     t.trail.push_back(route_to_src[j]);
   }
 
@@ -334,10 +357,9 @@ void PatrolAgent::init_agent()
       ros::spinOnce();
       sleep(0.1);
     }
-    can_execute_decicion();
+    // can_execute_decicion();
   }
 }
-
 
 void PatrolAgent::init_agent2()
 {
@@ -361,7 +383,7 @@ void PatrolAgent::init_agent2()
       ros::spinOnce();
       sleep(0.1);
     }
-    can_execute_decicion();
+    // can_execute_decicion();
   }
 }
 
@@ -387,7 +409,7 @@ void PatrolAgent::init_agent3()
       ros::spinOnce();
       sleep(0.1);
     }
-    can_execute_decicion();
+    // can_execute_decicion();
   }
 }
 
@@ -398,26 +420,26 @@ void PatrolAgent::run()
   c_print("@ Ready!", green);
 
   // initially clear the costmap (to make sure the robot is not trapped):
-  std_srvs::Empty srv;
-  std::string mb_string;
+  // std_srvs::Empty srv;
+  // std::string mb_string;
 
-  if (ID_ROBOT > -1)
-  {
-    std::ostringstream id_string;
-    id_string << ID_ROBOT;
-    mb_string = "robot_" + id_string.str() + "/";
-  }
-  mb_string += "move_base/clear_costmaps";
+  // if (ID_ROBOT > -1)
+  // {
+  //   std::ostringstream id_string;
+  //   id_string << ID_ROBOT;
+  //   mb_string = "robot_" + id_string.str() + "/";
+  // }
+  // mb_string += "move_base/clear_costmaps";
 
-  if (ros::service::call(mb_string.c_str(), srv))
-  {
-    // if (ros::service::call("move_base/clear_costmaps", srv)){
-    ROS_INFO("Costmap correctly cleared before patrolling task.");
-  }
-  else
-  {
-    ROS_WARN("Was not able to clear costmap (%s) before patrolling...", mb_string.c_str());
-  }
+  // if (ros::service::call(mb_string.c_str(), srv))
+  // {
+  //   // if (ros::service::call("move_base/clear_costmaps", srv)){
+  //   ROS_INFO("Costmap correctly cleared before patrolling task.");
+  // }
+  // else
+  // {
+  //   ROS_WARN("Was not able to clear costmap (%s) before patrolling...", mb_string.c_str());
+  // }
 
   // Asynch spinner (non-blocking)
   ros::AsyncSpinner spinner(2); // Use n threads
@@ -563,7 +585,6 @@ void PatrolAgent::request_Task()
   sleep(0.1);
 }
 
-
 void PatrolAgent::request_Mission()
 {
   patrolling_sim::MissionRequest mission_request;
@@ -599,7 +620,6 @@ void PatrolAgent::request_Mission()
 
   ros::spinOnce();
   sleep(0.1);
-
 }
 
 } // namespace patrolagent

@@ -31,7 +31,7 @@ int CFA::compute_next_vertex()
       msg.data.clear();
       msg.data.push_back(value);
       msg.data.push_back(AT_HOME_MSG_TYPE);
-      results_pub.publish(msg);
+      // results_pub.publish(msg);
       ros::spinOnce();
 
       at_home = true;

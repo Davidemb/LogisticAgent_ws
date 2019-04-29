@@ -1,9 +1,9 @@
 [Config]
 map: model5
-nrobots: 1
+nrobots: 2
 from: 0
-to: 0
-algorithm: CFAGENT
+to: 10
+algorithm: CYCLE
 locmode: odom
 gwait: 0
 term: gnome-terminal

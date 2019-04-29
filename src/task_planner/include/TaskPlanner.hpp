@@ -22,6 +22,8 @@
 #include <task_planner/Mission.h>
 #include <task_planner/Task.h>
 
+#include <tcp_interface/RCOMMessage.h>
+
 #include "getgraph.hpp"
 #include "partition.hpp"
 
