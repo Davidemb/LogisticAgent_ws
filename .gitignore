@@ -1,10 +1,13 @@
 devel/
 build/
 results/
+video/
 
 .vscode
 .catkin_workspace
 .catkin_tools
 
-experiments.txt
-rostime.txt
+*.txt
+*.mp4
+*.ogv
+*.bag

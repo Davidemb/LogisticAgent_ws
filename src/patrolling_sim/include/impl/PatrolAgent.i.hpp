@@ -365,8 +365,8 @@ void PatrolAgent::init_agent2()
 {
 
   bool f = true;
-  while (!OK)
-  {
+  // while (!OK)
+  // {
     // chiedo se dopo aver calcolato la via per la src posso andare se non posso
     // aspetto
     // e dopo looprate.sleep() richiedo se posso finalmente partire
@@ -384,7 +384,7 @@ void PatrolAgent::init_agent2()
       sleep(0.1);
     }
     // can_execute_decicion();
-  }
+  // }
 }
 
 void PatrolAgent::init_agent3()

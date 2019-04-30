@@ -330,6 +330,7 @@ private:
   ros::Subscriber sub_mission;
 
   ros::Subscriber sub_init;
+  ros::Publisher pub_init;
   ros::Publisher
       pub_task; // pubblicazione dell'array (pop dal vettore di tasks)
   ros::Publisher pub_results;

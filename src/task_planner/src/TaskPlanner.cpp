@@ -13,8 +13,6 @@ int main(int argc, char **argv)
 
   TP.init(argc, argv);
 
-  OK = false;
-
   //   while (!OK)
   //   {
   //     //   c_print("aspetto i robot", red);
