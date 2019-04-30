@@ -7,7 +7,7 @@ video/
 .catkin_workspace
 .catkin_tools
 
-*.txt
+# *.txt
 *.mp4
 *.ogv
 *.bag
