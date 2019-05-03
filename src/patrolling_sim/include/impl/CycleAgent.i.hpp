@@ -14,7 +14,7 @@ int CycleAgent::compute_next_vertex()
     if (mission[id_task].take)
     {
       c_print("RequestTask",green);
-      request_Task();
+      // request_Task();
     }
     else
     {

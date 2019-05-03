@@ -5,14 +5,17 @@ namespace taskplanner
 
 TaskPlanner::TaskPlanner(ros::NodeHandle &nh_)
 {
+  #if DBG
   sub_init = nh_.subscribe("init", 1, &TaskPlanner::init_Callback, this);
   sub_task = nh_.subscribe("need_task", 1, &TaskPlanner::task_Callback, this);
   sub_mission = nh_.subscribe("need_mission", 1, &TaskPlanner::mission_Callback, this);
 
   pub_task = nh_.advertise<task_planner::Task>("answer", 1);
-  pub_init = nh_.advertise<std_msgs::Int16MultiArray>("init", 1);
   // pub_results = nh_.advertise<std_msgs::Int16MultiArray>("results", 100);
   pub_results = nh_.advertise<tcp_interface::RCOMMessage>("results", 100);
+  #endif
+
+  pub_init = nh_.advertise<std_msgs::Int16MultiArray>("init", 1);
 }
 
 void TaskPlanner::t_print(Task &t)
@@ -671,6 +674,7 @@ void TaskPlanner::run()
   // TODO
 }
 
+#if DBG
 void TaskPlanner::task_Callback(const patrolling_sim::TaskRequestConstPtr &tr)
 {
   bool single_task = true;
@@ -782,5 +786,6 @@ void TaskPlanner::mission_Callback(const patrolling_sim::MissionRequestConstPtr 
   sleep(1);
   c_print("fine", red);
 }
+#endif
 
 }  // namespace taskplanner

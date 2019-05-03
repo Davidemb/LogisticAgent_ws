@@ -12,7 +12,7 @@ int COA::compute_next_vertex()
     vertex = mission[id_task].trail[id_vertex];
     if (mission[id_task].take)
     {
-      request_Mission();
+      // request_Mission();
       // sleep(10);
     }
     else

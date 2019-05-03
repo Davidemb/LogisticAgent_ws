@@ -15,14 +15,17 @@
 #include <ros/ros.h>
 #include <sys/stat.h>
 
-#include <patrolling_sim/MissionRequest.h>
-#include <patrolling_sim/TaskRequest.h>
-#include <std_msgs/Bool.h>
+#define DBG false
 #include <std_msgs/Int16MultiArray.h>
+#include <std_msgs/Bool.h>
+
+#if DBG
+#include <patrolling_sim/TaskRequest.h>
 #include <task_planner/Mission.h>
 #include <task_planner/Task.h>
-
 #include <tcp_interface/RCOMMessage.h>
+#endif
+
 
 #include "getgraph.hpp"
 #include "partition.hpp"
@@ -321,9 +324,11 @@ public:
 
   void init(int argc, char **argv);
   void run();
-  void task_Callback(const patrolling_sim::TaskRequestConstPtr &msg);
   void init_Callback(const std_msgs::Int16MultiArrayConstPtr &msg);
+  #if DBG
+  void task_Callback(const patrolling_sim::TaskRequestConstPtr &msg);
   void mission_Callback(const patrolling_sim::MissionRequestConstPtr &msg);
+  #endif
 
 private:
   ros::Subscriber sub_task; // quando un robot vuole un task

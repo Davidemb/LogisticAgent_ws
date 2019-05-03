@@ -54,17 +54,17 @@ std_msgs
 ## Generate messages in the 'msg' folder
 add_message_files(
   FILES
-  MissionRequest.msg
+  # MissionRequest.msg
   TaskRequest.msg
-  Vertex.msg
-  VertexWeb.msg
+  # Vertex.msg
+  # VertexWeb.ms/g
 )
 
 ## Generate services in the 'srv' folder
-add_service_files(
-   FILES
-   GoToStartPosSrv.srv
-)
+# add_service_files(
+#    FILES
+#    GoToStartPosSrv.srv
+# )
 
 ## Generate actions in the 'action' folder
 # add_action_files(
@@ -75,7 +75,9 @@ add_service_files(
 
 ## Generate added messages and services with any dependencies listed here
  generate_messages(
-   DEPENDENCIES std_msgs geometry_msgs
+   DEPENDENCIES 
+   std_msgs 
+   geometry_msgs
  )
 
 ###################################
@@ -88,9 +90,9 @@ add_service_files(
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
-  INCLUDE_DIRS src
+  # INCLUDE_DIRS src
    LIBRARIES PatrolAgent SSIPatrolAgent LogicAgent CycleAgent CycleOptAgent
-   CATKIN_DEPENDS message_runtime 
+   CATKIN_DEPENDS message_runtime roscpp std_msgs geometry_msgs
 #  CATKIN_DEPENDS actionlib move_base_msgs nav_msgs roscpp tf
 #  DEPENDS system_lib
 )
@@ -104,7 +106,7 @@ catkin_package(
 # include_directories(include)
 include_directories(
   include
-  src
+  # src
   ${catkin_INCLUDE_DIRS}
   /home/dave/LogisticAgent_ws/lib
 )
@@ -142,6 +144,8 @@ src/CFAgent.cpp
 
 ########################################################################################################################
 
+# add_dependencies(${PROJECT_NAME} ${catkin_EXPORTED_TARGETS})
+
 ## Declare a cpp executable 
 add_executable(LOGA src/LOGA_Agent.cpp)
 ## Specify libraries to link a library or executable target against
@@ -176,9 +180,9 @@ add_dependencies(monitor ${PROJECT_NAME}_gencpp ${catkin_EXPORTED_TARGETS})
 ## Specify libraries to link a library or executable target against
 target_link_libraries(monitor ${catkin_LIBRARIES})
 
-add_executable(GoToStartPos src/GoToStartPos.cpp)
-add_dependencies(GoToStartPos ${PROJECT_NAME}_gencpp ${catkin_EXPORTED_TARGETS})
-target_link_libraries(GoToStartPos ${catkin_LIBRARIES})
+# add_executable(GoToStartPos src/GoToStartPos.cpp)
+# add_dependencies(GoToStartPos ${PROJECT_NAME}_gencpp ${catkin_EXPORTED_TARGETS})
+# target_link_libraries(GoToStartPos ${catkin_LIBRARIES})
 
 ## Declare a cpp executable 
 add_executable(idlHistogram src/idlHistogram.cpp)

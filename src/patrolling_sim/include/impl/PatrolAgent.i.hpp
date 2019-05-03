@@ -185,12 +185,14 @@ void PatrolAgent::init(int argc, char **argv)
   // odom_sub = nh.subscribe<nav_msgs::Odometry>(string1, 1, boost::bind(&PatrolAgent::odomCB, this, _1));
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  #if DBG
   sub_to_task_planner_mission = nh.subscribe<task_planner::Task>(
       "task_planner/answer", 1, boost::bind(&PatrolAgent::receive_mission_Callback, this, _1));
 
   pub_to_task_planner_needtask = nh.advertise<patrolling_sim::TaskRequest>("task_planner/need_task", 1);
   pub_to_task_planner_needmission = nh.advertise<patrolling_sim::MissionRequest>("task_planner/need_mission", 1);
   pub_to_task_planner_init = nh.advertise<std_msgs::Int16MultiArray>("task_planner/init", 1);
+  #endif
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
   pub_broadcast_msg = nh.advertise<std_msgs::Int16MultiArray>("broadcast_msg", 100);
@@ -213,10 +215,12 @@ void PatrolAgent::init(int argc, char **argv)
   // results_sub = nh.subscribe<std_msgs::Int16MultiArray>("results", 100,
   // boost::bind(&PatrolAgent::resultsCB, this,
   // _1)); // Subscrever "results" vindo dos robots
+  #if DBG
 
   rcom_pub = nh.advertise<tcp_interface::RCOMMessage>("RCOMMessage", 100);
   rcom_sub = nh.subscribe<tcp_interface::RCOMMessage>("RCOMMessage", 100, boost::bind(&PatrolAgent::resultsCB, this, _1));
   // last time comm delay has been applied
+  #endif
   last_communication_delay_time = ros::Time::now().toSec();
 
   readParams();
@@ -352,7 +356,7 @@ void PatrolAgent::init_agent()
       msg.data.push_back(CAPACITY);
       calc_route_to_src();
       // compute_cost_of_route();
-      pub_to_task_planner_init.publish(msg);
+      // pub_to_task_planner_init.publish(msg);
       f = false;
       ros::spinOnce();
       sleep(0.1);
@@ -378,7 +382,7 @@ void PatrolAgent::init_agent2()
       msg.data.push_back(CAPACITY);
       calc_route_to_src();
       // compute_cost_of_route();
-      pub_to_task_planner_init.publish(msg);
+      // pub_to_task_planner_init.publish(msg);
       f = false;
       ros::spinOnce();
       sleep(0.1);
@@ -404,7 +408,7 @@ void PatrolAgent::init_agent3()
       msg.data.push_back(CAPACITY);
       calc_route_to_src();
       // compute_cost_of_route();
-      pub_to_task_planner_init.publish(msg);
+      // pub_to_task_planner_init.publish(msg);
       f = false;
       ros::spinOnce();
       sleep(0.1);
@@ -548,6 +552,7 @@ void PatrolAgent::receive_results()
 {
 }
 
+#if DBG
 void PatrolAgent::request_Task()
 {
   patrolling_sim::TaskRequest task_request;
@@ -621,5 +626,6 @@ void PatrolAgent::request_Mission()
   ros::spinOnce();
   sleep(0.1);
 }
+#endif
 
 } // namespace patrolagent

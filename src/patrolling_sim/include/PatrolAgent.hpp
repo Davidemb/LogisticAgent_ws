@@ -57,12 +57,6 @@
 #include "getgraph.hpp"
 #include "message_types.hpp"
 
-#include <task_planner/Task.h>
-#include <patrolling_sim/MissionRequest.h>
-#include <patrolling_sim/TaskRequest.h>
-#include <patrolling_sim/Vertex.h>
-#include <patrolling_sim/VertexWeb.h>
-#include <tcp_interface/RCOMMessage.h>
 #include <geometry_msgs/PoseWithCovarianceStamped.h>
 
 #define NUM_MAX_ROBOTS 32
@@ -70,6 +64,16 @@
 #define SHARE_MSG 33
 #define DELTA_TIME_SEQUENTIAL_START 15
 #define SIMULATE_FOREVER false // WARNING: Set this to false, if you want a finishing condition.
+#define DBG false
+
+#if DBG
+#include <task_planner/Task.h>
+#include <patrolling_sim/MissionRequest.h>
+#include <patrolling_sim/TaskRequest.h>
+#include <patrolling_sim/Vertex.h>
+#include <patrolling_sim/VertexWeb.h>
+#include <tcp_interface/RCOMMessage.h>
+#endif
 
 namespace patrolagent
 {
@@ -80,8 +84,6 @@ struct Task
   int item;
   int order;
   int demand;
-  // int priority;
-  // int src;
   int dst;
   int path_distance;
   std::vector<uint> trail;
@@ -152,36 +154,31 @@ protected:
   tf::TransformListener *listener;
   MoveBaseClient *ac; // action client for reaching target goals
 
-  // ros::Subscriber odom_sub, positions_sub;
-  // /------------------------------------------------------------------------
+// ros::Subscriber odom_sub, positions_sub;
+// /------------------------------------------------------------------------
+#if DBG
   ros::Subscriber sub_to_task_planner_mission;
   ros::Publisher pub_to_task_planner_needtask;
   ros::Publisher pub_to_task_planner_needmission;
   ros::Publisher pub_to_task_planner_init;
-  
+
   ros::Subscriber sub_to_task_planner_init;
+
+  ros::Subscriber rcom_sub;
+  ros::Publisher rcom_pub;
+#endif
+  ros::Subscriber pose_sub;
 
   // ros::Publisher positions_pub;
   // ros::Subscriber results_sub;
   // ros::Publisher results_pub;
   // ros::Publisher cmd_vel_pub;
-  ros::Subscriber pose_sub;
-
-  ros::Subscriber rcom_sub;
-  ros::Publisher rcom_pub;
 
   ros::Publisher pub_broadcast_msg;
   ros::Subscriber sub_broadcast_msg;
 
-  ros::Publisher pub_vertex_msg;
-  ros::Publisher pub_vertex_web;
-  ros::Subscriber sub_vertex_web;
-
   std::vector<Task> mission;
 
-  // patrolling_sim::VertexWeb vertex_web_msg;
-
-  // std::vector<int> route;
   bool *ok;
   bool at_home = false;
   uint id_vertex = 0;
@@ -247,8 +244,10 @@ public:
   void send_interference();
   void send_resendgoal();
   void positionsCB(const nav_msgs::Odometry::ConstPtr &msg);
-  // void resultsCB(const std_msgs::Int16MultiArray::ConstPtr &msg);
+// void resultsCB(const std_msgs::Int16MultiArray::ConstPtr &msg);
+#if DBG
   void resultsCB(const tcp_interface::RCOMMessage::ConstPtr &msg);
+#endif
   // Must be implemented by sub-classes
   virtual int compute_next_vertex();
 
@@ -261,12 +260,13 @@ public:
 
   void calc_route_to_src();
   void can_execute_decicion();
+  int compute_cost_of_route();
+#if DBG
   void request_Task();
   void request_Mission();
-  int compute_cost_of_route();
   void receive_mission_Callback(const task_planner::TaskConstPtr &msg);
   //   ^ nuovi messaggi di task NB route[];
-
+#endif
   void broadcast_msg_Callback(const std_msgs::Int16MultiArray::ConstPtr &msg);
   //----------------------------------------------------------------------
 };

@@ -712,12 +712,14 @@ void PatrolAgent::do_send_message(std_msgs::Int16MultiArray &msg)
   std::string s = ss.str();
 
   //results_pub.publish(msg);
+  #if DBG
   tcp_interface::RCOMMessage m;
   m.header.stamp = ros::Time::now();
   m.robotreceiver = "all";
   m.robotsender = robotname;
   m.value = s;
   rcom_pub.publish(m);
+  #endif
   ros::spinOnce();
 }
 
@@ -838,6 +840,8 @@ void PatrolAgent::send_resendgoal()
 //   ros::spinOnce();
 // }
 
+#if DBG
+
 void PatrolAgent::resultsCB(const tcp_interface::RCOMMessage::ConstPtr &msg)
 {
 
@@ -935,6 +939,7 @@ void PatrolAgent::resultsCB(const tcp_interface::RCOMMessage::ConstPtr &msg)
   ros::spinOnce();
 }
 
+
 void PatrolAgent::receive_mission_Callback(const task_planner::TaskConstPtr &msg)
 {
   if (msg->ID_ROBOT == ID_ROBOT)
@@ -982,6 +987,8 @@ void PatrolAgent::receive_mission_Callback(const task_planner::TaskConstPtr &msg
     }
   }
 }
+
+#endif
 
 void PatrolAgent::init_Callback(const std_msgs::Int16MultiArray::ConstPtr &msg)
 {
