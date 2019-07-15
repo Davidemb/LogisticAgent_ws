@@ -1,12 +1,8 @@
 [Config]
 map: model5
 nrobots: 1
-from: 0
-to: 0
-algorithm: CFAGENT
+algorithm: CYCLE
 locmode: odom
+navmode: ros
 gwait: 0
-term: gnome-terminal
-master: true
-networkif: lo
-robot: virtual
+term: xterm

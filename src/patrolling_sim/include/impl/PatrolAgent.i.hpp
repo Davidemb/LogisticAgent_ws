@@ -2,8 +2,8 @@
 
 namespace patrolagent
 {
-using namespace std;
 
+// Inizializzazione del robot
 void PatrolAgent::init(int argc, char **argv)
 {
   /*
@@ -30,7 +30,7 @@ void PatrolAgent::init(int argc, char **argv)
   }
 
   robotname = string(argv[4]);
-  // CAPACITY = atoi(argv[5]);
+  CAPACITY = atoi(argv[5]);
 
   /** D.Portugal: needed in case you "rosrun" from another folder **/
   chdir(PS_path.c_str());
@@ -118,20 +118,20 @@ void PatrolAgent::init(int argc, char **argv)
   // printf("initial vertex = %d\n\n", current_vertex);
 
   // instantaneous idleness and last visit initialized with zeros:
-  instantaneous_idleness = new double[dimension];
-  last_visit = new double[dimension];
+  // instantaneous_idleness = new double[dimension];
+  // last_visit = new double[dimension];
 
-  for (size_t i = 0; i < dimension; i++)
-  {
-    instantaneous_idleness[i] = 0.0;
-    last_visit[i] = 0.0;
+  // for (size_t i = 0; i < dimension; i++)
+  // {
+  //   instantaneous_idleness[i] = 0.0;
+  //   last_visit[i] = 0.0;
 
-    if (i == current_vertex)
-    {
-      last_visit[i] = 0.1; // Avoids getting back at the initial vertex
-    }
-    // ROS_INFO("last_visit[%d]=%f", i, last_visit[i]);
-  }
+  //   if (i == current_vertex)
+  //   {
+  //     last_visit[i] = 0.1; // Avoids getting back at the initial vertex
+  //   }
+  //   // ROS_INFO("last_visit[%d]=%f", i, last_visit[i]);
+  // }
 
   // Publicar dados de "odom" para nó de posições
   // positions_pub = nh.advertise<nav_msgs::Odometry>("positions", 1); // only concerned about the most recent
@@ -140,7 +140,7 @@ void PatrolAgent::init(int argc, char **argv)
   // positions_sub = nh.subscribe<nav_msgs::Odometry>("positions", 10, boost::bind(&PatrolAgent::positionsCB, this, _1));
 
   char string1[40];
-  char string2[40];
+  // char string2[40];
   // char string3[40];
   // char string4[40];
 
@@ -161,6 +161,8 @@ void PatrolAgent::init(int argc, char **argv)
 
   //   TEAMSIZE = ID_ROBOT + 1;
   // }
+
+  c_print("   DC  ",magenta);
 
   if (ID_ROBOT == -1)
   {
@@ -226,25 +228,6 @@ void PatrolAgent::init(int argc, char **argv)
   readParams();
 }
 
-void PatrolAgent::can_execute_decicion()
-{
-  std_msgs::Int16MultiArray init_msg;
-  init_msg.data.clear();
-  int value = ID_ROBOT;
-  if (value == -1)
-  {
-    value = 0;
-  }
-  init_msg.data.push_back(value);
-  init_msg.data.push_back(INIT_MSG);
-  init_msg.data.push_back(current_dim_path);
-  c_print("broadcast", red);
-  pub_broadcast_msg.publish(init_msg);
-  ros::Rate loop_rate(30);
-  ros::spinOnce();
-  loop_rate.sleep();
-}
-
 void PatrolAgent::calc_route_to_src()
 {
   int value = ID_ROBOT;
@@ -295,30 +278,6 @@ void PatrolAgent::calc_route_to_src()
   mission.push_back(t);
 }
 
-int PatrolAgent::compute_cost_of_route()
-{
-  int anterior, proximo;
-
-  for (int i = 1; i < mission.front().trail.size(); i++)
-  {
-    anterior = mission.front().trail[i - 1];
-    proximo = mission.front().trail[i];
-
-    for (int j = 0; j < vertex_web[anterior].num_neigh; j++)
-    {
-      if (vertex_web[anterior].id_neigh[j] == proximo)
-      {
-        current_dim_path += vertex_web[anterior].cost[j];
-        break;
-      }
-    }
-  }
-
-  c_print("costo del percorso: ", current_dim_path, magenta);
-
-  return current_dim_path;
-}
-
 int PatrolAgent::ccor(vector<uint> route)
 {
   int custo_final = 0;
@@ -337,84 +296,6 @@ int PatrolAgent::ccor(vector<uint> route)
     }
   }
   return custo_final;
-}
-
-void PatrolAgent::init_agent()
-{
-
-  bool f = true;
-  while (!OK)
-  {
-    // chiedo se dopo aver calcolato la via per la src posso andare se non posso
-    // aspetto
-    // e dopo looprate.sleep() richiedo se posso finalmente partire
-    if (f)
-    {
-      std_msgs::Int16MultiArray msg;
-      msg.data.push_back(ID_ROBOT);
-      msg.data.push_back(46);
-      msg.data.push_back(CAPACITY);
-      calc_route_to_src();
-      // compute_cost_of_route();
-      // pub_to_task_planner_init.publish(msg);
-      f = false;
-      ros::spinOnce();
-      sleep(0.1);
-    }
-    // can_execute_decicion();
-  }
-}
-
-void PatrolAgent::init_agent2()
-{
-
-  bool f = true;
-  // while (!OK)
-  // {
-    // chiedo se dopo aver calcolato la via per la src posso andare se non posso
-    // aspetto
-    // e dopo looprate.sleep() richiedo se posso finalmente partire
-    if (f)
-    {
-      std_msgs::Int16MultiArray msg;
-      msg.data.push_back(ID_ROBOT);
-      msg.data.push_back(48);
-      msg.data.push_back(CAPACITY);
-      calc_route_to_src();
-      // compute_cost_of_route();
-      // pub_to_task_planner_init.publish(msg);
-      f = false;
-      ros::spinOnce();
-      sleep(0.1);
-    }
-    // can_execute_decicion();
-  // }
-}
-
-void PatrolAgent::init_agent3()
-{
-
-  bool f = true;
-  while (!OK)
-  {
-    // chiedo se dopo aver calcolato la via per la src posso andare se non posso
-    // aspetto
-    // e dopo looprate.sleep() richiedo se posso finalmente partire
-    if (f)
-    {
-      std_msgs::Int16MultiArray msg;
-      msg.data.push_back(ID_ROBOT);
-      msg.data.push_back(49);
-      msg.data.push_back(CAPACITY);
-      calc_route_to_src();
-      // compute_cost_of_route();
-      // pub_to_task_planner_init.publish(msg);
-      f = false;
-      ros::spinOnce();
-      sleep(0.1);
-    }
-    // can_execute_decicion();
-  }
 }
 
 void PatrolAgent::run()
@@ -451,9 +332,6 @@ void PatrolAgent::run()
   //     ros::waitForShutdown();
 
   /* Run Algorithm */
-
-  for (int i = 0; i < 5; i++)
-    sleep(1);
 
   ros::Rate loop_rate(30); // 0.033 seconds or 30Hz
 
@@ -513,7 +391,7 @@ void PatrolAgent::onGoalComplete()
   if (next_vertex > -1)
   {
     // Update Idleness Table:
-    update_idleness();
+    // update_idleness();
     current_vertex = next_vertex;
   }
 
@@ -550,6 +428,26 @@ void PatrolAgent::send_results()
 
 void PatrolAgent::receive_results()
 {
+}
+
+void PatrolAgent::init_agent()
+{
+  // dico al TP che esisto, mi metto in attesa finche non mi dice di partire
+  // pub_to_task_planner_init()
+  bool flag = true;
+  std_msgs::Int16MultiArray msg;
+  msg.data.push_back(ID_ROBOT);
+  msg.data.push_back(49);
+  msg.data.push_back(CAPACITY);
+  c_print("pub_to_task_planner_init",green);
+  pub_to_task_planner_init.publish(msg);
+  ros::spinOnce();
+  sleep(0.1);
+  // while(flag)
+  // {
+  //   c_print("aspetto",red);
+  // }
+
 }
 
 #if DBG
@@ -589,6 +487,7 @@ void PatrolAgent::request_Task()
   ros::spinOnce();
   sleep(0.1);
 }
+#endif
 
 void PatrolAgent::request_Mission()
 {
@@ -626,6 +525,5 @@ void PatrolAgent::request_Mission()
   ros::spinOnce();
   sleep(0.1);
 }
-#endif
 
 } // namespace patrolagent

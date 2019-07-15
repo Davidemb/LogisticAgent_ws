@@ -54,7 +54,7 @@ std_msgs
 ## Generate messages in the 'msg' folder
 add_message_files(
   FILES
-  # MissionRequest.msg
+  MissionRequest.msg
   TaskRequest.msg
   # Vertex.msg
   # VertexWeb.ms/g
@@ -119,54 +119,65 @@ add_library(PatrolAgent
   src/config.cpp
 )
 
+add_dependencies(PatrolAgent ${PROJECT_NAME}_generate_messages_cpp)
+
 # Declare a cpp library
 add_library(SSIPatrolAgent
   src/SSIPatrolAgent.cpp
 )
+
+add_dependencies(SSIPatrolAgent ${PROJECT_NAME}_generate_messages_cpp)
 
 # Declare a cpp library
 add_library(LogicAgent
   src/LogicAgent.cpp
 )
 
+add_dependencies(LogicAgent ${PROJECT_NAME}_generate_messages_cpp)
+
 # Declare a cpp library
 add_library(CycleAgent
   src/CycleAgent.cpp
 )
 
+add_dependencies(CycleAgent ${PROJECT_NAME}_generate_messages_cpp)
+
 add_library(CycleOptAgent
   src/CycleOptAgent.cpp
 )
+add_dependencies(CycleOptAgent ${PROJECT_NAME}_generate_messages_cpp)
 
 add_library(CFAgent 
 src/CFAgent.cpp
 )
 
+add_dependencies(CFAgent ${PROJECT_NAME}_generate_messages_cpp)
+
 ########################################################################################################################
 
-# add_dependencies(${PROJECT_NAME} ${catkin_EXPORTED_TARGETS})
+# add_dependencies(PatrolAgent SSIPatrolAgent LogicAgent CycleAgent CycleOptAgent CFAgent  ${PROJECT_NAME}_generate_messages_cpp ${catkin_EXPORTED_TARGETS})
 
 ## Declare a cpp executable 
 add_executable(LOGA src/LOGA_Agent.cpp)
 ## Specify libraries to link a library or executable target against
-add_dependencies(LOGA ${PROJECT_NAME}_gencpp ${catkin_EXPORTED_TARGETS})
+add_dependencies(LOGA ${PROJECT_NAME}_generate_messages_cpp ${catkin_EXPORTED_TARGETS})
 target_link_libraries(LOGA PatrolAgent LogicAgent ${catkin_LIBRARIES})
 
 ## Declare a cpp executable 
 add_executable(CYCLE src/CYCLE_Agent.cpp)
-add_dependencies(CYCLE ${PROJECT_NAME}_gencpp ${catkin_EXPORTED_TARGETS})
+add_dependencies(CYCLE ${PROJECT_NAME}_generate_messages_cpp ${catkin_EXPORTED_TARGETS})
 ## Specify libraries to link a library or executable target against
 target_link_libraries(CYCLE PatrolAgent CycleAgent ${catkin_LIBRARIES})
 
 ## Declare a cpp executable 
 add_executable(CYCLEOPT src/CYCLE_Opt_Agent.cpp)
-add_dependencies(CYCLEOPT ${PROJECT_NAME}_gencpp ${catkin_EXPORTED_TARGETS})
+add_dependencies(CYCLEOPT ${PROJECT_NAME}_generate_messages_cpp ${catkin_EXPORTED_TARGETS})
 ## Specify libraries to link a library or executable target against
 target_link_libraries(CYCLEOPT PatrolAgent CycleOptAgent ${catkin_LIBRARIES})
 
 ## Declare a cpp executable 
 add_executable(CFAGENT src/CF_Agent.cpp)
-add_dependencies(CFAGENT ${PROJECT_NAME}_gencpp ${catkin_EXPORTED_TARGETS})
+add_dependencies(CFAGENT ${PROJECT_NAME}_generate_messages_cpp ${catkin_EXPORTED_TARGETS})
 ## Specify libraries to link a library or executable target against
 target_link_libraries(CFAGENT PatrolAgent CFAgent ${catkin_LIBRARIES})
 
@@ -176,7 +187,7 @@ target_link_libraries(CFAGENT PatrolAgent CFAgent ${catkin_LIBRARIES})
  
 ## Declare a cpp executable 
 add_executable(monitor src/view_result.cpp src/getgraph.cpp)
-add_dependencies(monitor ${PROJECT_NAME}_gencpp ${catkin_EXPORTED_TARGETS})
+add_dependencies(monitor ${PROJECT_NAME}_generate_messages_cpp ${catkin_EXPORTED_TARGETS})
 ## Specify libraries to link a library or executable target against
 target_link_libraries(monitor ${catkin_LIBRARIES})
 

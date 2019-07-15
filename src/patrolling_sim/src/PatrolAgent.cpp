@@ -107,23 +107,6 @@ void PatrolAgent::readParams()
   // }
 }
 
-void PatrolAgent::update_idleness()
-{
-  double now = ros::Time::now().toSec();
-
-  for (size_t i = 0; i < dimension; i++)
-  {
-    if ((int)i == next_vertex)
-    {
-      last_visit[i] = now;
-    }
-    instantaneous_idleness[i] = now - last_visit[i];
-
-    // Show Idleness Table:
-    // ROS_INFO("idleness[%u] = %f",i,instantaneous_idleness[i]);
-  }
-}
-
 ////////////////////////////////////////////////////////////////////////////////
 
 void PatrolAgent::send_initialize_msg()
@@ -283,41 +266,6 @@ void PatrolAgent::sendGoal(int next_vertex)
   ac->sendGoal(goal, boost::bind(&PatrolAgent::goalDoneCallback, this, _1, _2),
                boost::bind(&PatrolAgent::goalActiveCallback, this),
                boost::bind(&PatrolAgent::goalFeedbackCallback, this, _1));
-}
-
-void PatrolAgent::sendMissionGoal(vector<uint> mission)
-{
-  goal_canceled_by_user = false;
-
-  // double target_x = vertex_web[next_vertex].x, target_y = vertex_web[next_vertex].y;
-
-  // Define Goal:
-  move_base_msgs::MoveBaseGoal goal;
-  // Send the goal to the robot (Global Map)
-  geometry_msgs::Quaternion angle_quat = tf::createQuaternionMsgFromYaw(0.0);
-  goal.target_pose.header.frame_id = "map";
-  goal.target_pose.header.stamp = ros::Time::now();
-  for (int i = 0; i < mission.size(); i++)
-  {
-    goal.target_pose.pose.position.x = vertex_web[mission[i]].x; // vertex_web[current_vertex].x;
-    goal.target_pose.pose.position.y = vertex_web[mission[i]].y; // vertex_web[current_vertex].y;
-    goal.target_pose.pose.orientation = angle_quat;              // doesn't matter really.
-
-    ac->sendGoal(goal, boost::bind(&PatrolAgent::goalDoneCallback, this, _1, _2),
-                 boost::bind(&PatrolAgent::goalActiveCallback, this),
-                 boost::bind(&PatrolAgent::goalFeedbackCallback, this, _1));
-    ac->waitForResult();
-    cout << "id del vetice: " << mission[i] << " ";
-
-    if (ac->getState() == actionlib::SimpleClientGoalState::SUCCEEDED)
-    {
-      ROS_INFO("Goal reached ... WAITING %.2f sec", goal_reached_wait);
-      // ros::Duration delay(goal_reached_wait); // wait after goal is reached
-      // delay.sleep();
-      ROS_INFO("Goal reached ... DONE");
-      goal_complete = true;
-    }
-  }
 }
 
 void PatrolAgent::cancelGoal()

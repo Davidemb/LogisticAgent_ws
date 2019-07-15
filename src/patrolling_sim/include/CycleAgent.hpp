@@ -25,10 +25,6 @@ namespace cycleagent
             virtual void run();
             virtual void onGoalComplete();
             virtual int compute_next_vertex();
-            void compute_mission();
-            void compute_single_task();
-            int go_to_src();
-            void compute_src(int vertex);
     };
 }//namespace cycleagent
 

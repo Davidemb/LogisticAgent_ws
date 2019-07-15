@@ -14,7 +14,8 @@ int CycleAgent::compute_next_vertex()
     if (mission[id_task].take)
     {
       c_print("RequestTask",green);
-      // request_Task();
+      request_Task();
+      sleep(10);
     }
     else
     {
@@ -25,17 +26,6 @@ int CycleAgent::compute_next_vertex()
       {
         value = 0;
       }
-
-      // [ID,msg_type,vertex,intention,0]
-      c_print("ATHOMEEEEEEEEEEEEEEEEEEEEEEEEEEEEE", red, Pr);
-      std_msgs::Int16MultiArray msg;
-      msg.data.clear();
-      msg.data.push_back(value);
-      msg.data.push_back(AT_HOME_MSG_TYPE);
-      // results_pub.publish(msg);
-      ros::spinOnce();
-
-      at_home = true;
     }
     //  ^ Importatnte!
     // mission.clear();
@@ -58,20 +48,21 @@ void CycleAgent::onGoalComplete()
   if (next_vertex > -1)
   {
     // Update Idleness Table:
-    update_idleness();
+    // update_idleness();
     current_vertex = next_vertex;
   }
 
   // devolver proximo vertex tendo em conta apenas as idlenesses;
 
-  if (!at_home)
+  // if (!at_home)
+  c_print("compute_next_vertex",yellow);
     next_vertex = compute_next_vertex();
-  else
-  {
-    c_print("sono a casa!", yellow, Pr);
-    sendGoal(next_vertex);
-    end_simulation = true;
-  }
+  // else
+  // {
+  //   c_print("sono a casa!", yellow, Pr);
+  //   sendGoal(next_vertex);
+  //   end_simulation = true;
+  // }
 
   // next_vertex = compute_next_vertex();
 
@@ -94,7 +85,8 @@ void CycleAgent::onGoalComplete()
   goal_complete = false;
 }
 
-void CycleAgent::run()
+// MAIN
+void CycleAgent::run() 
 {
   // get ready
   ready();
@@ -130,7 +122,11 @@ void CycleAgent::run()
 
   /* Run Algorithm */
 
-   init_agent3();
+  //  init_agent3();
+
+  c_print("RequestTask",green);
+      request_Task();
+      sleep(5);
 
   ros::Rate loop_rate(30); // 0.033 seconds or 30Hz
 
@@ -142,6 +138,7 @@ void CycleAgent::run()
 
     if (goal_complete)
     {
+      c_print("before OnGoal()",magenta);
       onGoalComplete(); // can be redefined
       resend_goal_count = 0;
     }

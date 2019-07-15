@@ -13,7 +13,7 @@ int CFA::compute_next_vertex()
     vertex = mission[id_task].trail[id_vertex];
     if (mission[id_task].take)
     {
-      // request_Mission();
+      request_Mission();
     }
     else
     {
@@ -57,7 +57,7 @@ void CFA::onGoalComplete()
   if (next_vertex > -1)
   {
     // Update Idleness Table:
-    update_idleness();
+    // update_idleness();
     current_vertex = next_vertex;
   }
 
@@ -128,7 +128,7 @@ void CFA::run()
   // ros::waitForShutdown();
 
   /* Run Algorithm */
-  init_agent2();
+  // init_agent2();
 
   ros::Rate loop_rate(30);  // 0.033 seconds or 30Hz
 

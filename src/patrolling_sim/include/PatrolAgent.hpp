@@ -64,14 +64,14 @@
 #define SHARE_MSG 33
 #define DELTA_TIME_SEQUENTIAL_START 15
 #define SIMULATE_FOREVER false // WARNING: Set this to false, if you want a finishing condition.
-#define DBG false
+#define DBG true
 
 #if DBG
 #include <task_planner/Task.h>
 #include <patrolling_sim/MissionRequest.h>
 #include <patrolling_sim/TaskRequest.h>
-#include <patrolling_sim/Vertex.h>
-#include <patrolling_sim/VertexWeb.h>
+// #include <patrolling_sim/Vertex.h>
+// #include <patrolling_sim/VertexWeb.h>
 #include <tcp_interface/RCOMMessage.h>
 #endif
 
@@ -101,6 +101,7 @@ ostream &operator<<(ostream &os, const Task &t)
 
 using uint = unsigned int;
 using MoveBaseClient = actionlib::SimpleActionClient<move_base_msgs::MoveBaseAction>;
+using namespace std;
 
 const std::string PS_path = ros::package::getPath("patrolling_sim"); // D.Portugal => get pkg path
 
@@ -109,7 +110,7 @@ class PatrolAgent
 protected:
   int TEAMSIZE;
   int ID_ROBOT;
-  int CAPACITY = 2; //////////////////////////////////////////////////////////////////////////////////////////////
+  int CAPACITY; //////////////////////////////////////////////////////////////////////////////////////////////
 
   double xPos[NUM_MAX_ROBOTS]; // tabelas de posições (atençao ao index pro caso
                                // de 1 so robot)
@@ -252,15 +253,11 @@ public:
   virtual int compute_next_vertex();
 
   //--------------------------------------------------------------------------
-  void init_agent();
-  void init_agent2();
-  void init_agent3();
 
   int ccor(vector<uint> v);
 
   void calc_route_to_src();
-  void can_execute_decicion();
-  int compute_cost_of_route();
+  void init_agent();
 #if DBG
   void request_Task();
   void request_Mission();

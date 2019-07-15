@@ -15,7 +15,7 @@
 #include <ros/ros.h>
 #include <sys/stat.h>
 
-#define DBG false
+#define DBG true
 #include <std_msgs/Int16MultiArray.h>
 #include <std_msgs/Bool.h>
 
@@ -327,7 +327,7 @@ public:
   void init_Callback(const std_msgs::Int16MultiArrayConstPtr &msg);
   #if DBG
   void task_Callback(const patrolling_sim::TaskRequestConstPtr &msg);
-  void mission_Callback(const patrolling_sim::MissionRequestConstPtr &msg);
+  // void mission_Callback(const patrolling_sim::MissionRequestConstPtr &msg);
   #endif
 
 private:

@@ -21,6 +21,9 @@ int main (int argc, char** argv)
     cycleagent::CycleAgent CA;
     CA.init (argc, argv);
     c_print("@ Inizializzazione finita!",green);
+    sleep(3);
+    CA.init_agent();
+    sleep(3);
     CA.run();
     return 0;
 }

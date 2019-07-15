@@ -8,7 +8,7 @@ TaskPlanner::TaskPlanner(ros::NodeHandle &nh_)
   #if DBG
   sub_init = nh_.subscribe("init", 1, &TaskPlanner::init_Callback, this);
   sub_task = nh_.subscribe("need_task", 1, &TaskPlanner::task_Callback, this);
-  sub_mission = nh_.subscribe("need_mission", 1, &TaskPlanner::mission_Callback, this);
+  // sub_mission = nh_.subscribe("need_mission", 1, &TaskPlanner::mission_Callback, this);
 
   pub_task = nh_.advertise<task_planner::Task>("answer", 1);
   // pub_results = nh_.advertise<std_msgs::Int16MultiArray>("results", 100);
@@ -193,6 +193,7 @@ void TaskPlanner::init_Callback(const std_msgs::Int16MultiArrayConstPtr &msg)
       {
         // posso fare qualcosa tipo avvisare i robot che possono partire
         // ma chi parte? direi in modo sequenziale... serve ricevitore del messaggio
+        // pub_init.
       }
     }
     break;
@@ -740,52 +741,52 @@ void TaskPlanner::task_Callback(const patrolling_sim::TaskRequestConstPtr &tr)
   sleep(1);
 }
 
-void TaskPlanner::mission_Callback(const patrolling_sim::MissionRequestConstPtr &mr)
-{
-  c_print("Request Mission! id_robot: ", mr->ID_ROBOT, green);
+// void TaskPlanner::mission_Callback(const patrolling_sim::MissionRequestConstPtr &mr)
+// {
+//   c_print("Request Mission! id_robot: ", mr->ID_ROBOT, green);
 
-  bool single_task = true;
-  uint id_robot = mr->ID_ROBOT;
-  task_planner::Task tm;
+//   bool single_task = true;
+//   uint id_robot = mr->ID_ROBOT;
+//   task_planner::Task tm;
 
-  if ((single_task) && (v_pt.size() >= 1))
-  {
-    ProcessTask pt = v_pt.front();
-    tm.header.stamp = ros::Time().now();
-    tm.ID_ROBOT = id_robot;
-    tm.take = true;
-    tm.go_home = false;
-    tm.demand = pt.tot_demand;
-    tm.item = 0;  // per ora!
-    tm.order = pt.id;
-    tm.dst = 0;  // per ora
-    tm.path_distance = pt.path_distance;
-    for (auto i = 0; i < pt.route.size(); i++)
-    {
-      tm.route.push_back(pt.route[i]);
-      tm.condition.push_back(false);
-    }
-    pub_task.publish(tm);
-    v_pt.erase(find(v_pt.begin(), v_pt.end(), pt));
-    single_task = false;
-  }
-  else
-  {
-    tm.header.stamp = ros::Time().now();
-    tm.ID_ROBOT = mr->ID_ROBOT;
-    tm.take = false;
-    tm.demand = 0;
-    tm.item = 3;
-    tm.go_home = true;
-    tm.dst = initial_position[id];
-    c_print("% publish on topic mission! go_home ID_robot: ", tm.ID_ROBOT, yellow);
-    id++;
-    pub_task.publish(tm);
-  }
-  ros::spinOnce();
-  sleep(1);
-  c_print("fine", red);
-}
+//   if ((single_task) && (v_pt.size() >= 1))
+//   {
+//     ProcessTask pt = v_pt.front();
+//     tm.header.stamp = ros::Time().now();
+//     tm.ID_ROBOT = id_robot;
+//     tm.take = true;
+//     tm.go_home = false;
+//     tm.demand = pt.tot_demand;
+//     tm.item = 0;  // per ora!
+//     tm.order = pt.id;
+//     tm.dst = 0;  // per ora
+//     tm.path_distance = pt.path_distance;
+//     for (auto i = 0; i < pt.route.size(); i++)
+//     {
+//       tm.route.push_back(pt.route[i]);
+//       tm.condition.push_back(false);
+//     }
+//     pub_task.publish(tm);
+//     v_pt.erase(find(v_pt.begin(), v_pt.end(), pt));
+//     single_task = false;
+//   }
+//   else
+//   {
+//     tm.header.stamp = ros::Time().now();
+//     tm.ID_ROBOT = mr->ID_ROBOT;
+//     tm.take = false;
+//     tm.demand = 0;
+//     tm.item = 3;
+//     tm.go_home = true;
+//     tm.dst = initial_position[id];
+//     c_print("% publish on topic mission! go_home ID_robot: ", tm.ID_ROBOT, yellow);
+//     id++;
+//     pub_task.publish(tm);
+//   }
+//   ros::spinOnce();
+//   sleep(1);
+//   c_print("fine", red);
+// }
 #endif
 
 }  // namespace taskplanner

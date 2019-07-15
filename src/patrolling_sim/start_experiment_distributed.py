@@ -105,7 +105,7 @@ def getSimulationRunning():
 # Run the experiment with the given arguments
 # Terminates if simulation is stopped (/simulation_runnning param is false)
 # or if timeout is reached (if this is >0)
-def run_experiment(MAP, NROBOTS, ALG_SHORT, LOC_MODE, GWAIT, COMMDELAY, TERM, TIMEOUT, MASTER, FROM, TO, NETWORK_IF, ROBOT ):
+def run_experiment(MAP, NROBOTS, ALG_SHORT, LOC_MODE, GWAIT, COMMDELAY, TERM, TIMEOUT, MASTER, FROM, TO, NETWORK_IF, ROBOT, CAPACITY ):
 
     ALG = findAlgName(ALG_SHORT)
     print 'Run the experiment'
@@ -122,6 +122,7 @@ def run_experiment(MAP, NROBOTS, ALG_SHORT, LOC_MODE, GWAIT, COMMDELAY, TERM, TI
     print 'Monitor ', MASTER
     print 'Network Interface ', NETWORK_IF
     print 'Type of robot ', ROBOT
+    print 'Capacity', CAPACITY
     
     
     loadInitPoses()
@@ -222,7 +223,7 @@ def run_experiment(MAP, NROBOTS, ALG_SHORT, LOC_MODE, GWAIT, COMMDELAY, TERM, TI
             now = datetime.datetime.now()
             dateString = now.strftime("%Y-%m-%d-%H:%M")
             #cmd = 'bash -c \'rosrun patrolling_sim '+ALG+' __name:=patrol_robot'+str(i)+' '+MAP+' '+str(i)+' > logs/'+ALG+'-'+dateString+'-robot'+str(i)+'.log \''
-            cmd = 'bash -c \'rosrun patrolling_sim '+ALG+' __name:=patrol_robot'+str(i)+' '+MAP+' '+str(i)+' robot_'+str(i) +'\''
+            cmd = 'bash -c \'rosrun patrolling_sim '+ALG+' __name:=patrol_robot'+str(i)+' '+MAP+' '+str(i)+' robot_'+str(i)+' '+str(CAPACITY) +'\''
         print cmd
         if (TERM == 'xterm'):
 	  os.system('xterm -hold -e  "'+cmd+'" &')
@@ -478,8 +479,9 @@ def main():
     TO = sys.argv[11]
     NETWORK_IF = sys.argv[12]
     ROBOT = sys.argv[13]
+    CAPACITY = sys.argv[14]
     
-    run_experiment(MAP, NROBOTS, ALG_SHORT, LOC_MODE, GWAIT, COMMDELAY, TERM, TIMEOUT, MASTER, FROM, TO, NETWORK_IF,ROBOT)
+    run_experiment(MAP, NROBOTS, ALG_SHORT, LOC_MODE, GWAIT, COMMDELAY, TERM, TIMEOUT, MASTER, FROM, TO, NETWORK_IF,ROBOT,CAPACITY)
 
 if __name__ == '__main__':
     

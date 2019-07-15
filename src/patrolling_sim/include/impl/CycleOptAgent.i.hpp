@@ -57,7 +57,7 @@ void COA::onGoalComplete()
   if (next_vertex > -1)
   {
     // Update Idleness Table:
-    update_idleness();
+    // update_idleness();
     current_vertex = next_vertex;
   }
 
@@ -133,7 +133,7 @@ void COA::run()
 
   while (ros::ok())
   {
-    init_agent();
+    // init_agent();
 
     if (goal_complete)
     {
