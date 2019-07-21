@@ -20,7 +20,7 @@
 #include "message_types.hpp"
 // #include "patrolling_sim/GoToStartPosSrv.h"
 #include <color_cout.hpp>
-#include <tcp_interface/RCOMMessage.h>
+// #include <tcp_interface/RCOMMessage.h>
 
 using namespace std;
 
@@ -76,23 +76,23 @@ double goal_reached_wait, comm_delay, lost_message_rate;
 string algorithm, algparams, nav_mod, initial_positions;
 
 // Distributed
-void do_send_message(std_msgs::Int16MultiArray &msg) {
-    std::stringstream ss;
+// void do_send_message(std_msgs::Int16MultiArray &msg) {
+//     std::stringstream ss;
 
-    for (std::vector<signed short>::iterator it = msg.data.begin(); it != msg.data.end(); ++it) {
-       ss << *it <<" ";
-    }
-    std::string s = ss.str();
+//     for (std::vector<signed short>::iterator it = msg.data.begin(); it != msg.data.end(); ++it) {
+//        ss << *it <<" ";
+//     }
+//     std::string s = ss.str();
 
-    //results_pub.publish(msg);
-    tcp_interface::RCOMMessage m;
-    m.header.stamp = ros::Time::now();
-    m.robotreceiver="all";
-    m.robotsender=MONITOR_TCP_NAME;
-    m.value=s;
-    results_pub.publish(m);
-    ros::spinOnce();
-}
+//     //results_pub.publish(msg);
+//     // tcp_interface::RCOMMessage m;
+//     m.header.stamp = ros::Time::now();
+//     m.robotreceiver="all";
+//     m.robotsender=MONITOR_TCP_NAME;
+//     m.value=s;
+//     results_pub.publish(m);
+//     ros::spinOnce();
+// }
 // 
 const std::string PS_path = ros::package::getPath("patrolling_sim");  // D.Portugal => get pkg path
 
@@ -148,185 +148,185 @@ void finish_simulation()
   ros::spinOnce();
 }
 
-// void resultsCB(const std_msgs::Int16MultiArray::ConstPtr &msg)
-// {
-//   std::vector<signed short>::const_iterator it = msg->data.begin();
+void resultsCB(const std_msgs::Int16MultiArray::ConstPtr &msg)
+{
+  std::vector<signed short>::const_iterator it = msg->data.begin();
 
-//   std::vector<int> vresults;
+  std::vector<int> vresults;
 
-//   view_result vr;
+  view_result vr;
 
-//   vresults.clear();
+  vresults.clear();
 
-//   for (size_t k = 0; k < msg->data.size(); k++)
-//   {
-//     vresults.push_back(*it);
-//     it++;
-//   }
+  for (size_t k = 0; k < msg->data.size(); k++)
+  {
+    vresults.push_back(*it);
+    it++;
+  }
 
-//   int id_robot = vresults[0];  // robot sending the message or Task planner 888
-//   int msg_type = vresults[1];  // message type
+  int id_robot = vresults[0];  // robot sending the message or Task planner 888
+  int msg_type = vresults[1];  // message type
 
-//   switch (msg_type)
-//   {
-//     case INITIALIZE_MSG_TYPE:
-//     {
-//       if (initialize && vresults[2] == 1)
-//       {
-//         if (init_robots[id_robot] == false)
-//         {  // receive init msg: "ID,msg_type,1"
-//           printf("Robot [ID = %d] is Active!\n", id_robot);
-//           init_robots[id_robot] = true;
+  switch (msg_type)
+  {
+    case INITIALIZE_MSG_TYPE:
+    {
+      if (initialize && vresults[2] == 1)
+      {
+        if (init_robots[id_robot] == false)
+        {  // receive init msg: "ID,msg_type,1"
+          printf("Robot [ID = %d] is Active!\n", id_robot);
+          init_robots[id_robot] = true;
 
-//           // Patch D.Portugal (needed to support other simulators besides Stage):
-//           double current_time = ros::Time::now().toSec();
-//           // initialize last_goal_reached:
-//           set_last_goal_reached(id_robot, current_time);
+          // Patch D.Portugal (needed to support other simulators besides Stage):
+          double current_time = ros::Time::now().toSec();
+          // initialize last_goal_reached:
+          set_last_goal_reached(id_robot, current_time);
 
-//           cnt++;
-//         }
+          cnt++;
+        }
 
-//         printf("All Robots GO!\n");
-//         initialize = false;
+        printf("All Robots GO!\n");
+        initialize = false;
 
-//         // Clock Reset:
-//         time_zero = ros::Time::now().toSec();
-//         last_report_time = time_zero;
+        // Clock Reset:
+        time_zero = ros::Time::now().toSec();
+        last_report_time = time_zero;
 
-//         time(&real_time_zero);
-//         printf("Time zero = %.1f (sim) = %lu (real) \n", time_zero, (long)real_time_zero);
+        time(&real_time_zero);
+        printf("Time zero = %.1f (sim) = %lu (real) \n", time_zero, (long)real_time_zero);
 
-//         std_msgs::Int16MultiArray msg;  // -1,msg_type,100,0,0
-//         msg.data.clear();
-//         msg.data.push_back(-1);
-//         msg.data.push_back(INITIALIZE_MSG_TYPE);
-//         msg.data.push_back(100);  // Go !!!
-//         results_pub.publish(msg);
-//         ros::spinOnce();
-//       }
-//     }
-//     break;
+        std_msgs::Int16MultiArray msg;  // -1,msg_type,100,0,0
+        msg.data.clear();
+        msg.data.push_back(-1);
+        msg.data.push_back(INITIALIZE_MSG_TYPE);
+        msg.data.push_back(100);  // Go !!!
+        results_pub.publish(msg);
+        ros::spinOnce();
+      }
+    }
+    break;
 
-//     case TARGET_REACHED_MSG_TYPE:
-//     {
-//       // goal sent by a robot during the experiment
-//       // [ID,msg_type,vertex,intention,0]
-//       if (initialize == false)
-//       {
-//         goal = vresults[2];
-//         ROS_INFO("Robot %d reached Goal %d.\n", id_robot, goal);
-//         fflush(stdout);
-//         goal_reached = true;
-//         update_stats(id_robot, goal);
-//         ros::spinOnce();
-//       }
-//       break;
-//     }
+    case TARGET_REACHED_MSG_TYPE:
+    {
+      // goal sent by a robot during the experiment
+      // [ID,msg_type,vertex,intention,0]
+      if (initialize == false)
+      {
+        goal = vresults[2];
+        ROS_INFO("Robot %d reached Goal %d.\n", id_robot, goal);
+        fflush(stdout);
+        goal_reached = true;
+        update_stats(id_robot, goal);
+        ros::spinOnce();
+      }
+      break;
+    }
 
-//     case INTERFERENCE_MSG_TYPE:
-//     {
-//       // interference: [ID,msg_type]
-//       if (initialize == false)
-//       {
-//         ROS_INFO("Robot %d sent interference.\n", id_robot);
-//         // interference_cnt++;
-//         view_results.at(id_robot).interference += 1;
-//         /*  c_print("\nview result:", red);
-//          for (int i = 0; i < view_results.size(); i++)
-//          {
-//            cout << view_results[i].ID_ROBOT << " " << view_results[i].n_task << " " << view_results[i].type_A << " "
-//                 << view_results[i].type_B << " " << view_results[i].type_C << " " << view_results[i].dim_path << " "
-//                 << view_results[i].interference << " " << view_results[i].resend_goal << "\n";
-//          }
-//          cout << "\n"; */
-//         // view_results.at(id_robot).resend_goal += vresults[6];
-//         // ros::spinOnce();
-//       }
-//       break;
-//     }
+    case INTERFERENCE_MSG_TYPE:
+    {
+      // interference: [ID,msg_type]
+      if (initialize == false)
+      {
+        ROS_INFO("Robot %d sent interference.\n", id_robot);
+        // interference_cnt++;
+        view_results.at(id_robot).interference += 1;
+        /*  c_print("\nview result:", red);
+         for (int i = 0; i < view_results.size(); i++)
+         {
+           cout << view_results[i].ID_ROBOT << " " << view_results[i].n_task << " " << view_results[i].type_A << " "
+                << view_results[i].type_B << " " << view_results[i].type_C << " " << view_results[i].dim_path << " "
+                << view_results[i].interference << " " << view_results[i].resend_goal << "\n";
+         }
+         cout << "\n"; */
+        // view_results.at(id_robot).resend_goal += vresults[6];
+        // ros::spinOnce();
+      }
+      break;
+    }
 
-//     case RESENDGOAL_MSG_TYPE:
-//     {
-//       if (initialize == false)
-//       {
-//         ROS_INFO("Robot %d sent resendgoal.\n", id_robot);
-//         // resendgoal_cnt++;
-//         // view_results.at(id_robot).interference += vresults[5];
-//         view_results.at(id_robot).resend_goal += 1;
+    case RESENDGOAL_MSG_TYPE:
+    {
+      if (initialize == false)
+      {
+        ROS_INFO("Robot %d sent resendgoal.\n", id_robot);
+        // resendgoal_cnt++;
+        // view_results.at(id_robot).interference += vresults[5];
+        view_results.at(id_robot).resend_goal += 1;
 
-//         // ros::spinOnce();
-//       }
-//       break;
-//     }
+        // ros::spinOnce();
+      }
+      break;
+    }
 
-//     case TASK_REACHED_MSG_TYPE:
-//     {
-//       if (initialize == false)
-//       {
-//         view_results.at(id_robot).ID_ROBOT = id_robot;
-//         view_results.at(id_robot).n_task += vresults[2];    //  demand
-//         view_results.at(id_robot).dim_path += vresults[4];  // dim_path
-//         switch (vresults[3])
-//         {
-//           case 0:
-//           {
-//             view_results.at(id_robot).type_A += 1;
-//             // ros::spinOnce();
-//           }
-//           break;
-//           case 1:
-//           {
-//             view_results.at(id_robot).type_B += 1;
-//             // ros::spinOnce();
-//           }
-//           break;
-//           case 2:
-//           {
-//             view_results.at(id_robot).type_C += 1;
-//             // ros::spinOnce();
-//           }
-//           break;
-//         }
-//       }
+    case TASK_REACHED_MSG_TYPE:
+    {
+      if (initialize == false)
+      {
+        view_results.at(id_robot).ID_ROBOT = id_robot;
+        view_results.at(id_robot).n_task += vresults[2];    //  demand
+        view_results.at(id_robot).dim_path += vresults[4];  // dim_path
+        switch (vresults[3])
+        {
+          case 0:
+          {
+            view_results.at(id_robot).type_A += 1;
+            // ros::spinOnce();
+          }
+          break;
+          case 1:
+          {
+            view_results.at(id_robot).type_B += 1;
+            // ros::spinOnce();
+          }
+          break;
+          case 2:
+          {
+            view_results.at(id_robot).type_C += 1;
+            // ros::spinOnce();
+          }
+          break;
+        }
+      }
 
-//       case AT_HOME_MSG_TYPE:
-//       {
-//         if (initialize == false)
-//         {
-//           ok[id_robot] = true;
-//           // ros::spinOnce();
-//         }
-//         break;
-//       }
+      case AT_HOME_MSG_TYPE:
+      {
+        if (initialize == false)
+        {
+          ok[id_robot] = true;
+          // ros::spinOnce();
+        }
+        break;
+      }
 
-//       case END_MSG_TYPE:
-//       {
-//         int c = 0;
-//         for (auto i = 0; i < 4; i++)
-//         {
-//           if (ok[i] == true)
-//           {
-//             c++;
-//           }
-//         }
-//         if (c == 3)
-//           finish_simulation();
+      case END_MSG_TYPE:
+      {
+        int c = 0;
+        for (auto i = 0; i < 4; i++)
+        {
+          if (ok[i] == true)
+          {
+            c++;
+          }
+        }
+        if (c == 3)
+          finish_simulation();
 
-//         // ros::spinOnce();
-//       }
-//       break;
+        // ros::spinOnce();
+      }
+      break;
 
-//       case TASK_PLANNER_MSG_TYPE:
-//       {
-//         nTask = vresults[2];
-//         // ros::spinOnce();
-//       }
-//       break;
-//     }
-//   }
-// }
+      case TASK_PLANNER_MSG_TYPE:
+      {
+        nTask = vresults[2];
+        // ros::spinOnce();
+      }
+      break;
+    }
+  }
+}
 
-
+/* 
 void resultsCB(const tcp_interface::RCOMMessage::ConstPtr& msg) { // msg array: [ID,vertex,intention,interference]
     //void resultsCB(const std_msgs::Int16MultiArray::ConstPtr& msg) { // msg array: [ID,vertex,intention,interference]
     //cout << "1- receiver:"<< msg->robotreceiver << "robotname:"<< MONITOR_TCP_NAME << endl;
@@ -345,7 +345,7 @@ void resultsCB(const tcp_interface::RCOMMessage::ConstPtr& msg) { // msg array: 
     for (int k=0; k<msg->data.size(); k++) {
         vresults.push_back(*it); it++;
     }
-    */
+    
     
     
     std::vector<int> vresults;
@@ -379,7 +379,7 @@ void resultsCB(const tcp_interface::RCOMMessage::ConstPtr& msg) { // msg array: 
     ++it;
     int p4 = *it; //data[2]
     ++it;  
-*/
+
     switch(msg_type) {
         case INITIALIZE_MSG_TYPE:
         {
@@ -462,7 +462,7 @@ void resultsCB(const tcp_interface::RCOMMessage::ConstPtr& msg) { // msg array: 
                     }
                     
                 }
-            }*/
+            }
             break;
         }
     case POSITION_MSG_TYPE:
@@ -471,7 +471,7 @@ void resultsCB(const tcp_interface::RCOMMessage::ConstPtr& msg) { // msg array: 
     }
     }
 }
-
+ */
 
 bool check_dead_robots()
 {

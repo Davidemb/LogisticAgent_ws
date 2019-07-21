@@ -17,14 +17,14 @@
 # SPEEDUP: simulator speedup (if Custom Stage is used)
 
 MAP=model5
-NROBOTS=4
+NROBOTS=1
 INITPOS=default
 ALG=CYCLE
 LOC=AMCL
 NAV=ros
 GWAIT=0
 COMMDELAY=0.2
-TERM=gnome-terminal 
+TERM=xterm 
 TIMEOUT=1800
 CUSTOM_STAGE=false
 SPEEDUP=1.0

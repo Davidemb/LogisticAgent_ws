@@ -166,69 +166,49 @@ void PatrolAgent::send_initialize_msg()
 //   }
 // }
 
-// void PatrolAgent::getRobotPose(int robotid, float &x, float &y, float &theta)
-// {
-//   if (listener == NULL)
-//   {
-//     ROS_ERROR("TF listener null");
-//     return;
-//   }
+void PatrolAgent::getRobotPose(int robotid, float &x, float &y, float &theta)
+{
+  if (listener == NULL)
+  {
+    ROS_ERROR("TF listener null");
+    return;
+  }
 
-//   std::stringstream ss;
-//   ss << "robot_" << robotid;
-//   std::string robotname = ss.str();
-//   std::string sframe = "/map"; // Patch David Portugal: Remember that the global map frame is "/map"
-//   std::string dframe;
-//   if (ID_ROBOT > -1)
-//   {
-//     dframe = "/" + robotname + "/base_link";
-//   }
-//   else
-//   {
-//     dframe = "/base_link";
-//   }
+  std::stringstream ss;
+  ss << "robot_" << robotid;
+  std::string robotname = ss.str();
+  std::string sframe = "/map"; // Patch David Portugal: Remember that the global map frame is "/map"
+  std::string dframe;
+  if (ID_ROBOT > -1)
+  {
+    dframe = "/" + robotname + "/base_link";
+  }
+  else
+  {
+    dframe = "/base_link";
+  }
 
-//   tf::StampedTransform transform;
+  tf::StampedTransform transform;
 
-//   try
-//   {
-//     listener->waitForTransform(sframe, dframe, ros::Time(0), ros::Duration(3));
-//     listener->lookupTransform(sframe, dframe, ros::Time(0), transform);
-//   }
-//   catch (tf::TransformException ex)
-//   {
-//     ROS_ERROR("Cannot transform from %s to %s\n", sframe.c_str(), dframe.c_str());
-//     ROS_ERROR("%s", ex.what());
-//   }
+  try
+  {
+    listener->waitForTransform(sframe, dframe, ros::Time(0), ros::Duration(3));
+    listener->lookupTransform(sframe, dframe, ros::Time(0), transform);
+  }
+  catch (tf::TransformException ex)
+  {
+    ROS_ERROR("Cannot transform from %s to %s\n", sframe.c_str(), dframe.c_str());
+    ROS_ERROR("%s", ex.what());
+  }
 
-//   x = transform.getOrigin().x();
-//   y = transform.getOrigin().y();
-//   theta = tf::getYaw(transform.getRotation());
-//   // printf("Robot %d pose : %.1f %.1f \n",robotid,x,y);
-// }
+  x = transform.getOrigin().x();
+  y = transform.getOrigin().y();
+  theta = tf::getYaw(transform.getRotation());
+  // printf("Robot %d pose : %.1f %.1f \n",robotid,x,y);
+}
 
-// void PatrolAgent::odomCB(const nav_msgs::Odometry::ConstPtr &msg)
-// { // colocar propria posicao na tabela
-
-//   //  printf("Colocar Propria posição na tabela, ID_ROBOT = %d\n",ID_ROBOT);
-//   int idx = ID_ROBOT;
-
-//   if (ID_ROBOT <= -1)
-//   {
-//     idx = 0;
-//   }
-
-//   float x, y, th;
-//   getRobotPose(idx, x, y, th);
-
-//   xPos[idx] = x; // msg->pose.pose.position.x;
-//   yPos[idx] = y; // msg->pose.pose.position.y;
-
-//   //  printf("Posicao colocada em Pos[%d]\n",idx);
-// }
-
-void PatrolAgent::poseCB(const geometry_msgs::PoseWithCovarianceStamped::ConstPtr &msg)
-{ //colocar propria posicao na tabela
+void PatrolAgent::odomCB(const nav_msgs::Odometry::ConstPtr &msg)
+{ // colocar propria posicao na tabela
 
   //  printf("Colocar Propria posição na tabela, ID_ROBOT = %d\n",ID_ROBOT);
   int idx = ID_ROBOT;
@@ -238,15 +218,35 @@ void PatrolAgent::poseCB(const geometry_msgs::PoseWithCovarianceStamped::ConstPt
     idx = 0;
   }
 
-  //float x,y,th;
-  //getRobotPose(idx,x,y,th);
+  float x, y, th;
+  getRobotPose(idx, x, y, th);
 
-  xPos[idx] = msg->pose.pose.position.x;
-  yPos[idx] = msg->pose.pose.position.y;
-  thetaPos[idx] = tf::getYaw(msg->pose.pose.orientation);
-  //printf(" POSITION RECEIVED x:%f y:%f \n",xPos[idx],yPos[idx]);
+  xPos[idx] = x; // msg->pose.pose.position.x;
+  yPos[idx] = y; // msg->pose.pose.position.y;
+
   //  printf("Posicao colocada em Pos[%d]\n",idx);
 }
+
+// void PatrolAgent::poseCB(const geometry_msgs::PoseWithCovarianceStamped::ConstPtr &msg)
+// { //colocar propria posicao na tabela
+
+//   //  printf("Colocar Propria posição na tabela, ID_ROBOT = %d\n",ID_ROBOT);
+//   int idx = ID_ROBOT;
+
+//   if (ID_ROBOT <= -1)
+//   {
+//     idx = 0;
+//   }
+
+//   //float x,y,th;
+//   //getRobotPose(idx,x,y,th);
+
+//   xPos[idx] = msg->pose.pose.position.x;
+//   yPos[idx] = msg->pose.pose.position.y;
+//   thetaPos[idx] = tf::getYaw(msg->pose.pose.orientation);
+//   //printf(" POSITION RECEIVED x:%f y:%f \n",xPos[idx],yPos[idx]);
+//   //  printf("Posicao colocada em Pos[%d]\n",idx);
+// }
 
 void PatrolAgent::sendGoal(int next_vertex)
 {
@@ -583,58 +583,58 @@ void PatrolAgent::receive_positions()
 {
 }
 
-// void PatrolAgent::positionsCB(const nav_msgs::Odometry::ConstPtr &msg)
-// { // construir tabelas de posições
+void PatrolAgent::positionsCB(const nav_msgs::Odometry::ConstPtr &msg)
+{ // construir tabelas de posições
 
-//   //     printf("Construir tabela de posicoes (receber posicoes), ID_ROBOT = %d\n",ID_ROBOT);
+  //     printf("Construir tabela de posicoes (receber posicoes), ID_ROBOT = %d\n",ID_ROBOT);
 
-//   char id[20]; // identificador do robot q enviou a msg d posição...
-//   strcpy(id, msg->header.frame_id.c_str());
-//   // int stamp = msg->header.seq;
-//   //     printf("robot q mandou msg = %s\n", id);
+  char id[20]; // identificador do robot q enviou a msg d posição...
+  strcpy(id, msg->header.frame_id.c_str());
+  // int stamp = msg->header.seq;
+  //     printf("robot q mandou msg = %s\n", id);
 
-//   // Build Positions Table
+  // Build Positions Table
 
-//   if (ID_ROBOT > -1)
-//   {
-//     // verify id "XX" of robot: (string: "robot_XX/map")
+  if (ID_ROBOT > -1)
+  {
+    // verify id "XX" of robot: (string: "robot_XX/map")
 
-//     char str_idx[4];
-//     uint i;
+    char str_idx[4];
+    uint i;
 
-//     for (i = 6; i < 10; i++)
-//     {
-//       if (id[i] == '/')
-//       {
-//         str_idx[i - 6] = '\0';
-//         break;
-//       }
-//       else
-//       {
-//         str_idx[i - 6] = id[i];
-//       }
-//     }
+    for (i = 6; i < 10; i++)
+    {
+      if (id[i] == '/')
+      {
+        str_idx[i - 6] = '\0';
+        break;
+      }
+      else
+      {
+        str_idx[i - 6] = id[i];
+      }
+    }
 
-//     int idx = atoi(str_idx);
-//     //  printf("id robot q mandou msg = %d\n",idx);
+    int idx = atoi(str_idx);
+    //  printf("id robot q mandou msg = %d\n",idx);
 
-//     if (idx >= TEAMSIZE && TEAMSIZE <= NUM_MAX_ROBOTS)
-//     {
-//       // update teamsize:
-//       TEAMSIZE = idx + 1;
-//     }
+    if (idx >= TEAMSIZE && TEAMSIZE <= NUM_MAX_ROBOTS)
+    {
+      // update teamsize:
+      TEAMSIZE = idx + 1;
+    }
 
-//     if (ID_ROBOT != idx)
-//     { // Ignore own positions
-//       xPos[idx] = msg->pose.pose.position.x;
-//       yPos[idx] = msg->pose.pose.position.y;
-//     }
-//     //      printf ("Position Table:\n frame.id = %s\n id_robot = %d\n xPos[%d] = %f\n yPos[%d] = %f\n\n", id, idx, idx,
-//     //      xPos[idx], idx, yPos[idx] );
-//   }
+    if (ID_ROBOT != idx)
+    { // Ignore own positions
+      xPos[idx] = msg->pose.pose.position.x;
+      yPos[idx] = msg->pose.pose.position.y;
+    }
+    //      printf ("Position Table:\n frame.id = %s\n id_robot = %d\n xPos[%d] = %f\n yPos[%d] = %f\n\n", id, idx, idx,
+    //      xPos[idx], idx, yPos[idx] );
+  }
 
-//   receive_positions();
-// }
+  receive_positions();
+}
 
 // simulates blocking send operation with delay in communication
 void PatrolAgent::do_send_message(std_msgs::Int16MultiArray &msg)
@@ -649,26 +649,26 @@ void PatrolAgent::do_send_message(std_msgs::Int16MultiArray &msg)
     // last_communication_delay_time = current_time;
     //}
   }
-  // results_pub.publish(msg);
-  // ros::spinOnce();|
-  std::stringstream ss;
-
-  for (std::vector<signed short>::iterator it = msg.data.begin(); it != msg.data.end(); ++it)
-  {
-    ss << *it << " ";
-  }
-  std::string s = ss.str();
-
-  //results_pub.publish(msg);
-  #if DBG
-  tcp_interface::RCOMMessage m;
-  m.header.stamp = ros::Time::now();
-  m.robotreceiver = "all";
-  m.robotsender = robotname;
-  m.value = s;
-  rcom_pub.publish(m);
-  #endif
+  results_pub.publish(msg);
   ros::spinOnce();
+  // std::stringstream ss;
+
+  // for (std::vector<signed short>::iterator it = msg.data.begin(); it != msg.data.end(); ++it)
+  // {
+  //   ss << *it << " ";
+  // }
+  // std::string s = ss.str();
+
+  // //results_pub.publish(msg);
+  // #if DBG
+  // tcp_interface::RCOMMessage m;
+  // m.header.stamp = ros::Time::now();
+  // m.robotreceiver = "all";
+  // m.robotsender = robotname;
+  // m.value = s;
+  // rcom_pub.publish(m);
+  // #endif
+  // ros::spinOnce();
 }
 
 void PatrolAgent::send_interference()
@@ -713,162 +713,63 @@ void PatrolAgent::send_resendgoal()
   ros::spinOnce();
 }
 
-// void PatrolAgent::resultsCB(const std_msgs::Int16MultiArray::ConstPtr &msg)
-// {
-//   std::vector<signed short>::const_iterator it = msg->data.begin();
-
-//   vresults.clear();
-
-//   for (size_t k = 0; k < msg->data.size(); k++)
-//   {
-//     vresults.push_back(*it);
-//     it++;
-//   }
-
-//   int id_sender = vresults[0];
-//   int msg_type = vresults[1];
-
-//   // printf(" MESSAGE FROM %d TYPE %d ...\n",id_sender, msg_type);
-
-//   // messages coming from the monitor
-//   if (id_sender == -1 && msg_type == INITIALIZE_MSG_TYPE)
-//   {
-//     if (initialize == true && vresults[2] == 100)
-//     { //"-1,msg_type,100,seq_flag" (BEGINNING)
-//       ROS_INFO("Let's Patrol!\n");
-//       double r = 1.0 * ((rand() % 1000) / 1000.0);
-
-//       // TODO if sequential start
-//       // r = DELTA_TIME_SEQUENTIAL_START * ID_ROBOT;
-
-//       ros::Duration wait(r); // seconds
-
-//       printf("Wait %.1f seconds (init pos:%s)\n", r, initial_positions.c_str());
-
-//       wait.sleep();
-//       initialize = false;
-//     }
-
-// #if SIMULATE_FOREVER == false
-//     if (initialize == false && vresults[2] == 999)
-//     { //"-1,msg_type,999" (END)
-//       ROS_INFO("The simulation is over. Let's leave");
-//       end_simulation = true;
-//     }
-// #endif
-//   }
-
-//   if (!initialize)
-//   {
-// #if 0
-//         // communication delay
-//         if(ID_ROBOT>-1){
-//             if ((communication_delay>0.001) && (id_sender!=ID_ROBOT)) {
-//                     double current_time = ros::Time::now().toSec();
-//                     if (current_time-last_communication_delay_time>1.0) {
-//                             ROS_INFO("Communication delay %.1f",communication_delay);
-//                             ros::Duration delay(communication_delay); // seconds
-//                             delay.sleep();
-//                             last_communication_delay_time = current_time;
-//                 }
-//             }
-//             bool lost_message = false;
-//             if ((lost_message_rate>0.0001)&& (id_sender!=ID_ROBOT)) {
-//                 double r = (rand() % 1000)/1000.0;
-//                 lost_message = r < lost_message_rate;
-//             }
-//             if (lost_message) {
-//                 ROS_INFO("Lost message");
-//             }
-//         }
-// #endif
-//     receive_results();
-//   }
-
-//   ros::spinOnce();
-// }
-
-#if DBG
-
-void PatrolAgent::resultsCB(const tcp_interface::RCOMMessage::ConstPtr &msg)
+void PatrolAgent::resultsCB(const std_msgs::Int16MultiArray::ConstPtr &msg)
 {
-
-  //std::vector<signed short>::const_iterator it = msg->data.begin();
+  std::vector<signed short>::const_iterator it = msg->data.begin();
 
   vresults.clear();
 
-  //for (size_t k=0; k<msg->data.size(); k++) {
-  //    vresults.push_back(*it); it++;
-  //}
-
-  signed short buf;
-
-  string message;
-  message = msg->value;
-  stringstream ss(message); // Insert the string into a stream
-
-  //printf(" MESSAGE RECEIVED %s \n",message.c_str());
-  while (ss >> buf)
+  for (size_t k = 0; k < msg->data.size(); k++)
   {
-    //tokens.push_back(buf);
-    vresults.push_back(buf);
+    vresults.push_back(*it);
+    it++;
   }
 
   int id_sender = vresults[0];
   int msg_type = vresults[1];
 
-  if (msg->robotreceiver != robotname) //&& msg->robotreceiver!="all")
-    return;
+  // printf(" MESSAGE FROM %d TYPE %d ...\n",id_sender, msg_type);
 
-  //printf("--> MESSAGE FROM %d To %s/%s TYPE %d ...\n",id_sender,
-  //   msg->robotreceiver.c_str(),robotname.str().c_str(), msg_type);
-
-  if (id_sender != ID_ROBOT && msg_type == POSITION_MSG_TYPE)
+  // messages coming from the monitor
+  if (id_sender == -1 && msg_type == INITIALIZE_MSG_TYPE)
   {
-    if (id_sender >= TEAMSIZE && TEAMSIZE < NUM_MAX_ROBOTS)
-    {
-      //update teamsize:
-      TEAMSIZE = id_sender + 1;
+    if (initialize == true && vresults[2] == 100)
+    { //"-1,msg_type,100,seq_flag" (BEGINNING)
+      ROS_INFO("Let's Patrol!\n");
+      double r = 1.0 * ((rand() % 1000) / 1000.0);
+
+      // TODO if sequential start
+      // r = DELTA_TIME_SEQUENTIAL_START * ID_ROBOT;
+
+      ros::Duration wait(r); // seconds
+
+      printf("Wait %.1f seconds (init pos:%s)\n", r, initial_positions.c_str());
+
+      wait.sleep();
+      initialize = false;
     }
-    //printf(" POSITION RECEIVED in MM FROM %d x:%d y:%d \n",id_sender,vresults[2],vresults[3]);
-    xPos[id_sender] = float(vresults[2]) / 100;
-    yPos[id_sender] = float(vresults[3]) / 100;
-    //printf(" POSITION RECEIVED FROM %d x:%f y:%f \n",id_sender,xPos[id_sender],yPos[id_sender]);
-    receive_positions();
+
+#if SIMULATE_FOREVER == false
+    if (initialize == false && vresults[2] == 999)
+    { //"-1,msg_type,999" (END)
+      ROS_INFO("The simulation is over. Let's leave");
+      end_simulation = true;
+    }
+#endif
   }
-  else
+
+  if (!initialize)
   {
-
-    // messages coming from the monitor
-    if (id_sender == -1 && msg_type == INITIALIZE_MSG_TYPE)
-    {
-      if (initialize == true && vresults[2] == 100)
-      { //"-1,msg_type,100" (BEGINNING)
-        ROS_INFO("Let's Patrol!\n");
-        double r = 1.0 * ((rand() % 1000) / 1000.0);
-        ros::Duration wait(r); // seconds
-        wait.sleep();
-        initialize = false;
-      }
-
-      if (initialize == false && vresults[2] == 999)
-      { //"-1,msg_type,999" (END)
-        ROS_INFO("The simulation is over. Let's leave");
-        end_simulation = true;
-      }
-    }
-
-    if (!initialize)
-    {
 #if 0
-            // communication delay
+        // communication delay
+        if(ID_ROBOT>-1){
             if ((communication_delay>0.001) && (id_sender!=ID_ROBOT)) {
-                double current_time = ros::Time::now().toSec();
-                if (current_time-last_communication_delay_time>1.0) {
-                    ROS_INFO("Communication delay %.1f",communication_delay);
-                    ros::Duration delay(communication_delay); // seconds
-                    delay.sleep();
-                    last_communication_delay_time = current_time;
+                    double current_time = ros::Time::now().toSec();
+                    if (current_time-last_communication_delay_time>1.0) {
+                            ROS_INFO("Communication delay %.1f",communication_delay);
+                            ros::Duration delay(communication_delay); // seconds
+                            delay.sleep();
+                            last_communication_delay_time = current_time;
                 }
             }
             bool lost_message = false;
@@ -879,13 +780,112 @@ void PatrolAgent::resultsCB(const tcp_interface::RCOMMessage::ConstPtr &msg)
             if (lost_message) {
                 ROS_INFO("Lost message");
             }
-            else
+        }
 #endif
-      receive_results();
-    }
+    receive_results();
   }
+
   ros::spinOnce();
 }
+
+#if DBG
+
+// void PatrolAgent::resultsCB(const tcp_interface::RCOMMessage::ConstPtr &msg)
+// {
+
+//   //std::vector<signed short>::const_iterator it = msg->data.begin();
+
+//   vresults.clear();
+
+//   //for (size_t k=0; k<msg->data.size(); k++) {
+//   //    vresults.push_back(*it); it++;
+//   //}
+
+//   signed short buf;
+
+//   string message;
+//   message = msg->value;
+//   stringstream ss(message); // Insert the string into a stream
+
+//   //printf(" MESSAGE RECEIVED %s \n",message.c_str());
+//   while (ss >> buf)
+//   {
+//     //tokens.push_back(buf);
+//     vresults.push_back(buf);
+//   }
+
+//   int id_sender = vresults[0];
+//   int msg_type = vresults[1];
+
+//   if (msg->robotreceiver != robotname) //&& msg->robotreceiver!="all")
+//     return;
+
+//   //printf("--> MESSAGE FROM %d To %s/%s TYPE %d ...\n",id_sender,
+//   //   msg->robotreceiver.c_str(),robotname.str().c_str(), msg_type);
+
+//   if (id_sender != ID_ROBOT && msg_type == POSITION_MSG_TYPE)
+//   {
+//     if (id_sender >= TEAMSIZE && TEAMSIZE < NUM_MAX_ROBOTS)
+//     {
+//       //update teamsize:
+//       TEAMSIZE = id_sender + 1;
+//     }
+//     //printf(" POSITION RECEIVED in MM FROM %d x:%d y:%d \n",id_sender,vresults[2],vresults[3]);
+//     xPos[id_sender] = float(vresults[2]) / 100;
+//     yPos[id_sender] = float(vresults[3]) / 100;
+//     //printf(" POSITION RECEIVED FROM %d x:%f y:%f \n",id_sender,xPos[id_sender],yPos[id_sender]);
+//     receive_positions();
+//   }
+//   else
+//   {
+
+//     // messages coming from the monitor
+//     if (id_sender == -1 && msg_type == INITIALIZE_MSG_TYPE)
+//     {
+//       if (initialize == true && vresults[2] == 100)
+//       { //"-1,msg_type,100" (BEGINNING)
+//         ROS_INFO("Let's Patrol!\n");
+//         double r = 1.0 * ((rand() % 1000) / 1000.0);
+//         ros::Duration wait(r); // seconds
+//         wait.sleep();
+//         initialize = false;
+//       }
+
+//       if (initialize == false && vresults[2] == 999)
+//       { //"-1,msg_type,999" (END)
+//         ROS_INFO("The simulation is over. Let's leave");
+//         end_simulation = true;
+//       }
+//     }
+
+//     if (!initialize)
+//     {
+// #if 0
+//             // communication delay
+//             if ((communication_delay>0.001) && (id_sender!=ID_ROBOT)) {
+//                 double current_time = ros::Time::now().toSec();
+//                 if (current_time-last_communication_delay_time>1.0) {
+//                     ROS_INFO("Communication delay %.1f",communication_delay);
+//                     ros::Duration delay(communication_delay); // seconds
+//                     delay.sleep();
+//                     last_communication_delay_time = current_time;
+//                 }
+//             }
+//             bool lost_message = false;
+//             if ((lost_message_rate>0.0001)&& (id_sender!=ID_ROBOT)) {
+//                 double r = (rand() % 1000)/1000.0;
+//                 lost_message = r < lost_message_rate;
+//             }
+//             if (lost_message) {
+//                 ROS_INFO("Lost message");
+//             }
+//             else
+// #endif
+//       receive_results();
+//     }
+//   }
+//   ros::spinOnce();
+// }
 
 
 void PatrolAgent::receive_mission_Callback(const task_planner::TaskConstPtr &msg)

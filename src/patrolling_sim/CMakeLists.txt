@@ -108,7 +108,7 @@ include_directories(
   include
   # src
   ${catkin_INCLUDE_DIRS}
-  /home/dave/LogisticAgent_ws/lib
+  /home/antonello/Tesi/LogisticAgent_ws/lib
 )
 
 # Declare a cpp library

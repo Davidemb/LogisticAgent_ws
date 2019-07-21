@@ -11,8 +11,8 @@ TaskPlanner::TaskPlanner(ros::NodeHandle &nh_)
   // sub_mission = nh_.subscribe("need_mission", 1, &TaskPlanner::mission_Callback, this);
 
   pub_task = nh_.advertise<task_planner::Task>("answer", 1);
-  // pub_results = nh_.advertise<std_msgs::Int16MultiArray>("results", 100);
-  pub_results = nh_.advertise<tcp_interface::RCOMMessage>("results", 100);
+  pub_results = nh_.advertise<std_msgs::Int16MultiArray>("results", 100);
+  // pub_results = nh_.advertise<tcp_interface::RCOMMessage>("results", 100);
   #endif
 
   pub_init = nh_.advertise<std_msgs::Int16MultiArray>("init", 1);
@@ -68,7 +68,7 @@ void TaskPlanner::init(int argc, char **argv)
   srand(time(NULL));
   chdir(PS_path.c_str());
   string mapname = string(argv[1]);
-  string graph_file = "/home/dave/LogisticAgent_ws/src/patrolling_sim/maps/" + mapname + "/" + mapname + ".graph";
+  string graph_file = "/home/antonello/Tesi/LogisticAgent_ws/src/patrolling_sim/maps/" + mapname + "/" + mapname + ".graph";
   uint dimension = GetGraphDimension(graph_file.c_str());
   vertex_web = new vertex[dimension];
   GetGraphInfo(vertex_web, dimension, graph_file.c_str());

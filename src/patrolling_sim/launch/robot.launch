@@ -40,7 +40,7 @@
 	
     </node>
     
-    <node pkg="tcp_interface" type="tcp_interface" name="tcp" output="screen">
+    <!-- <node pkg="tcp_interface" type="tcp_interface" name="tcp" output="screen">
 	  <param name="TCP_server_port" value="900$(arg robotid)"/>
       <param name="UDP_server_port" value="910$(arg robotid)"/>
       <param name="network_interface" value="$(arg network_interface)"/>
@@ -48,7 +48,7 @@
       <param name="UDP_team_max_port" value="9115"/>
       <param name="config_file" value="$(find tcp_interface)/config/UDPpeers.cfg"/>
       <param name="robot_name" value="$(arg robotname)"/>
-    </node>
+    </node> -->
 
   </group>
 </launch>

@@ -134,57 +134,43 @@ void PatrolAgent::init(int argc, char **argv)
   // }
 
   // Publicar dados de "odom" para nó de posições
-  // positions_pub = nh.advertise<nav_msgs::Odometry>("positions", 1); // only concerned about the most recent
+  positions_pub = nh.advertise<nav_msgs::Odometry>("positions", 1); // only concerned about the most recent
 
   // Subscrever posições de outros robots
-  // positions_sub = nh.subscribe<nav_msgs::Odometry>("positions", 10, boost::bind(&PatrolAgent::positionsCB, this, _1));
+  positions_sub = nh.subscribe<nav_msgs::Odometry>("positions", 10, boost::bind(&PatrolAgent::positionsCB, this, _1));
 
   char string1[40];
-  // char string2[40];
+  char string2[40];
   // char string3[40];
   // char string4[40];
 
-  // if (ID_ROBOT == -1)
-  // {
-  //   strcpy(string1, "odom");    // string = "odom"
-  //   strcpy(string2, "cmd_vel"); // string = "cmd_vel"
-  //   strcpy(string3, "vetrex");
-  //   strcpy(string4, "vetrex_web");
-  //   TEAMSIZE = 1;
-  // }
-  // else
-  // {
-  //   sprintf(string1, "robot_%d/odom", ID_ROBOT);
-  //   sprintf(string2, "robot_%d/cmd_vel", ID_ROBOT);
-  //   sprintf(string3, "robot_%d/vertex", ID_ROBOT);
-  //   sprintf(string4, "robot_%d/vertex_web", ID_ROBOT);
-
-  //   TEAMSIZE = ID_ROBOT + 1;
-  // }
-
-  c_print("   DC  ",magenta);
-
   if (ID_ROBOT == -1)
   {
-    strcpy(string1, "amcl_pose"); //string = "odom"
-    //strcpy (string2,"cmd_vel"); //string = "cmd_vel"
+    strcpy(string1, "odom");    // string = "odom"
+    strcpy(string2, "cmd_vel"); // string = "cmd_vel"
+    // strcpy(string3, "vetrex");
+    // strcpy(string4, "vetrex_web");
     TEAMSIZE = 1;
   }
   else
   {
-    sprintf(string1, "%s/amcl_pose", robotname.c_str());
-    // sprintf(string2,"%s/cmd_vel",robotname.c_str());
+    sprintf(string1, "robot_%d/odom", ID_ROBOT);
+    sprintf(string2, "robot_%d/cmd_vel", ID_ROBOT);
+    // sprintf(string3, "robot_%d/vertex", ID_ROBOT);
+    // sprintf(string4, "robot_%d/vertex_web", ID_ROBOT);
+
     TEAMSIZE = ID_ROBOT + 1;
   }
+
 
   /* Set up listener for global coordinates of robots */
   listener = new tf::TransformListener();
 
   // Cmd_vel to backup:
-  // cmd_vel_pub = nh.advertise<geometry_msgs::Twist>(string2, 1);
+  cmd_vel_pub = nh.advertise<geometry_msgs::Twist>(string2, 1);
 
   // Subscrever para obter dados de "odom" do robot corrente
-  // odom_sub = nh.subscribe<nav_msgs::Odometry>(string1, 1, boost::bind(&PatrolAgent::odomCB, this, _1));
+   odom_sub = nh.subscribe<nav_msgs::Odometry>(string1, 1, boost::bind(&PatrolAgent::odomCB, this, _1));
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   #if DBG
@@ -207,20 +193,18 @@ void PatrolAgent::init(int argc, char **argv)
 
   // sub_vertex_web = nh.subscribe<patrolling_sim::VertexWeb>(string4, 1,
   // boost::bind(&PatrolAgent::receive_vertex_web_Callback, this, _1));
-  pose_sub = nh.subscribe<geometry_msgs::PoseWithCovarianceStamped>(string1, 1, boost::bind(&PatrolAgent::poseCB, this, _1)); //size of the buffer = 1 (?)
+  // pose_sub = nh.subscribe<geometry_msgs::PoseWithCovarianceStamped>(string1, 1, boost::bind(&PatrolAgent::poseCB, this, _1)); //size of the buffer = 1 (?)
   ros::spinOnce();
 
   // Publicar dados para "results"
-  // results_pub = nh.advertise<std_msgs::Int16MultiArray>("results", 100);
+  results_pub = nh.advertise<std_msgs::Int16MultiArray>("results", 100);
   // results_sub = nh.subscribe("results", 10, resultsCB); //Subscrever
   // "results" vindo dos robots
-  // results_sub = nh.subscribe<std_msgs::Int16MultiArray>("results", 100,
-  // boost::bind(&PatrolAgent::resultsCB, this,
-  // _1)); // Subscrever "results" vindo dos robots
+  results_sub = nh.subscribe<std_msgs::Int16MultiArray>("results", 100,boost::bind(&PatrolAgent::resultsCB, this, _1)); // Subscrever "results" vindo dos robots
   #if DBG
 
-  rcom_pub = nh.advertise<tcp_interface::RCOMMessage>("RCOMMessage", 100);
-  rcom_sub = nh.subscribe<tcp_interface::RCOMMessage>("RCOMMessage", 100, boost::bind(&PatrolAgent::resultsCB, this, _1));
+  // rcom_pub = nh.advertise<tcp_interface::RCOMMessage>("RCOMMessage", 100);
+  // rcom_sub = nh.subscribe<tcp_interface::RCOMMessage>("RCOMMessage", 100, boost::bind(&PatrolAgent::resultsCB, this, _1));
   // last time comm delay has been applied
   #endif
   last_communication_delay_time = ros::Time::now().toSec();

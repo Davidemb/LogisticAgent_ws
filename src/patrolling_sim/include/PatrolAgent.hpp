@@ -72,7 +72,7 @@
 #include <patrolling_sim/TaskRequest.h>
 // #include <patrolling_sim/Vertex.h>
 // #include <patrolling_sim/VertexWeb.h>
-#include <tcp_interface/RCOMMessage.h>
+//#include <tcp_interface/RCOMMessage.h>
 #endif
 
 namespace patrolagent
@@ -155,7 +155,7 @@ protected:
   tf::TransformListener *listener;
   MoveBaseClient *ac; // action client for reaching target goals
 
-// ros::Subscriber odom_sub, positions_sub;
+  ros::Subscriber odom_sub, positions_sub;
 // /------------------------------------------------------------------------
 #if DBG
   ros::Subscriber sub_to_task_planner_mission;
@@ -165,15 +165,15 @@ protected:
 
   ros::Subscriber sub_to_task_planner_init;
 
-  ros::Subscriber rcom_sub;
-  ros::Publisher rcom_pub;
+  // ros::Subscriber rcom_sub;
+  // ros::Publisher rcom_pub;
 #endif
   ros::Subscriber pose_sub;
 
-  // ros::Publisher positions_pub;
-  // ros::Subscriber results_sub;
-  // ros::Publisher results_pub;
-  // ros::Publisher cmd_vel_pub;
+  ros::Publisher positions_pub;
+  ros::Subscriber results_sub;
+  ros::Publisher results_pub;
+  ros::Publisher cmd_vel_pub;
 
   ros::Publisher pub_broadcast_msg;
   ros::Subscriber sub_broadcast_msg;
@@ -206,14 +206,14 @@ public:
 
   void send_initialize_msg();
   void init_Callback(const std_msgs::Int16MultiArrayConstPtr &msg);
-  void poseCB(const geometry_msgs::PoseWithCovarianceStamped::ConstPtr &msg);
+  // void poseCB(const geometry_msgs::PoseWithCovarianceStamped::ConstPtr &msg);
 
   virtual void run();
   void ready();
   virtual void onGoalComplete(); // what to do when a goal has been reached
 
-  // void getRobotPose(int robotid, float &x, float &y, float &theta);
-  // void odomCB(const nav_msgs::Odometry::ConstPtr &msg);
+  void getRobotPose(int robotid, float &x, float &y, float &theta);
+  void odomCB(const nav_msgs::Odometry::ConstPtr &msg);
 
   void sendGoal(int next_vertex);
   void sendMissionGoal(vector<uint> mission);
@@ -245,9 +245,9 @@ public:
   void send_interference();
   void send_resendgoal();
   void positionsCB(const nav_msgs::Odometry::ConstPtr &msg);
-// void resultsCB(const std_msgs::Int16MultiArray::ConstPtr &msg);
+  void resultsCB(const std_msgs::Int16MultiArray::ConstPtr &msg);
 #if DBG
-  void resultsCB(const tcp_interface::RCOMMessage::ConstPtr &msg);
+  // void resultsCB(const tcp_interface::RCOMMessage::ConstPtr &msg);
 #endif
   // Must be implemented by sub-classes
   virtual int compute_next_vertex();
