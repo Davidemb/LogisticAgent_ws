@@ -1,0 +1,3 @@
+uint32  ID_ROBOT
+uint32  TEAMSIZE
+bool    INIT_DONE

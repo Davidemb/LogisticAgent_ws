@@ -56,6 +56,7 @@ add_message_files(
   FILES
   MissionRequest.msg
   TaskRequest.msg
+  Token.msg
   # Vertex.msg
   # VertexWeb.ms/g
 )
@@ -180,6 +181,12 @@ add_executable(CFAGENT src/CF_Agent.cpp)
 add_dependencies(CFAGENT ${PROJECT_NAME}_generate_messages_cpp ${catkin_EXPORTED_TARGETS})
 ## Specify libraries to link a library or executable target against
 target_link_libraries(CFAGENT PatrolAgent CFAgent ${catkin_LIBRARIES})
+
+## Declare a cpp executable 
+add_executable(TP src/TPAgent.cpp)
+add_dependencies(TP ${PROJECT_NAME}_generate_messages_cpp ${catkin_EXPORTED_TARGETS})
+## Specify libraries to link a library or executable target against
+target_link_libraries(TP PatrolAgent ${catkin_LIBRARIES})
 
 ########################################################################################################################
 

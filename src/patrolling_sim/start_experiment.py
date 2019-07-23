@@ -35,7 +35,8 @@ Alg_names = [
         [ 'LOGA', 'LOGA'],
         [ 'CYCLE','CYCLE'],
         [ 'CYCLEOPT','CYCLEOPT'],
-        [ 'CFAGENT', 'CFAGENT']
+        [ 'CFAGENT', 'CFAGENT'],
+        [ 'TP',   'TP']
      ]
 
 Map_names = ['cumberland','example','grid','1r5','broughton','DIAG_labs','DIAG_floor1','model1','model2','model3','model4','model5']   
