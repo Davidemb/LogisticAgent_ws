@@ -12,7 +12,11 @@ void TPAgent::init(int argc, char **argv)
     token_pub = nh.advertise<patrolling_sim::Token>("token_msg", 1);
 
     token_sub = nh.subscribe<patrolling_sim::Token>("token_msg", 20,
-        boost::bind(&TPAgent::token_callback, this, _1));
+                                                    boost::bind(&TPAgent::token_callback, this, _1));
+
+    init_tw_map();
+
+    reached_pickup = false;
 }
 
 void TPAgent::run()
@@ -59,29 +63,101 @@ void TPAgent::run()
 
     ros::Rate loop_rate(30); // 0.033 seconds or 30Hz
 
+    //test grafo mappa
+    // if (ID_ROBOT == 0)
+    // {
+    //     ostringstream oss;
+    //     oss << "Id nodo:" << ID_ROBOT
+    //         << "\n\tX: " << vertex_web[ID_ROBOT].x
+    //         << "\n\tY: " << vertex_web[ID_ROBOT].y
+    //         << "\n\tNum. vicini: " << vertex_web[ID_ROBOT].num_neigh;
+    //     string s = oss.str();
+    //     c_print(s.c_str(), magenta);
+    //     int path[dimension];
+    //     uint path_size;
+    //     dijkstra(ID_ROBOT, 20, path, path_size, vertex_web, dimension);
+    //     c_print("\nPercorso calcolato:");
+    //     for (int i = 0; i < path_size; i++)
+    //     {
+    //         oss.str("");
+    //         oss.clear();
+    //         oss << "\t" << path[i];
+    //         c_print(oss.str().c_str(), magenta);
+    //     }
+    // }
+
     /*
      *  ogni bot manda la teamsize ipotizzata in broadcast
      *  e attende 1 secondo, in questo modo ogni bot scopre
      *  la reale teamsize
-     * (migliorabile)
+     *  (migliorabile)
      */
     c_print("Pubblico teamsize", green);
     patrolling_sim::Token t;
     t.ID_ROBOT = ID_ROBOT;
-    t.TEAMSIZE = ID_ROBOT+1;
+    t.TEAMSIZE = ID_ROBOT + 1;
     t.INIT_DONE = false;
     token_pub.publish(t);
     sleep(5);
 
-    if(ID_ROBOT == 0) {
+    //il primo robot fa partire l'anello
+    if (ID_ROBOT == 0)
+    {
+        c_print("Avvio token ring", magenta);
+        c_print("RequestTask", green);
+        request_Task();
+        sleep(5);
+
+        patrolling_sim::Token t;
         t.ID_ROBOT = 0;
         t.TEAMSIZE = TEAMSIZE;
         t.INIT_DONE = true;
+        t.ID_ROBOT_VERTEX.push_back(0);
+        t.SRC_VERTEX.push_back(current_vertex);
+        t.DST_VERTEX.push_back(next_vertex);
+        // t.FIRST_ROUND = true;
         token_pub.publish(t);
+    }
+    else
+    {
+        c_print("RequestTask", green);
+        request_Task();
+        sleep(5);
     }
 
     while (ros::ok())
     {
+        if (goal_complete)
+        {
+            c_print("before OnGoal()", magenta);
+            onGoalComplete();
+            resend_goal_count = 0;
+        }
+        else
+        {
+            if (interference)
+            {
+                do_interference_behavior();
+            }
+
+            if (ResendGoal)
+            {
+                ROS_INFO("Re-Sending goal (%d) - Vertex %d (%f,%f)", resend_goal_count, next_vertex, vertex_web[next_vertex].x,
+                         vertex_web[next_vertex].y);
+                send_resendgoal();
+                sendGoal(next_vertex);
+
+                ResendGoal = false;
+            }
+
+            processEvents();
+
+            if (end_simulation)
+            {
+                return;
+            }
+        }
+
         loop_rate.sleep();
 
     } // while ros.ok
@@ -89,37 +165,140 @@ void TPAgent::run()
 
 void TPAgent::onGoalComplete()
 {
+    if (next_vertex > -1)
+    {
+        current_vertex = next_vertex;
+    }
+
+
+    c_print("compute_next_vertex", yellow);
+    next_vertex = compute_next_vertex();
+
+    c_print("   @ compute_next_vertex: ", next_vertex, green);
+
+    c_print("[DEBUG]:\tid_task: ", id_task, "\tdst: ", mission[id_task].dst, "\tnext_vertex: ", next_vertex, yellow);
+
+    send_goal_reached(); // Send TARGET to monitor
+
+    send_results(); // Algorithm specific function
+
+    // Send the goal to the robot (Global Map)
+    ROS_INFO("Sending goal - Vertex %d (%f,%f)\n", next_vertex, vertex_web[next_vertex].x, vertex_web[next_vertex].y);
+    // sendGoal(vertex_web[next_vertex].x, vertex_web[next_vertex].y);
+    sendGoal(next_vertex); // send to move_base
+
+    goal_complete = false;
 }
 
 int TPAgent::compute_next_vertex()
 {
+    int vertex;
+
+    if (current_vertex == mission[id_task].dst)
+    {
+        reached_pickup = true;
+    }
+
+    if (current_vertex == 6)
+    // if (current_vertex == mission[id_task].trail.back())
+    {
+        if (mission[id_task].take)
+        {
+            c_print("RequestTask", green);
+            request_Task();
+            reached_pickup = false;
+            sleep(10);
+        }
+
+        send_task_reached();
+    }
+
+    int path[dimension];
+    uint path_length;
+    if (!reached_pickup)
+    {
+        dijkstra(current_vertex, mission[id_task].dst, path, path_length, vertex_web, dimension);
+    }
+    else
+    {
+        dijkstra(current_vertex, 6, path, path_length, vertex_web, dimension);
+        // dijkstra(current_vertex, mission[id_task].trail.back(), path, path_length, vertex_web, dimension);
+    }
+    vertex = path[1];
+
+    c_print("[DEBUG]:\tpath_length: ", path_length, yellow);
+    for(int i=0; i<path_length; i++)
+    {
+        c_print("\t\t",path[i], yellow);
+    }
+    c_print("current vertex: ", current_vertex, "\tnext vertex: ", vertex, "\tdestination: ", mission[id_task].dst, magenta);
+    return vertex;
 }
 
 void TPAgent::token_callback(const patrolling_sim::TokenConstPtr &msg)
 {
     //calcolo dimensione team
-    if(!msg->INIT_DONE)
+    if (!msg->INIT_DONE)
     {
-        if(msg->TEAMSIZE > TEAMSIZE)
+        if (msg->TEAMSIZE > TEAMSIZE)
         {
             TEAMSIZE = msg->TEAMSIZE;
         }
     }
-    else if(ID_ROBOT == (msg->ID_ROBOT+1) % TEAMSIZE)
+    else if (ID_ROBOT == (msg->ID_ROBOT + 1) % TEAMSIZE)
     {
         std::ostringstream oss;
         oss << "Token ricevuto! ID messaggio: " << msg->ID_ROBOT
-                << "\tID robot: " << ID_ROBOT << "\tTEAMSIZE: " << TEAMSIZE;
+            << "\tID robot: " << ID_ROBOT << "\tTEAMSIZE: " << TEAMSIZE;
         std::string s = oss.str();
-        c_print(s.c_str(), green);
+        // c_print(s.c_str(), green);
+
+        // riempo campi messaggio
         patrolling_sim::Token t;
         t.ID_ROBOT = ID_ROBOT;
         t.INIT_DONE = true;
         t.TEAMSIZE = TEAMSIZE;
+        t.ID_ROBOT_VERTEX = msg->ID_ROBOT_VERTEX;
+        t.SRC_VERTEX = msg->SRC_VERTEX;
+        t.DST_VERTEX = msg->DST_VERTEX;
+
+        // aggiorno le informazioni sull'arco che sto occupando
+        bool found = false;
+        for (auto i = 0; i < t.ID_ROBOT_VERTEX.size() && !found; i++)
+        {
+            if (t.ID_ROBOT_VERTEX[i] == ID_ROBOT)
+            {
+                t.SRC_VERTEX[i] = current_vertex;
+                t.DST_VERTEX[i] = next_vertex;
+                found = true;
+            }
+        }
+
+        // il mio id non è ancora stato inserito nel token
+        if (!found)
+        {
+            t.ID_ROBOT_VERTEX.push_back(ID_ROBOT);
+            t.SRC_VERTEX.push_back(current_vertex);
+            t.DST_VERTEX.push_back(next_vertex);
+        }
+
         ros::Duration d(1.0);
         d.sleep();
         token_pub.publish(t);
-        c_print("Token pubblicato!", green);
+        // c_print("Token pubblicato!", green);
+    }
+}
+
+void TPAgent::init_tw_map()
+{
+    for (int i = 0; i < dimension; i++)
+    {
+        std::vector<uint> v;
+        for (int j = 0; j < dimension; j++)
+        {
+            v.push_back(0);
+        }
+        token_weight_map.push_back(v);
     }
 }
 
