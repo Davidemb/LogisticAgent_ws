@@ -161,7 +161,8 @@ void TPAgent::run()
         loop_rate.sleep();
 
     } // while ros.ok
-}
+} // run()
+
 
 void TPAgent::onGoalComplete()
 {
@@ -176,7 +177,7 @@ void TPAgent::onGoalComplete()
 
     c_print("   @ compute_next_vertex: ", next_vertex, green);
 
-    c_print("[DEBUG]:\tid_task: ", id_task, "\tdst: ", mission[id_task].dst, "\tnext_vertex: ", next_vertex, yellow);
+    c_print("[DEBUG]\tid_task: ", id_task, "\tdst: ", mission[id_task].dst, "\tnext_vertex: ", next_vertex, yellow);
 
     send_goal_reached(); // Send TARGET to monitor
 
@@ -190,8 +191,10 @@ void TPAgent::onGoalComplete()
     goal_complete = false;
 }
 
+
 int TPAgent::compute_next_vertex()
 {
+    c_print("[DEBUG]\tCalled compute_next_vertex()", yellow);
     int vertex;
 
     if (current_vertex == mission[id_task].dst)
@@ -199,7 +202,7 @@ int TPAgent::compute_next_vertex()
         reached_pickup = true;
     }
 
-    if (current_vertex == 6)
+    if (current_vertex == 6 && reached_pickup)
     // if (current_vertex == mission[id_task].trail.back())
     {
         if (mission[id_task].take)
@@ -217,27 +220,68 @@ int TPAgent::compute_next_vertex()
     uint path_length;
     if (!reached_pickup)
     {
-        dijkstra(current_vertex, mission[id_task].dst, path, path_length, vertex_web, dimension);
+        c_print("[DEBUG]\tCalling tp_dijkstra, first leg", yellow);
+        tp_dijkstra(current_vertex, mission[id_task].dst, path, path_length);
+        // dijkstra(current_vertex, mission[id_task].dst, path, path_length, vertex_web, dimension);
     }
     else
     {
-        dijkstra(current_vertex, 6, path, path_length, vertex_web, dimension);
+        c_print("[DEBUG]\tCalling tp_dijkstra, last leg", yellow);
+        tp_dijkstra(current_vertex, 6, path, path_length);
         // dijkstra(current_vertex, mission[id_task].trail.back(), path, path_length, vertex_web, dimension);
     }
     vertex = path[1];
 
-    c_print("[DEBUG]:\tpath_length: ", path_length, yellow);
+    c_print("[DEBUG]\tpath_length: ", path_length, yellow);
     for(int i=0; i<path_length; i++)
     {
         c_print("\t\t",path[i], yellow);
     }
     c_print("current vertex: ", current_vertex, "\tnext vertex: ", vertex, "\tdestination: ", mission[id_task].dst, magenta);
     return vertex;
+} // compute_next_vertex()
+
+
+void TPAgent::tp_dijkstra(uint source, uint destination, int *shortest_path, uint &elem_s_path)
+{
+    const int PENALTY=500;
+
+    vertex web_copy[dimension];
+    for( int i=0; i<dimension; i++ )
+    {
+        // copia della struttura
+        // web_copy[i] = vertex_web[i];
+        web_copy[i].id = vertex_web[i].id;
+        web_copy[i].num_neigh = vertex_web[i].num_neigh;
+        web_copy[i].x = vertex_web[i].x;
+        web_copy[i].y = vertex_web[i].y;
+        memcpy( web_copy[i].id_neigh, vertex_web[i].id_neigh, sizeof(uint)*8 );
+        memcpy( web_copy[i].cost, vertex_web[i].cost, sizeof(uint)*8 );
+        memcpy( web_copy[i].cost_m, vertex_web[i].cost_m, sizeof(float)*8 );
+        memcpy( web_copy[i].visited, vertex_web[i].visited, sizeof(bool)*8 );
+        for( int j=0; j<web_copy[i].num_neigh; j++)
+        {
+            memcpy( web_copy[i].dir[j], vertex_web[i].dir[j], sizeof(char)*3 );
+        }
+
+        // incremento del peso degli archi
+        for( int j=0; j<web_copy[i].num_neigh; j++ )
+        {
+            uint from = web_copy[i].id;
+            uint to = web_copy[i].id_neigh[j];
+            web_copy[i].cost[j] += PENALTY*token_weight_map[from][to];
+        }
+    }
+
+    // calcolo il percorso con il nuovo grafo
+    dijkstra( source, destination, shortest_path, elem_s_path, web_copy, dimension );
 }
+
 
 void TPAgent::token_callback(const patrolling_sim::TokenConstPtr &msg)
 {
-    //calcolo dimensione team
+    // c_print("[DEBUG]\tCalled token_callback()", yellow);
+    // calcolo dimensione team
     if (!msg->INIT_DONE)
     {
         if (msg->TEAMSIZE > TEAMSIZE)
@@ -248,10 +292,10 @@ void TPAgent::token_callback(const patrolling_sim::TokenConstPtr &msg)
     else if (ID_ROBOT == (msg->ID_ROBOT + 1) % TEAMSIZE)
     {
         std::ostringstream oss;
-        oss << "Token ricevuto! ID messaggio: " << msg->ID_ROBOT
+        oss << "[DEBUG]\tToken ricevuto! ID messaggio: " << msg->ID_ROBOT
             << "\tID robot: " << ID_ROBOT << "\tTEAMSIZE: " << TEAMSIZE;
         std::string s = oss.str();
-        // c_print(s.c_str(), green);
+        // c_print(s.c_str(), yellow);
 
         // riempo campi messaggio
         patrolling_sim::Token t;
@@ -261,6 +305,7 @@ void TPAgent::token_callback(const patrolling_sim::TokenConstPtr &msg)
         t.ID_ROBOT_VERTEX = msg->ID_ROBOT_VERTEX;
         t.SRC_VERTEX = msg->SRC_VERTEX;
         t.DST_VERTEX = msg->DST_VERTEX;
+        // c_print("[DEBUG]\tCampi riempiti", yellow);
 
         // aggiorno le informazioni sull'arco che sto occupando
         bool found = false;
@@ -281,16 +326,36 @@ void TPAgent::token_callback(const patrolling_sim::TokenConstPtr &msg)
             t.SRC_VERTEX.push_back(current_vertex);
             t.DST_VERTEX.push_back(next_vertex);
         }
+        // c_print("[DEBUG]\tToken aggiornato", yellow);
 
-        ros::Duration d(1.0);
+        // aggiorno la mappa degli archi occupati
+        init_tw_map();
+        // c_print("[DEBUG]\tinit_tw_map() terminato\n\tAggiornamento mappa archi...", yellow);
+        for (auto i=0; i<t.ID_ROBOT_VERTEX.size(); i++)
+        {
+            int dst = (int) t.DST_VERTEX[i];
+            int src = (int) t.SRC_VERTEX[i];
+            if (dst != -1 && src != -1)
+            {
+                // c_print("\t\ti:",i,"\tsrc: ",t.SRC_VERTEX[i],"\tdst: ",t.DST_VERTEX[i], yellow);
+                token_weight_map[t.SRC_VERTEX[i]][t.DST_VERTEX[i]]++;
+            }
+        }
+        // c_print("[DEBUG]\tMappa archi aggiornata", yellow);
+
+        ros::Duration d(0.1);
         d.sleep();
         token_pub.publish(t);
         // c_print("Token pubblicato!", green);
     }
-}
+    
+    // c_print("[DEBUG]\ttoken_callback() terminated", yellow);
+} // token_callback()
+
 
 void TPAgent::init_tw_map()
 {
+    token_weight_map.clear();
     for (int i = 0; i < dimension; i++)
     {
         std::vector<uint> v;

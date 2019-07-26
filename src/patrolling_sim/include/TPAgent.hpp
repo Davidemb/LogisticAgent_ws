@@ -13,6 +13,7 @@ namespace tpagent
 
             std::vector< std::vector<uint> > token_weight_map;
             bool reached_pickup;
+
         public:
             virtual void init(int argc, char **argv);
             virtual void run();
@@ -21,6 +22,7 @@ namespace tpagent
 
             void token_callback(const patrolling_sim::TokenConstPtr &msg);
             void init_tw_map();
+            void tp_dijkstra(uint source, uint destination, int *shortest_path, uint &elem_s_path);
     };
 }
 
