@@ -211,6 +211,12 @@ int TPAgent::compute_next_vertex()
             request_Task();
             reached_pickup = false;
             sleep(10);
+            // task_planner::TaskConstPtr p;
+            // do
+            // {
+            //     p = ros::topic::waitForMessage<task_planner::Task>("task_planner/answer");
+            //     c_print("[DEBUG]\tID_ROBOT task: ", p->ID_ROBOT, yellow);
+            // } while(p->ID_ROBOT != ID_ROBOT);
         }
 
         send_task_reached();
@@ -264,7 +270,7 @@ void TPAgent::tp_dijkstra(uint source, uint destination, int *shortest_path, uin
             memcpy( web_copy[i].dir[j], vertex_web[i].dir[j], sizeof(char)*3 );
         }
 
-        // incremento del peso degli archi
+        // incremento il peso degli archi occupati
         for( int j=0; j<web_copy[i].num_neigh; j++ )
         {
             uint from = web_copy[i].id;
@@ -313,8 +319,11 @@ void TPAgent::token_callback(const patrolling_sim::TokenConstPtr &msg)
         {
             if (t.ID_ROBOT_VERTEX[i] == ID_ROBOT)
             {
-                t.SRC_VERTEX[i] = current_vertex;
-                t.DST_VERTEX[i] = next_vertex;
+                // t.SRC_VERTEX[i] = current_vertex;
+                // t.DST_VERTEX[i] = next_vertex;
+                // voglio svantaggiare il percorso opposto al mio
+                t.SRC_VERTEX[i] = next_vertex;
+                t.DST_VERTEX[i] = current_vertex;
                 found = true;
             }
         }
@@ -323,8 +332,11 @@ void TPAgent::token_callback(const patrolling_sim::TokenConstPtr &msg)
         if (!found)
         {
             t.ID_ROBOT_VERTEX.push_back(ID_ROBOT);
-            t.SRC_VERTEX.push_back(current_vertex);
-            t.DST_VERTEX.push_back(next_vertex);
+            // t.SRC_VERTEX.push_back(current_vertex);
+            // t.DST_VERTEX.push_back(next_vertex);
+            // voglio svantaggiare il percorso opposto al mio
+            t.SRC_VERTEX.push_back(next_vertex);
+            t.DST_VERTEX.push_back(current_vertex);
         }
         // c_print("[DEBUG]\tToken aggiornato", yellow);
 
