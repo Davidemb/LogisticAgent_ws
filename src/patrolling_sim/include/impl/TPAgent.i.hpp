@@ -197,8 +197,16 @@ int TPAgent::compute_next_vertex()
     c_print("[DEBUG]\tCalled compute_next_vertex()", yellow);
     int vertex;
 
+    while(mission.empty())
+    {
+        c_print("[WARN]\tMission not received! Waiting...", yellow);
+        usleep(200000);
+    }
+
+    assert(!mission.empty());
     if (current_vertex == mission[id_task].dst)
     {
+        c_print("[DEBUG]\tReached pickup point", yellow);
         reached_pickup = true;
     }
 
@@ -319,11 +327,8 @@ void TPAgent::token_callback(const patrolling_sim::TokenConstPtr &msg)
         {
             if (t.ID_ROBOT_VERTEX[i] == ID_ROBOT)
             {
-                // t.SRC_VERTEX[i] = current_vertex;
-                // t.DST_VERTEX[i] = next_vertex;
-                // voglio svantaggiare il percorso opposto al mio
-                t.SRC_VERTEX[i] = next_vertex;
-                t.DST_VERTEX[i] = current_vertex;
+                t.SRC_VERTEX[i] = current_vertex;
+                t.DST_VERTEX[i] = next_vertex;
                 found = true;
             }
         }
@@ -332,11 +337,8 @@ void TPAgent::token_callback(const patrolling_sim::TokenConstPtr &msg)
         if (!found)
         {
             t.ID_ROBOT_VERTEX.push_back(ID_ROBOT);
-            // t.SRC_VERTEX.push_back(current_vertex);
-            // t.DST_VERTEX.push_back(next_vertex);
-            // voglio svantaggiare il percorso opposto al mio
-            t.SRC_VERTEX.push_back(next_vertex);
-            t.DST_VERTEX.push_back(current_vertex);
+            t.SRC_VERTEX.push_back(current_vertex);
+            t.DST_VERTEX.push_back(next_vertex);
         }
         // c_print("[DEBUG]\tToken aggiornato", yellow);
 
@@ -347,10 +349,16 @@ void TPAgent::token_callback(const patrolling_sim::TokenConstPtr &msg)
         {
             int dst = (int) t.DST_VERTEX[i];
             int src = (int) t.SRC_VERTEX[i];
-            if (dst != -1 && src != -1)
+            if (dst >= 0 && dst < dimension &&
+                src >= 0 && src < dimension &&
+                t.ID_ROBOT_VERTEX[i] != ID_ROBOT)
             {
                 // c_print("\t\ti:",i,"\tsrc: ",t.SRC_VERTEX[i],"\tdst: ",t.DST_VERTEX[i], yellow);
-                token_weight_map[t.SRC_VERTEX[i]][t.DST_VERTEX[i]]++;
+
+                //svaforisco la mia direzione
+                // token_weight_map[t.SRC_VERTEX[i]][t.DST_VERTEX[i]]++;
+                //sfavorisco la direzione inversa
+                token_weight_map[t.DST_VERTEX[i]][t.SRC_VERTEX[i]]+=3;
             }
         }
         // c_print("[DEBUG]\tMappa archi aggiornata", yellow);
