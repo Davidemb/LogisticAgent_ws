@@ -63,34 +63,10 @@ void TPAgent::run()
 
     ros::Rate loop_rate(30); // 0.033 seconds or 30Hz
 
-    //test grafo mappa
-    // if (ID_ROBOT == 0)
-    // {
-    //     ostringstream oss;
-    //     oss << "Id nodo:" << ID_ROBOT
-    //         << "\n\tX: " << vertex_web[ID_ROBOT].x
-    //         << "\n\tY: " << vertex_web[ID_ROBOT].y
-    //         << "\n\tNum. vicini: " << vertex_web[ID_ROBOT].num_neigh;
-    //     string s = oss.str();
-    //     c_print(s.c_str(), magenta);
-    //     int path[dimension];
-    //     uint path_size;
-    //     dijkstra(ID_ROBOT, 20, path, path_size, vertex_web, dimension);
-    //     c_print("\nPercorso calcolato:");
-    //     for (int i = 0; i < path_size; i++)
-    //     {
-    //         oss.str("");
-    //         oss.clear();
-    //         oss << "\t" << path[i];
-    //         c_print(oss.str().c_str(), magenta);
-    //     }
-    // }
-
     /*
      *  ogni bot manda la teamsize ipotizzata in broadcast
-     *  e attende 1 secondo, in questo modo ogni bot scopre
+     *  e attende qualche secondo, in questo modo ogni bot scopre
      *  la reale teamsize
-     *  (migliorabile)
      */
     c_print("Pubblico teamsize", green);
     patrolling_sim::Token t;
@@ -219,12 +195,6 @@ int TPAgent::compute_next_vertex()
             request_Task();
             reached_pickup = false;
             sleep(10);
-            // task_planner::TaskConstPtr p;
-            // do
-            // {
-            //     p = ros::topic::waitForMessage<task_planner::Task>("task_planner/answer");
-            //     c_print("[DEBUG]\tID_ROBOT task: ", p->ID_ROBOT, yellow);
-            // } while(p->ID_ROBOT != ID_ROBOT);
         }
 
         send_task_reached();

@@ -1640,3 +1640,12 @@ results/model5_4/TP/ubuntu-HT/20190804_180356
 results/model5_4/TP/ubuntu-HT/20190804_181019
 results/model5_4/TP/ubuntu-HT/20190804_182037
 results/model5_4/TP/ubuntu-HT/20190804_182255
+results/model5_4/TP/ubuntu-HT/20190805_115515
+results/model5_4/TP/ubuntu-HT/20190805_115808
+results/model5_4/TP/ubuntu-HT/20190805_120418
+results/model5_4/TP/ubuntu-HT/20190805_120637
+results/model5_4/TP/ubuntu-HT/20190805_121212
+results/model5_4/TP/ubuntu-HT/20190805_121512
+results/model5_4/TP/ubuntu-HT/20190805_121718
+results/model5_4/TP/ubuntu-HT/20190805_121958
+results/model5_4/TP/ubuntu-HT/20190805_122330
